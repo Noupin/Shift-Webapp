@@ -1,0 +1,47 @@
+@import "~bootstrap/scss/bootstrap";
+
+$lightColor: #ececec;
+$brightLightNeu: #f8f8f8;
+$dimLightNeu: #e0e0e0;
+
+$darkColor: #1A1B1F;
+$brightDarkNeu: #222328;
+$dimDarkNeu: #121316;
+
+body{
+    background-color: $lightColor;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li{
+    float: left;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.textbox{
+    text-align: center;
+    outline: none;
+}
+
+
+//Neumorphism
+.neumorphic{
+    padding: 10px;
+    margin: 10px 0px;
+    border-radius: 15px;
+    background-color: $lightColor;
+    border: 0;
+    box-shadow: 5px 5px 10px $dimLightNeu, 
+                -5px -5px 10px $brightLightNeu;
+}
