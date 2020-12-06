@@ -1,5 +1,6 @@
 //Third Party Imports
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import {
   BrowserRouter as Router,
@@ -12,28 +13,34 @@ import { Nav } from "react-bootstrap";
 //First Party Imports
 import { Register } from "./User/Register";
 import { Login } from "./User/Login";
+import { Logout } from "./User/Logout";
 
 export default function App() {
   return (
     <Router>
-      <div>
-      <Nav variant="pills" defaultActiveKey="/home">
-        <Nav.Item>
-          <Nav.Link>
-            <Link to="/">Home</Link>
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link >
-            <Link to="/register">Register</Link>
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link>
-          <Link to="/login">Login</Link>
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
+      <div className="body">
+        <Nav variant="pills" defaultActiveKey="/">
+          <Nav.Item>
+            <Nav.Link>
+              <Link to="/">Home</Link>
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link >
+              <Link to="/register">Register</Link>
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link>
+              <Link to="/login">Login</Link>
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link>
+              <Link to="/logout">Logout</Link>
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -43,6 +50,9 @@ export default function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/logout">
+            <Logout />
           </Route>
           <Route path="/">
             <Home />
@@ -55,12 +65,4 @@ export default function App() {
 
 function Home() {
   return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }
