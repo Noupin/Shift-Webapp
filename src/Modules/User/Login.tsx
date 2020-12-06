@@ -1,5 +1,12 @@
+//Third Party Imports
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+
+//First Party Imports
+import { Button } from '../../Components/Button/Button';
+import { TextBox } from '../../Components/TextBox/TextBox';
+import { Checkbox } from '../../Components/Checkbox/Checkbox';
+
 
 export const Login = () => {
 
@@ -23,17 +30,17 @@ export const Login = () => {
   return (
     <Container>
       <Row>
-        <input type="text" className="neumorphic textbox" placeholder="Username/Email" onBlur={(event) => setUsernameOrEmail(event.target.value)}/><br/>
+        <TextBox type="text" placeholder="Username/Email" onBlur={(event) => setUsernameOrEmail(event.target.value)}/>
       </Row>
       <Row>
-        <input type="password" className="neumorphic textbox" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/><br/>
+       <TextBox type="password" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
       </Row>
       <Row>
-        <Col sm={8}>
-          <button className="neumorphic" onClick={registerUser}>Login</button>
+        <Col xs={10}>
+          <Button onClick={registerUser}>Login</Button>
         </Col>
-        <Col sm={4}>
-        <input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(!rememberMe)}/>
+        <Col xs={2}>
+          <Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)}/>
         </Col>
       </Row>
     </Container>

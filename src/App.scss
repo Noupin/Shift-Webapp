@@ -1,12 +1,5 @@
 @import "~bootstrap/scss/bootstrap";
-
-$lightColor: #ececec;
-$brightLightNeu: #f8f8f8;
-$dimLightNeu: #e0e0e0;
-
-$darkColor: #1A1B1F;
-$brightDarkNeu: #222328;
-$dimDarkNeu: #121316;
+@import "./variables.scss";
 
 body{
     background-color: $lightColor;
@@ -29,16 +22,19 @@ li{
     text-decoration: none;
 }
 
-.textbox{
-    text-align: center;
-    outline: none;
-}
+@for $i from 1 through 12 {
+    .col-#{$i}{
+        padding: 0;
+    }
+  }
 
 
 //Neumorphism
 .neumorphic{
+    min-width: 100%;
+    outline: none;
     padding: 10px;
-    margin: 10px 0px;
+    margin: 10px 0px ;
     border-radius: 15px;
     background-color: $lightColor;
     border: 0;

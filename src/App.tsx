@@ -2,18 +2,15 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router,
+  Switch, Route, Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 
 //First Party Imports
-import { Register } from "./User/Register";
-import { Login } from "./User/Login";
-import { Logout } from "./User/Logout";
+import { Register } from "./Modules/User/Register";
+import { Login } from "./Modules/User/Login";
+import { Logout } from "./Modules/User/Logout";
+
 
 export default function App() {
   return (

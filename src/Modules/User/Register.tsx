@@ -1,5 +1,12 @@
+//Third Party Imports
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+
+//First Party Imports
+import { Button } from '../../Components/Button/Button';
+import { TextBox } from '../../Components/TextBox/TextBox';
+import { Checkbox } from '../../Components/Checkbox/Checkbox';
+
 
 export const Register = () => {
 
@@ -25,23 +32,23 @@ export const Register = () => {
   return (
     <Container>
       <Row>
-        <input type="text" className="neumorphic textbox" placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
+        <TextBox type="text" placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
       </Row>
       <Row>
-        <input type="email" className="neumorphic textbox" placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
+        <TextBox type="email" placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
       </Row>
       <Row>
-        <input type="password" className="neumorphic textbox" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
+        <TextBox type="password" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
       </Row>
       <Row>
-        <input type="password" className="neumorphic textbox" placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
+        <TextBox type="password" placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
       </Row>
       <Row>
         <Col xs={10}>
-          <button className="neumorphic" onClick={registerUser}>Sign Up</button>
+          <Button onClick={registerUser}>Sign Up</Button>
         </Col>
         <Col xs={2}>
-          <input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(!rememberMe)}/>
+          <Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)}/>
         </Col>
       </Row>
     </Container>

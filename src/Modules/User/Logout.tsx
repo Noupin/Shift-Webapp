@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+//Third Party Imports
+import React from 'react';
+import { Container, Row } from 'react-bootstrap';
+
+//First Party Imports
+import { Button } from '../../Components/Button/Button';
+
 
 export const Logout = () => {
 
@@ -17,7 +22,7 @@ export const Logout = () => {
   return (
     <Container>
       <Row>
-        <button className="neumorphic" onClick={logoutUser}>Logout</button>
+        <Button onClick={logoutUser}>Logout</Button>
       </Row>
     </Container>
   );
