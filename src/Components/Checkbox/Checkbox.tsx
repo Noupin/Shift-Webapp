@@ -12,6 +12,9 @@ export interface ICheckbox{
 
 export const Checkbox = (props: ICheckbox) => {
     return(
-        <input type="checkbox" checked={props.checked} onChange={props.onChange}/>
+        <label>
+            <input type="checkbox" checked={props.checked} onChange={props.onChange}/>
+            <div className="checkbox"></div>
+        </label>
     );
 }
