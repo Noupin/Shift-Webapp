@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
-import { Checkbox } from '../../Components/Checkbox/Checkbox';
 
 
 export const Register = () => {
@@ -15,14 +14,13 @@ export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
 
   const registerUser = () => {
     const requestOptions: RequestInit = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: username, password: password, email: email, remember: rememberMe})
+      body: JSON.stringify({ username: username, password: password, email: email})
     };
     
     if(password === confirmPassword){
@@ -60,16 +58,11 @@ export const Register = () => {
           </Row>
 
           <Row className="align-items-center">
-            <Col xs={3} className="pr-1 text-right">
-              Remember Me
-            </Col>
-            <Col xs={1} className="p-2">
-              <Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)}/>
-            </Col>
             <Col xs={2}></Col>
-            <Col xs={6}>
+            <Col xs={8}>
               <Button onClick={registerUser}>Register &#10140;</Button>
             </Col>
+            <Col xs={2}></Col>
           </Row>
 
           <br/>
@@ -80,7 +73,7 @@ export const Register = () => {
       <Row className="mt-auto mb-3">
         <Col xs={4}></Col>
         <Col xs={4}>
-          <Link to="/login" className="maxWidth">
+          <Link to="/login" className="w-100">
             <Button>Already Have An Account?</Button>
           </Link>
         </Col>

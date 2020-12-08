@@ -10,6 +10,7 @@ import { Container, Nav, Row, Col } from "react-bootstrap";
 import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
 import { Logout } from "./Modules/User/Logout";
+import { Account } from './Modules/User/Account';
 
 
 export default function App() {
@@ -20,9 +21,9 @@ export default function App() {
           <Col>
             <div className="h-100 d-flex flex-column">
               <Row className="justify-content-center">
-                <Nav variant="pills" defaultActiveKey="/">
+                <Nav id="nav" variant="pills" defaultActiveKey="/">
                   <Nav.Item>
-                    <Nav.Link>
+                    <Nav.Link >
                       <Link to="/">Home</Link>
                     </Nav.Link>
                   </Nav.Item>
@@ -41,6 +42,11 @@ export default function App() {
                       <Link to="/logout">Logout</Link>
                     </Nav.Link>
                   </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link>
+                      <Link to="/account">Account</Link>
+                    </Nav.Link>
+                  </Nav.Item>
                 </Nav>
               </Row>
 
@@ -55,6 +61,9 @@ export default function App() {
                   </Route>
                   <Route path="/logout">
                     <Logout />
+                  </Route>
+                  <Route path="/account">
+                    <Account />
                   </Route>
                   <Route path="/">
                     <Home />

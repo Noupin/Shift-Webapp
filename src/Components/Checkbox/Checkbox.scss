@@ -1,7 +1,5 @@
 @import "../../variables.scss";
 
-$toggleWidth: 100%;
-
 
 label {
     align-items: center;
@@ -15,7 +13,10 @@ label {
     & :checked ~ .checkbox {
         box-shadow: inset -5px -5px 10px $brightLightNeu,
                     inset 5px 5px 10px $dimLightNeu;
+        content: "<i>&#x2713;</i>";
+        background-color: #3ddf86;
     }
+
 }
     
 input[type="checkbox"] {
@@ -28,7 +29,7 @@ input[type="checkbox"] {
     text-align: center;
     width: 100%;
     padding-bottom: 100%;
-    position: relative;
+    position: absolute;
     background: $lightColor;
     box-shadow: -5px -5px 10px $brightLightNeu,
                 5px 5px 10px $dimLightNeu;
@@ -39,4 +40,3 @@ input[type="checkbox"] {
     box-shadow: -2px -2px 4px $brightLightNeu,
                 2px 2px 4px $dimLightNeu;
 }
-

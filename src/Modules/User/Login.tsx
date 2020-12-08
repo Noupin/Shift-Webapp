@@ -79,7 +79,7 @@ export const Login = () => {
       <Row className="mt-auto mb-3">
         <Col xs={4}></Col>
         <Col xs={4}>
-          <Link to="/register" className="maxWidth">
+          <Link to="/register" className="w-100">
             <Button>Don't Have An Account?</Button>
           </Link>
         </Col>
