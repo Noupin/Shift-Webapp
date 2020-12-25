@@ -1,2 +1,2 @@
-# Shift Android App
-This is the Website app for Shift.
+# Shift Web App
+The web app associated with the Shift project. Designed for a more usser firendly experience on a desktop or laptop while being able to scale to those on smaller devices. For the optimal experience on a mobile device the Mobile app is reccomended.

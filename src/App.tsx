@@ -11,6 +11,9 @@ import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
 import { Logout } from "./Modules/User/Logout";
 import { Account } from './Modules/User/Account';
+import { ForgotPassword } from "./Modules/User/ForgotPassword";
+//import { Navbar } from "./Components/Navbar/Navbar";
+import { Load } from "./Modules/Load/Load"
 
 
 export default function App() {
@@ -20,6 +23,10 @@ export default function App() {
         <Row className="justify-content-center h-100">
           <Col>
             <div className="h-100 d-flex flex-column">
+              <Row className="justify-content-center">
+                <h1>Navbar</h1>
+              </Row>
+
               <Row className="justify-content-center">
                 <Nav id="nav" variant="pills" defaultActiveKey="/">
                   <Nav.Item>
@@ -64,6 +71,12 @@ export default function App() {
                   </Route>
                   <Route path="/account">
                     <Account />
+                  </Route>
+                  <Route path="/forgotPassword">
+                    <ForgotPassword />
+                  </Route>
+                  <Route path="/load">
+                    <Load />
                   </Route>
                   <Route path="/">
                     <Home />

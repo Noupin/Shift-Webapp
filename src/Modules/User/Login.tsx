@@ -67,7 +67,7 @@ export const Login = () => {
             <Col xs={2}></Col>
             <Col xs={1}></Col>
             <Col xs={4}>
-              Forgot Password?
+              <Link to="/forgotPassword">Forgot Password?</Link>
             </Col>
           </Row>
 
