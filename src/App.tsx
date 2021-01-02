@@ -1,10 +1,10 @@
 //Third Party Imports
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import { BrowserRouter as Router,
   Switch, Route, Link } from "react-router-dom";
-import { Container, Nav, Row, Col } from "react-bootstrap";
+import { Container, Nav, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
 import { Register } from "./Modules/User/Register";
@@ -14,9 +14,22 @@ import { Account } from './Modules/User/Account';
 import { ForgotPassword } from "./Modules/User/ForgotPassword";
 //import { Navbar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load"
+import { Button } from "./Components/Button/Button";
+import { IElevatedPageState } from "./Interfaces/PageState";
 
 
 export default function App() {
+  const [uuid, setUUID] = useState("");
+
+  const [msg, setMsg] = useState("");
+  const [showMsg, setShowMsg] = useState(true);
+
+  const pageState: IElevatedPageState = {uuid: uuid, setUUID: setUUID, setMsg: setMsg};
+
+  useEffect(() => {
+    setShowMsg(true);
+  }, [msg]);
+
   return (
     <Router>
       <Container fluid className="flex h-100">
@@ -57,32 +70,41 @@ export default function App() {
                 </Nav>
               </Row>
 
+              <Alert show={showMsg} variant="success">
+                <Row className="flex-grow-1">
+                  <Col xs={9}>{msg}</Col>
+                  <Col xs={3}>
+                    <Button onClick={() => setShowMsg(false)}>Close</Button>
+                  </Col>
+                </Row>
+              </Alert>
 
               <Row className="flex-grow-1">
                 <Switch>
                   <Route path="/register">
-                    <Register />
+                    <Register {...pageState}></Register>
                   </Route>
                   <Route path="/login">
-                    <Login />
+                    <Login {...pageState}></Login>
                   </Route>
                   <Route path="/logout">
-                    <Logout />
+                    <Logout {...pageState}></Logout>
                   </Route>
                   <Route path="/account">
-                    <Account />
+                    <Account {...pageState}></Account>
                   </Route>
                   <Route path="/forgotPassword">
-                    <ForgotPassword />
+                    <ForgotPassword {...pageState}></ForgotPassword>
                   </Route>
                   <Route path="/load">
-                    <Load />
+                    <Load {...pageState}></Load>
                   </Route>
                   <Route path="/">
                     <Home />
                   </Route>
                 </Switch>
               </Row>
+
             </div>
           </Col>
         </Row>

@@ -5,13 +5,13 @@ button:focus {
 }
 
 .neuHover:hover{
-    background: $lightColor;
-    box-shadow: 2px 2px 4px $dimLightNeu, 
-                -2px -2px 4px $brightLightNeu;
+    background: $color;
+    box-shadow: 2px 2px 4px $dimShadow, 
+                -2px -2px 4px $brightShadow;
 }
 
 .neuPress:active {
-    background: $lightColor;
-    box-shadow: inset 5px 5px 10px $dimLightNeu, 
-                inset -5px -5px 10px $brightLightNeu;
+    background: $color;
+    box-shadow: inset 5px 5px 10px $dimShadow, 
+                inset -5px -5px 10px $brightShadow;
 }

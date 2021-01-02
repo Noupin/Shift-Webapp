@@ -3,7 +3,7 @@
 
 
 html, body{
-    background-color: $lightColor;
+    background-color: $color;
     display: flex;
     text-align: center;
     justify-content: center;
@@ -53,8 +53,8 @@ label {
     padding: 10px;
     margin: 10px 0px ;
     border-radius: 15px;
-    background-color: $lightColor;
+    background-color: $color;
     border: 0;
-    box-shadow: 5px 5px 10px $dimLightNeu, 
-                -5px -5px 10px $brightLightNeu;
+    box-shadow: 5px 5px 10px $dimShadow, 
+                -5px -5px 10px $brightShadow;
 }

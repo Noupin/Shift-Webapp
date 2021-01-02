@@ -4,7 +4,7 @@ import React from 'react';
 //First Party Imports
 import './Button.scss';
 
-export interface IButton{
+interface IButton {
     onClick?: () => void,
     children: React.ReactNode
 }

@@ -11,8 +11,8 @@ label {
     cursor: pointer;
 
     & :checked ~ .checkbox {
-        box-shadow: inset -5px -5px 10px $brightLightNeu,
-                    inset 5px 5px 10px $dimLightNeu;
+        box-shadow: inset -5px -5px 10px $brightShadow,
+                    inset 5px 5px 10px $dimShadow;
         content: "<i>&#x2713;</i>";
         background-color: #2daaed;
     }
@@ -30,13 +30,13 @@ input[type="checkbox"] {
     width: 100%;
     padding-bottom: 100%;
     position: absolute;
-    background: $lightColor;
-    box-shadow: -5px -5px 10px $brightLightNeu,
-                5px 5px 10px $dimLightNeu;
+    background: $color;
+    box-shadow: -5px -5px 10px $brightShadow,
+                5px 5px 10px $dimShadow;
     border-radius: 10px;
 }
 
 .checkbox:hover {
-    box-shadow: -2px -2px 4px $brightLightNeu,
-                2px 2px 4px $dimLightNeu;
+    box-shadow: -2px -2px 4px $brightShadow,
+                2px 2px 4px $dimShadow;
 }

@@ -1,8 +1,11 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 
+//First Party Imports
+import { IElevatedPageState } from "../../Interfaces/PageState";
 
-export const Account = () => {
+
+export const Account = (props: IElevatedPageState) => {
   const [username, setUsername] = useState("");
 
   useEffect(() => {

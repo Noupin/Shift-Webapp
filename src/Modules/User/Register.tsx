@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
+import { IElevatedPageState } from "../../Interfaces/PageState";
 
 
-export const Register = () => {
+export const Register = (props: IElevatedPageState) => {
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -26,6 +27,7 @@ export const Register = () => {
     if(password === confirmPassword){
       fetch(`/api/users/register`, requestOptions).then(res => res.json()).then(data => {
         console.log(data);
+        props.setMsg(data.msg);
       });
     }
     else{

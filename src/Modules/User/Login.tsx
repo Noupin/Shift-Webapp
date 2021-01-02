@@ -7,24 +7,28 @@ import { Link } from "react-router-dom";
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
+import { IElevatedPageState } from "../../Interfaces/PageState";
 
 
-export const Login = () => {
+export const Login = (props: IElevatedPageState) => {
 
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const registerUser = () => {
+  const loginUser = () => {
     const requestOptions: RequestInit = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ usernameOrEmail: usernameOrEmail, password: password, remember: rememberMe})
+      body: JSON.stringify({usernameOrEmail: usernameOrEmail,
+                            password: password,
+                            remember: rememberMe})
     };
     
     fetch(`/api/users/login`, requestOptions).then(res => res.json()).then(data => {
       console.log(data);
+      props.setMsg(data.msg);
     });
   }
 
@@ -49,7 +53,7 @@ export const Login = () => {
           <Row>
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button onClick={registerUser}>Login &#10140;</Button>
+              <Button onClick={loginUser}>Login &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>

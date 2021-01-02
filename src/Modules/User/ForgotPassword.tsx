@@ -5,9 +5,10 @@ import { Container, Row, Col } from 'react-bootstrap';
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
+import { IElevatedPageState } from "../../Interfaces/PageState";
 
 
-export const ForgotPassword = () => {
+export const ForgotPassword = (props: IElevatedPageState) => {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,6 +24,7 @@ export const ForgotPassword = () => {
     if(password === confirmPassword){
         fetch(`/api/users/resetPassword`, requestOptions).then(res => res.json()).then(data => {
         console.log(data);
+        props.setMsg(data.msg);
         });
     }
     else{
