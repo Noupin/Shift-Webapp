@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import { BrowserRouter as Router,
-  Switch, Route, Link } from "react-router-dom";
+         Switch, Route, Link } from "react-router-dom";
 import { Container, Nav, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
@@ -14,21 +14,27 @@ import { Account } from './Modules/User/Account';
 import { ForgotPassword } from "./Modules/User/ForgotPassword";
 //import { Navbar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load"
+import { Train } from "./Modules/Train/Train";
+import { Shift } from "./Modules/Shift/Shift";
 import { Button } from "./Components/Button/Button";
 import { IElevatedPageState } from "./Interfaces/PageState";
 
 
 export default function App() {
-  const [uuid, setUUID] = useState("");
+  const [shiftUUID, setShiftUUID] = useState(sessionStorage.getItem('shiftUUID') || "");
 
   const [msg, setMsg] = useState("");
   const [showMsg, setShowMsg] = useState(true);
 
-  const pageState: IElevatedPageState = {uuid: uuid, setUUID: setUUID, setMsg: setMsg};
+  const pageState: IElevatedPageState = {shiftUUID: shiftUUID, setShiftUUID: setShiftUUID, setMsg: setMsg};
 
   useEffect(() => {
     setShowMsg(true);
   }, [msg]);
+
+  useEffect(() => {
+    sessionStorage.setItem("shiftUUID", shiftUUID);
+  }, [shiftUUID]);
 
   return (
     <Router>
@@ -98,6 +104,12 @@ export default function App() {
                   </Route>
                   <Route path="/load">
                     <Load {...pageState}></Load>
+                  </Route>
+                  <Route path="/train">
+                    <Train {...pageState}></Train>
+                  </Route>
+                  <Route path="/shift">
+                    <Shift {...pageState}></Shift>
                   </Route>
                   <Route path="/">
                     <Home />

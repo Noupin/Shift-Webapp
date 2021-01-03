@@ -1,15 +1,16 @@
 //Third Party Imports
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { IElevatedPageState } from "../../Interfaces/PageState";
 
 
-interface RequestReturn {
+interface loadRequestReturn {
   msg: string,
-  uuid: string
+  shiftUUID: string
 } 
 
 interface trainRequestReturn {
@@ -41,7 +42,7 @@ export const Load = (props: IElevatedPageState) => {
     method: 'POST',
     credentials: "include",
     headers: { 'Content-Type': 'application/json'},
-    body: JSON.stringify({uuid: props.uuid,
+    body: JSON.stringify({shiftUUID: props.shiftUUID,
                           usePTM: false,
                           prebuiltShiftModel: ""})
   };
@@ -50,7 +51,7 @@ export const Load = (props: IElevatedPageState) => {
     method: 'POST',
     credentials: "include",
     headers: { 'Content-Type': 'application/json'},
-    body: JSON.stringify({uuid: props.uuid,
+    body: JSON.stringify({shiftUUID: props.shiftUUID,
                           usePTM: false,
                           prebuiltShiftModel: ""})
   };
@@ -69,10 +70,10 @@ export const Load = (props: IElevatedPageState) => {
     console.log(requestOptions);
     console.log(dataTypes);
 
-    fetch(`/api/loadData`, requestOptions).then(res => res.json()).then((data: RequestReturn) => {
+    fetch(`/api/loadData`, requestOptions).then(res => res.json()).then((data: loadRequestReturn) => {
       console.log(data);
       props.setMsg(data.msg);
-      props.setUUID(data.uuid);
+      props.setShiftUUID(data.shiftUUID);
     })
     .catch(error => {
       console.error(error);
@@ -101,7 +102,6 @@ export const Load = (props: IElevatedPageState) => {
   }
 
 
-
   return (
     <Container>
       <Row>
@@ -125,7 +125,9 @@ export const Load = (props: IElevatedPageState) => {
       </Row>
       <Row>
         <Col>
-          <Button onClick={trainShift}>Train</Button>
+          <Link to="/train" className="w-100">
+            <Button>Time To Train?</Button>
+          </Link>
         </Col>
         <Col>
           <Button onClick={shift}>Inference</Button>
