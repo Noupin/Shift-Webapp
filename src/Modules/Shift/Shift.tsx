@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
+
 //First Party Imports
-import { Button } from '../../Components/Button/Button';
 import { IElevatedPageState } from "../../Interfaces/PageState";
+import { Button } from '../../Components/Button/Button';
+import { Media } from '../../Components/Media/Media';
 
 
 interface shiftRequestReturn {
@@ -37,19 +39,28 @@ export const Shift = (props: IElevatedPageState) => {
 	}
 
 	return (
-		<Container>
+		<Container className="d-flex justify-content-center h-100 flex-column">
 			<Row>
-				<Col>
+				<Media className="neumorphic borderRadius-2 p-2 my-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+			</Row>
+			<Row className="mb-3">
+				<Media className="neumorphic borderRadius-2 p-2 my-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+			</Row>
+			<Row className="mt-2">
+				<Col xs={3}>
 					<Link to="/train" className="w-100">
-            <Button>Train Again?</Button>
+            <Button className="borderRadius-2 p-2 mr-4">&#x2190; Train More</Button>
           </Link>
 				</Col>
-				<Col>
-					<Button onClick={shift}>Shift</Button>
+				<Col xs={3}>
+					<Link to="/load" className="w-100">
+            <Button className="borderRadius-2 p-2 ml-4">Shift Again &#x21ba;</Button>
+          </Link>
 				</Col>
-			</Row>
-			<Row>
-				<img src={`data:image/jpeg;base64,${image}`} alt="Img" />
+				<Col xs={1}></Col>
+				<Col xs={5}>
+					<Button className="borderRadius-2 p-2" onClick={shift}>Share</Button>
+				</Col>
 			</Row>
 		</Container>
 	);

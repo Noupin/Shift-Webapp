@@ -15,6 +15,7 @@ import { ForgotPassword } from "./Modules/User/ForgotPassword";
 //import { Navbar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load"
 import { Train } from "./Modules/Train/Train";
+import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Shift } from "./Modules/Shift/Shift";
 import { Button } from "./Components/Button/Button";
 import { IElevatedPageState } from "./Interfaces/PageState";
@@ -29,7 +30,7 @@ export default function App() {
   const pageState: IElevatedPageState = {shiftUUID: shiftUUID, setShiftUUID: setShiftUUID, setMsg: setMsg};
 
   useEffect(() => {
-    setShowMsg(true);
+    setShowMsg(false);
   }, [msg]);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export default function App() {
                 </Nav>
               </Row>
 
-              <Alert show={showMsg} variant="success">
+              <Alert show={showMsg} variant="primary">
                 <Row className="flex-grow-1">
                   <Col xs={9}>{msg}</Col>
                   <Col xs={3}>
@@ -107,6 +108,9 @@ export default function App() {
                   </Route>
                   <Route path="/train">
                     <Train {...pageState}></Train>
+                  </Route>
+                  <Route path="/advancedTrain">
+                    <AdvancedTrain {...pageState}></AdvancedTrain>
                   </Route>
                   <Route path="/shift">
                     <Shift {...pageState}></Shift>

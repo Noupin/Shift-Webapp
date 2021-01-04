@@ -47,22 +47,22 @@ export const Register = (props: IElevatedPageState) => {
           <br/>
 
           <Row>
-            <TextBox type="text" placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
+            <TextBox className="p-2 mt-2 mb-2 borderRadius-2" type="text" placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
           </Row>
           <Row>
-            <TextBox type="email" placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
+            <TextBox className="p-2 mt-2 mb-2 borderRadius-2" type="email" placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
           </Row>
           <Row>
-            <TextBox type="password" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
+            <TextBox className="p-2 mt-2 mb-2 borderRadius-2" type="password" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
           </Row>
           <Row>
-            <TextBox type="password" placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
+            <TextBox className="p-2 mt-2 mb-2 borderRadius-2" type="password" placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
           </Row>
 
           <Row className="align-items-center">
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button onClick={registerUser}>Register &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2" onClick={registerUser}>Register &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>
@@ -76,7 +76,7 @@ export const Register = (props: IElevatedPageState) => {
         <Col xs={4}></Col>
         <Col xs={4}>
           <Link to="/login" className="w-100">
-            <Button>Already Have An Account?</Button>
+            <Button className="p-2 mb-2 borderRadius-2">Already Have An Account?</Button>
           </Link>
         </Col>
         <Col xs={4}></Col>

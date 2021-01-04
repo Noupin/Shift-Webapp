@@ -24,7 +24,7 @@ export const Logout = (props: IElevatedPageState) => {
   return (
     <Container>
       <Row>
-        <Button onClick={logoutUser}>Logout</Button>
+        <Button className="p-2 mt-2 mb-2 borderRadius-2" onClick={logoutUser}>Logout</Button>
       </Row>
     </Container>
   );

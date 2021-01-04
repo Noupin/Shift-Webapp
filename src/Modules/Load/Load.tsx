@@ -4,8 +4,10 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
 //First Party Imports
-import { Button } from '../../Components/Button/Button';
 import { IElevatedPageState } from "../../Interfaces/PageState";
+import { Button } from '../../Components/Button/Button';
+import { Media } from '../../Components/Media/Media';
+import { MediaList } from "../../Components/MediaList/MediaList";
 
 
 interface loadRequestReturn {
@@ -13,17 +15,8 @@ interface loadRequestReturn {
   shiftUUID: string
 } 
 
-interface trainRequestReturn {
-  msg: string
-}
-
-interface inferRequestReturn {
-  msg: string,
-  testImage: string
-}
-
 const ListOfFiles: File[] = [];
-const ListOfDataType: string[] = []
+const ListOfDataType: string[] = [];
 
 export const Load = (props: IElevatedPageState) => {
 
@@ -36,24 +29,6 @@ export const Load = (props: IElevatedPageState) => {
     method: 'POST',
     headers: {},
     credentials: "include",
-  };
-
-  const trainRequestOption: RequestInit = {
-    method: 'POST',
-    credentials: "include",
-    headers: { 'Content-Type': 'application/json'},
-    body: JSON.stringify({shiftUUID: props.shiftUUID,
-                          usePTM: false,
-                          prebuiltShiftModel: ""})
-  };
-
-  const inferRequestOption: RequestInit = {
-    method: 'POST',
-    credentials: "include",
-    headers: { 'Content-Type': 'application/json'},
-    body: JSON.stringify({shiftUUID: props.shiftUUID,
-                          usePTM: false,
-                          prebuiltShiftModel: ""})
   };
 
   const sendFile = () => {
@@ -80,61 +55,38 @@ export const Load = (props: IElevatedPageState) => {
     });
   }
 
-  const trainShift = () => {
-    fetch(`/api/train`, trainRequestOption).then(res => res.json()).then((data: trainRequestReturn) => {
-      console.log(data);
-      props.setMsg(data.msg);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  }
-
-  const shift = () => {
-    fetch(`/api/inference`, inferRequestOption).then(res => res.json()).then((data: inferRequestReturn) => {
-      setImage(data.testImage);
-      props.setMsg(data.msg);
-      console.log(data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  }
-
-
   return (
-    <Container>
+    <Container className="d-flex justify-content-center h-100 flex-column">
+      <h2>Base Face</h2>
       <Row>
+      <Col xs={2}></Col>
+        <Col xs={8}>
+          <Media className="neumorphic mt-2 mb-2 borderRadius-2" mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
+        </Col>
+        <Col xs={2}></Col>
+      </Row>
+      <Row className="h-50 overflow-hidden">
         <Col>
-          <input type="file" name="file" onChange={(event) => setFiles([...files, event.target.files![0]])}/>
-          <Button onClick={sendFile}>Load</Button>
+          <h4>More Base</h4>
+          <MediaList className="mt-2 borderRadius-2 p-3" insetNeumorphic={true} elementsPerRow={2}>
+            <Media mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
+            <Media mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
+          </MediaList>
         </Col>
         <Col>
-          {files.map((currentFile, currentIndex) => (
-            <p onClick={() => setFiles(files.filter((file, index) => index !== currentIndex))}>{currentFile!.name}</p> //Empty list error
-          ))}
+          <h4>Mask Face</h4>
+          <MediaList className="mt-2 borderRadius-2 p-3" insetNeumorphic={true} elementsPerRow={2}>
+            <Media mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
+            <Media mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
+          </MediaList>
         </Col>
       </Row>
       <Row>
-        <Col>
-          <Button onClick={() => setDataTypes([...dataTypes, "base"])}>Base</Button>
+        <Col xs={2}></Col>
+        <Col xs={8}>
+          <Button className="p-2 mt-2 mb-2 borderRadius-2" onClick={sendFile}>Load</Button>
         </Col>
-        <Col>
-          <Button onClick={() => setDataTypes([...dataTypes, "mask"])}>Mask</Button>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Link to="/train" className="w-100">
-            <Button>Time To Train?</Button>
-          </Link>
-        </Col>
-        <Col>
-          <Button onClick={shift}>Inference</Button>
-        </Col>
-      </Row>
-      <Row>
-        <img src={`data:image/jpeg;base64,${image}`} alt="Img" />
+        <Col xs={2}></Col>
       </Row>
     </Container>
   );

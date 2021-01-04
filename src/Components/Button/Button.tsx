@@ -4,13 +4,16 @@ import React from 'react';
 //First Party Imports
 import './Button.scss';
 
-interface IButton {
-    onClick?: () => void,
-    children: React.ReactNode
+interface IButton extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
+  onClick?: () => void,
+  children: React.ReactNode
 }
 
 export const Button = (props: IButton) => {
-    return(
-        <button className="neuPress neuHover neumorphic" onClick={props.onClick}>{ props.children }</button>
-    );
+  const {children, onClick, ...buttonProps} = props;
+  const cssClasses = buttonProps.className?.toString() + " neuPress neuHover neumorphic";
+
+  return(
+    <button {...buttonProps} className={cssClasses} onClick={onClick}>{children}</button>
+  );
 }

@@ -46,15 +46,43 @@ label {
 }
 
 
+
+//Border Radius
+.borderRadius-1{
+    border-radius: ($radiusSize*0.2) + 0px;
+}
+.borderRadius-2{
+    border-radius: ($radiusSize*0.4) + 0px;
+}
+.borderRadius-3{
+    border-radius: ($radiusSize*0.6) + 0px;
+}
+.borderRadius-4{
+    border-radius: ($radiusSize*0.8) + 0px;
+}
+.borderRadius-5{
+    border-radius: ($radiusSize) + 0px;
+}
+.borderRadius-c{
+    border-radius: 50%;
+}
+
+
 //Neumorphism
 .neumorphic{
     min-width: 100%;
     outline: none;
-    padding: 10px;
-    margin: 10px 0px ;
-    border-radius: 15px;
     background-color: $sameAsBackground;
     border: 0;
     box-shadow: 5px 5px 10px $dimShadow, 
                 -5px -5px 10px $brightShadow;
+}
+
+.insetNeumorphic{
+    min-width: 100%;
+    outline: none;
+    background-color: $sameAsBackground;
+    border: 0;
+    box-shadow: inset 5px 5px 10px $dimShadow, 
+                inset -5px -5px 10px $brightShadow;
 }
