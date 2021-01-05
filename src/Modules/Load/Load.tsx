@@ -11,6 +11,7 @@ import { MediaList } from "../../Components/MediaList/MediaList";
 import { defaultVideo } from "../../Helpers/defaultMedia";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { openFileDialog } from '../../Helpers/FileSelector';
+import { fillArray } from "../../Helpers/Arrays";
 
 
 interface loadRequestReturn {
@@ -23,7 +24,7 @@ const ListOfDataType: string[] = [];
 
 export const Load = (props: IElevatedPageState) => {
 
-  const [dataTypes, setDataTypes] = useState(ListOfDataType);
+  const [trainingDataTypes, setTrainingDataTypes] = useState(ListOfDataType);
   const [files, setFiles] = useState(ListOfFiles);
   const [baseFiles, setBaseFiles] = useState(ListOfFiles);
   const [maskFiles, setMaskFiles] = useState(ListOfFiles);
@@ -36,6 +37,11 @@ export const Load = (props: IElevatedPageState) => {
     credentials: "include",
   };
 
+  useEffect(() => {
+    setFiles([baseVideo, ...baseFiles, ...maskFiles]);
+    setTrainingDataTypes([...fillArray("base", baseFiles.length+1), ...fillArray("mask", maskFiles.length)])
+  }, [baseVideo, baseFiles, maskFiles]);
+
   const sendFile = () => {
     const data = new FormData();
     for (var fileIndex = 0; fileIndex < files.length; fileIndex++){
@@ -44,11 +50,10 @@ export const Load = (props: IElevatedPageState) => {
     }
     requestOptions.body = data;
 
-    requestHeaders.append('dataTypes', JSON.stringify(dataTypes));
+    requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
     requestOptions.headers = requestHeaders;
 
     console.log(requestOptions);
-    console.log(dataTypes);
 
     fetch(`/api/loadData`, requestOptions).then(res => res.json()).then((data: loadRequestReturn) => {
       console.log(data);
