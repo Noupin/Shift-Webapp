@@ -16,7 +16,7 @@ const videoTypes: string[] = ['mp4', 'webm', 'ogg']
 
 export const Media = (props: IMedia) => {
   const {mediaSrc, mediaType, droppable, ...mediaProps} = props;
-  const cssClasses = mediaProps.className?.toString() + "overflow-auto";
+  const cssClasses = mediaProps.className?.toString();
 
   let element: JSX.Element
   const [mediaSrcState, setMediaSrcState] = useState(mediaSrc);

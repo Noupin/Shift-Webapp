@@ -44,16 +44,16 @@ export const Login = (props: IElevatedPageState) => {
           <br/>
 
           <Row>
-            <TextBox className="p-2 mt-2 mb-2 borderRadius-2" type="text" placeholder="Username/Email" onBlur={(event) => setUsernameOrEmail(event.target.value)}/>
+            <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text" placeholder="Username/Email" onBlur={(event) => setUsernameOrEmail(event.target.value)}/>
           </Row>
           <Row>
-           <TextBox className="p-2 mt-2 mb-2 borderRadius-2" type="password" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
+           <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
           </Row>
 
           <Row>
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2" onClick={loginUser}>Login &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={loginUser}>Login &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>
@@ -85,7 +85,7 @@ export const Login = (props: IElevatedPageState) => {
         <Col xs={4}></Col>
         <Col xs={4}>
           <Link to="/register" className="w-100">
-            <Button className="p-2 mb-2 borderRadius-2">Don't Have An Account?</Button>
+            <Button className="p-2 mb-2 borderRadius-2 w-100">Don't Have An Account?</Button>
           </Link>
         </Col>
         <Col xs={4}></Col>

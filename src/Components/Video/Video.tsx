@@ -11,7 +11,7 @@ interface IVideo extends React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLV
 
 export const Video = (props: IVideo) => {
   const {videoSrc, videoType, ...videoProps} = props;
-  const cssClasses = videoProps.className?.toString();
+  const cssClasses = videoProps.className?.toString() + ' borderRadius-2 embed-responsive';
 
   return(
     <video {...videoProps} className={cssClasses} key={videoSrc} controls>

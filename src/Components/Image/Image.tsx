@@ -10,7 +10,7 @@ interface IImage extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLIma
 
 export const Image = (props: IImage) => {
   const {imageSrc, ...imageProps} = props;
-  const cssClasses = imageProps.className?.toString();
+  const cssClasses = imageProps.className?.toString() + " borderRadius-2 img-fluid";
 
   return(
     <img {...imageProps} className={cssClasses} src={imageSrc} alt="Image"/>

@@ -40,18 +40,18 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
           </Row>
         </Col>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
           </Row>
         </Col>
       </Row>
@@ -59,11 +59,11 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
         <Col xs={2}></Col>
         <Col xs={4} className="m-2">
           <Link to="/train" className="w-100">
-            <Button className="borderRadius-2 p-2 mr-2">Basic View</Button>
+            <Button className="borderRadius-2 p-2 mr-2 w-100">Basic View</Button>
           </Link>
         </Col>
         <Col xs={4} className="m-2">
-          <Button className="borderRadius-2 p-2 ml-2" onClick={trainShift}>Shift</Button>
+          <Button className="borderRadius-2 p-2 ml-2 w-100" onClick={trainShift}>Shift</Button>
         </Col>
         <Col xs={2}></Col>
       </Row>

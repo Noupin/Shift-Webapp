@@ -67,11 +67,17 @@ export const Load = (props: IElevatedPageState) => {
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
-      <h2>Base Face</h2>
+      <h4>Base Face</h4>
       <Row>
-      <Col xs={2}></Col>
-        <Col xs={8}>
-          <Media className="neumorphic borderRadius-2 mt-2 mb-2" onDragOver={(event) => allowDrop(event)}
+        <Col xs={2}></Col>
+        <Col xs={8} className="neumorphic borderRadius-2">
+          <Row>
+            <Col xs={11}></Col>
+            <Col xs={1} >
+              <h4 className="pr-2 mr-2" onClick={(event) => {openFileDialog(event, baseFiles, setBaseFiles)}}>&#43;</h4>
+            </Col>
+          </Row>
+          <Media className="borderRadius-2 mt-2 mb-2 p-2" onDragOver={(event) => allowDrop(event)}
                       onDrop={(event) => setBaseVideo(dropFiles(event)[0])} mediaSrc={baseVideo} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
@@ -80,7 +86,12 @@ export const Load = (props: IElevatedPageState) => {
         <Col>
           <h4>More Base</h4>
           <div className="neumorphic borderRadius-2">
-            <h4 className="text-right pr-2" onClick={(event) => {openFileDialog(event, baseFiles, setBaseFiles)}}>&#43;</h4>
+            <Row>
+              <Col xs={11}></Col>
+              <Col xs={1} >
+                <h4 className="pr-2 mr-2" onClick={(event) => {openFileDialog(event, baseFiles, setBaseFiles)}}>&#43;</h4>
+              </Col>
+            </Row>
             <MediaList className="mt-2 p-3" onDragOver={(event) => allowDrop(event)}
                       onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event)])} elementsPerRow={2} key={baseFiles.length}>
               {baseFiles.map((file) => (
@@ -92,7 +103,12 @@ export const Load = (props: IElevatedPageState) => {
         <Col>
           <h4>Mask Face</h4>
           <div className="neumorphic borderRadius-2">
-            <h4 className="text-right pr-2" onClick={(event) => {openFileDialog(event, maskFiles, setMaskFiles);}}>&#43;</h4>
+            <Row>
+              <Col xs={11}></Col>
+              <Col xs={1} >
+                <h4 className="pr-2 mr-2" onClick={(event) => {openFileDialog(event, baseFiles, setBaseFiles)}}>&#43;</h4>
+              </Col>
+            </Row>
             <MediaList className="mt-2 borderRadius-2 p-3" onDragOver={(event) => allowDrop(event)}
                       onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event)])} elementsPerRow={2} key={maskFiles.length}>
               {maskFiles.map((file) => (

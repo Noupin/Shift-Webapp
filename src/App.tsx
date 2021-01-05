@@ -81,7 +81,7 @@ export default function App() {
                 <Row className="flex-grow-1">
                   <Col xs={9}>{msg}</Col>
                   <Col xs={3}>
-                    <Button className="borderRadius-2 p-2" onClick={() => setShowMsg(false)}>Close</Button>
+                    <Button className="borderRadius-2 p-2 w-100" onClick={() => setShowMsg(false)}>Close</Button>
                   </Col>
                 </Row>
               </Alert>

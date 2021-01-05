@@ -16,7 +16,6 @@ export const dropFiles = (event: React.DragEvent) => {
   }
   else {
     console.log("That data type is not allowed to be dropped");
-    files.push(new File([""], ''));
   }
   
   return files;

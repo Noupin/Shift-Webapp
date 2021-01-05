@@ -10,6 +10,7 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 
 export const ForgotPassword = (props: IElevatedPageState) => {
 
+  const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -44,16 +45,19 @@ export const ForgotPassword = (props: IElevatedPageState) => {
           <br/>
 
           <Row>
-            <TextBox className="m-2 p-2 borderRadius-2" type="password" placeholder="New Password" onBlur={(event) => setPassword(event.target.value)}/>
+            <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" placeholder="Current Password" onBlur={(event) => setCurrentPassword(event.target.value)}/>
           </Row>
           <Row>
-            <TextBox className="m-2 p-2 borderRadius-2" type="password" placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
+            <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" placeholder="New Password" onBlur={(event) => setPassword(event.target.value)}/>
+          </Row>
+          <Row>
+            <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
           </Row>
 
           <Row>
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="mt-3 m-2 p-2 borderRadius-2" onClick={registerUser}>Update &#10140;</Button>
+              <Button className="mt-3 m-2 p-2 borderRadius-2 w-100" onClick={registerUser}>Update &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>
