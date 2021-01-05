@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
+import { defaultVideo } from "../../Helpers/defaultMedia";
 
 
 interface shiftRequestReturn {
@@ -40,19 +41,20 @@ export const Shift = (props: IElevatedPageState) => {
 
 	return (
 		<Container className="d-flex justify-content-center h-100 flex-column">
-			<Row>
-				<Media className="neumorphic borderRadius-2 p-2 my-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+			<Row className="mb-2">
+				<Media className="neumorphic borderRadius-2 p-2 my-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
 			</Row>
-			<Row className="mb-3">
-				<Media className="neumorphic borderRadius-2 p-2 my-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+			<Row className="my-3">
+				<Media className="neumorphic borderRadius-2 p-2 my-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
 			</Row>
 			<Row className="mt-2">
-				<Col xs={3}>
+				<Col xs={1}></Col>
+				<Col xs={2}>
 					<Link to="/train" className="w-100">
             <Button className="borderRadius-2 p-2 mr-4">&#x2190; Train More</Button>
           </Link>
 				</Col>
-				<Col xs={3}>
+				<Col xs={2}>
 					<Link to="/load" className="w-100">
             <Button className="borderRadius-2 p-2 ml-4">Shift Again &#x21ba;</Button>
           </Link>
@@ -61,6 +63,7 @@ export const Shift = (props: IElevatedPageState) => {
 				<Col xs={5}>
 					<Button className="borderRadius-2 p-2" onClick={shift}>Share</Button>
 				</Col>
+				<Col xs={1}></Col>
 			</Row>
 		</Container>
 	);

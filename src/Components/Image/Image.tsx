@@ -13,6 +13,6 @@ export const Image = (props: IImage) => {
   const cssClasses = imageProps.className?.toString();
 
   return(
-    <img {...imageProps} className={cssClasses} src={props.imageSrc} alt="Image"/>
+    <img {...imageProps} className={cssClasses} src={imageSrc} alt="Image"/>
   );
 }

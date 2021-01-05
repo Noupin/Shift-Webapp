@@ -30,7 +30,7 @@ export default function App() {
   const pageState: IElevatedPageState = {shiftUUID: shiftUUID, setShiftUUID: setShiftUUID, setMsg: setMsg};
 
   useEffect(() => {
-    setShowMsg(false);
+    setShowMsg(true);
   }, [msg]);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function App() {
                 <Row className="flex-grow-1">
                   <Col xs={9}>{msg}</Col>
                   <Col xs={3}>
-                    <Button onClick={() => setShowMsg(false)}>Close</Button>
+                    <Button className="borderRadius-2 p-2" onClick={() => setShowMsg(false)}>Close</Button>
                   </Col>
                 </Row>
               </Alert>

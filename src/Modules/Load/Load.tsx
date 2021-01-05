@@ -8,6 +8,7 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { MediaList } from "../../Components/MediaList/MediaList";
+import { defaultVideo } from "../../Helpers/defaultMedia";
 
 
 interface loadRequestReturn {
@@ -61,27 +62,27 @@ export const Load = (props: IElevatedPageState) => {
       <Row>
       <Col xs={2}></Col>
         <Col xs={8}>
-          <Media className="neumorphic mt-2 mb-2 borderRadius-2" mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
+          <Media className="neumorphic borderRadius-2 mt-2 mb-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
       </Row>
-      <Row className="h-50 overflow-hidden">
+      <Row className="mt-4">
         <Col>
           <h4>More Base</h4>
           <MediaList className="mt-2 borderRadius-2 p-3" insetNeumorphic={true} elementsPerRow={2}>
-            <Media mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
-            <Media mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
+            <Media mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
+            <Media mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
           </MediaList>
         </Col>
         <Col>
           <h4>Mask Face</h4>
           <MediaList className="mt-2 borderRadius-2 p-3" insetNeumorphic={true} elementsPerRow={2}>
-            <Media mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
-            <Media mediaSrc={'chris.mp4'} mediaType="video/mp4"/>
+            <Media mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
+            <Media mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
           </MediaList>
         </Col>
       </Row>
-      <Row>
+      <Row className="mt-2">
         <Col xs={2}></Col>
         <Col xs={8}>
           <Button className="p-2 mt-2 mb-2 borderRadius-2" onClick={sendFile}>Load</Button>

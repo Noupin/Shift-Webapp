@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
+import { defaultVideo } from "../../Helpers/defaultMedia";
 
 
 interface trainRequestReturn {
@@ -39,18 +40,18 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
           </Row>
         </Col>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
           </Row>
         </Col>
       </Row>

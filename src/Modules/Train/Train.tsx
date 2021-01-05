@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
+import { defaultVideo } from "../../Helpers/defaultMedia";
 
 
 interface trainRequestReturn {
@@ -36,8 +37,8 @@ export const Train = (props: IElevatedPageState) => {
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
-      <Row>
-        <Media className="neumorphic mt-2 mb-2 borderRadius-2" mediaSrc="chris.mp4" mediaType="video/mp4"/>
+      <Row className="my-2">
+        <Media className="neumorphic borderRadius-2 my-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
       </Row>
       <Row>
         <Col xs={2}></Col>
