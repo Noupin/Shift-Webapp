@@ -12,7 +12,6 @@ export const dropFiles = (event: React.DragEvent) => {
   if(event.dataTransfer.files.length > 0) {
     for (var fileIndex = 0; fileIndex < event.dataTransfer.files.length; fileIndex++){
       files.push(event.dataTransfer.files[fileIndex]);
-      console.log(event.dataTransfer.files[fileIndex]);
     }
   }
   else {

@@ -86,40 +86,38 @@ export default function App() {
                 </Row>
               </Alert>
 
-              <Row className="flex-grow-1">
-                <Switch>
-                  <Route path="/register">
-                    <Register {...pageState}></Register>
-                  </Route>
-                  <Route path="/login">
-                    <Login {...pageState}></Login>
-                  </Route>
-                  <Route path="/logout">
-                    <Logout {...pageState}></Logout>
-                  </Route>
-                  <Route path="/account">
-                    <Account {...pageState}></Account>
-                  </Route>
-                  <Route path="/forgotPassword">
-                    <ForgotPassword {...pageState}></ForgotPassword>
-                  </Route>
-                  <Route path="/load">
-                    <Load {...pageState}></Load>
-                  </Route>
-                  <Route path="/train">
-                    <Train {...pageState}></Train>
-                  </Route>
-                  <Route path="/advancedTrain">
-                    <AdvancedTrain {...pageState}></AdvancedTrain>
-                  </Route>
-                  <Route path="/shift">
-                    <Shift {...pageState}></Shift>
-                  </Route>
-                  <Route path="/">
-                    <Home />
-                  </Route>
-                </Switch>
-              </Row>
+              <Switch>
+                <Route path="/register">
+                  <Register {...pageState}></Register>
+                </Route>
+                <Route path="/login">
+                  <Login {...pageState}></Login>
+                </Route>
+                <Route path="/logout">
+                  <Logout {...pageState}></Logout>
+                </Route>
+                <Route path="/account">
+                  <Account {...pageState}></Account>
+                </Route>
+                <Route path="/forgotPassword">
+                  <ForgotPassword {...pageState}></ForgotPassword>
+                </Route>
+                <Route path="/load">
+                  <Load {...pageState}></Load>
+                </Route>
+                <Route path="/train">
+                  <Train {...pageState}></Train>
+                </Route>
+                <Route path="/advancedTrain">
+                  <AdvancedTrain {...pageState}></AdvancedTrain>
+                </Route>
+                <Route path="/shift">
+                  <Shift {...pageState}></Shift>
+                </Route>
+                <Route path="/">
+                  <Home />
+                </Route>
+              </Switch>
 
             </div>
           </Col>

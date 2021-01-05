@@ -1,5 +1,5 @@
 //Third Party Imports
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
@@ -9,6 +9,8 @@ import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { MediaList } from "../../Components/MediaList/MediaList";
 import { defaultVideo } from "../../Helpers/defaultMedia";
+import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
+import { openFileDialog } from '../../Helpers/FileSelector';
 
 
 interface loadRequestReturn {
@@ -22,8 +24,10 @@ const ListOfDataType: string[] = [];
 export const Load = (props: IElevatedPageState) => {
 
   const [dataTypes, setDataTypes] = useState(ListOfDataType);
-  const [image, setImage] = useState("");
   const [files, setFiles] = useState(ListOfFiles);
+  const [baseFiles, setBaseFiles] = useState(ListOfFiles);
+  const [maskFiles, setMaskFiles] = useState(ListOfFiles);
+  const [baseVideo, setBaseVideo] = useState(defaultVideo);
 
   const requestHeaders = new Headers();
   const requestOptions: RequestInit = {
@@ -62,24 +66,35 @@ export const Load = (props: IElevatedPageState) => {
       <Row>
       <Col xs={2}></Col>
         <Col xs={8}>
-          <Media className="neumorphic borderRadius-2 mt-2 mb-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
+          <Media className="neumorphic borderRadius-2 mt-2 mb-2" onDragOver={(event) => allowDrop(event)}
+                      onDrop={(event) => setBaseVideo(dropFiles(event)[0])} mediaSrc={baseVideo} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
       </Row>
       <Row className="mt-4">
         <Col>
           <h4>More Base</h4>
-          <MediaList className="mt-2 borderRadius-2 p-3" insetNeumorphic={true} elementsPerRow={2}>
-            <Media mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
-            <Media mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
-          </MediaList>
+          <div className="neumorphic borderRadius-2">
+            <h4 className="text-right pr-2" onClick={(event) => {openFileDialog(event, baseFiles, setBaseFiles)}}>&#43;</h4>
+            <MediaList className="mt-2 p-3" onDragOver={(event) => allowDrop(event)}
+                      onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event)])} elementsPerRow={2} key={baseFiles.length}>
+              {baseFiles.map((file) => (
+                <Media mediaSrc={file} mediaType="video/mp4" droppable={true}/>
+              ))}
+            </MediaList>
+          </div>
         </Col>
         <Col>
           <h4>Mask Face</h4>
-          <MediaList className="mt-2 borderRadius-2 p-3" insetNeumorphic={true} elementsPerRow={2}>
-            <Media mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
-            <Media mediaSrc={defaultVideo} mediaType="video/mp4" droppable={true}/>
-          </MediaList>
+          <div className="neumorphic borderRadius-2">
+            <h4 className="text-right pr-2" onClick={(event) => {openFileDialog(event, maskFiles, setMaskFiles);}}>&#43;</h4>
+            <MediaList className="mt-2 borderRadius-2 p-3" onDragOver={(event) => allowDrop(event)}
+                      onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event)])} elementsPerRow={2} key={maskFiles.length}>
+              {maskFiles.map((file) => (
+                <Media mediaSrc={file} mediaType="video/mp4" droppable={true}/>
+              ))}
+            </MediaList>
+          </div>
         </Col>
       </Row>
       <Row className="mt-2">

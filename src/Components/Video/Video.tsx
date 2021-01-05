@@ -13,8 +13,6 @@ export const Video = (props: IVideo) => {
   const {videoSrc, videoType, ...videoProps} = props;
   const cssClasses = videoProps.className?.toString();
 
-  console.log(videoSrc)
-
   return(
     <video {...videoProps} className={cssClasses} key={videoSrc} controls>
       <source src={videoSrc} type={videoType}/>

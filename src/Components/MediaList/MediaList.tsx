@@ -5,17 +5,12 @@ import { Row, Col } from 'react-bootstrap';
 
 interface IMediaList extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
   elementsPerRow: number
-  insetNeumorphic: boolean
   children: React.ReactNode
 }
 
 export const MediaList = (props: IMediaList) =>{
-  const {elementsPerRow, insetNeumorphic, children, ...mediaListProps} = props;
-  let neumorphicType = "neumorphic";
-  if(insetNeumorphic){
-    neumorphicType = "insetNeumorphic"
-  }
-  const cssClasses = mediaListProps.className?.toString() + ` ${neumorphicType}`;
+  const {elementsPerRow, children, ...mediaListProps} = props;
+  const cssClasses = mediaListProps.className?.toString();
   const [elements, setElements] = useState(React.Children.toArray(children));
 
   let gridElements: React.ReactNode[][] = [[]]
@@ -33,7 +28,7 @@ export const MediaList = (props: IMediaList) =>{
   return (
     <div {...mediaListProps} className={cssClasses}>
       {gridElements.map((row, currentIndex) => (
-        <Row>
+        <Row className="my-2 mx-0">
           {row.map(element => (<Col>{element}</Col>))}
         </Row>
       ))}
