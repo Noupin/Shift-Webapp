@@ -12,7 +12,7 @@ import { Login } from "./Modules/User/Login";
 import { Logout } from "./Modules/User/Logout";
 import { Account } from './Modules/User/Account';
 import { ForgotPassword } from "./Modules/User/ForgotPassword";
-//import { Navbar } from "./Components/Navbar/Navbar";
+import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load"
 import { Train } from "./Modules/Train/Train";
 import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
@@ -27,7 +27,7 @@ export default function App() {
   const [msg, setMsg] = useState("");
   const [showMsg, setShowMsg] = useState(true);
 
-  const pageState: IElevatedPageState = {shiftUUID: shiftUUID, setShiftUUID: setShiftUUID, setMsg: setMsg};
+  const pageState: IElevatedPageState = {shiftUUID: shiftUUID, setShiftUUID: setShiftUUID, setMsg: setMsg, epochs: 10, username: ""};
 
   useEffect(() => {
     setShowMsg(true);
@@ -44,37 +44,7 @@ export default function App() {
           <Col>
             <div className="h-100 d-flex flex-column">
               <Row className="justify-content-center">
-                <h1>Lorem Ipsum Soda</h1>
-              </Row>
-
-              <Row className="justify-content-center">
-                <Nav id="nav" variant="pills" defaultActiveKey="/">
-                  <Nav.Item>
-                    <Nav.Link >
-                      <Link to="/">Home</Link>
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link >
-                      <Link to="/register">Register</Link>
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link>
-                      <Link to="/login">Login</Link>
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link>
-                      <Link to="/logout">Logout</Link>
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link>
-                      <Link to="/account">Account</Link>
-                    </Nav.Link>
-                  </Nav.Item>
-                </Nav>
+                <NavBar {...pageState}/>
               </Row>
 
               <Alert show={showMsg} variant="primary">

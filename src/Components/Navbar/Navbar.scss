@@ -1,9 +1,17 @@
 @import "../../variables.scss";
 
-.nav {
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem calc((100vw - 1000px) / 2);
-    z-index: 10;
+
+.navLink{
+    color: black;
+    text-decoration: none;
+}
+
+.navLink:hover{
+    text-decoration: none;
+}
+
+.navSelected {
+    background: $sameAsBackground;
+    box-shadow: inset 5px 5px 10px $dimShadow, 
+                inset -5px -5px 10px $brightShadow;
 }
