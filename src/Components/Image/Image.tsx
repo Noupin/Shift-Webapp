@@ -1,5 +1,5 @@
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 //First Party Imports
 import './Image.scss';
@@ -13,6 +13,6 @@ export const Image = (props: IImage) => {
   const cssClasses = imageProps.className?.toString() + " borderRadius-2 img-fluid";
 
   return(
-    <img {...imageProps} className={cssClasses} src={imageSrc} alt="Image"/>
+    <img {...imageProps} className={cssClasses} src={imageSrc} alt=""/>
   );
 }

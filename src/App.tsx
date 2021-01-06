@@ -44,7 +44,7 @@ export default function App() {
           <Col>
             <div className="h-100 d-flex flex-column">
               <Row className="justify-content-center">
-                <h1>Navbar</h1>
+                <h1>Lorem Ipsum Soda</h1>
               </Row>
 
               <Row className="justify-content-center">

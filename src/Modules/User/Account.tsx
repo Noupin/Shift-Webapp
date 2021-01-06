@@ -8,17 +8,21 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 export const Account = (props: IElevatedPageState) => {
   const [username, setUsername] = useState("");
 
-  useEffect(() => {
-    const requestOptions: RequestInit = {
-      method: 'GET',
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json' }
-    };
-      
+  const requestOptions: RequestInit = {
+    method: 'GET',
+    credentials: "include",
+    headers: { 'Content-Type': 'application/json' }
+  };
+
+  const getAccountData = async () => {
     fetch(`/api/users/account`, requestOptions).then(res => res.json()).then(data => {
       setUsername(data.username);
       console.log(data);
     });
+  }
+
+  useEffect(() => {
+    getAccountData()
   }, []);
 
   return (

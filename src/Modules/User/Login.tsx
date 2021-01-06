@@ -16,7 +16,7 @@ export const Login = (props: IElevatedPageState) => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const loginUser = () => {
+  const loginUser = async () => {
     const requestOptions: RequestInit = {
       method: 'POST',
       credentials: "include",

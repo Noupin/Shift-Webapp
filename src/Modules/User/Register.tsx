@@ -16,7 +16,7 @@ export const Register = (props: IElevatedPageState) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const registerUser = () => {
+  const registerUser = async () => {
     const requestOptions: RequestInit = {
       method: 'POST',
       credentials: "include",

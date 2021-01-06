@@ -1,5 +1,5 @@
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 //First Party Imports
 import { Image } from '../Image/Image';
@@ -9,7 +9,7 @@ import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 interface IMedia extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
   mediaSrc: File
   mediaType?: string
-  droppable: boolean
+  droppable?: boolean
 }
 
 const videoTypes: string[] = ['mp4', 'webm', 'ogg']

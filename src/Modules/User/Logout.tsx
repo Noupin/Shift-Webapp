@@ -9,7 +9,7 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 
 export const Logout = (props: IElevatedPageState) => {
 
-  const logoutUser = () => {
+  const logoutUser = async () => {
     const requestOptions: RequestInit = {
       method: 'GET',
       credentials: "include",

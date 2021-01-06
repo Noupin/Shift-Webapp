@@ -1,0 +1,12 @@
+input[type="file"]{
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+}
+
+input[type="file"] + label {
+    font-weight: bold;
+    font-size: x-large;
+}

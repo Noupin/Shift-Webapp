@@ -1,5 +1,5 @@
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 
 
@@ -11,7 +11,7 @@ interface IMediaList extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
 export const MediaList = (props: IMediaList) =>{
   const {elementsPerRow, children, ...mediaListProps} = props;
   const cssClasses = mediaListProps.className?.toString();
-  const [elements, setElements] = useState(React.Children.toArray(children));
+  const elements = React.Children.toArray(children);
 
   let gridElements: React.ReactNode[][] = [[]]
   let gridRow = 0;

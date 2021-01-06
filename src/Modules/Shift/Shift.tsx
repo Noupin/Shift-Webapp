@@ -9,15 +9,24 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { defaultVideo } from "../../Helpers/defaultMedia";
+import { useFetch } from "../../Hooks/Fetch";
+import { useBinaryImageCovnersion } from "../../Hooks/Images";
 
 
 interface shiftRequestReturn {
-    msg: string,
-    testImage: string
-  }
+	msg: string,
+	testImage: string
+}
+
+let shiftResponse: shiftRequestReturn = {msg: "", testImage: ""}
+
 
 export const Shift = (props: IElevatedPageState) => {
-	const [image, setImage] = useState("");
+	const [image, setImage] = useState(defaultVideo);
+	const [imageString, setImageString] = useState("");
+
+	const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(shiftResponse);
+	const [convertImage, imageFile, imageError, imageLoading] = useBinaryImageCovnersion()
 
 	const requestOptions: RequestInit = {
 		method: 'POST',
@@ -28,24 +37,34 @@ export const Shift = (props: IElevatedPageState) => {
 													prebuiltShiftModel: ""})
 	};
 
-	const shift = () => {
-		fetch(`/api/inference`, requestOptions).then(res => res.json()).then((data: shiftRequestReturn) => {
-			setImage(data.testImage);
-			props.setMsg(data.msg);
-			console.log(data);
-		})
-		.catch(error => {
-			console.error(error);
-		});
+
+	async function shift(){
+		apiFetch(`/api/inference`, requestOptions)
+		setImageString(apiResponse.testImage)
+		convertImage(imageString)
 	}
+
+
+	useEffect(() => {
+		setImage(imageFile)
+	}, [imageFile]);
+
+	useEffect(() => {
+		console.error(apiError);
+	}, [apiError]);
+
+	useEffect(() => {
+		console.error(imageError);
+	}, [imageError]);
+
 
 	return (
 		<Container className="d-flex justify-content-center h-100 flex-column">
 			<Row className="mb-2">
-				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" key={image.lastModified} mediaSrc={image} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-3">
-				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>
@@ -61,7 +80,7 @@ export const Shift = (props: IElevatedPageState) => {
 				</Col>
 				<Col xs={1}></Col>
 				<Col xs={5}>
-					<Button className="borderRadius-2 p-2 w-100" onClick={shift}>Share</Button>
+					<Button className="borderRadius-2 p-2 w-100" disabled={apiLoading || imageLoading} onClick={shift}>Share</Button>
 				</Col>
 				<Col xs={1}></Col>
 			</Row>

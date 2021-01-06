@@ -1,5 +1,5 @@
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 //First Party Imports
 import './Video.scss';

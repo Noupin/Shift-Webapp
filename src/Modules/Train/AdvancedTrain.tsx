@@ -1,5 +1,5 @@
 //Third Party Imports
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
@@ -8,13 +8,18 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { defaultVideo } from "../../Helpers/defaultMedia";
+import { useFetch } from "../../Hooks/Fetch";
 
 
 interface trainRequestReturn {
   msg: string
 }
 
+let trainResponse: trainRequestReturn = {msg: ""}
+
+
 export const AdvancedTrain = (props: IElevatedPageState) => {
+  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(trainResponse);  
 
   const requestOptions: RequestInit = {
     method: 'POST',
@@ -25,33 +30,35 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
                           prebuiltShiftModel: ""})
   };
 
-  const trainShift = () => {
-    fetch(`/api/train`, requestOptions).then(res => res.json()).then((data: trainRequestReturn) => {
-      console.log(data);
-      props.setMsg(data.msg);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+  
+  async function train(){
+    apiFetch(`/api/train`, requestOptions)
+    props.setMsg(apiResponse.msg)
   }
+
+
+  useEffect(() => {
+    console.error(apiError)
+  }, [apiError]);
+
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
         </Col>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4" droppable={false}/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
         </Col>
       </Row>
@@ -63,7 +70,7 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
           </Link>
         </Col>
         <Col xs={4} className="m-2">
-          <Button className="borderRadius-2 p-2 ml-2 w-100" onClick={trainShift}>Shift</Button>
+          <Button className="borderRadius-2 p-2 ml-2 w-100" onClick={train}>Shift</Button>
         </Col>
         <Col xs={2}></Col>
       </Row>
