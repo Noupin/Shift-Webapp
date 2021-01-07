@@ -1,17 +1,51 @@
 //Third Party Imports
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Navbar, Nav } from "react-bootstrap";
 
 
 //First Party Imports
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import './Navbar.scss'
 import Logo from '../../Assets/icon.png'
+import { IElevatedPageState } from "../../Interfaces/PageState";
 
 
 export const NavBar = (props: IElevatedPageState) => {
   const imageStyle = {height: "auto", width: "auto", maxHeight: "30px", maxWidth: "30px"}
+
+
+  let userNavElements = (
+    <>
+    <Nav.Link>
+      <NavLink to="/login" activeClassName="navSelected" className="nav-link borderRadius-2">
+        Login
+      </NavLink>
+    </Nav.Link>
+    <Nav.Link>
+      <NavLink to="/register" activeClassName="navSelected" className="nav-link borderRadius-2">
+        Register
+      </NavLink>
+    </Nav.Link>
+    </>
+  );
+  
+  if(props.authenticated){
+    userNavElements = (
+      <>
+      <Nav.Link>
+        <NavLink to="/account" activeClassName="navSelected" className="nav-link borderRadius-2">
+          Account
+        </NavLink>
+      </Nav.Link>
+      <Nav.Link>
+        <NavLink to="/logout" activeClassName="navSelected" className="nav-link borderRadius-2">
+          Logout
+        </NavLink>
+      </Nav.Link>
+      </>
+    );
+  }
+
   return (
     <div className="neumorphic borderRadius-2 mx-2 mt-2 w-100">
       <Navbar sticky="top" expand="lg">
@@ -32,11 +66,7 @@ export const NavBar = (props: IElevatedPageState) => {
             </Nav.Link>
           </Nav>
           <Nav className="justify-content-end">
-            <Nav.Link>
-              <NavLink to="/account" activeClassName="navSelected" className="nav-link borderRadius-2">
-                Account
-              </NavLink>
-            </Nav.Link>
+            {userNavElements}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

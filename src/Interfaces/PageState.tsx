@@ -6,5 +6,6 @@ export interface IElevatedPageState {
     setShiftUUID: React.Dispatch<React.SetStateAction<string>>
     setMsg: React.Dispatch<React.SetStateAction<string>>
     epochs: number
-    username: string
+    user: string
+    authenticated: boolean
 }

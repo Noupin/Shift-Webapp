@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import { BrowserRouter as Router,
-         Switch, Route, Link } from "react-router-dom";
-import { Container, Nav, Row, Col, Alert } from "react-bootstrap";
+         Switch, Route } from "react-router-dom";
+import { Container, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
+import { IElevatedPageState } from "./Interfaces/PageState";
 import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
 import { Logout } from "./Modules/User/Logout";
@@ -18,16 +19,46 @@ import { Train } from "./Modules/Train/Train";
 import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Shift } from "./Modules/Shift/Shift";
 import { Button } from "./Components/Button/Button";
-import { IElevatedPageState } from "./Interfaces/PageState";
+import { useFetch } from "./Hooks/Fetch"
+
+
+interface authenticationRequestReturn {
+  authenticated: boolean
+}
+
+let authenticationResponse: authenticationRequestReturn = {authenticated: false};
 
 
 export default function App() {
+  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(authenticationResponse);
+
+  const [authenticated, setAuthenticated] = useState(false)
   const [shiftUUID, setShiftUUID] = useState(sessionStorage.getItem('shiftUUID') || "");
 
   const [msg, setMsg] = useState("");
   const [showMsg, setShowMsg] = useState(true);
 
-  const pageState: IElevatedPageState = {shiftUUID: shiftUUID, setShiftUUID: setShiftUUID, setMsg: setMsg, epochs: 10, username: ""};
+  const pageState: IElevatedPageState = {shiftUUID: shiftUUID,
+                                         setShiftUUID: setShiftUUID,
+                                         setMsg: setMsg,
+                                         epochs: 10,
+                                         user: "",
+                                         authenticated: authenticated};
+  
+  function isUserAuthenticated(){
+    const requestOptions: RequestInit = {
+      method: 'GET',
+      credentials: "include",
+      headers: { 'Content-Type': 'application/json' }
+    };
+
+    apiFetch(`api/users/isAuthenticated`, requestOptions)
+    setAuthenticated(apiResponse.authenticated)
+  }
+
+  useEffect(() => {
+    isUserAuthenticated()
+  });
 
   useEffect(() => {
     setShowMsg(true);
