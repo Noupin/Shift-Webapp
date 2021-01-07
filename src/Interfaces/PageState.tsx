@@ -8,4 +8,5 @@ export interface IElevatedPageState {
     epochs: number
     user: string
     authenticated: boolean
+    setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
 }

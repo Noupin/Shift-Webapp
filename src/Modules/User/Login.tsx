@@ -1,5 +1,5 @@
 //Third Party Imports
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
@@ -8,15 +8,26 @@ import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { IElevatedPageState } from "../../Interfaces/PageState";
+import { useFetch } from "../../Hooks/Fetch";
+import { useAuthentication } from "../../Hooks/Authenticated";
+
+
+interface loginRequestReturn {
+  msg: string
+}
+
+let loginResponse: loginRequestReturn = {msg: ""}
 
 
 export const Login = (props: IElevatedPageState) => {
-
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const loginUser = async () => {
+  const [isAuthenticated, authenticate] = useAuthentication()
+  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(loginResponse);
+
+  async function loginUser() {
     const requestOptions: RequestInit = {
       method: 'POST',
       credentials: "include",
@@ -26,11 +37,18 @@ export const Login = (props: IElevatedPageState) => {
                             remember: rememberMe})
     };
     
-    fetch(`/api/users/login`, requestOptions).then(res => res.json()).then(data => {
-      console.log(data);
-      props.setMsg(data.msg);
-    });
+    apiFetch(`/api/users/login`, requestOptions)
+    props.setMsg(apiResponse.msg)
+
+    authenticate()
+    props.setAuthenticated(isAuthenticated)
   }
+
+    
+  useEffect(() => {
+    console.error(apiError)
+  }, [apiError]);
+
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
@@ -53,7 +71,7 @@ export const Login = (props: IElevatedPageState) => {
           <Row>
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={loginUser}>Login &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={loginUser} disabled={apiLoading}>Login &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>

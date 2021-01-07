@@ -33,7 +33,7 @@ export const Load = (props: IElevatedPageState) => {
   const [baseFiles, setBaseFiles] = useState(ListOfFiles);
   const [maskFiles, setMaskFiles] = useState(ListOfFiles);
   const [baseVideo, setBaseVideo] = useState(defaultVideo);
-  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(loadResponse);  
+  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(loadResponse);
 
   const requestHeaders = new Headers();
   const requestOptions: RequestInit = {
@@ -79,7 +79,7 @@ export const Load = (props: IElevatedPageState) => {
           <Row>
             <Col xs={11}></Col>
             <Col xs={1} >
-              <FileDialog className="pr-2" id="baseVideoUpload" onChange={(event) => setBaseVideo(event.target.files![0])}>&#x21c6;</FileDialog>
+              <FileDialog className="pr-4" id="baseVideoUpload" onChange={(event) => setBaseVideo(event.target.files![0])}>&#x21c6;</FileDialog>
             </Col>
           </Row>
           <Media className="borderRadius-2 p-2" key={baseVideo.name} onDragOver={(event) => allowDrop(event)}
@@ -94,7 +94,7 @@ export const Load = (props: IElevatedPageState) => {
             <Row>
               <Col xs={11}></Col>
               <Col xs={1} >
-                <FileDialog className="pr-2" id="baseFileUpload" mutipleSelect={true} onChange={(event) => setBaseFiles((current) => [...current, ...fileListToList(event.target.files!)])}>&#43;</FileDialog>
+                <FileDialog className="pr-4" id="baseFileUpload" mutipleSelect={true} onChange={(event) => setBaseFiles((current) => [...current, ...fileListToList(event.target.files!)])}>&#43;</FileDialog>
               </Col>
             </Row>
             <MediaList className="mt-2 p-3" onDragOver={(event) => allowDrop(event)}
@@ -111,7 +111,7 @@ export const Load = (props: IElevatedPageState) => {
             <Row>
               <Col xs={11}></Col>
               <Col xs={1} >
-                <FileDialog className="pr-2" id="maskFileUpload" mutipleSelect={true} onChange={(event) => setMaskFiles((current) => [...current, ...fileListToList(event.target.files!)])}>&#43;</FileDialog>
+                <FileDialog className="pr-4" id="maskFileUpload" mutipleSelect={true} onChange={(event) => setMaskFiles((current) => [...current, ...fileListToList(event.target.files!)])}>&#43;</FileDialog>
               </Col>
             </Row>
             <MediaList className="mt-2 borderRadius-2 p-3" onDragOver={(event) => allowDrop(event)}

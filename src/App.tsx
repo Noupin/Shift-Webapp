@@ -10,7 +10,6 @@ import { Container, Row, Col, Alert } from "react-bootstrap";
 import { IElevatedPageState } from "./Interfaces/PageState";
 import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
-import { Logout } from "./Modules/User/Logout";
 import { Account } from './Modules/User/Account';
 import { ForgotPassword } from "./Modules/User/ForgotPassword";
 import { NavBar } from "./Components/Navbar/Navbar";
@@ -19,18 +18,11 @@ import { Train } from "./Modules/Train/Train";
 import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Shift } from "./Modules/Shift/Shift";
 import { Button } from "./Components/Button/Button";
-import { useFetch } from "./Hooks/Fetch"
-
-
-interface authenticationRequestReturn {
-  authenticated: boolean
-}
-
-let authenticationResponse: authenticationRequestReturn = {authenticated: false};
+import { useAuthentication } from "./Hooks/Authenticated"
 
 
 export default function App() {
-  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(authenticationResponse);
+  const [isAuthenticated, authenticate] = useAuthentication()
 
   const [authenticated, setAuthenticated] = useState(false)
   const [shiftUUID, setShiftUUID] = useState(sessionStorage.getItem('shiftUUID') || "");
@@ -43,22 +35,17 @@ export default function App() {
                                          setMsg: setMsg,
                                          epochs: 10,
                                          user: "",
-                                         authenticated: authenticated};
-  
-  function isUserAuthenticated(){
-    const requestOptions: RequestInit = {
-      method: 'GET',
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json' }
-    };
-
-    apiFetch(`api/users/isAuthenticated`, requestOptions)
-    setAuthenticated(apiResponse.authenticated)
-  }
+                                         authenticated: authenticated,
+                                         setAuthenticated: setAuthenticated};
 
   useEffect(() => {
-    isUserAuthenticated()
-  });
+    async function auth() {
+      authenticate()
+      setAuthenticated(isAuthenticated)
+    }
+
+    auth()
+  }, []);
 
   useEffect(() => {
     setShowMsg(true);
@@ -75,7 +62,7 @@ export default function App() {
           <Col>
             <div className="h-100 d-flex flex-column">
               <Row className="justify-content-center">
-                <NavBar {...pageState}/>
+                <NavBar {...pageState} key={`${authenticated}`}/>
               </Row>
 
               <Alert show={showMsg} variant="primary">
@@ -93,9 +80,6 @@ export default function App() {
                 </Route>
                 <Route path="/login">
                   <Login {...pageState}></Login>
-                </Route>
-                <Route path="/logout">
-                  <Logout {...pageState}></Logout>
                 </Route>
                 <Route path="/account">
                   <Account {...pageState}></Account>

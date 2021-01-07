@@ -3,10 +3,20 @@ import React, { useState, useEffect } from 'react';
 
 //First Party Imports
 import { IElevatedPageState } from "../../Interfaces/PageState";
+import { useFetch } from "../../Hooks/Fetch";
+
+
+interface accountRequestReturn {
+  username: string,
+}
+
+let accountResponse: accountRequestReturn = {username: ""}
 
 
 export const Account = (props: IElevatedPageState) => {
   const [username, setUsername] = useState("");
+
+  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(accountResponse);
 
   const requestOptions: RequestInit = {
     method: 'GET',
@@ -14,15 +24,17 @@ export const Account = (props: IElevatedPageState) => {
     headers: { 'Content-Type': 'application/json' }
   };
 
-  const getAccountData = async () => {
-    fetch(`/api/users/account`, requestOptions).then(res => res.json()).then(data => {
-      setUsername(data.username);
-      console.log(data);
-    });
+  async function getAccountData() {
+    apiFetch(`/api/users/account`, requestOptions)
+    setUsername(apiResponse.username)
   }
 
   useEffect(() => {
-    getAccountData()
+    async function accountAPI(){
+      getAccountData()
+    }
+
+    accountAPI()
   }, []);
 
   return (
