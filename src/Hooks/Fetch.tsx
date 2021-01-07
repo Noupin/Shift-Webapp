@@ -11,8 +11,9 @@ export function useFetch(defaultResponse: any): [(url: string, options: RequestI
     setIsLoading(true);
 
     try{
-      const res = await fetch(url, options);
-      const json = await res.json();
+      let res = await fetch(url, options);
+      let json = await res.json();
+      console.log(json)
       setResponse(json);
       setIsLoading(false)
     }

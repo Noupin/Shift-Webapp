@@ -22,7 +22,7 @@ let logoutResponse: logoutRequestReturn = {msg: ""}
 export const NavBar = (props: IElevatedPageState) => {
   const imageStyle = {height: "auto", width: "auto", maxHeight: "30px", maxWidth: "30px"}
 
-  const [isAuthenticated, authenticate] = useAuthentication()
+  const [isAuthenticated, authenticate, checkingAuthentication] = useAuthentication()
   const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(logoutResponse);
 
 
@@ -33,10 +33,10 @@ export const NavBar = (props: IElevatedPageState) => {
       headers: { 'Content-Type': 'application/json'}
     };
 
-    apiFetch(`/api/users/logout`, requestOptions)
+    await apiFetch(`/api/users/logout`, requestOptions)
     props.setMsg(apiResponse.msg)
 
-    authenticate()
+    await authenticate()
     props.setAuthenticated(isAuthenticated)
   }
 
@@ -61,24 +61,22 @@ export const NavBar = (props: IElevatedPageState) => {
     </>
   );
   
-  useEffect(() => {
-    if(props.authenticated){
-      userNavElements = (
-        <>
-        <Nav.Link>
-          <NavLink to="/account" activeClassName="navSelected" className="nav-link borderRadius-2">
-            Account
-          </NavLink>
-        </Nav.Link>
-        <Nav.Link>
-          <Button className="neumorphic borderRadius-2 py-2 px-3" onClick={logoutUser} disabled={apiLoading}>
-            Logout
-          </Button>
-        </Nav.Link>
-        </>
-      );
-    }
-  }, [props.authenticated]);
+  if(props.authenticated){
+    userNavElements = (
+      <>
+      <Nav.Link>
+        <NavLink to="/account" activeClassName="navSelected" className="nav-link borderRadius-2">
+          Account
+        </NavLink>
+      </Nav.Link>
+      <Nav.Link>
+        <Button className="neumorphic borderRadius-2 py-2 px-3" onClick={logoutUser} disabled={apiLoading || checkingAuthentication}>
+          Logout
+        </Button>
+      </Nav.Link>
+      </>
+    );
+  }
 
   return (
     <div className="neumorphic borderRadius-2 mx-2 mt-2 w-100">

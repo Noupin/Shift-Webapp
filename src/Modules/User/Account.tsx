@@ -25,17 +25,17 @@ export const Account = (props: IElevatedPageState) => {
   };
 
   async function getAccountData() {
-    apiFetch(`/api/users/account`, requestOptions)
+    await apiFetch(`/api/users/account`, requestOptions)
     setUsername(apiResponse.username)
   }
 
   useEffect(() => {
     async function accountAPI(){
-      getAccountData()
+      await getAccountData()
     }
 
     accountAPI()
-  }, []);
+  }, [username]);
 
   return (
     <>

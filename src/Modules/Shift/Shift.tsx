@@ -39,9 +39,9 @@ export const Shift = (props: IElevatedPageState) => {
 
 
 	async function shift(){
-		apiFetch(`/api/inference`, requestOptions)
+		await apiFetch(`/api/inference`, requestOptions)
 		setImageString(apiResponse.testImage)
-		convertImage(imageString)
+		await convertImage(imageString)
 	}
 
 

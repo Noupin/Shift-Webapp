@@ -22,7 +22,7 @@ import { useAuthentication } from "./Hooks/Authenticated"
 
 
 export default function App() {
-  const [isAuthenticated, authenticate] = useAuthentication()
+  const [isAuthenticated, authenticate, checkingAuthentication] = useAuthentication()
 
   const [authenticated, setAuthenticated] = useState(false)
   const [shiftUUID, setShiftUUID] = useState(sessionStorage.getItem('shiftUUID') || "");
@@ -39,12 +39,13 @@ export default function App() {
                                          setAuthenticated: setAuthenticated};
 
   useEffect(() => {
-    async function auth() {
-      authenticate()
+    async function checkAuthentication() {
+      await authenticate()
+      console.log(isAuthenticated)
       setAuthenticated(isAuthenticated)
     }
 
-    auth()
+    checkAuthentication()
   }, []);
 
   useEffect(() => {

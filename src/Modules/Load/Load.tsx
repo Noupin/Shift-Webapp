@@ -54,7 +54,7 @@ export const Load = (props: IElevatedPageState) => {
     requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
     requestOptions.headers = requestHeaders;
 
-    apiFetch(`/api/loadData`, requestOptions)
+    await apiFetch(`/api/loadData`, requestOptions)
     props.setMsg(apiResponse.msg)
     props.setShiftUUID(apiResponse.shiftUUID)
   }

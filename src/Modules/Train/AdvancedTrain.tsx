@@ -32,7 +32,7 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
 
   
   async function train(){
-    apiFetch(`/api/train`, requestOptions)
+    await apiFetch(`/api/train`, requestOptions)
     props.setMsg(apiResponse.msg)
   }
 

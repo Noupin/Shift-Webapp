@@ -12,7 +12,7 @@ interface authenticationRequestReturn {
 let authenticationResponse: authenticationRequestReturn = {authenticated: false};
 
 
-export function useAuthentication(): [boolean, () => Promise<void>]{
+export function useAuthentication(): [boolean, () => Promise<void>, boolean]{
   const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(authenticationResponse);
   const [authenticated, setAuthenticated] = useState(false);
 
@@ -23,10 +23,9 @@ export function useAuthentication(): [boolean, () => Promise<void>]{
       headers: { 'Content-Type': 'application/json' }
     };
 
-    apiFetch(`/api/users/isAuthenticated`, requestOptions)
-    console.log(apiResponse)
+    await apiFetch(`/api/users/isAuthenticated`, requestOptions)
     setAuthenticated(apiResponse.authenticated)
   }
 
-  return [authenticated, isAuthenticated]
+  return [authenticated, isAuthenticated, apiLoading]
 }

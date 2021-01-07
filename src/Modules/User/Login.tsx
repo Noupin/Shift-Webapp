@@ -24,7 +24,7 @@ export const Login = (props: IElevatedPageState) => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [isAuthenticated, authenticate] = useAuthentication()
+  const [isAuthenticated, authenticate, checkingAuthentication] = useAuthentication()
   const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(loginResponse);
 
   async function loginUser() {
@@ -37,10 +37,10 @@ export const Login = (props: IElevatedPageState) => {
                             remember: rememberMe})
     };
     
-    apiFetch(`/api/users/login`, requestOptions)
+    await apiFetch(`/api/users/login`, requestOptions)
     props.setMsg(apiResponse.msg)
 
-    authenticate()
+    await authenticate()
     props.setAuthenticated(isAuthenticated)
   }
 
@@ -71,7 +71,7 @@ export const Login = (props: IElevatedPageState) => {
           <Row>
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={loginUser} disabled={apiLoading}>Login &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={loginUser} disabled={apiLoading || checkingAuthentication}>Login &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>
