@@ -37,10 +37,10 @@ export const Login = (props: IElevatedPageState) => {
                             remember: rememberMe})
     };
     
-    await apiFetch(`/api/users/login`, requestOptions)
+    apiFetch(`/api/users/login`, requestOptions)
     props.setMsg(apiResponse.msg)
 
-    await authenticate()
+    authenticate()
     props.setAuthenticated(isAuthenticated)
   }
 

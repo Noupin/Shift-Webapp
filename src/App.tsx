@@ -28,7 +28,7 @@ export default function App() {
   const [shiftUUID, setShiftUUID] = useState(sessionStorage.getItem('shiftUUID') || "");
 
   const [msg, setMsg] = useState("");
-  const [showMsg, setShowMsg] = useState(true);
+  const [showMsg, setShowMsg] = useState(false);
 
   const pageState: IElevatedPageState = {shiftUUID: shiftUUID,
                                          setShiftUUID: setShiftUUID,
@@ -39,16 +39,13 @@ export default function App() {
                                          setAuthenticated: setAuthenticated};
 
   useEffect(() => {
-    async function checkAuthentication() {
-      await authenticate()
-      console.log(isAuthenticated)
-      setAuthenticated(isAuthenticated)
-    }
-
-    checkAuthentication()
-  }, []);
+    authenticate()
+    setAuthenticated(isAuthenticated)
+  }, [isAuthenticated]);
 
   useEffect(() => {
+    if(!msg) return;
+
     setShowMsg(true);
   }, [msg]);
 

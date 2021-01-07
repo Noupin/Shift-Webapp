@@ -5,21 +5,20 @@ import { Link } from "react-router-dom";
 
 //First Party Imports
 import { IElevatedPageState } from "../../Interfaces/PageState";
+import { ITrainRequestReturn } from "../../Interfaces/Train";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { defaultVideo } from "../../Helpers/defaultMedia";
 import { useFetch } from "../../Hooks/Fetch";
+import { useBinaryImageCovnersion } from "../../Hooks/Images";
 
 
-interface trainRequestReturn {
-  msg: string
-}
-
-let trainResponse: trainRequestReturn = {msg: ""}
+let trainResponse: ITrainRequestReturn = {msg: "", exhibit: []}
 
 
 export const AdvancedTrain = (props: IElevatedPageState) => {
-  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(trainResponse);  
+  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(trainResponse); 
+  const [convertImage, imageFile, imageError, imageLoading] = useBinaryImageCovnersion() 
 
   const requestOptions: RequestInit = {
     method: 'POST',
@@ -27,12 +26,14 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify({shiftUUID: props.shiftUUID,
                           usePTM: false,
-                          prebuiltShiftModel: ""})
+                          prebuiltShiftModel: "",
+                          epochs: 10,
+                          trainType: 'basic'})
   };
 
   
-  async function train(){
-    await apiFetch(`/api/train`, requestOptions)
+  function train(){
+    apiFetch(`/api/train`, requestOptions)
     props.setMsg(apiResponse.msg)
   }
 

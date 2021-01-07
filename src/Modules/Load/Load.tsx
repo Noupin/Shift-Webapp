@@ -1,7 +1,7 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //First Party Imports
 import { IElevatedPageState } from "../../Interfaces/PageState";
@@ -33,18 +33,21 @@ export const Load = (props: IElevatedPageState) => {
   const [baseFiles, setBaseFiles] = useState(ListOfFiles);
   const [maskFiles, setMaskFiles] = useState(ListOfFiles);
   const [baseVideo, setBaseVideo] = useState(defaultVideo);
+
+  const history = useHistory()
   const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(loadResponse);
 
   const requestHeaders = new Headers();
-  const requestOptions: RequestInit = {
-    method: 'POST',
-    headers: {},
-    credentials: "include",
-  };
 
 
   async function load(){
     const data = new FormData();
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      headers: {},
+      credentials: "include",
+    };
+
     for (var fileIndex = 0; fileIndex < files.length; fileIndex++){
       console.log(files[fileIndex].name);
       data.append(`file${fileIndex}`, files[fileIndex]);
@@ -54,9 +57,11 @@ export const Load = (props: IElevatedPageState) => {
     requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
     requestOptions.headers = requestHeaders;
 
-    await apiFetch(`/api/loadData`, requestOptions)
+    apiFetch(`/api/loadData`, requestOptions)
     props.setMsg(apiResponse.msg)
     props.setShiftUUID(apiResponse.shiftUUID)
+    
+    //history.push("/train")
   }
 
 

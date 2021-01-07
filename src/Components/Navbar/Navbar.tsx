@@ -26,17 +26,17 @@ export const NavBar = (props: IElevatedPageState) => {
   const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(logoutResponse);
 
 
-  async function logoutUser() {
+  function logoutUser() {
     const requestOptions: RequestInit = {
       method: 'GET',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'}
     };
 
-    await apiFetch(`/api/users/logout`, requestOptions)
+    apiFetch(`/api/users/logout`, requestOptions)
     props.setMsg(apiResponse.msg)
 
-    await authenticate()
+    authenticate()
     props.setAuthenticated(isAuthenticated)
   }
 
@@ -70,7 +70,7 @@ export const NavBar = (props: IElevatedPageState) => {
         </NavLink>
       </Nav.Link>
       <Nav.Link>
-        <Button className="neumorphic borderRadius-2 py-2 px-3" onClick={logoutUser} disabled={apiLoading || checkingAuthentication}>
+        <Button className="neumorphic borderRadius-2 py-2 px-3 w-100" onClick={logoutUser} disabled={apiLoading || checkingAuthentication}>
           Logout
         </Button>
       </Nav.Link>

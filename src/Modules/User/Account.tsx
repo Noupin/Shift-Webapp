@@ -24,18 +24,14 @@ export const Account = (props: IElevatedPageState) => {
     headers: { 'Content-Type': 'application/json' }
   };
 
-  async function getAccountData() {
-    await apiFetch(`/api/users/account`, requestOptions)
+  function getAccountData() {
+    apiFetch(`/api/users/account`, requestOptions)
     setUsername(apiResponse.username)
   }
 
   useEffect(() => {
-    async function accountAPI(){
-      await getAccountData()
-    }
-
-    accountAPI()
-  }, [username]);
+    getAccountData()
+  }, []);
 
   return (
     <>

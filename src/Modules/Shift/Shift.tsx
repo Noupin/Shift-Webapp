@@ -38,14 +38,19 @@ export const Shift = (props: IElevatedPageState) => {
 	};
 
 
-	async function shift(){
-		await apiFetch(`/api/inference`, requestOptions)
+	function shift(){
+		apiFetch(`/api/inference`, requestOptions)
 		setImageString(apiResponse.testImage)
-		await convertImage(imageString)
+		convertImage(imageString)
 	}
 
 
 	useEffect(() => {
+		shift();
+	}, []);
+
+	useEffect(() => {
+		if(!imageFile) return;
 		setImage(imageFile)
 	}, [imageFile]);
 
