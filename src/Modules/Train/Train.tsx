@@ -51,6 +51,8 @@ export const Train = (props: IElevatedPageState) => {
     if(!trainResponse) return;
 
     props.setMsg(trainResponse!.msg)
+    if(!trainResponse!.exhibit) return;
+
     setImageString(trainResponse!.exhibit[0]);
   }, [trainResponse]);
 

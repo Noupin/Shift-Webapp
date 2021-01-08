@@ -71,7 +71,7 @@ export default function App() {
   }, [error]);
 
   return (
-    <Router>
+    <Router key={`${authenticated}`}>
       <Container fluid className="flex h-100">
         <Row className="justify-content-center h-100">
           <Col>

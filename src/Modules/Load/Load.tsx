@@ -11,7 +11,7 @@ import { MediaList } from "../../Components/MediaList/MediaList";
 import { FileDialog } from "../../Components/FileDialog/FileDialog"
 import { defaultVideo, validMediaFileExtesnions } from "../../constants";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
-import { fileListToList } from '../../Helpers/Files';
+import { fileListToList, validateFileList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
 import { useFetch } from "../../Helpers/Fetch";
 
@@ -84,6 +84,7 @@ export const Load = (props: IElevatedPageState) => {
 
   useEffect(() => {
     setFiles([baseVideo, ...baseFiles, ...maskFiles]);
+    console.log(files)
     setTrainingDataTypes([...fillArray("base", baseFiles.length+1), ...fillArray("mask", maskFiles.length)])
   }, [baseVideo, baseFiles, maskFiles]);
 
@@ -98,11 +99,16 @@ export const Load = (props: IElevatedPageState) => {
             <Col xs={11}></Col>
             <Col xs={1}>
               <FileDialog className="pr-4" id="baseVideoUpload" onChange={(event) => {
-                if(!validMediaFileExtesnions.includes(event.target.files![0].name.split('.').pop()!)){
-                  props.setMsg(`That file type ${event.target.files![0].name.split('.').pop()!} is not allowed to be selected`)
+                const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+                if(badExtensions.length > 0){
+                  props.setMsg( `The file type ${badExtensions[0]} is not allowed to be selected`)
+                }
+                if(filteredFiles.length === 0){
+                  setBaseVideo(defaultVideo)
                 }
                 else{
-                  setBaseVideo(event.target.files![0])
+                  setBaseVideo(filteredFiles[0])
                 }
               }}>&#x21c6;</FileDialog>
             </Col>
@@ -120,14 +126,13 @@ export const Load = (props: IElevatedPageState) => {
               <Col xs={11}></Col>
               <Col xs={1} >
                 <FileDialog className="pr-4" id="baseFileUpload" mutipleSelect={true} onChange={(event) => {
-                  const filteredFiles = fileListToList(event.target.files!).filter((file) => !validMediaFileExtesnions.includes(file.name.split('.').pop()!))
-                  if(filteredFiles.length > 0){
-                    const badExtensions = filteredFiles.map(file => file.name.split('.').pop()!)
+                  const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+                  if(badExtensions.length > 0){
                     props.setMsg(badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`)
                   }
-                  else{
-                    setBaseFiles((current) => [...current, ...fileListToList(event.target.files!)])
-                  }
+  
+                  setBaseFiles((current) => [...current, ...filteredFiles])
                 }}>&#43;</FileDialog>
               </Col>
             </Row>
@@ -146,16 +151,13 @@ export const Load = (props: IElevatedPageState) => {
               <Col xs={11}></Col>
               <Col xs={1} >
                 <FileDialog className="pr-4" id="maskFileUpload" mutipleSelect={true} onChange={(event) => {
-                  const filteredFiles = fileListToList(event.target.files!).filter((file) => !validMediaFileExtesnions.includes(file.name.split('.').pop()!))
-                  console.log(filteredFiles)
-                  if(filteredFiles.length > 0){
-                    const badExtensions = filteredFiles.map(file => file.name.split('.').pop()!)
-                    console.log(badExtensions)
+                  const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+                  if(badExtensions.length > 0){
                     props.setMsg(badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`)
                   }
-                  else{
-                    setMaskFiles((current) => [...current, ...fileListToList(event.target.files!)])
-                  }
+  
+                  setMaskFiles((current) => [...current, ...filteredFiles])
                 }}>&#43;</FileDialog>
               </Col>
             </Row>
