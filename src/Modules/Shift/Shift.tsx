@@ -8,9 +8,9 @@ import { Link } from "react-router-dom";
 import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { defaultVideo } from "../../Helpers/defaultMedia";
-import { useFetch } from "../../Hooks/Fetch";
-import { useBinaryImageCovnersion } from "../../Hooks/Images";
+import { defaultVideo } from "../../Constants/defaultMedia";
+import { useFetch } from "../../Helpers/Fetch";
+import { useConvertImage } from "../../Helpers/Images";
 
 
 interface shiftRequestReturn {
@@ -18,49 +18,43 @@ interface shiftRequestReturn {
 	testImage: string
 }
 
-let shiftResponse: shiftRequestReturn = {msg: "", testImage: ""}
-
 
 export const Shift = (props: IElevatedPageState) => {
 	const [image, setImage] = useState(defaultVideo);
 	const [imageString, setImageString] = useState("");
 
-	const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(shiftResponse);
-	const [convertImage, imageFile, imageError, imageLoading] = useBinaryImageCovnersion()
+	const [fetching, setFetching] = useState(true);
+  const [shiftResponse, setShiftResponse] = useState<shiftRequestReturn>();
+  const [converting, setConverting] = useState(false);
 
-	const requestOptions: RequestInit = {
-		method: 'POST',
-		credentials: "include",
-		headers: { 'Content-Type': 'application/json'},
-		body: JSON.stringify({shiftUUID: props.shiftUUID,
-													usePTM: false,
-													prebuiltShiftModel: ""})
-	};
+	let requestOptions: RequestInit = {};
 
 
-	function shift(){
-		apiFetch(`/api/inference`, requestOptions)
-		setImageString(apiResponse.testImage)
-		convertImage(imageString)
-	}
+	useFetch(() => fetching, setFetching, props.setError, setShiftResponse, `/api/inference`, () => requestOptions)
+	useConvertImage(() => converting, setConverting, props.setError, setImage, () => imageString);
 
 
 	useEffect(() => {
-		shift();
-	}, []);
+		if(!fetching) return;
+
+		requestOptions = {
+			method: 'POST',
+			credentials: "include",
+			headers: { 'Content-Type': 'application/json'},
+			body: JSON.stringify({shiftUUID: props.shiftUUID,
+														usePTM: false,
+														prebuiltShiftModel: ""})
+		}
+
+		props.setMsg(shiftResponse!.msg);
+		setImageString(shiftResponse!.testImage);
+		setConverting(true);
+	}, [fetching]);
 
 	useEffect(() => {
-		if(!imageFile) return;
-		setImage(imageFile)
-	}, [imageFile]);
-
-	useEffect(() => {
-		console.error(apiError);
-	}, [apiError]);
-
-	useEffect(() => {
-		console.error(imageError);
-	}, [imageError]);
+    if(!converting) return;
+    console.log("Converted Image");
+  }, [converting]);
 
 
 	return (
@@ -85,7 +79,7 @@ export const Shift = (props: IElevatedPageState) => {
 				</Col>
 				<Col xs={1}></Col>
 				<Col xs={5}>
-					<Button className="borderRadius-2 p-2 w-100" disabled={apiLoading || imageLoading} onClick={shift}>Share</Button>
+					<Button className="borderRadius-2 p-2 w-100" disabled={fetching || converting}>Share</Button>
 				</Col>
 				<Col xs={1}></Col>
 			</Row>

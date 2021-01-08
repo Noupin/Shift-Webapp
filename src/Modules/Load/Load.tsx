@@ -9,19 +9,17 @@ import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { MediaList } from "../../Components/MediaList/MediaList";
 import { FileDialog } from "../../Components/FileDialog/FileDialog"
-import { defaultVideo } from "../../Helpers/defaultMedia";
+import { defaultVideo } from "../../Constants/defaultMedia";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { fileListToList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
-import { useFetch } from "../../Hooks/Fetch";
+import { useFetch } from "../../Helpers/Fetch";
 
 
 interface loadRequestReturn {
   msg: string,
   shiftUUID: string
 }
-
-let loadResponse: loadRequestReturn = {msg: "", shiftUUID: ""}
 
 const ListOfFiles: File[] = [];
 const ListOfDataType: string[] = [];
@@ -35,14 +33,22 @@ export const Load = (props: IElevatedPageState) => {
   const [baseVideo, setBaseVideo] = useState(defaultVideo);
 
   const history = useHistory()
-  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(loadResponse);
 
+  const [fetching, setFetching] = useState(false);
+  const [loadResponse, setLoadResponse] = useState<loadRequestReturn>();
+
+  let requestOptions: RequestInit = {};
   const requestHeaders = new Headers();
 
 
-  async function load(){
+  useFetch(() => fetching, setFetching, props.setError, setLoadResponse, `/api/users/load`, () => requestOptions)
+
+
+  useEffect(() => {
+    if(!fetching) return;
+
     const data = new FormData();
-    const requestOptions: RequestInit = {
+    requestOptions = {
       method: 'POST',
       headers: {},
       credentials: "include",
@@ -57,22 +63,16 @@ export const Load = (props: IElevatedPageState) => {
     requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
     requestOptions.headers = requestHeaders;
 
-    apiFetch(`/api/loadData`, requestOptions)
-    props.setMsg(apiResponse.msg)
-    props.setShiftUUID(apiResponse.shiftUUID)
+    props.setMsg(loadResponse!.msg)
+    props.setShiftUUID(loadResponse!.shiftUUID)
     
     //history.push("/train")
-  }
-
+  });
 
   useEffect(() => {
     setFiles([baseVideo, ...baseFiles, ...maskFiles]);
     setTrainingDataTypes([...fillArray("base", baseFiles.length+1), ...fillArray("mask", maskFiles.length)])
   }, [baseVideo, baseFiles, maskFiles]);
-
-  useEffect(() => {
-		console.error(apiError);
-	}, [apiError]);
 
 
   return (
@@ -131,7 +131,7 @@ export const Load = (props: IElevatedPageState) => {
       <Row className="mt-2">
         <Col xs={2}></Col>
         <Col xs={8}>
-          <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={apiLoading} onClick={load}>Load</Button>
+          <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
         </Col>
         <Col xs={2}></Col>
       </Row>

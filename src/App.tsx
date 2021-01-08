@@ -8,6 +8,7 @@ import { Container, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
 import { IElevatedPageState } from "./Interfaces/PageState";
+import { IAuthRequestReturn } from "./Interfaces/Authenticate"
 import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
 import { Account } from './Modules/User/Account';
@@ -18,30 +19,35 @@ import { Train } from "./Modules/Train/Train";
 import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Shift } from "./Modules/Shift/Shift";
 import { Button } from "./Components/Button/Button";
-import { useAuthentication } from "./Hooks/Authenticated"
+import { useAuthenticate } from "./Helpers/Authenticate";
 
 
 export default function App() {
-  const [isAuthenticated, authenticate, checkingAuthentication] = useAuthentication()
-
   const [authenticated, setAuthenticated] = useState(false)
   const [shiftUUID, setShiftUUID] = useState(sessionStorage.getItem('shiftUUID') || "");
-
+  const [error, setError] = useState(new Error())
   const [msg, setMsg] = useState("");
   const [showMsg, setShowMsg] = useState(false);
 
-  const pageState: IElevatedPageState = {shiftUUID: shiftUUID,
+  const [fetching, setFetching] = useState(true)
+  const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>()
+
+  const pageState: IElevatedPageState = {shiftUUID: () => shiftUUID,
                                          setShiftUUID: setShiftUUID,
                                          setMsg: setMsg,
                                          epochs: 10,
                                          user: "",
-                                         authenticated: authenticated,
-                                         setAuthenticated: setAuthenticated};
+                                         authenticated: () => authenticated,
+                                         setAuthenticated: setAuthenticated,
+                                         setError: setError};
+  
+    
+  useAuthenticate(() => fetching, setFetching, setError, setAuthenticatedResponse)
 
   useEffect(() => {
-    authenticate()
-    setAuthenticated(isAuthenticated)
-  }, [isAuthenticated]);
+    if(!authenticatedResponse) return;
+    setAuthenticated(authenticatedResponse!.authenticated)
+  }, [authenticatedResponse]);
 
   useEffect(() => {
     if(!msg) return;
@@ -67,7 +73,7 @@ export default function App() {
                 <Row className="flex-grow-1">
                   <Col xs={9}>{msg}</Col>
                   <Col xs={3}>
-                    <Button className="borderRadius-2 p-2 w-100" onClick={() => setShowMsg(false)}>Close</Button>
+                    <Button className="borderRadius-2 p-2 w-100" onClick={() => {setShowMsg(false);setMsg("")}}>Close</Button>
                   </Col>
                 </Row>
               </Alert>

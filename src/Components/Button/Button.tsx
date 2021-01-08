@@ -5,8 +5,8 @@ import React from 'react';
 import './Button.scss';
 
 interface IButton extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
-  onClick?: () => void,
   children: React.ReactNode
+  onClick?: () => void
 }
 
 export const Button = (props: IButton) => {

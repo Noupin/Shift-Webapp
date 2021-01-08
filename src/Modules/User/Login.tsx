@@ -8,15 +8,14 @@ import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { IElevatedPageState } from "../../Interfaces/PageState";
-import { useFetch } from "../../Hooks/Fetch";
-import { useAuthentication } from "../../Hooks/Authenticated";
+import { IAuthRequestReturn } from "../../Interfaces/Authenticate";
+import { useFetch } from "../../Helpers/Fetch";
+import { useAuthenticate } from '../../Helpers/Authenticate';
 
 
 interface loginRequestReturn {
   msg: string
 }
-
-let loginResponse: loginRequestReturn = {msg: ""}
 
 
 export const Login = (props: IElevatedPageState) => {
@@ -24,11 +23,22 @@ export const Login = (props: IElevatedPageState) => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [isAuthenticated, authenticate, checkingAuthentication] = useAuthentication()
-  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(loginResponse);
+  const [loginResponse, setLoginResponse] = useState<loginRequestReturn>();
+  const [fetching, setFetching] = useState(false);
+  const [authenticated, setAuthenticated] = useState<IAuthRequestReturn>();
+  const [authenticating, setAuthenticating] = useState(false);
 
-  async function loginUser() {
-    const requestOptions: RequestInit = {
+  let requestOptions: RequestInit = {};
+
+
+  useFetch(() => fetching, setFetching, props.setError, setLoginResponse, `/api/users/login`, () => requestOptions)
+
+  useAuthenticate(() => authenticating, setAuthenticating, props.setError, setAuthenticated)
+
+  useEffect(() => {
+    if(!fetching) return;
+
+    requestOptions = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
@@ -36,18 +46,14 @@ export const Login = (props: IElevatedPageState) => {
                             password: password,
                             remember: rememberMe})
     };
-    
-    apiFetch(`/api/users/login`, requestOptions)
-    props.setMsg(apiResponse.msg)
 
-    authenticate()
-    props.setAuthenticated(isAuthenticated)
-  }
+    props.setMsg(loginResponse!.msg)
+  }, [fetching]);
 
-    
   useEffect(() => {
-    console.error(apiError)
-  }, [apiError]);
+    if(!authenticating) return;
+    props.setAuthenticated(authenticated!.authenticated)
+  }, [authenticating]);
 
 
   return (
@@ -71,7 +77,7 @@ export const Login = (props: IElevatedPageState) => {
           <Row>
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={loginUser} disabled={apiLoading || checkingAuthentication}>Login &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => {setFetching(true);setAuthenticating(true)}}>Login &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>

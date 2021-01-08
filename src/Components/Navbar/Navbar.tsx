@@ -8,75 +8,12 @@ import { Navbar, Nav } from "react-bootstrap";
 import './Navbar.scss'
 import Logo from '../../Assets/icon.png'
 import { IElevatedPageState } from "../../Interfaces/PageState";
-import { Button } from '../../Components/Button/Button';
-import { useFetch } from "../../Hooks/Fetch";
-import { useAuthentication } from "../../Hooks/Authenticated";
-
-interface logoutRequestReturn {
-  msg: string
-}
-
-let logoutResponse: logoutRequestReturn = {msg: ""}
+import { UserElements } from "./UserElements";
 
 
 export const NavBar = (props: IElevatedPageState) => {
   const imageStyle = {height: "auto", width: "auto", maxHeight: "30px", maxWidth: "30px"}
 
-  const [isAuthenticated, authenticate, checkingAuthentication] = useAuthentication()
-  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(logoutResponse);
-
-
-  function logoutUser() {
-    const requestOptions: RequestInit = {
-      method: 'GET',
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json'}
-    };
-
-    apiFetch(`/api/users/logout`, requestOptions)
-    props.setMsg(apiResponse.msg)
-
-    authenticate()
-    props.setAuthenticated(isAuthenticated)
-  }
-
-
-  useEffect(() => {
-    console.error(apiError)
-  }, [apiError]);
-
-
-  let userNavElements = (
-    <>
-    <Nav.Link>
-      <NavLink to="/login" activeClassName="navSelected" className="nav-link borderRadius-2">
-        Login
-      </NavLink>
-    </Nav.Link>
-    <Nav.Link>
-      <NavLink to="/register" activeClassName="navSelected" className="nav-link borderRadius-2">
-        Register
-      </NavLink>
-    </Nav.Link>
-    </>
-  );
-  
-  if(props.authenticated){
-    userNavElements = (
-      <>
-      <Nav.Link>
-        <NavLink to="/account" activeClassName="navSelected" className="nav-link borderRadius-2">
-          Account
-        </NavLink>
-      </Nav.Link>
-      <Nav.Link>
-        <Button className="neumorphic borderRadius-2 py-2 px-3 w-100" onClick={logoutUser} disabled={apiLoading || checkingAuthentication}>
-          Logout
-        </Button>
-      </Nav.Link>
-      </>
-    );
-  }
 
   return (
     <div className="neumorphic borderRadius-2 mx-2 mt-2 w-100">
@@ -98,7 +35,7 @@ export const NavBar = (props: IElevatedPageState) => {
             </Nav.Link>
           </Nav>
           <Nav className="justify-content-end" key={`${props.authenticated}`}>
-            {userNavElements}
+            <UserElements {...props}/>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

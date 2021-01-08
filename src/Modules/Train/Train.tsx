@@ -8,54 +8,59 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 import { ITrainRequestReturn } from "../../Interfaces/Train";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { defaultVideo } from "../../Helpers/defaultMedia";
-import { useFetch } from "../../Hooks/Fetch";
-import { useBinaryImageCovnersion } from "../../Hooks/Images";
-
-
-let trainResponse: ITrainRequestReturn = {msg: "", exhibit: []}
+import { defaultVideo } from "../../Constants/defaultMedia";
+import { useFetch } from "../../Helpers/Fetch";
+import { useConvertImage } from "../../Helpers/Images";
 
 
 export const Train = (props: IElevatedPageState) => {
   const [stopTrain, setStopTrain] = useState(false);
+  const [imageString, setImageString] = useState("");
   const [image, setImage] = useState(defaultVideo);
 
   const history = useHistory()
-  const [apiFetch, apiResponse, apiError, apiLoading] = useFetch(trainResponse);  
-  const [convertImage, imageFile, imageError, imageLoading] = useBinaryImageCovnersion()
 
-  const requestOptions: RequestInit = {
-    method: 'POST',
-    credentials: "include",
-    headers: { 'Content-Type': 'application/json'},
-    body: JSON.stringify({shiftUUID: props.shiftUUID,
-                          usePTM: false,
-                          prebuiltShiftModel: "",
-                          epochs: 10,
-                          trainType: 'basic'})
-  };
+  const [fetching, setFetching] = useState(false);
+  const [trainResponse, setTrainResponse] = useState<ITrainRequestReturn>();
+  const [converting, setConverting] = useState(false);
+
+  let requestOptions: RequestInit = {};
 
 
-  function train(){
-    apiFetch(`/api/train`, requestOptions)
-    props.setMsg(apiResponse.msg)
-  }
+  useFetch(() => fetching, setFetching, props.setError, setTrainResponse, `/api/users/train`, () => requestOptions)
+  useConvertImage(() => converting, setConverting, props.setError, setImage, () => imageString);
 
+  useEffect(() => {
+    if(!fetching) return;
+    requestOptions = {
+      method: 'POST',
+      credentials: "include",
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({shiftUUID: props.shiftUUID,
+                            usePTM: false,
+                            prebuiltShiftModel: "",
+                            epochs: props.epochs,
+                            trainType: 'basic'})
+    };
+
+    props.setMsg(trainResponse!.msg);
+    setImageString(trainResponse!.exhibit[0]);
+    setConverting(true);
+  }, [fetching]);
+
+  useEffect(() => {
+    if(!converting) return;
+    console.log("Converted Image");
+  }, [converting]);
 
   useEffect(() => {
     if (stopTrain){
-      history.push("/shift")
+      history.push("/shift");
       return;
     }
 
-    train()
-    convertImage(apiResponse.exhibit[-1])
-    setImage(imageFile)
+    setFetching(true);
   }, [image]); //may need stopTrain in dependencies
-
-  useEffect(() => {
-    console.error(apiError)
-  }, [apiError]);
 
 
   return (
@@ -67,11 +72,11 @@ export const Train = (props: IElevatedPageState) => {
         <Col xs={2}></Col>
         <Col xs={4}>
           <Link to="/advancedTrain" className="w-100">
-            <Button className="p-2 mt-2 mb-2 mr-4 borderRadius-2 w-100" disabled={stopTrain && apiLoading} onClick={() => setStopTrain(true)}>Advanced View</Button>
+            <Button className="p-2 mt-2 mb-2 mr-4 borderRadius-2 w-100" disabled={converting && fetching} onClick={() => setStopTrain(true)}>Advanced View</Button>
           </Link>
         </Col>
         <Col xs={4}>
-          <Button className="p-2 mt-2 mb-2 ml-4 borderRadius-2 w-100" disabled={stopTrain && apiLoading} onClick={() => setStopTrain(true)}>Stop Training</Button>
+          <Button className="p-2 mt-2 mb-2 ml-4 borderRadius-2 w-100" disabled={stopTrain && fetching} onClick={() => setStopTrain(true)}>Stop Training</Button>
         </Col>
         <Col xs={2}></Col>
       </Row>

@@ -1,0 +1,21 @@
+@import "../../variables.scss";
+
+button{
+    color: $color
+}
+
+button:focus {
+    outline: none;
+}
+
+.neuHover:hover{
+    background: $sameAsBackground;
+    box-shadow: 2px 2px 4px $dimShadow, 
+                -2px -2px 4px $brightShadow;
+}
+
+.neuPress:active {
+    background: $sameAsBackground;
+    box-shadow: inset 5px 5px 10px $dimShadow, 
+                inset -5px -5px 10px $brightShadow;
+}

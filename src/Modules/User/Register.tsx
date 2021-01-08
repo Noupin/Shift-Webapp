@@ -1,39 +1,54 @@
 //Third Party Imports
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
+import { useFetch } from '../../Helpers/Fetch';
 import { IElevatedPageState } from "../../Interfaces/PageState";
 
 
-export const Register = (props: IElevatedPageState) => {
+interface registerRequestReturn {
+  msg: string
+}
 
+
+export const Register = (props: IElevatedPageState) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const registerUser = async () => {
-    const requestOptions: RequestInit = {
+  const [fetching, setFetching] = useState(false);
+  const [registerResponse, setRegisterResponse] = useState<registerRequestReturn>();
+
+  let requestOptions: RequestInit = {};
+
+
+  useFetch(() => fetching, setFetching, props.setError, setRegisterResponse, `/api/users/register`, () => requestOptions)
+
+
+  useEffect(() => {
+    if(fetching) return;
+
+    if (password !== confirmPassword){
+      console.log("Passwords do not match");
+      setFetching(false)
+      return;
+    }
+
+    requestOptions = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: username, password: password, email: email})
     };
-    
-    if(password === confirmPassword){
-      fetch(`/api/users/register`, requestOptions).then(res => res.json()).then(data => {
-        console.log(data);
-        props.setMsg(data.msg);
-      });
-    }
-    else{
-      console.log("Passwords do not match");
-    }
-  }
+
+    props.setMsg(registerResponse!.msg);
+  }, [fetching]);
+
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
@@ -62,7 +77,7 @@ export const Register = (props: IElevatedPageState) => {
           <Row className="align-items-center">
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={registerUser}>Register &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={() => {setFetching(true)}}>Register &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>
