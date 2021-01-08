@@ -1,6 +1,3 @@
-//Third Party Imports
-import React, { useEffect } from 'react';
-
 //First Party Imports
 import { IAuthRequestReturn } from '../Interfaces/Authenticate'
 

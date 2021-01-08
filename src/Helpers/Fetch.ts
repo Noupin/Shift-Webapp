@@ -1,6 +1,3 @@
-//Third Party Imports
-import React, { useEffect } from 'react';
-
 
 async function returnFetch(url: string, options: RequestInit){
   return await fetch(url, options)

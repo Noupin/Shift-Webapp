@@ -1,6 +1,3 @@
-//Third Party Imports
-import React, { useEffect } from 'react';
-
 
 export function useConvertImage(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
                                 setError: React.Dispatch<React.SetStateAction<Error>>,
