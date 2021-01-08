@@ -7,10 +7,10 @@ import { Link, useHistory } from "react-router-dom";
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import { IAuthRequestReturn } from "../../Interfaces/Authenticate";
 import { useFetch } from "../../Helpers/Fetch";
 import { useAuthenticate } from '../../Helpers/Authenticate';
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface loginRequestReturn {
@@ -18,7 +18,7 @@ interface loginRequestReturn {
 }
 
 
-export function Login (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function Login (props: IElevatedStateProps){
   const {elevatedState, setElevatedState, ...navProps} = props;
 
   const [usernameOrEmail, setUsernameOrEmail] = useState("");

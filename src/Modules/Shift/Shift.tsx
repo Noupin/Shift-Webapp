@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 
 
 //First Party Imports
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { defaultVideo } from "../../constants";
 import { useFetch } from "../../Helpers/Fetch";
 import { useConvertImage } from "../../Helpers/Images";
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface shiftRequestReturn {
@@ -19,7 +19,7 @@ interface shiftRequestReturn {
 }
 
 
-export function Shift (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function Shift (props: IElevatedStateProps){
 	const {elevatedState, setElevatedState, ...navProps} = props;
 
 	const [image, setImage] = useState(defaultVideo);

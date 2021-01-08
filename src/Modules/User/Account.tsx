@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 
 //First Party Imports
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import { useFetch } from "../../Helpers/Fetch";
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface accountRequestReturn {
@@ -11,7 +11,7 @@ interface accountRequestReturn {
 }
 
 
-export function Account (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function Account (props: IElevatedStateProps){
   const {elevatedState, setElevatedState, ...navProps} = props;
 
   const [username, setUsername] = useState("");

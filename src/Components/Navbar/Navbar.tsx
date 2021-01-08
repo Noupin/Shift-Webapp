@@ -7,11 +7,11 @@ import { Navbar, Nav } from "react-bootstrap";
 //First Party Imports
 import './Navbar.scss'
 import Logo from '../../Assets/icon.png'
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import { UserElements } from "./UserElements";
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
-export function NavBar (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function NavBar (props: IElevatedStateProps){
   const {elevatedState, setElevatedState, ...navProps} = props;
   const imageStyle = {height: "auto", width: "auto", maxHeight: "30px", maxWidth: "30px"}
 

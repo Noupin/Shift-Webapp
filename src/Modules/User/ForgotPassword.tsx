@@ -5,8 +5,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import { useFetch } from "../../Helpers/Fetch";
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface resetPasswordRequestReturn {
@@ -14,7 +14,7 @@ interface resetPasswordRequestReturn {
 }
 
 
-export function ForgotPassword (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function ForgotPassword (props: IElevatedStateProps){
   const {elevatedState, setElevatedState, ...navProps} = props;
 
   const [currentPassword, setCurrentPassword] = useState("");

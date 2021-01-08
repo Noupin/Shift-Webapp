@@ -4,19 +4,19 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import { ITrainRequestReturn } from "../../Interfaces/Train";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { defaultVideo } from "../../constants";
 import { useFetch } from "../../Helpers/Fetch";
 import { useConvertImage } from "../../Helpers/Images";
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 let trainResponse: ITrainRequestReturn = {msg: "", exhibit: []}
 
 
-export function AdvancedTrain (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function AdvancedTrain (props: IElevatedStateProps){
   const {elevatedState, setElevatedState, ...navProps} = props;
 
   const [stopTrain, setStopTrain] = useState(false);

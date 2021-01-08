@@ -4,16 +4,16 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
 //First Party Imports
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { MediaList } from "../../Components/MediaList/MediaList";
 import { FileDialog } from "../../Components/FileDialog/FileDialog"
 import { defaultVideo, validMediaFileExtesnions } from "../../constants";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
-import { fileListToList, validateFileList } from '../../Helpers/Files';
+import { validateFileList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
 import { useFetch } from "../../Helpers/Fetch";
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface loadRequestReturn {
@@ -25,7 +25,7 @@ const ListOfFiles: File[] = [];
 const ListOfDataType: string[] = [];
 
 
-export function Load (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function Load (props: IElevatedStateProps){
   const {elevatedState, setElevatedState, ...loadProps} = props;
 
   const [trainingDataTypes, setTrainingDataTypes] = useState(ListOfDataType);

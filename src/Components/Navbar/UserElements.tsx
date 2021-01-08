@@ -6,11 +6,11 @@ import { Navbar, Nav } from "react-bootstrap";
 
 //First Party Imports
 import './Navbar.scss'
-import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { useFetch } from "../../Helpers/Fetch";
 import { useAuthenticate } from '../../Helpers/Authenticate';
 import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface logoutRequestReturn {
@@ -18,7 +18,7 @@ interface logoutRequestReturn {
 }
 
 
-export function UserElements (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function UserElements (props: IElevatedStateProps){
   const {elevatedState, setElevatedState, ...navProps} = props;
 
   const [authenticating, setAuthenticating] = useState(false);

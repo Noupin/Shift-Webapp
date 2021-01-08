@@ -9,7 +9,7 @@ import { TextBox } from '../../Components/TextBox/TextBox';
 import { useAuthenticate } from '../../Helpers/Authenticate';
 import { useFetch } from '../../Helpers/Fetch';
 import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
-import { IElevatedPageState } from "../../Interfaces/PageState";
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface registerRequestReturn {
@@ -17,7 +17,7 @@ interface registerRequestReturn {
 }
 
 
-export function Register (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+export function Register (props: IElevatedStateProps){
   const {elevatedState, setElevatedState, ...navProps} = props;
 
   const [username, setUsername] = useState("");
