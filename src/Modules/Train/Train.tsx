@@ -8,7 +8,7 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 import { ITrainRequestReturn } from "../../Interfaces/Train";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { defaultVideo } from "../../Constants/defaultMedia";
+import { defaultVideo } from "../../constants";
 import { useFetch } from "../../Helpers/Fetch";
 import { useConvertImage } from "../../Helpers/Images";
 
@@ -65,7 +65,7 @@ export const Train = (props: IElevatedPageState) => {
     }
 
     if(image === defaultVideo) return;
-    console.log(image)
+
     console.log("Image Converted")
     setFetching(true)
   }, [image])
@@ -74,7 +74,7 @@ export const Train = (props: IElevatedPageState) => {
   return (
     <Container className="d-flex justify-content-center h-100 flex-column" key={image.lastModified}>
       <Row className="my-2">
-        <Media className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image} mediaType="video/mp4"/>
+        <Media elevatedProps={props} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image} mediaType="video/mp4"/>
       </Row>
       <Row>
         <Col xs={2}></Col>

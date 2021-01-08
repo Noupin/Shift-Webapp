@@ -42,7 +42,7 @@ export const Register = (props: IElevatedPageState) => {
     if(!fetching) return;
 
     if (password !== confirmPassword){
-      console.log("Passwords do not match");
+      props.setMsg("Passwords do not match");
       setFetching(false)
       return;
     }

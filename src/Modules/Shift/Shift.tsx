@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { IElevatedPageState } from "../../Interfaces/PageState";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { defaultVideo } from "../../Constants/defaultMedia";
+import { defaultVideo } from "../../constants";
 import { useFetch } from "../../Helpers/Fetch";
 import { useConvertImage } from "../../Helpers/Images";
 
@@ -71,10 +71,10 @@ export const Shift = (props: IElevatedPageState) => {
 	return (
 		<Container className="d-flex justify-content-center h-100 flex-column" key={image.lastModified}>
 			<Row className="mb-2">
-				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image} mediaType="video/mp4"/>
+				<Media elevatedProps={props} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-3">
-				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+				<Media elevatedProps={props} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>

@@ -8,7 +8,7 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 import { ITrainRequestReturn } from "../../Interfaces/Train";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { defaultVideo } from "../../Constants/defaultMedia";
+import { defaultVideo } from "../../constants";
 import { useFetch } from "../../Helpers/Fetch";
 import { useConvertImage } from "../../Helpers/Images";
 
@@ -83,18 +83,18 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage} mediaType="video/mp4"/>
+            <Media elevatedProps={props} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media elevatedProps={props} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
         </Col>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media elevatedProps={props} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media elevatedProps={props} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
         </Col>
       </Row>

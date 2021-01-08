@@ -5,8 +5,11 @@ import React, { useState } from 'react';
 import { Image } from '../Image/Image';
 import { Video } from '../Video/Video';
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
+import { validMediaFileExtesnions } from '../../constants';
+import { IElevatedPageState } from '../../Interfaces/PageState';
 
 interface IMedia extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
+  elevatedProps: IElevatedPageState
   mediaSrc: File
   mediaType?: string
   droppable?: boolean
@@ -15,7 +18,7 @@ interface IMedia extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivEle
 const videoTypes: string[] = ['mp4', 'webm', 'ogg']
 
 export const Media = (props: IMedia) => {
-  const {mediaSrc, mediaType, droppable, ...mediaProps} = props;
+  const {elevatedProps, mediaSrc, mediaType, droppable, ...mediaProps} = props;
   const cssClasses = mediaProps.className?.toString();
 
   let element: JSX.Element
@@ -24,7 +27,7 @@ export const Media = (props: IMedia) => {
 
   if (videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1){
     if(droppable){
-      element = <Video onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event)[0])} videoSrc={mediaSrcString} videoType={mediaType!}/>;
+      element = <Video onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, elevatedProps, validMediaFileExtesnions)[0])} videoSrc={mediaSrcString} videoType={mediaType!}/>;
     }
     else{
       element = <Video videoSrc={mediaSrcString} videoType={mediaType!}/>;
@@ -32,7 +35,7 @@ export const Media = (props: IMedia) => {
   }
   else{
     if(droppable){
-      element = <Image onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event)[0])} imageSrc={mediaSrcString}/>
+      element = <Image onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, elevatedProps, validMediaFileExtesnions)[0])} imageSrc={mediaSrcString}/>
     }
     else{
       element = <Image imageSrc={mediaSrcString}/>

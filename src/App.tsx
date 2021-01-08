@@ -32,7 +32,7 @@ export default function App() {
   const [fetching, setFetching] = useState(true)
   const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>()
 
-  const pageState: IElevatedPageState = {shiftUUID: () => shiftUUID,
+  const elevatedState: IElevatedPageState = {shiftUUID: () => shiftUUID,
                                          setShiftUUID: setShiftUUID,
                                          setMsg: setMsg,
                                          epochs: 10,
@@ -77,7 +77,7 @@ export default function App() {
           <Col>
             <div className="h-100 d-flex flex-column">
               <Row className="justify-content-center">
-                <NavBar {...pageState} key={`${authenticated}`}/>
+                <NavBar {...elevatedState} key={`${authenticated}`}/>
               </Row>
 
               <Alert show={showMsg} variant="primary">
@@ -91,28 +91,28 @@ export default function App() {
 
               <Switch>
                 <Route path="/register">
-                  <Register {...pageState}></Register>
+                  <Register {...elevatedState}></Register>
                 </Route>
                 <Route path="/login">
-                  <Login {...pageState}></Login>
+                  <Login {...elevatedState}></Login>
                 </Route>
                 <Route path="/account">
-                  <Account {...pageState}></Account>
+                  <Account {...elevatedState}></Account>
                 </Route>
                 <Route path="/forgotPassword">
-                  <ForgotPassword {...pageState}></ForgotPassword>
+                  <ForgotPassword {...elevatedState}></ForgotPassword>
                 </Route>
                 <Route path="/load">
-                  <Load {...pageState}></Load>
+                  <Load {...elevatedState}></Load>
                 </Route>
                 <Route path="/train">
-                  <Train {...pageState}></Train>
+                  <Train {...elevatedState}></Train>
                 </Route>
                 <Route path="/advancedTrain">
-                  <AdvancedTrain {...pageState}></AdvancedTrain>
+                  <AdvancedTrain {...elevatedState}></AdvancedTrain>
                 </Route>
                 <Route path="/shift">
-                  <Shift {...pageState}></Shift>
+                  <Shift {...elevatedState}></Shift>
                 </Route>
                 <Route path="/">
                   <Home />
