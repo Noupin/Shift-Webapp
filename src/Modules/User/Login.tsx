@@ -18,7 +18,9 @@ interface loginRequestReturn {
 }
 
 
-export const Login = (props: IElevatedPageState) => {
+export function Login (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...navProps} = props;
+
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -32,8 +34,8 @@ export const Login = (props: IElevatedPageState) => {
 
   let requestOptions: RequestInit = {};
 
-  const apiFetch = useFetch(setFetching, props.setError, setLoginResponse, `/api/users/login`, () => requestOptions, loginResponse);
-  const auth = useAuthenticate(setAuthenticating, props.setError, setAuthenticatedResponse);
+  const apiFetch = useFetch(setFetching, setElevatedState, setLoginResponse, `/api/users/login`, () => requestOptions, loginResponse);
+  const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse);
 
 
   useEffect(() => {
@@ -54,19 +56,19 @@ export const Login = (props: IElevatedPageState) => {
 
   useEffect(() => {
     if(!authenticating || !loginResponse) return;
-    props.setMsg(loginResponse!.msg)
+    setElevatedState((prev) => ({...prev, msg: loginResponse!.msg}));
     auth()
   }, [authenticating, loginResponse]);
 
   useEffect(() => {
     if(!authenticatedResponse) return;
-    props.setAuthenticated(authenticatedResponse.authenticated)
+    setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse.authenticated}))
   }, [authenticatedResponse]);
 
   useEffect(() => {
-    if(!props.authenticated()) return;
+    if(!elevatedState().authenticated) return;
     history.push("/")
-  }, [props.authenticated()]);
+  }, [elevatedState().authenticated]);
 
 
 

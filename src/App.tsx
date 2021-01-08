@@ -23,26 +23,24 @@ import { useAuthenticate } from "./Helpers/Authenticate";
 
 
 export default function App() {
-  const [authenticated, setAuthenticated] = useState(false)
-  const [shiftUUID, setShiftUUID] = useState(sessionStorage.getItem('shiftUUID') || "");
-  const [error, setError] = useState(new Error())
-  const [msg, setMsg] = useState("");
+  const [elevatedState, setElevatedState] = useState<IElevatedPageState>({
+    msg: "",
+    error: new Error(),
+    authenticated: false,
+    user: "",
+    shiftUUID: "",
+    epochs: 10
+  })
+
+  const getElevatedState = function(){ return elevatedState };
+
   const [showMsg, setShowMsg] = useState(false);
 
   const [fetching, setFetching] = useState(true)
   const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>()
-
-  const elevatedState: IElevatedPageState = {shiftUUID: () => shiftUUID,
-                                         setShiftUUID: setShiftUUID,
-                                         setMsg: setMsg,
-                                         epochs: 10,
-                                         user: "",
-                                         authenticated: () => authenticated,
-                                         setAuthenticated: setAuthenticated,
-                                         setError: setError};
   
     
-  const auth = useAuthenticate(setFetching, setError, setAuthenticatedResponse)
+  const auth = useAuthenticate(setFetching, setElevatedState, setAuthenticatedResponse)
 
   useEffect(() => {
     if(!fetching) return;
@@ -51,68 +49,71 @@ export default function App() {
 
   useEffect(() => {
     if(!authenticatedResponse) return;
-    setAuthenticated(authenticatedResponse!.authenticated)
+    setElevatedState({...elevatedState, authenticated: authenticatedResponse!.authenticated})
   }, [authenticatedResponse]);
 
   useEffect(() => {
-    if(!msg) return;
+    if(!elevatedState.msg) return;
 
     setShowMsg(true);
-  }, [msg]);
+  }, [elevatedState.msg]);
 
   useEffect(() => {
-    if(!shiftUUID) return;
-    sessionStorage.setItem("shiftUUID", shiftUUID);
-  }, [shiftUUID]);
+    if(!elevatedState.shiftUUID) return;
+    sessionStorage.setItem("shiftUUID", elevatedState.shiftUUID);
+  }, [elevatedState.shiftUUID]);
 
   useEffect(() => {
-    if(!error) return;
-    console.error(error);
-  }, [error]);
+    if(!elevatedState.error) return;
+    console.error(elevatedState.error);
+  }, [elevatedState.error]);
 
   return (
-    <Router key={`${authenticated}`}>
+    <Router key={`${() => elevatedState.authenticated}`}>
       <Container fluid className="flex h-100">
         <Row className="justify-content-center h-100">
           <Col>
             <div className="h-100 d-flex flex-column">
               <Row className="justify-content-center">
-                <NavBar {...elevatedState} key={`${authenticated}`}/>
+                <NavBar elevatedState={getElevatedState} setElevatedState={setElevatedState} key={`${() => elevatedState.authenticated}`}/>
               </Row>
 
               <Alert show={showMsg} variant="primary">
                 <Row className="flex-grow-1">
-                  <Col xs={9}>{msg}</Col>
+                  <Col xs={9}>{elevatedState.msg}</Col>
                   <Col xs={3}>
-                    <Button className="borderRadius-2 p-2 w-100" onClick={() => {setShowMsg(false);setMsg("")}}>Close</Button>
+                    <Button className="borderRadius-2 p-2 w-100" onClick={() => {
+                      setShowMsg(false);
+                      setElevatedState((prev) => ({...prev, msg: ""}))
+                      }}>Close</Button>
                   </Col>
                 </Row>
               </Alert>
 
               <Switch>
                 <Route path="/register">
-                  <Register {...elevatedState}></Register>
+                  <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}></Register>
                 </Route>
                 <Route path="/login">
-                  <Login {...elevatedState}></Login>
+                  <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}></Login>
                 </Route>
                 <Route path="/account">
-                  <Account {...elevatedState}></Account>
+                  <Account elevatedState={getElevatedState} setElevatedState={setElevatedState}></Account>
                 </Route>
                 <Route path="/forgotPassword">
-                  <ForgotPassword {...elevatedState}></ForgotPassword>
+                  <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}></ForgotPassword>
                 </Route>
                 <Route path="/load">
-                  <Load {...elevatedState}></Load>
+                  <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}></Load>
                 </Route>
                 <Route path="/train">
-                  <Train {...elevatedState}></Train>
+                  <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}></Train>
                 </Route>
                 <Route path="/advancedTrain">
-                  <AdvancedTrain {...elevatedState}></AdvancedTrain>
+                  <AdvancedTrain elevatedState={getElevatedState} setElevatedState={setElevatedState}></AdvancedTrain>
                 </Route>
                 <Route path="/shift">
-                  <Shift {...elevatedState}></Shift>
+                  <Shift elevatedState={getElevatedState} setElevatedState={setElevatedState}></Shift>
                 </Route>
                 <Route path="/">
                   <Home />

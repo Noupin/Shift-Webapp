@@ -17,7 +17,9 @@ interface registerRequestReturn {
 }
 
 
-export const Register = (props: IElevatedPageState) => {
+export function Register (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...navProps} = props;
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,15 +36,15 @@ export const Register = (props: IElevatedPageState) => {
   let requestOptions: RequestInit = {};
 
 
-  const apiFetch = useFetch(setFetching, props.setError, setRegisterResponse, `/api/users/register`, () => requestOptions, registerResponse)
-  const auth = useAuthenticate(setAuthenticating, props.setError, setAuthenticatedResponse)
+  const apiFetch = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/register`, () => requestOptions, registerResponse)
+  const auth = useAuthenticate(setAuthenticating, props.setElevatedState, setAuthenticatedResponse)
 
 
   useEffect(() => {
     if(!fetching) return;
 
     if (password !== confirmPassword){
-      props.setMsg("Passwords do not match");
+      setElevatedState((prev) => ({...prev, msg: "Passwords do not match"}))
       setFetching(false)
       return;
     }
@@ -61,19 +63,20 @@ export const Register = (props: IElevatedPageState) => {
   useEffect(() => {
     if(!authenticating || !registerResponse) return;
 
-    props.setMsg(registerResponse!.msg);
+    setElevatedState((prev) => ({...prev, msg: registerResponse!.msg}))
     auth()
   }, [authenticating, registerResponse]);
 
   useEffect(() => {
     if(!authenticatedResponse) return;
-    props.setAuthenticated(authenticatedResponse.authenticated)
+
+    setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse.authenticated}))
   }, [authenticatedResponse]);
 
   useEffect(() => {
-    if(!props.authenticated()) return;
+    if(!elevatedState().authenticated) return;
     history.push("/")
-  }, [props.authenticated()]);
+  }, [elevatedState().authenticated]);
 
 
   return (

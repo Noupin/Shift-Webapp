@@ -25,7 +25,9 @@ const ListOfFiles: File[] = [];
 const ListOfDataType: string[] = [];
 
 
-export const Load = (props: IElevatedPageState) => {
+export function Load (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...loadProps} = props;
+
   const [trainingDataTypes, setTrainingDataTypes] = useState(ListOfDataType);
   const [files, setFiles] = useState(ListOfFiles);
   const [baseFiles, setBaseFiles] = useState(ListOfFiles);
@@ -42,14 +44,14 @@ export const Load = (props: IElevatedPageState) => {
   const requestHeaders = new Headers();
 
 
-  const apiFetch = useFetch(setFetching, props.setError, setLoadResponse, `/api/loadData`, () => requestOptions, loadResponse)
+  const apiFetch = useFetch(setFetching, setElevatedState, setLoadResponse, `/api/loadData`, () => requestOptions, loadResponse)
 
   
   useEffect(() => {
     if(!fetching) return;
 
     if(baseVideo === defaultVideo){
-      props.setMsg("Make sure you have a priamry base media")
+      setElevatedState((prev) => ({...prev, msg: "Make sure you have a priamry base media"}))
       return;
     }
 
@@ -73,14 +75,14 @@ export const Load = (props: IElevatedPageState) => {
 
   useEffect(() => {
     if(!loadResponse) return;
-    props.setShiftUUID(loadResponse!.shiftUUID)
-    props.setMsg(loadResponse!.msg);
+    setElevatedState((prev) => ({...prev, shiftUUID: loadResponse!.shiftUUID}))
+    setElevatedState((prev) => ({...prev, msg: loadResponse!.msg}));
   }, [loadResponse]);
 
   useEffect(() => {
-    if(!props.shiftUUID() || props.shiftUUID() === prevShiftUUID) return;
+    if(!elevatedState().shiftUUID || elevatedState().shiftUUID === prevShiftUUID) return;
     history.push("/train");
-  }, [props.shiftUUID()]);
+  }, [elevatedState().shiftUUID]);
 
   useEffect(() => {
     setFiles([baseVideo, ...baseFiles, ...maskFiles]);
@@ -102,7 +104,7 @@ export const Load = (props: IElevatedPageState) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
-                  props.setMsg( `The file type ${badExtensions[0]} is not allowed to be selected`)
+                  setElevatedState((prev) => ({...prev, msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
                 }
                 if(filteredFiles.length === 0){
                   setBaseVideo(defaultVideo)
@@ -113,8 +115,8 @@ export const Load = (props: IElevatedPageState) => {
               }}>&#x21c6;</FileDialog>
             </Col>
           </Row>
-          <Media elevatedProps={props} className="borderRadius-2 p-2" key={baseVideo.name} onDragOver={(event) => allowDrop(event)}
-                 onDrop={(event) => setBaseVideo(dropFiles(event, props, validMediaFileExtesnions)[0])} mediaSrc={baseVideo} mediaType="video/mp4" droppable={true}/>
+          <Media setElevatedState={setElevatedState} className="borderRadius-2 p-2" key={baseVideo.name} onDragOver={(event) => allowDrop(event)}
+                 onDrop={(event) => setBaseVideo(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])} mediaSrc={baseVideo} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
       </Row>
@@ -129,7 +131,8 @@ export const Load = (props: IElevatedPageState) => {
                   const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                   if(badExtensions.length > 0){
-                    props.setMsg(badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`)
+                    setElevatedState((prev) => ({...prev,
+                      msg: badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`}))
                   }
   
                   setBaseFiles((current) => [...current, ...filteredFiles])
@@ -137,9 +140,9 @@ export const Load = (props: IElevatedPageState) => {
               </Col>
             </Row>
             <MediaList className="mt-2 p-3" onDragOver={(event) => allowDrop(event)}
-                       onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, props, validMediaFileExtesnions)])} elementsPerRow={2} key={baseFiles.length}>
+                       onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])} elementsPerRow={2} key={baseFiles.length}>
               {baseFiles.map((file) => (
-                <Media elevatedProps={props} mediaSrc={file} mediaType="video/mp4"/>
+                <Media setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
               ))}
             </MediaList>
           </div>
@@ -154,7 +157,8 @@ export const Load = (props: IElevatedPageState) => {
                   const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                   if(badExtensions.length > 0){
-                    props.setMsg(badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`)
+                    setElevatedState((prev) => ({...prev,
+                      msg: badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`}))
                   }
   
                   setMaskFiles((current) => [...current, ...filteredFiles])
@@ -162,9 +166,9 @@ export const Load = (props: IElevatedPageState) => {
               </Col>
             </Row>
             <MediaList className="mt-2 borderRadius-2 p-3" onDragOver={(event) => allowDrop(event)}
-                       onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, props, validMediaFileExtesnions)])} elementsPerRow={2} key={maskFiles.length}>
+                       onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])} elementsPerRow={2} key={maskFiles.length}>
               {maskFiles.map((file) => (
-                <Media elevatedProps={props} mediaSrc={file} mediaType="video/mp4"/>
+                <Media setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
               ))}
             </MediaList>
           </div>

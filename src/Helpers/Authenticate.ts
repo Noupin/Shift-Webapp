@@ -1,5 +1,6 @@
 //First Party Imports
 import { IAuthRequestReturn } from '../Interfaces/Authenticate'
+import { IElevatedPageState } from '../Interfaces/PageState';
 
 
 const authRequestOptions: RequestInit = {
@@ -13,7 +14,7 @@ async function returnFetch(url: string, options: RequestInit){
 }
 
 export function useAuthenticate(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                                setError: React.Dispatch<React.SetStateAction<Error>>,
+                                setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
                                 setData: React.Dispatch<React.SetStateAction<IAuthRequestReturn | undefined>>){
 
   async function call(){
@@ -28,7 +29,7 @@ export function useAuthenticate(setLoading: React.Dispatch<React.SetStateAction<
     }
     catch (error){
       setLoading(false);
-      setError(error);
+      setElevatedState((prev) => ({...prev, error: error}));
     }
   }
 

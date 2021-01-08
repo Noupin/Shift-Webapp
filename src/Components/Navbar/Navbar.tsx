@@ -11,7 +11,8 @@ import { IElevatedPageState } from "../../Interfaces/PageState";
 import { UserElements } from "./UserElements";
 
 
-export const NavBar = (props: IElevatedPageState) => {
+export function NavBar (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...navProps} = props;
   const imageStyle = {height: "auto", width: "auto", maxHeight: "30px", maxWidth: "30px"}
 
 
@@ -34,8 +35,8 @@ export const NavBar = (props: IElevatedPageState) => {
               </NavLink>
             </Nav.Link>
           </Nav>
-          <Nav className="justify-content-end" key={`${props.authenticated}`}>
-            <UserElements {...props}/>
+          <Nav className="justify-content-end" key={`${elevatedState().authenticated}`}>
+            <UserElements elevatedState={elevatedState} setElevatedState={setElevatedState}/>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -18,7 +18,9 @@ interface logoutRequestReturn {
 }
 
 
-export const UserElements = (props: IElevatedPageState) => {
+export function UserElements (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...navProps} = props;
+
   const [authenticating, setAuthenticating] = useState(false);
   const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>()
 
@@ -31,8 +33,8 @@ export const UserElements = (props: IElevatedPageState) => {
     headers: { 'Content-Type': 'application/json'}
   };
 
-  const auth = useAuthenticate(setAuthenticating, props.setError, setAuthenticatedResponse)
-  const apiFetch = useFetch(setFetching, props.setError, setLogoutResponse, `/api/users/logout`, () => requestOptions, logoutResponse)
+  const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse)
+  const apiFetch = useFetch(setFetching, setElevatedState, setLogoutResponse, `/api/users/logout`, () => requestOptions, logoutResponse)
 
   useEffect(() => {
     if(!fetching) return;
@@ -42,17 +44,17 @@ export const UserElements = (props: IElevatedPageState) => {
 
   useEffect(() => {
     if (!authenticating || !logoutResponse) return;
-    props.setMsg(logoutResponse!.msg)
+    setElevatedState((prev) => ({...prev, msg: logoutResponse!.msg}))
     auth()
   }, [authenticating, logoutResponse]);
 
   useEffect(() => {
     if (!authenticatedResponse) return;
-    props.setAuthenticated(authenticatedResponse!.authenticated)
+    setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse!.authenticated}))
   }, [authenticatedResponse]);
 
 
-  if(props.authenticated()){
+  if(elevatedState().authenticated){
     return (
       <>
       <Nav.Link>

@@ -14,7 +14,8 @@ interface resetPasswordRequestReturn {
 }
 
 
-export const ForgotPassword = (props: IElevatedPageState) => {
+export function ForgotPassword (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...navProps} = props;
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -26,13 +27,13 @@ export const ForgotPassword = (props: IElevatedPageState) => {
   let requestOptions: RequestInit = {};
 
 
-  const apiFetch = useFetch(setFetching, props.setError, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions, registerResponse)
+  const apiFetch = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions, registerResponse)
 
   useEffect(() => {
     if(fetching) return;
 
     if (password !== confirmPassword){
-      props.setMsg("Passwords do not match");
+      setElevatedState((prev) => ({...prev, msg: "Passwords do not match"}));
       setFetching(false)
       return;
     }
@@ -49,7 +50,6 @@ export const ForgotPassword = (props: IElevatedPageState) => {
 
   useEffect(() => {
     if(!registerResponse) return;
-    props.setMsg(registerResponse!.msg)
   }, [registerResponse]);
 
 

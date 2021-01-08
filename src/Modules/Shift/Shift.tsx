@@ -19,7 +19,9 @@ interface shiftRequestReturn {
 }
 
 
-export const Shift = (props: IElevatedPageState) => {
+export function Shift (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+	const {elevatedState, setElevatedState, ...navProps} = props;
+
 	const [image, setImage] = useState(defaultVideo);
 	const [imageString, setImageString] = useState("");
 
@@ -30,8 +32,8 @@ export const Shift = (props: IElevatedPageState) => {
 	let requestOptions: RequestInit = {};
 
 
-	const apiFetch = useFetch(setFetching, props.setError, setShiftResponse, `/api/inference`, () => requestOptions, shiftResponse)
-	const convertImage = useConvertImage(setConverting, props.setError, setImage, () => imageString);
+	const apiFetch = useFetch(setFetching, setElevatedState, setShiftResponse, `/api/inference`, () => requestOptions, shiftResponse)
+	const convertImage = useConvertImage(setConverting, setElevatedState, setImage, () => imageString);
 
 
 	useEffect(() => {
@@ -41,7 +43,7 @@ export const Shift = (props: IElevatedPageState) => {
 			method: 'POST',
 			credentials: "include",
 			headers: { 'Content-Type': 'application/json'},
-			body: JSON.stringify({shiftUUID: props.shiftUUID(),
+			body: JSON.stringify({shiftUUID: elevatedState().shiftUUID,
 														usePTM: false,
 														prebuiltShiftModel: ""})
 		}
@@ -52,7 +54,7 @@ export const Shift = (props: IElevatedPageState) => {
 	useEffect(() => {
 		if(!shiftResponse) return;
 
-		props.setMsg(shiftResponse!.msg)
+		setElevatedState((prev) => ({...prev, msg: shiftResponse!.msg}));
 		setImageString(shiftResponse!.testImage)
 	}, [shiftResponse]);
 
@@ -71,10 +73,10 @@ export const Shift = (props: IElevatedPageState) => {
 	return (
 		<Container className="d-flex justify-content-center h-100 flex-column" key={image.lastModified}>
 			<Row className="mb-2">
-				<Media elevatedProps={props} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image} mediaType="video/mp4"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-3">
-				<Media elevatedProps={props} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>

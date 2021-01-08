@@ -16,7 +16,9 @@ import { useConvertImage } from "../../Helpers/Images";
 let trainResponse: ITrainRequestReturn = {msg: "", exhibit: []}
 
 
-export const AdvancedTrain = (props: IElevatedPageState) => {
+export function AdvancedTrain (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...navProps} = props;
+
   const [stopTrain, setStopTrain] = useState(false);
 
   const [imageString, setImageString] = useState("");
@@ -34,8 +36,8 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
   let requestOptions: RequestInit = {};
 
 
-  const apiFetch = useFetch(setFetching, props.setError, setTrainResponse, `/api/train`, () => requestOptions, trainResponse)
-  const convertImage = useConvertImage(setConverting, props.setError, setBaseImage, () => imageString);
+  const apiFetch = useFetch(setFetching, setElevatedState, setTrainResponse, `/api/train`, () => requestOptions, trainResponse)
+  const convertImage = useConvertImage(setConverting, setElevatedState, setBaseImage, () => imageString);
 
   useEffect(() => {
     if(!fetching || stopTrain) return;
@@ -44,10 +46,10 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({shiftUUID: props.shiftUUID(),
+      body: JSON.stringify({shiftUUID: elevatedState().shiftUUID,
                             usePTM: false,
                             prebuiltShiftModel: "",
-                            epochs: props.epochs,
+                            epochs: elevatedState().epochs,
                             trainType: 'basic'})
     };
 
@@ -57,6 +59,7 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
   useEffect(() => {
     if(!converting || !trainResponse) return;
 
+    setElevatedState((prev) => ({...prev, msg: trainResponse!.msg}))
     setImageString(trainResponse.exhibit[0]);
   }, [trainResponse]);
 
@@ -83,18 +86,18 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media elevatedProps={props} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage} mediaType="video/mp4"/>
+            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media elevatedProps={props} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
         </Col>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media elevatedProps={props} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media elevatedProps={props} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
           </Row>
         </Col>
       </Row>

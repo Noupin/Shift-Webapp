@@ -11,7 +11,9 @@ interface accountRequestReturn {
 }
 
 
-export const Account = (props: IElevatedPageState) => {
+export function Account (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...navProps} = props;
+
   const [username, setUsername] = useState("");
 
   const [fetching, setFetching] = useState(true);
@@ -24,7 +26,7 @@ export const Account = (props: IElevatedPageState) => {
   };
 
 
-  const apiFetch = useFetch(setFetching, props.setError, setAccountResponse, `/api/users/account`, () => requestOptions, accountResponse)
+  const apiFetch = useFetch(setFetching, setElevatedState, setAccountResponse, `/api/users/account`, () => requestOptions, accountResponse)
 
   useEffect(() => {
     if(!fetching) return;

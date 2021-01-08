@@ -1,10 +1,11 @@
+import { IElevatedPageState } from "../Interfaces/PageState";
 
 export function useConvertImage(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                                setError: React.Dispatch<React.SetStateAction<Error>>,
+                                setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
                                 setData: React.Dispatch<React.SetStateAction<File>>,
                                 imageString: () => string){
 
-  async function call(){
+  function call(){
     setLoading(true);
 
     try{
@@ -30,7 +31,7 @@ export function useConvertImage(setLoading: React.Dispatch<React.SetStateAction<
     }
     catch (error){
       setLoading(false);
-      setError(error);
+      setElevatedState((prev) => ({...prev, error: error}));
     }
   }
 

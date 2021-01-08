@@ -13,7 +13,9 @@ import { useFetch } from "../../Helpers/Fetch";
 import { useConvertImage } from "../../Helpers/Images";
 
 
-export const Train = (props: IElevatedPageState) => {
+export function Train (props: {elevatedState: () => IElevatedPageState, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>}){
+  const {elevatedState, setElevatedState, ...navProps} = props;
+
   const [stopTrain, setStopTrain] = useState(false);
   const [imageString, setImageString] = useState("");
   const [image, setImage] = useState(defaultVideo);
@@ -27,8 +29,8 @@ export const Train = (props: IElevatedPageState) => {
   let requestOptions: RequestInit = {};
 
 
-  const apiFetch = useFetch(setFetching, props.setError, setTrainResponse, `/api/train`, () => requestOptions, trainResponse)
-  const convertImage = useConvertImage(setConverting, props.setError, setImage, () => imageString);
+  const apiFetch = useFetch(setFetching, setElevatedState, setTrainResponse, `/api/train`, () => requestOptions, trainResponse)
+  const convertImage = useConvertImage(setConverting, setElevatedState, setImage, () => imageString);
 
   useEffect(() => {
     if(!fetching || stopTrain) return;
@@ -37,10 +39,10 @@ export const Train = (props: IElevatedPageState) => {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({shiftUUID: props.shiftUUID(),
+      body: JSON.stringify({shiftUUID: elevatedState().shiftUUID,
                             usePTM: false,
                             prebuiltShiftModel: "",
-                            epochs: props.epochs,
+                            epochs: elevatedState().epochs,
                             trainType: 'basic'})
     };
 
@@ -50,7 +52,7 @@ export const Train = (props: IElevatedPageState) => {
   useEffect(() => {
     if(!trainResponse) return;
 
-    props.setMsg(trainResponse!.msg)
+    setElevatedState((prev) => ({...prev, msg: trainResponse!.msg}));
     if(!trainResponse!.exhibit) return;
 
     setImageString(trainResponse!.exhibit[0]);
@@ -76,7 +78,7 @@ export const Train = (props: IElevatedPageState) => {
   return (
     <Container className="d-flex justify-content-center h-100 flex-column" key={image.lastModified}>
       <Row className="my-2">
-        <Media elevatedProps={props} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image} mediaType="video/mp4"/>
+        <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image} mediaType="video/mp4"/>
       </Row>
       <Row>
         <Col xs={2}></Col>
