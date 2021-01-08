@@ -1,5 +1,6 @@
 /.vscode
 ChrisHemsworthMotivation.mp4
+**/Assets
 
 # dependencies
 /node_modules

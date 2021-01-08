@@ -6,28 +6,27 @@ async function returnFetch(url: string, options: RequestInit){
   return await fetch(url, options)
 }
 
-export function useFetch<T>(getLoading: () => boolean,
-                             setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                             setError: React.Dispatch<React.SetStateAction<Error>>,
-                             setData: React.Dispatch<React.SetStateAction<T>>,
-                             url: string, requestOptions: () => RequestInit){
-  useEffect(() => {
-    async function call() {
-      if(!getLoading()) return;
+export function useFetch<T>(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+                            setError: React.Dispatch<React.SetStateAction<Error>>,
+                            setData: React.Dispatch<React.SetStateAction<T>>,
+                            url: string, requestOptions: () => RequestInit,
+                            defaultResponse: T): () => Promise<void>{
 
-      try{
-        const response = await returnFetch(url, requestOptions());
-        const json = await response.json();
-        console.log(json)
-        setData(json);
+  async function call(){
+    setLoading(true);
 
-        setLoading(false);
-      }
-      catch (error){
-        setError(error)
-      }
+    try{
+      const response = await fetch(url, requestOptions());
+      const json = await response.json();
+
+      setData(json);
+      setLoading(false);
     }
+    catch (error){
+      setLoading(false);
+      setError(error);
+    }
+  }
 
-    call()
-  }, [getLoading()]);
+  return call
 }

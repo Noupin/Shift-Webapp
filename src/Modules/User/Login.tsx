@@ -1,7 +1,7 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
@@ -23,17 +23,18 @@ export const Login = (props: IElevatedPageState) => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [loginResponse, setLoginResponse] = useState<loginRequestReturn>();
   const [fetching, setFetching] = useState(false);
-  const [authenticated, setAuthenticated] = useState<IAuthRequestReturn>();
+  const [loginResponse, setLoginResponse] = useState<loginRequestReturn>();
   const [authenticating, setAuthenticating] = useState(false);
+  const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>();
+
+  const history = useHistory();
 
   let requestOptions: RequestInit = {};
 
+  const apiFetch = useFetch(setFetching, props.setError, setLoginResponse, `/api/users/login`, () => requestOptions, loginResponse);
+  const auth = useAuthenticate(setAuthenticating, props.setError, setAuthenticatedResponse);
 
-  useFetch(() => fetching, setFetching, props.setError, setLoginResponse, `/api/users/login`, () => requestOptions)
-
-  useAuthenticate(() => authenticating, setAuthenticating, props.setError, setAuthenticated)
 
   useEffect(() => {
     if(!fetching) return;
@@ -47,13 +48,26 @@ export const Login = (props: IElevatedPageState) => {
                             remember: rememberMe})
     };
 
-    props.setMsg(loginResponse!.msg)
+    apiFetch()
+    setAuthenticating(true)
   }, [fetching]);
 
   useEffect(() => {
-    if(!authenticating) return;
-    props.setAuthenticated(authenticated!.authenticated)
-  }, [authenticating]);
+    if(!authenticating || !loginResponse) return;
+    props.setMsg(loginResponse!.msg)
+    auth()
+  }, [authenticating, loginResponse]);
+
+  useEffect(() => {
+    if(!authenticatedResponse) return;
+    props.setAuthenticated(authenticatedResponse.authenticated)
+  }, [authenticatedResponse]);
+
+  useEffect(() => {
+    if(!props.authenticated()) return;
+    history.push("/")
+  }, [props.authenticated()]);
+
 
 
   return (
@@ -77,7 +91,7 @@ export const Login = (props: IElevatedPageState) => {
           <Row>
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => {setFetching(true);setAuthenticating(true)}}>Login &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" disabled={fetching || authenticating} onClick={() => {setFetching(true)}}>Login &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>

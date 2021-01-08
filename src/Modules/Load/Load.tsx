@@ -37,13 +37,14 @@ export const Load = (props: IElevatedPageState) => {
   const [fetching, setFetching] = useState(false);
   const [loadResponse, setLoadResponse] = useState<loadRequestReturn>();
 
+  const prevShiftUUID = sessionStorage["shiftUUID"];
   let requestOptions: RequestInit = {};
   const requestHeaders = new Headers();
 
 
-  useFetch(() => fetching, setFetching, props.setError, setLoadResponse, `/api/users/load`, () => requestOptions)
+  const apiFetch = useFetch(setFetching, props.setError, setLoadResponse, `/api/loadData`, () => requestOptions, loadResponse)
 
-
+  
   useEffect(() => {
     if(!fetching) return;
 
@@ -55,7 +56,6 @@ export const Load = (props: IElevatedPageState) => {
     };
 
     for (var fileIndex = 0; fileIndex < files.length; fileIndex++){
-      console.log(files[fileIndex].name);
       data.append(`file${fileIndex}`, files[fileIndex]);
     }
     requestOptions.body = data;
@@ -63,11 +63,19 @@ export const Load = (props: IElevatedPageState) => {
     requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
     requestOptions.headers = requestHeaders;
 
-    props.setMsg(loadResponse!.msg)
+    apiFetch()
+  }, [fetching]);
+
+  useEffect(() => {
+    if(!loadResponse) return;
     props.setShiftUUID(loadResponse!.shiftUUID)
-    
-    //history.push("/train")
-  });
+    props.setMsg(loadResponse!.msg);
+  }, [loadResponse]);
+
+  useEffect(() => {
+    if(!props.shiftUUID() || props.shiftUUID() === prevShiftUUID) return;
+    history.push("/train");
+  }, [props.shiftUUID()]);
 
   useEffect(() => {
     setFiles([baseVideo, ...baseFiles, ...maskFiles]);

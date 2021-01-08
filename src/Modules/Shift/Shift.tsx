@@ -30,8 +30,8 @@ export const Shift = (props: IElevatedPageState) => {
 	let requestOptions: RequestInit = {};
 
 
-	useFetch(() => fetching, setFetching, props.setError, setShiftResponse, `/api/inference`, () => requestOptions)
-	useConvertImage(() => converting, setConverting, props.setError, setImage, () => imageString);
+	const apiFetch = useFetch(setFetching, props.setError, setShiftResponse, `/api/inference`, () => requestOptions, shiftResponse)
+	const convertImage = useConvertImage(setConverting, props.setError, setImage, () => imageString);
 
 
 	useEffect(() => {
@@ -41,26 +41,37 @@ export const Shift = (props: IElevatedPageState) => {
 			method: 'POST',
 			credentials: "include",
 			headers: { 'Content-Type': 'application/json'},
-			body: JSON.stringify({shiftUUID: props.shiftUUID,
+			body: JSON.stringify({shiftUUID: props.shiftUUID(),
 														usePTM: false,
 														prebuiltShiftModel: ""})
 		}
 
-		props.setMsg(shiftResponse!.msg);
-		setImageString(shiftResponse!.testImage);
-		setConverting(true);
+		 apiFetch()
 	}, [fetching]);
 
 	useEffect(() => {
-    if(!converting) return;
-    console.log("Converted Image");
-  }, [converting]);
+		if(!shiftResponse) return;
+
+		props.setMsg(shiftResponse!.msg)
+		setImageString(shiftResponse!.testImage)
+	}, [shiftResponse]);
+
+	useEffect(() => {
+		if(!imageString) return;
+		convertImage()
+	}, [imageString]);
+
+	useEffect(() => {
+		if(image === defaultVideo) return;
+
+		console.log("Image Converted")
+	}, [image]);
 
 
 	return (
-		<Container className="d-flex justify-content-center h-100 flex-column">
+		<Container className="d-flex justify-content-center h-100 flex-column" key={image.lastModified}>
 			<Row className="mb-2">
-				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" key={image.lastModified} mediaSrc={image} mediaType="video/mp4"/>
+				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-3">
 				<Media className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4"/>
@@ -69,12 +80,12 @@ export const Shift = (props: IElevatedPageState) => {
 				<Col xs={1}></Col>
 				<Col xs={2}>
 					<Link to="/train" className="w-100">
-            <Button className="borderRadius-2 p-2 mr-4 w-100">&#x2190; Train More</Button>
+            <Button className="borderRadius-2 p-2 mr-4 w-100" disabled={fetching || converting}>&#x2190; Train More</Button>
           </Link>
 				</Col>
 				<Col xs={2}>
 					<Link to="/load" className="w-100">
-            <Button className="borderRadius-2 p-2 ml-4 w-100">Shift Again &#x21ba;</Button>
+            <Button className="borderRadius-2 p-2 ml-4 w-100" disabled={fetching || converting}>Shift Again &#x21ba;</Button>
           </Link>
 				</Col>
 				<Col xs={1}></Col>

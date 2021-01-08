@@ -42,7 +42,12 @@ export default function App() {
                                          setError: setError};
   
     
-  useAuthenticate(() => fetching, setFetching, setError, setAuthenticatedResponse)
+  const auth = useAuthenticate(setFetching, setError, setAuthenticatedResponse)
+
+  useEffect(() => {
+    if(!fetching) return;
+    auth()
+  }, [fetching]);
 
   useEffect(() => {
     if(!authenticatedResponse) return;
@@ -56,8 +61,14 @@ export default function App() {
   }, [msg]);
 
   useEffect(() => {
+    if(!shiftUUID) return;
     sessionStorage.setItem("shiftUUID", shiftUUID);
   }, [shiftUUID]);
+
+  useEffect(() => {
+    if(!error) return;
+    console.error(error);
+  }, [error]);
 
   return (
     <Router>

@@ -17,8 +17,6 @@ interface logoutRequestReturn {
   msg: string
 }
 
-let logoutResponse: logoutRequestReturn = {msg: ""}
-
 
 export const UserElements = (props: IElevatedPageState) => {
   const [authenticating, setAuthenticating] = useState(false);
@@ -33,20 +31,25 @@ export const UserElements = (props: IElevatedPageState) => {
     headers: { 'Content-Type': 'application/json'}
   };
 
-  useAuthenticate(() => authenticating, setAuthenticating, props.setError, setAuthenticatedResponse)
-  useFetch(() => fetching, setFetching, props.setError, setLogoutResponse, `/api/users/logout`, () => requestOptions)
-
-  useEffect(() => {
-    if(!authenticatedResponse) return;
-    props.setAuthenticated(authenticatedResponse!.authenticated)
-  }, [authenticatedResponse]);
-
+  const auth = useAuthenticate(setAuthenticating, props.setError, setAuthenticatedResponse)
+  const apiFetch = useFetch(setFetching, props.setError, setLogoutResponse, `/api/users/logout`, () => requestOptions, logoutResponse)
 
   useEffect(() => {
     if(!fetching) return;
-    props.setMsg(logoutResponse!.msg);
-  });
+    apiFetch()
+    setAuthenticating(true)
+  }, [fetching]);
 
+  useEffect(() => {
+    if (!authenticating || !logoutResponse) return;
+    props.setMsg(logoutResponse!.msg)
+    auth()
+  }, [authenticating, logoutResponse]);
+
+  useEffect(() => {
+    if (!authenticatedResponse) return;
+    props.setAuthenticated(authenticatedResponse!.authenticated)
+  }, [authenticatedResponse]);
 
 
   if(props.authenticated()){

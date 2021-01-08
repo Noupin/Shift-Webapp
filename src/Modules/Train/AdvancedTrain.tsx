@@ -27,56 +27,63 @@ export const AdvancedTrain = (props: IElevatedPageState) => {
 
   const history = useHistory()
 
-  const [fetching, setFetching] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [trainResponse, setTrainResponse] = useState<ITrainRequestReturn>();
   const [converting, setConverting] = useState(false);
 
   let requestOptions: RequestInit = {};
 
 
-  useFetch(() => fetching, setFetching, props.setError, setTrainResponse, `/api/users/advancedTrain`, () => requestOptions)
-  useConvertImage(() => converting, setConverting, props.setError, setBaseImage, () => imageString);
+  const apiFetch = useFetch(setFetching, props.setError, setTrainResponse, `/api/train`, () => requestOptions, trainResponse)
+  const convertImage = useConvertImage(setConverting, props.setError, setBaseImage, () => imageString);
 
   useEffect(() => {
-    if(!fetching) return;
+    if(!fetching || stopTrain) return;
+
     requestOptions = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({shiftUUID: props.shiftUUID,
+      body: JSON.stringify({shiftUUID: props.shiftUUID(),
                             usePTM: false,
                             prebuiltShiftModel: "",
                             epochs: props.epochs,
-                            trainType: 'advanced'})
+                            trainType: 'basic'})
     };
 
-    props.setMsg(trainResponse!.msg);
-    setImageString(trainResponse!.exhibit[0]);
-    setConverting(true);
+    apiFetch()
   }, [fetching]);
 
   useEffect(() => {
-    if(!converting) return;
-    console.log("Converted Image");
-  }, [converting]);
+    if(!converting || !trainResponse) return;
+
+    setImageString(trainResponse.exhibit[0]);
+  }, [trainResponse]);
 
   useEffect(() => {
-    if (stopTrain){
-      setFetching(false);
-      history.push("/shift");
-      return;
+		if(!imageString) return;
+		convertImage()
+	}, [imageString]);
+
+  useEffect(() => {
+    if(baseImage === defaultVideo) return;
+
+    if(stopTrain){
+      history.push("/shift")
     }
 
-    setFetching(true);
-  }, [baseImage, baseRemake, maskImage, maskRemake]); //may need stopTrain in dependencies
+    console.log("Image Converted")
+    setFetching(true)
+  }, [baseImage, baseRemake, maskImage, maskRemake])
+
 
 
   return (
-    <Container className="d-flex justify-content-center h-100 flex-column">
+    <Container className="d-flex justify-content-center h-100 flex-column" key={baseImage.lastModified}>
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
             <Media className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>

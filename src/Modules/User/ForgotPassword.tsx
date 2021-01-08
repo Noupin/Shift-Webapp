@@ -20,13 +20,13 @@ export const ForgotPassword = (props: IElevatedPageState) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [registerResponse, setRegisterResponse] = useState<resetPasswordRequestReturn>();
   const [fetching, setFetching] = useState(false);
+  const [registerResponse, setRegisterResponse] = useState<resetPasswordRequestReturn>();
 
   let requestOptions: RequestInit = {};
 
 
-  useFetch(() => fetching, setFetching, props.setError, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions)
+  const apiFetch = useFetch(setFetching, props.setError, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions, registerResponse)
 
   useEffect(() => {
     if(fetching) return;
@@ -44,8 +44,13 @@ export const ForgotPassword = (props: IElevatedPageState) => {
       body: JSON.stringify({currentPassword: currentPassword, password: password})
     };
 
-    props.setMsg(registerResponse!.msg)
+    apiFetch()
   }, [fetching]);
+
+  useEffect(() => {
+    if(!registerResponse) return;
+    props.setMsg(registerResponse!.msg)
+  }, [registerResponse]);
 
 
   return (

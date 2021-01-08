@@ -14,8 +14,8 @@ interface accountRequestReturn {
 export const Account = (props: IElevatedPageState) => {
   const [username, setUsername] = useState("");
 
+  const [fetching, setFetching] = useState(true);
   const [accountResponse, setAccountResponse] = useState<accountRequestReturn>()
-  const [fetching, setFetching] = useState(false)
 
   const requestOptions: RequestInit = {
     method: 'GET',
@@ -24,12 +24,17 @@ export const Account = (props: IElevatedPageState) => {
   };
 
 
-  useFetch(() => fetching, setFetching, props.setError, setAccountResponse, `/api/users/account`, () => requestOptions)
+  const apiFetch = useFetch(setFetching, props.setError, setAccountResponse, `/api/users/account`, () => requestOptions, accountResponse)
 
   useEffect(() => {
-    if(fetching) return;
-    setUsername(accountResponse!.username)
+    if(!fetching) return;
+    apiFetch()
   }, [fetching]);
+
+  useEffect(() => {
+    if(!accountResponse) return;
+    setUsername(accountResponse!.username);
+  }, [accountResponse]);
 
 
   return (

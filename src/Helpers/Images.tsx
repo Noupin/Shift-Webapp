@@ -2,32 +2,41 @@
 import React, { useEffect } from 'react';
 
 
-async function returnFetch(url: string, options: RequestInit){
-  return await fetch(url, options)
-}
+export function useConvertImage(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+                                setError: React.Dispatch<React.SetStateAction<Error>>,
+                                setData: React.Dispatch<React.SetStateAction<File>>,
+                                imageString: () => string){
 
-export function useConvertImage(getLoading: () => boolean,
-                             setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                             setError: React.Dispatch<React.SetStateAction<Error>>,
-                             setData: React.Dispatch<React.SetStateAction<File>>,
-                             imageString: () => string){
-  useEffect(() => {
-    async function call() {
-      if(!getLoading()) return;
+  async function call(){
+    setLoading(true);
 
-      try{
-        const response = await fetch(imageString());
-        const blob = await response.blob();
-        setData(new File([blob], `image${imageString().substring(23, 33)}`));
+    try{
+      const sliceSize = 512
+      const byteCharacters = atob(imageString());
+      const byteArrays = [];
 
-        setLoading(false);
+      for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
       }
-      catch(error){
-        setError(error);
-      }
+      const file = new File(byteArrays, "image");
+
+      setData(file);
+      setLoading(false);
     }
+    catch (error){
+      setLoading(false);
+      setError(error);
+    }
+  }
 
-    call()
-  }, [getLoading()]);
+  return call
 }
 

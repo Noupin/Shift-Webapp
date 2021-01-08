@@ -1,12 +1,14 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
+import { useAuthenticate } from '../../Helpers/Authenticate';
 import { useFetch } from '../../Helpers/Fetch';
+import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
 import { IElevatedPageState } from "../../Interfaces/PageState";
 
 
@@ -23,15 +25,21 @@ export const Register = (props: IElevatedPageState) => {
 
   const [fetching, setFetching] = useState(false);
   const [registerResponse, setRegisterResponse] = useState<registerRequestReturn>();
+  const [authenticating, setAuthenticating] = useState(false);
+  const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>();
+
+  const history = useHistory();
+
 
   let requestOptions: RequestInit = {};
 
 
-  useFetch(() => fetching, setFetching, props.setError, setRegisterResponse, `/api/users/register`, () => requestOptions)
+  const apiFetch = useFetch(setFetching, props.setError, setRegisterResponse, `/api/users/register`, () => requestOptions, registerResponse)
+  const auth = useAuthenticate(setAuthenticating, props.setError, setAuthenticatedResponse)
 
 
   useEffect(() => {
-    if(fetching) return;
+    if(!fetching) return;
 
     if (password !== confirmPassword){
       console.log("Passwords do not match");
@@ -46,8 +54,26 @@ export const Register = (props: IElevatedPageState) => {
       body: JSON.stringify({ username: username, password: password, email: email})
     };
 
-    props.setMsg(registerResponse!.msg);
+    apiFetch()
+    setAuthenticating(true)
   }, [fetching]);
+
+  useEffect(() => {
+    if(!authenticating || !registerResponse) return;
+
+    props.setMsg(registerResponse!.msg);
+    auth()
+  }, [authenticating, registerResponse]);
+
+  useEffect(() => {
+    if(!authenticatedResponse) return;
+    props.setAuthenticated(authenticatedResponse.authenticated)
+  }, [authenticatedResponse]);
+
+  useEffect(() => {
+    if(!props.authenticated()) return;
+    history.push("/")
+  }, [props.authenticated()]);
 
 
   return (
@@ -77,7 +103,7 @@ export const Register = (props: IElevatedPageState) => {
           <Row className="align-items-center">
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" onClick={() => {setFetching(true)}}>Register &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" disabled={fetching || authenticating} onClick={() => {setFetching(true)}}>Register &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>

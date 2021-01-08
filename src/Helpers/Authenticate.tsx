@@ -15,26 +15,25 @@ async function returnFetch(url: string, options: RequestInit){
   return await fetch(url, options)
 }
 
-export function useAuthenticate(getLoading: () => boolean,
-                             setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                             setError: React.Dispatch<React.SetStateAction<Error>>,
-                             setData: React.Dispatch<React.SetStateAction<IAuthRequestReturn | undefined>>){
-  useEffect(() => {
-    async function call() {
-      if(!getLoading()) return;
+export function useAuthenticate(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+                                setError: React.Dispatch<React.SetStateAction<Error>>,
+                                setData: React.Dispatch<React.SetStateAction<IAuthRequestReturn | undefined>>){
 
-      try{
-        const response = await returnFetch(`/api/users/isAuthenticated`, authRequestOptions);
-        const json = await response.json();
-        setData(json);
+  async function call(){
+    setLoading(true);
 
-        setLoading(false);
-      }
-      catch (error){
-        setError(error)
-      }
+    try{
+      const response = await fetch(`/api/users/isAuthenticated`, authRequestOptions);
+      const json = await response.json();
+
+      setData(json);
+      setLoading(false);
     }
+    catch (error){
+      setLoading(false);
+      setError(error);
+    }
+  }
 
-    call()
-  }, [getLoading()]);
+  return call
 }
