@@ -84,3 +84,16 @@ label {
     box-shadow: inset 5px 5px 10px $dimShadow, 
                 inset -5px -5px 10px $brightShadow;
 }
+
+
+//Glassmorphism
+.glassmorphic{
+    background: white;
+    background: linear-gradient(
+        to right bottom,
+        rgba(255, 255, 255, 0.7),
+        rgba(255, 255, 255, 0.3)
+    );
+    z-index: 2;
+    backdrop-filter: blur(2rem);
+}

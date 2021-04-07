@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 //First Party Imports
-import { useFetch } from "../../Helpers/Fetch";
+import { useFetch } from "../../Hooks/Fetch";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
@@ -12,7 +12,7 @@ interface accountRequestReturn {
 
 
 export function Account (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...navProps} = props;
+  const {elevatedState, setElevatedState, ...accountProps} = props;
 
   const [username, setUsername] = useState("");
 
@@ -26,11 +26,11 @@ export function Account (props: IElevatedStateProps){
   };
 
 
-  const apiFetch = useFetch(setFetching, setElevatedState, setAccountResponse, `/api/users/account`, () => requestOptions, accountResponse)
+  const fetchAccount = useFetch(setFetching, setElevatedState, setAccountResponse, `/api/users/account`, () => requestOptions, accountResponse)
 
   useEffect(() => {
     if(!fetching) return;
-    apiFetch()
+    fetchAccount()
   }, [fetching]);
 
   useEffect(() => {

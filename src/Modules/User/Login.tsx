@@ -8,7 +8,7 @@ import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { IAuthRequestReturn } from "../../Interfaces/Authenticate";
-import { useFetch } from "../../Helpers/Fetch";
+import { useFetch } from "../../Hooks/Fetch";
 import { useAuthenticate } from '../../Helpers/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
@@ -19,7 +19,7 @@ interface loginRequestReturn {
 
 
 export function Login (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...navProps} = props;
+  const {elevatedState, setElevatedState, ...loginProps} = props;
 
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +34,7 @@ export function Login (props: IElevatedStateProps){
 
   let requestOptions: RequestInit = {};
 
-  const apiFetch = useFetch(setFetching, setElevatedState, setLoginResponse, `/api/users/login`, () => requestOptions, loginResponse);
+  const fetchLogin = useFetch(setFetching, setElevatedState, setLoginResponse, `/api/users/login`, () => requestOptions, loginResponse);
   const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse);
 
 
@@ -50,7 +50,7 @@ export function Login (props: IElevatedStateProps){
                             remember: rememberMe})
     };
 
-    apiFetch()
+    fetchLogin()
     setAuthenticating(true)
   }, [fetching]);
 

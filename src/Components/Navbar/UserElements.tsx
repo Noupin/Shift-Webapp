@@ -7,7 +7,7 @@ import { Navbar, Nav } from "react-bootstrap";
 //First Party Imports
 import './Navbar.scss'
 import { Button } from '../../Components/Button/Button';
-import { useFetch } from "../../Helpers/Fetch";
+import { useFetch } from "../../Hooks/Fetch";
 import { useAuthenticate } from '../../Helpers/Authenticate';
 import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -19,7 +19,7 @@ interface logoutRequestReturn {
 
 
 export function UserElements (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...navProps} = props;
+  const {elevatedState, setElevatedState, ...useElementsProps} = props;
 
   const [authenticating, setAuthenticating] = useState(false);
   const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>()
@@ -34,11 +34,11 @@ export function UserElements (props: IElevatedStateProps){
   };
 
   const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse)
-  const apiFetch = useFetch(setFetching, setElevatedState, setLogoutResponse, `/api/users/logout`, () => requestOptions, logoutResponse)
+  const fetchLogout = useFetch(setFetching, setElevatedState, setLogoutResponse, `/api/users/logout`, () => requestOptions, logoutResponse)
 
   useEffect(() => {
     if(!fetching) return;
-    apiFetch()
+    fetchLogout()
     setAuthenticating(true)
   }, [fetching]);
 

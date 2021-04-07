@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import { BrowserRouter as Router,
-         Switch, Route } from "react-router-dom";
+         Switch, Route, useParams } from "react-router-dom";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
@@ -28,8 +28,11 @@ export default function App() {
     error: new Error(),
     authenticated: false,
     user: "",
+    defaultTrainView: "basic",
     shiftUUID: "",
-    epochs: 10
+    trainStatusInterval: 10,
+    usePTM: false,
+    prebuiltShiftModel: "",
   })
 
   const getElevatedState = function(){ return elevatedState };
@@ -41,6 +44,10 @@ export default function App() {
   
     
   const auth = useAuthenticate(setFetching, setElevatedState, setAuthenticatedResponse)
+
+  useEffect(() => {
+    setElevatedState({...elevatedState, shiftUUID: sessionStorage.getItem("shiftUUID")!})
+  }, [])
 
   useEffect(() => {
     if(!fetching) return;

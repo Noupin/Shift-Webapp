@@ -12,7 +12,7 @@ import { defaultVideo, validMediaFileExtesnions } from "../../constants";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { validateFileList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
-import { useFetch } from "../../Helpers/Fetch";
+import { useFetch } from "../../Hooks/Fetch";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
@@ -44,9 +44,11 @@ export function Load (props: IElevatedStateProps){
   const requestHeaders = new Headers();
 
 
-  const apiFetch = useFetch(setFetching, setElevatedState, setLoadResponse, `/api/loadData`, () => requestOptions, loadResponse)
+  const fetchLoad = useFetch(setFetching, setElevatedState, setLoadResponse, `/api/loadData`, () => requestOptions, loadResponse)
 
   
+  useEffect(() => {setElevatedState((prev) => ({...prev, prebuiltShiftModel: ""}))}, []);
+
   useEffect(() => {
     if(!fetching) return;
 
@@ -70,7 +72,7 @@ export function Load (props: IElevatedStateProps){
     requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
     requestOptions.headers = requestHeaders;
 
-    apiFetch()
+    fetchLoad()
   }, [fetching]);
 
   useEffect(() => {
@@ -81,12 +83,11 @@ export function Load (props: IElevatedStateProps){
 
   useEffect(() => {
     if(!elevatedState().shiftUUID || elevatedState().shiftUUID === prevShiftUUID) return;
-    history.push("/train");
+    history.push(`/${elevatedState().defaultTrainView === "basic" ? "train" : "advancedTrain"}`);
   }, [elevatedState().shiftUUID]);
 
   useEffect(() => {
     setFiles([baseVideo, ...baseFiles, ...maskFiles]);
-    console.log(files)
     setTrainingDataTypes([...fillArray("base", baseFiles.length+1), ...fillArray("mask", maskFiles.length)])
   }, [baseVideo, baseFiles, maskFiles]);
 

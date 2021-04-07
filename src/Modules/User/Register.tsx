@@ -7,7 +7,7 @@ import { Link, useHistory } from "react-router-dom";
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { useAuthenticate } from '../../Helpers/Authenticate';
-import { useFetch } from '../../Helpers/Fetch';
+import { useFetch } from '../../Hooks/Fetch';
 import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
@@ -18,7 +18,7 @@ interface registerRequestReturn {
 
 
 export function Register (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...navProps} = props;
+  const {elevatedState, setElevatedState, ...registerProps} = props;
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -36,7 +36,7 @@ export function Register (props: IElevatedStateProps){
   let requestOptions: RequestInit = {};
 
 
-  const apiFetch = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/register`, () => requestOptions, registerResponse)
+  const fetchRegister = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/register`, () => requestOptions, registerResponse)
   const auth = useAuthenticate(setAuthenticating, props.setElevatedState, setAuthenticatedResponse)
 
 
@@ -56,7 +56,7 @@ export function Register (props: IElevatedStateProps){
       body: JSON.stringify({ username: username, password: password, email: email})
     };
 
-    apiFetch()
+    fetchRegister()
     setAuthenticating(true)
   }, [fetching]);
 

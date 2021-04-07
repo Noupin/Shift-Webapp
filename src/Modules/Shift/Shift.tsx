@@ -8,72 +8,97 @@ import { Link } from "react-router-dom";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { defaultVideo } from "../../constants";
-import { useFetch } from "../../Helpers/Fetch";
-import { useConvertImage } from "../../Helpers/Images";
+import { useFetch } from "../../Hooks/Fetch";
+import { useInterval } from "../../Hooks/Interval";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface shiftRequestReturn {
 	msg: string,
-	testImage: string
+	stopped: boolean
 }
 
 
 export function Shift (props: IElevatedStateProps){
-	const {elevatedState, setElevatedState, ...navProps} = props;
+	const {elevatedState, setElevatedState, ...shiftProps} = props;
 
 	const [image, setImage] = useState(defaultVideo);
-	const [imageString, setImageString] = useState("");
 
-	const [fetching, setFetching] = useState(true);
+	const [shifting, setShifting] = useState(true);
+	const [stopShifting, setStopShifting] = useState(false);
+	const [updating, setUpdating] = useState(false);
   const [shiftResponse, setShiftResponse] = useState<shiftRequestReturn>();
-  const [converting, setConverting] = useState(false);
+	const [updateProgress, setUpdateProgress] = useState(false);
+	const [fileResponse, setFileResponse] = useState<Blob>();
 
 	let requestOptions: RequestInit = {};
 
+	function updateRequestOptions(method: string="POST"){
+    requestOptions = {
+			method: method,
+			credentials: "include",
+			headers: { 'Content-Type': 'application/json'},
+			body: method === "POST" ? JSON.stringify({shiftUUID: elevatedState().shiftUUID,
+															  usePTM: elevatedState().usePTM,
+															  prebuiltShiftModel: elevatedState().prebuiltShiftModel}) : null
+		};
+  }
 
-	const apiFetch = useFetch(setFetching, setElevatedState, setShiftResponse, `/api/inference`, () => requestOptions, shiftResponse)
-	const convertImage = useConvertImage(setConverting, setElevatedState, setImage, () => imageString);
+
+
+	const fetchInference = useFetch(setShifting, setElevatedState, setShiftResponse, `/api/inference`, () => requestOptions, shiftResponse)
+	const updateStatus = useFetch(setUpdateProgress, setElevatedState, setShiftResponse, `/api/inferenceStatus`, () => requestOptions, shiftResponse)
+	const getMedia = useFetch(setUpdateProgress, setElevatedState, setFileResponse, `/api/content/image/${elevatedState().shiftUUID}`, () => requestOptions, fileResponse)
 
 
 	useEffect(() => {
-		if(!fetching) return;
+		if(!shifting) return;
 
-		requestOptions = {
-			method: 'POST',
-			credentials: "include",
-			headers: { 'Content-Type': 'application/json'},
-			body: JSON.stringify({shiftUUID: elevatedState().shiftUUID,
-														usePTM: false,
-														prebuiltShiftModel: ""})
-		}
+		updateRequestOptions();
 
-		 apiFetch()
-	}, [fetching]);
+		fetchInference();
+		setUpdating(true);
+	}, [shifting]);
 
 	useEffect(() => {
 		if(!shiftResponse) return;
 
-		setElevatedState((prev) => ({...prev, msg: shiftResponse!.msg}));
-		setImageString(shiftResponse!.testImage)
+		setElevatedState((prev) => ({...prev, msg: shiftResponse.msg}));
 	}, [shiftResponse]);
 
-	useEffect(() => {
-		if(!imageString) return;
-		convertImage()
-	}, [imageString]);
+	useInterval(() => {
+		if(updating || !stopShifting){
+			updateRequestOptions();
+			updateStatus();
 
-	useEffect(() => {
-		if(image === defaultVideo) return;
+			if(shiftResponse == null){
+				return;
+			}
 
-		console.log("Image Converted")
-	}, [image]);
+			setStopShifting(shiftResponse.stopped);
+
+			if(stopShifting){
+				setUpdating(false); //Calback to get the most up to date value of updated
+				updateRequestOptions("GET")
+				getMedia("blob");
+
+				if(fileResponse == null){
+					return;
+				}
+
+				setImage(new File([fileResponse], 'shifted.png', {type: "media"}))
+			}
+			else{
+				setUpdating(true);
+			}
+		}
+	}, 1000);
 
 
 	return (
 		<Container className="d-flex justify-content-center h-100 flex-column" key={image.lastModified}>
 			<Row className="mb-2">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image} mediaType="video/mp4"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image} mediaType="media"/>
 			</Row>
 			<Row className="my-3">
 				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4"/>
@@ -82,17 +107,17 @@ export function Shift (props: IElevatedStateProps){
 				<Col xs={1}></Col>
 				<Col xs={2}>
 					<Link to="/train" className="w-100">
-            <Button className="borderRadius-2 p-2 mr-4 w-100" disabled={fetching || converting}>&#x2190; Train More</Button>
+            <Button className="borderRadius-2 p-2 mr-4 w-100" disabled={shifting}>&#x2190; Train More</Button>
           </Link>
 				</Col>
 				<Col xs={2}>
 					<Link to="/load" className="w-100">
-            <Button className="borderRadius-2 p-2 ml-4 w-100" disabled={fetching || converting}>Shift Again &#x21ba;</Button>
+            <Button className="borderRadius-2 p-2 ml-4 w-100" disabled={shifting} onClick={() => setShifting(true)}>Shift Again &#x21ba;</Button>
           </Link>
 				</Col>
 				<Col xs={1}></Col>
 				<Col xs={5}>
-					<Button className="borderRadius-2 p-2 w-100" disabled={fetching || converting}>Share</Button>
+					<Button className="borderRadius-2 p-2 w-100" disabled={shifting}>Share</Button>
 				</Col>
 				<Col xs={1}></Col>
 			</Row>

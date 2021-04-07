@@ -5,7 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
-import { useFetch } from "../../Helpers/Fetch";
+import { useFetch } from "../../Hooks/Fetch";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
@@ -15,7 +15,7 @@ interface resetPasswordRequestReturn {
 
 
 export function ForgotPassword (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...navProps} = props;
+  const {elevatedState, setElevatedState, ...forgotPasswordProps} = props;
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,7 @@ export function ForgotPassword (props: IElevatedStateProps){
   let requestOptions: RequestInit = {};
 
 
-  const apiFetch = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions, registerResponse)
+  const fetchResetPassword = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions, registerResponse)
 
   useEffect(() => {
     if(fetching) return;
@@ -45,7 +45,7 @@ export function ForgotPassword (props: IElevatedStateProps){
       body: JSON.stringify({currentPassword: currentPassword, password: password})
     };
 
-    apiFetch()
+    fetchResetPassword()
   }, [fetching]);
 
   useEffect(() => {

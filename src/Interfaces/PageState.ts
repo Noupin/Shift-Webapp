@@ -3,6 +3,9 @@ export interface IElevatedPageState {
     error: Error
     authenticated: boolean
     user: string
+    defaultTrainView: string
     shiftUUID: string
-    epochs: number
+    trainStatusInterval: number
+    usePTM: boolean
+    prebuiltShiftModel: string
 }

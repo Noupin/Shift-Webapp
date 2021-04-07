@@ -8,17 +8,22 @@ import { ITrainRequestReturn } from "../../Interfaces/Train";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { defaultVideo } from "../../constants";
-import { useFetch } from "../../Helpers/Fetch";
-import { useConvertImage } from "../../Helpers/Images";
+import { useFetch } from "../../Hooks/Fetch";
+import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
-let trainResponse: ITrainRequestReturn = {msg: "", exhibit: []}
+let trainResponse: ITrainRequestReturn = {msg: "", exhibit: [], stopped: false}
 
 
 export function AdvancedTrain (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...navProps} = props;
+  const {elevatedState, setElevatedState, ...advancedTrainProps} = props;
+  useEffect(() => {
+    setElevatedState((prev) => ({...prev, shiftUUID: sessionStorage["shiftUUID"]}))
+    setElevatedState((prev) => ({...prev, prebuiltShiftModel: elevatedState().shiftUUID}))
+  }, []);
 
+  const [basicView, setBasicView] = useState(false);
   const [stopTrain, setStopTrain] = useState(false);
 
   const [imageString, setImageString] = useState("");
@@ -36,24 +41,25 @@ export function AdvancedTrain (props: IElevatedStateProps){
   let requestOptions: RequestInit = {};
 
 
-  const apiFetch = useFetch(setFetching, setElevatedState, setTrainResponse, `/api/train`, () => requestOptions, trainResponse)
+  const fetchTrain = useFetch(setFetching, setElevatedState, setTrainResponse, `/api/train`, () => requestOptions, trainResponse)
   const convertImage = useConvertImage(setConverting, setElevatedState, setBaseImage, () => imageString);
 
+
   useEffect(() => {
-    if(!fetching || stopTrain) return;
+    if(!fetching || stopTrain || basicView) return;
 
     requestOptions = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({shiftUUID: elevatedState().shiftUUID,
-                            usePTM: false,
-                            prebuiltShiftModel: "",
-                            epochs: elevatedState().epochs,
+                            usePTM: elevatedState().usePTM,
+                            prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+                            epochs: elevatedState().trainStatusInterval,
                             trainType: 'basic'})
     };
 
-    apiFetch()
+    fetchTrain()
   }, [fetching]);
 
   useEffect(() => {
@@ -69,13 +75,15 @@ export function AdvancedTrain (props: IElevatedStateProps){
 	}, [imageString]);
 
   useEffect(() => {
-    if(baseImage === defaultVideo) return;
-
     if(stopTrain){
       history.push("/shift")
     }
+    if(basicView){
+      history.push("/train")
+    }
 
-    console.log("Image Converted")
+    if(baseImage === defaultVideo) return;
+
     setFetching(true)
   }, [baseImage, baseRemake, maskImage, maskRemake])
 
@@ -105,11 +113,11 @@ export function AdvancedTrain (props: IElevatedStateProps){
         <Col xs={2}></Col>
         <Col xs={4} className="m-2">
           <Link to="/train" className="w-100">
-            <Button className="borderRadius-2 p-2 mr-2 w-100" disabled={converting && fetching} onClick={() => setStopTrain(true)}>Basic View</Button>
+            <Button className="borderRadius-2 p-2 mr-2 w-100" disabled={ basicView} onClick={() => setBasicView(true)}>Basic View</Button>
           </Link>
         </Col>
         <Col xs={4} className="m-2">
-          <Button className="borderRadius-2 p-2 ml-2 w-100" disabled={stopTrain && fetching} onClick={() => setStopTrain(true)}>Stop Training</Button>
+          <Button className="borderRadius-2 p-2 ml-2 w-100" disabled={stopTrain} onClick={() => setStopTrain(true)}>Stop Training</Button>
         </Col>
         <Col xs={2}></Col>
       </Row>

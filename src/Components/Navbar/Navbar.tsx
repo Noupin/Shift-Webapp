@@ -17,7 +17,7 @@ export function NavBar (props: IElevatedStateProps){
 
 
   return (
-    <div className="neumorphic borderRadius-2 mx-2 mt-2 w-100">
+    <div className="neumorphic borderRadius-2 mx-2 my-2 w-100">
       <Navbar sticky="top" expand="lg">
         <Navbar.Brand>
           <NavLink to="/" className="pl-2 borderRadius-2">
