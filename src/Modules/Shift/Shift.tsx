@@ -83,10 +83,12 @@ export function Shift (props: IElevatedStateProps){
 				getMedia("blob");
 
 				if(fileResponse == null){
+					setUpdating(true);
 					return;
 				}
 
 				setImage(new File([fileResponse], 'shifted.png', {type: "media"}))
+				console.log(image)
 			}
 			else{
 				setUpdating(true);
