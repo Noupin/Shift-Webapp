@@ -78,7 +78,7 @@ export function Shift (props: IElevatedStateProps){
 			setStopShifting(shiftResponse.stopped);
 
 			if(stopShifting){
-				setUpdating(false); //Calback to get the most up to date value of updated
+				setUpdating(false);
 				updateRequestOptions("GET")
 				getMedia("blob");
 

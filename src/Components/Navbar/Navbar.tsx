@@ -36,7 +36,7 @@ export function NavBar (props: IElevatedStateProps){
             </Nav.Link>
           </Nav>
           <Nav className="justify-content-end" key={`${elevatedState().authenticated}`}>
-            <UserElements elevatedState={elevatedState} setElevatedState={setElevatedState}/>
+            <UserElements elevatedState={elevatedState} setElevatedState={setElevatedState} key={`${elevatedState().authenticated}`}/>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

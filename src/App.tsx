@@ -76,13 +76,13 @@ export default function App() {
   }, [elevatedState.error]);
 
   return (
-    <Router key={`${() => elevatedState.authenticated}`}>
+    <Router>
       <Container fluid className="flex h-100">
         <Row className="justify-content-center h-100">
           <Col>
             <div className="h-100 d-flex flex-column">
               <Row className="justify-content-center">
-                <NavBar elevatedState={getElevatedState} setElevatedState={setElevatedState} key={`${() => elevatedState.authenticated}`}/>
+                <NavBar elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
               </Row>
 
               <Alert show={showMsg} variant="primary">
