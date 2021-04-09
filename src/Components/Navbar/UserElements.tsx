@@ -3,7 +3,6 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Nav } from "react-bootstrap";
 
 
 //First Party Imports
@@ -59,32 +58,32 @@ export function UserElements (props: IElevatedStateProps){
   if(elevatedState().authenticated){
     return (
       <>
-      <Nav.Link>
-        <NavLink to="/account" activeClassName="navSelected" className="nav-link borderRadius-2">
+      <div className="mx-1 my-1">
+        <NavLink to="/account" activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
           Account
         </NavLink>
-      </Nav.Link>
-      <Nav.Link>
+      </div>
+      <div className="ml-3 mr-1 my-1">
         <Button className="neumorphic borderRadius-2 py-2 px-3 w-100" onClick={() => setFetching(true)} disabled={fetching || authenticating}>
           Logout
         </Button>
-      </Nav.Link>
+      </div>
       </>
     );
   }
   else{
     return (
       <>
-      <Nav.Link>
-        <NavLink to="/login" activeClassName="navSelected" className="nav-link borderRadius-2">
+      <div className="mx-1 my-1">
+        <NavLink to="/login" activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
           Login
         </NavLink>
-      </Nav.Link>
-      <Nav.Link>
-        <NavLink to="/register" activeClassName="navSelected" className="nav-link borderRadius-2">
+      </div>
+      <div className="mx-1 my-1">
+        <NavLink to="/register" activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
           Register
         </NavLink>
-      </Nav.Link>
+      </div>
       </>
     );
   }

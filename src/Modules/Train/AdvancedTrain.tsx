@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -17,7 +20,7 @@ let trainResponse: ITrainRequestReturn = {msg: "", exhibit: [], stopped: false}
 
 
 export function AdvancedTrain (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...advancedTrainProps} = props;
+  const {elevatedState, setElevatedState} = props;
   useEffect(() => {
     setElevatedState((prev) => ({...prev, shiftUUID: sessionStorage["shiftUUID"]}))
     setElevatedState((prev) => ({...prev, prebuiltShiftModel: elevatedState().shiftUUID}))

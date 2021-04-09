@@ -25,7 +25,7 @@ export function useFetch<T>(setLoading: React.Dispatch<React.SetStateAction<bool
       }
 
       if(convertedResponse == null){
-        throw "Fetch Response is Null";
+        throw Error("Fetch Response is Null");
       }
 
       setData(convertedResponse!);

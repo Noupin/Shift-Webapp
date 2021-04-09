@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //First Party Imports
 import { ITrainRequestReturn } from "../../Interfaces/Train";
@@ -14,7 +16,7 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 export function Train (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...trainProps} = props;
+  const {elevatedState, setElevatedState} = props;
   useEffect(() => {
     setElevatedState((prev) => ({...prev, shiftUUID: sessionStorage["shiftUUID"]}))
     setElevatedState((prev) => ({...prev, prebuiltShiftModel: elevatedState().shiftUUID}))
@@ -32,7 +34,7 @@ export function Train (props: IElevatedStateProps){
   const [updating, setUpdating] = useState(false);
   const [stop, setStop] = useState(false);
   const [trainResponse, setTrainResponse] = useState<ITrainRequestReturn>();
-  const [converting, setConverting] = useState(false);
+  const [, setConverting] = useState(false);
 
   let requestOptions: RequestInit = {};
 

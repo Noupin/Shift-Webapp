@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 
@@ -12,7 +14,7 @@ interface accountRequestReturn {
 
 
 export function Account (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...accountProps} = props;
+  const {setElevatedState} = props;
 
   const [username, setUsername] = useState("");
 

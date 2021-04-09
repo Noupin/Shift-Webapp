@@ -1,6 +1,6 @@
 export interface IElevatedPageState {
     msg: string
-    error: Error
+    error: Error | null
     authenticated: boolean
     user: string
     defaultTrainView: string

@@ -27,7 +27,7 @@ import { useAuthenticate } from "./Helpers/AuthenticateUser";
 export default function App() {
   const [elevatedState, setElevatedState] = useState<IElevatedPageState>({
     msg: "",
-    error: new Error(),
+    error: null,
     authenticated: false,
     user: "",
     defaultTrainView: "basic",
@@ -74,7 +74,8 @@ export default function App() {
 
   useEffect(() => {
     if(!elevatedState.error) return;
-    console.error(elevatedState.error);
+
+    console.log(elevatedState.error);
   }, [elevatedState.error]);
 
   return (

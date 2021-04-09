@@ -29,11 +29,11 @@ export function NavBar (props: IElevatedStateProps){
 
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link>
-              <NavLink to="/load" activeClassName="navSelected" className="nav-link borderRadius-2">
+            <div className="mx-2">
+              <NavLink to="/load" activeClassName="navSelected" className="nav-link borderRadius-2 px-4">
                 Load
               </NavLink>
-            </Nav.Link>
+            </div>
           </Nav>
           <Nav className="justify-content-end" key={`${elevatedState().authenticated}`}>
             <UserElements elevatedState={elevatedState} setElevatedState={setElevatedState} key={`${elevatedState().authenticated}`}/>

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -20,7 +22,7 @@ interface shiftRequestReturn {
 
 
 export function Shift (props: IElevatedStateProps){
-	const {elevatedState, setElevatedState, ...shiftProps} = props;
+	const {elevatedState, setElevatedState} = props;
 
 	const [image, setImage] = useState(defaultVideo);
 
@@ -28,7 +30,7 @@ export function Shift (props: IElevatedStateProps){
 	const [stopShifting, setStopShifting] = useState(false);
 	const [updating, setUpdating] = useState(false);
   const [shiftResponse, setShiftResponse] = useState<shiftRequestReturn>();
-	const [updateProgress, setUpdateProgress] = useState(false);
+	const [, setUpdateProgress] = useState(false);
 	const [fileResponse, setFileResponse] = useState<Blob>();
 
 	let requestOptions: RequestInit = {};

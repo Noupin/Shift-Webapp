@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 //First Party Imports
@@ -15,7 +17,7 @@ interface resetPasswordRequestReturn {
 
 
 export function ForgotPassword (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...forgotPasswordProps} = props;
+  const {setElevatedState} = props;
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -24,10 +26,10 @@ export function ForgotPassword (props: IElevatedStateProps){
   const [fetching, setFetching] = useState(false);
   const [registerResponse, setRegisterResponse] = useState<resetPasswordRequestReturn>();
 
-  let requestOptions: RequestInit = {};
+  const requestOptions = useRef<RequestInit>({});
 
 
-  const fetchResetPassword = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions, registerResponse)
+  const fetchResetPassword = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions.current, registerResponse)
 
   useEffect(() => {
     if(fetching) return;
@@ -38,7 +40,7 @@ export function ForgotPassword (props: IElevatedStateProps){
       return;
     }
 
-    requestOptions = {
+    requestOptions.current = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
