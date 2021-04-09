@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import { BrowserRouter as Router,
-         Switch, Route, useParams } from "react-router-dom";
+         Switch, Route } from "react-router-dom";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
@@ -19,7 +21,7 @@ import { Train } from "./Modules/Train/Train";
 import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Shift } from "./Modules/Shift/Shift";
 import { Button } from "./Components/Button/Button";
-import { useAuthenticate } from "./Helpers/Authenticate";
+import { useAuthenticate } from "./Helpers/AuthenticateUser";
 
 
 export default function App() {

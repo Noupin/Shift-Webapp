@@ -9,10 +9,6 @@ const authRequestOptions: RequestInit = {
   headers: { 'Content-Type': 'application/json' }
 };
 
-async function returnFetch(url: string, options: RequestInit){
-  return await fetch(url, options)
-}
-
 export function useAuthenticate(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
                                 setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
                                 setData: React.Dispatch<React.SetStateAction<IAuthRequestReturn | undefined>>){

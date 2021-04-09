@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
@@ -9,7 +11,7 @@ import { TextBox } from '../../Components/TextBox/TextBox';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { IAuthRequestReturn } from "../../Interfaces/Authenticate";
 import { useFetch } from "../../Hooks/Fetch";
-import { useAuthenticate } from '../../Helpers/Authenticate';
+import { useAuthenticate } from '../../Helpers/AuthenticateUser';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
@@ -19,7 +21,7 @@ interface loginRequestReturn {
 
 
 export function Login (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...loginProps} = props;
+  const {elevatedState, setElevatedState} = props;
 
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,16 +34,16 @@ export function Login (props: IElevatedStateProps){
 
   const history = useHistory();
 
-  let requestOptions: RequestInit = {};
+  const requestOptions = useRef<RequestInit>({});
 
-  const fetchLogin = useFetch(setFetching, setElevatedState, setLoginResponse, `/api/users/login`, () => requestOptions, loginResponse);
+  const fetchLogin = useFetch(setFetching, setElevatedState, setLoginResponse, `/api/users/login`, () => requestOptions.current, loginResponse);
   const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse);
 
 
   useEffect(() => {
     if(!fetching) return;
 
-    requestOptions = {
+    requestOptions.current = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},

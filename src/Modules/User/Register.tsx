@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
-import { useAuthenticate } from '../../Helpers/Authenticate';
+import { useAuthenticate } from '../../Helpers/AuthenticateUser';
 import { useFetch } from '../../Hooks/Fetch';
 import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -18,7 +20,7 @@ interface registerRequestReturn {
 
 
 export function Register (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...registerProps} = props;
+  const {elevatedState, setElevatedState} = props;
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -33,10 +35,10 @@ export function Register (props: IElevatedStateProps){
   const history = useHistory();
 
 
-  let requestOptions: RequestInit = {};
+  const requestOptions = useRef<RequestInit>({});
 
 
-  const fetchRegister = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/register`, () => requestOptions, registerResponse)
+  const fetchRegister = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/register`, () => requestOptions.current, registerResponse)
   const auth = useAuthenticate(setAuthenticating, props.setElevatedState, setAuthenticatedResponse)
 
 
@@ -49,7 +51,7 @@ export function Register (props: IElevatedStateProps){
       return;
     }
 
-    requestOptions = {
+    requestOptions.current = {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json' },

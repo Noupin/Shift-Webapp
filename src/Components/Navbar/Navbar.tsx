@@ -1,5 +1,5 @@
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Navbar, Nav } from "react-bootstrap";
 
@@ -12,7 +12,7 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 export function NavBar (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...navProps} = props;
+  const {elevatedState, setElevatedState} = props;
   const imageStyle = {height: "auto", width: "auto", maxHeight: "30px", maxWidth: "30px"}
 
 

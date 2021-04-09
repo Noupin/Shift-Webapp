@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
@@ -26,7 +28,7 @@ const ListOfDataType: string[] = [];
 
 
 export function Load (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...loadProps} = props;
+  const {elevatedState, setElevatedState} = props;
 
   const [trainingDataTypes, setTrainingDataTypes] = useState(ListOfDataType);
   const [files, setFiles] = useState(ListOfFiles);
@@ -40,11 +42,11 @@ export function Load (props: IElevatedStateProps){
   const [loadResponse, setLoadResponse] = useState<loadRequestReturn>();
 
   const prevShiftUUID = sessionStorage["shiftUUID"];
-  let requestOptions: RequestInit = {};
+  const requestOptions = useRef<RequestInit>({})
   const requestHeaders = new Headers();
 
 
-  const fetchLoad = useFetch(setFetching, setElevatedState, setLoadResponse, `/api/loadData`, () => requestOptions, loadResponse)
+  const fetchLoad = useFetch(setFetching, setElevatedState, setLoadResponse, `/api/loadData`, () => requestOptions.current, loadResponse)
 
   
   useEffect(() => {setElevatedState((prev) => ({...prev, prebuiltShiftModel: ""}))}, []);
@@ -58,7 +60,7 @@ export function Load (props: IElevatedStateProps){
     }
 
     const data = new FormData();
-    requestOptions = {
+    requestOptions.current = {
       method: 'POST',
       headers: {},
       credentials: "include",
@@ -67,10 +69,10 @@ export function Load (props: IElevatedStateProps){
     for (var fileIndex = 0; fileIndex < files.length; fileIndex++){
       data.append(`file${fileIndex}`, files[fileIndex]);
     }
-    requestOptions.body = data;
+    requestOptions.current.body = data;
 
     requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
-    requestOptions.headers = requestHeaders;
+    requestOptions.current.headers = requestHeaders;
 
     fetchLoad()
   }, [fetching]);

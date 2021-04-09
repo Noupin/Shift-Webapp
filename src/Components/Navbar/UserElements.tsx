@@ -1,14 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Navbar, Nav } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 
 
 //First Party Imports
 import './Navbar.scss'
 import { Button } from '../../Components/Button/Button';
 import { useFetch } from "../../Hooks/Fetch";
-import { useAuthenticate } from '../../Helpers/Authenticate';
+import { useAuthenticate } from '../../Helpers/AuthenticateUser';
 import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
@@ -19,7 +21,7 @@ interface logoutRequestReturn {
 
 
 export function UserElements (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState, ...useElementsProps} = props;
+  const {elevatedState, setElevatedState} = props;
 
   const [authenticating, setAuthenticating] = useState(false);
   const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>()
