@@ -145,7 +145,7 @@ export function Load (props: IElevatedStateProps){
             <MediaList className="mt-2 p-3" onDragOver={(event) => allowDrop(event)}
                        onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])} elementsPerRow={2} key={baseFiles.length}>
               {baseFiles.map((file) => (
-                <Media setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
+                <Media key={baseFiles.indexOf(file)} setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
               ))}
             </MediaList>
           </div>
@@ -171,7 +171,7 @@ export function Load (props: IElevatedStateProps){
             <MediaList className="mt-2 borderRadius-2 p-3" onDragOver={(event) => allowDrop(event)}
                        onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])} elementsPerRow={2} key={maskFiles.length}>
               {maskFiles.map((file) => (
-                <Media setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
+                <Media key={maskFiles.indexOf(file)} setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
               ))}
             </MediaList>
           </div>

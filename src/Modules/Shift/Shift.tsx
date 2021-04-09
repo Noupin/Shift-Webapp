@@ -90,7 +90,6 @@ export function Shift (props: IElevatedStateProps){
 				}
 
 				setImage(new File([fileResponse], 'shifted.png', {type: "media"}))
-				console.log(image)
 			}
 			else{
 				setUpdating(true);

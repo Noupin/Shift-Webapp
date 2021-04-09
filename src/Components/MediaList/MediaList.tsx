@@ -28,8 +28,8 @@ export const MediaList = (props: IMediaList) =>{
   return (
     <div {...mediaListProps} className={cssClasses}>
       {gridElements.map((row, currentIndex) => (
-        <Row className="my-2 mx-0">
-          {row.map(element => (<Col className="align-middle">{element}</Col>))}
+        <Row className="my-2 mx-0" key={currentIndex}>
+          {row.map(element => (<Col className="align-middle" key={currentIndex}>{element}</Col>))}
         </Row>
       ))}
     </div>
