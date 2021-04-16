@@ -34,7 +34,7 @@ export function Load (props: IElevatedStateProps){
   const [files, setFiles] = useState(ListOfFiles);
   const [baseFiles, setBaseFiles] = useState(ListOfFiles);
   const [maskFiles, setMaskFiles] = useState(ListOfFiles);
-  const [baseVideo, setBaseVideo] = useState(defaultVideo);
+  const [baseVideo, setBaseVideo] = useState<File>();
 
   const history = useHistory()
 
@@ -89,6 +89,8 @@ export function Load (props: IElevatedStateProps){
   }, [elevatedState().shiftUUID]);
 
   useEffect(() => {
+    if(!baseVideo) return;
+
     setFiles([baseVideo, ...baseFiles, ...maskFiles]);
     setTrainingDataTypes([...fillArray("base", baseFiles.length+1), ...fillArray("mask", maskFiles.length)])
   }, [baseVideo, baseFiles, maskFiles]);
@@ -118,8 +120,8 @@ export function Load (props: IElevatedStateProps){
               }}>&#x21c6;</FileDialog>
             </Col>
           </Row>
-          <Media setElevatedState={setElevatedState} className="borderRadius-2 p-2" key={baseVideo.name} onDragOver={(event) => allowDrop(event)}
-                 onDrop={(event) => setBaseVideo(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])} mediaSrc={baseVideo} mediaType="video/mp4" droppable={true}/>
+          <Media setElevatedState={setElevatedState} className="borderRadius-2 p-2" key={!baseVideo ? "": baseVideo.name} onDragOver={(event) => allowDrop(event)}
+                 mediaSrc={baseVideo!} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
       </Row>

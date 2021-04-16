@@ -75,7 +75,7 @@ export default function App() {
   useEffect(() => {
     if(!elevatedState.error) return;
 
-    console.log(elevatedState.error);
+    console.error(elevatedState.error);
   }, [elevatedState.error]);
 
   return (

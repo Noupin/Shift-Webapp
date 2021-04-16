@@ -23,11 +23,12 @@ export const Media = (props: IMedia) => {
 
   let element: JSX.Element
   const [mediaSrcState, setMediaSrcState] = useState(mediaSrc);
-  const mediaSrcString = URL.createObjectURL(mediaSrcState);
+  const mediaSrcString = URL.createObjectURL(mediaSrcState ? mediaSrcState : new File([], ""));
 
-  if (videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1){
+  if (mediaSrcState && videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1){
     if(droppable){
-      element = <Video onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])} videoSrc={mediaSrcString} videoType={mediaType!}/>;
+      element = <Video onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
+                 videoSrc={mediaSrcString} videoType={mediaType!}/>;
     }
     else{
       element = <Video videoSrc={mediaSrcString} videoType={mediaType!}/>;
@@ -35,7 +36,8 @@ export const Media = (props: IMedia) => {
   }
   else{
     if(droppable){
-      element = <Image onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])} imageSrc={mediaSrcString}/>
+      element = <Image onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
+                 imageSrc={mediaSrcString}/>
     }
     else{
       element = <Image imageSrc={mediaSrcString}/>
