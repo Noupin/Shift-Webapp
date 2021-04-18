@@ -16,11 +16,23 @@ import { validateFileList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
 import { useFetch } from "../../Hooks/Fetch";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
+import { IElevatedPageState } from '../../Interfaces/PageState';
 
 
 interface loadRequestReturn {
   msg: string,
   shiftUUID: string
+}
+
+function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<IElevatedPageState>>, setFiles: React.Dispatch<React.SetStateAction<File[]>>){
+  const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+  if(badExtensions.length > 0){
+    setState((prev) => ({...prev,
+      msg: badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`}))
+  }
+
+  setFiles((current) => [...current, ...filteredFiles])
 }
 
 const ListOfFiles: File[] = [];
@@ -91,6 +103,9 @@ export function Load (props: IElevatedStateProps){
   useEffect(() => {
     if(!baseVideo) return;
 
+    console.log(baseFiles)
+    console.log(maskFiles)
+
     setFiles([baseVideo, ...baseFiles, ...maskFiles]);
     setTrainingDataTypes([...fillArray("base", baseFiles.length+1), ...fillArray("mask", maskFiles.length)])
   }, [baseVideo, baseFiles, maskFiles]);
@@ -132,23 +147,13 @@ export function Load (props: IElevatedStateProps){
             <Row>
               <Col xs={11}></Col>
               <Col xs={1} >
-                <FileDialog className="pr-4" id="baseFileUpload" mutipleSelect={true} onChange={(event) => {
-                  const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
-
-                  if(badExtensions.length > 0){
-                    setElevatedState((prev) => ({...prev,
-                      msg: badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`}))
-                  }
-  
-                  setBaseFiles((current) => [...current, ...filteredFiles])
-                }}>&#43;</FileDialog>
+                <FileDialog className="pr-4" id="baseFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setBaseFiles)}>&#43;</FileDialog>
               </Col>
             </Row>
             <MediaList className="mt-2 p-3" onDragOver={(event) => allowDrop(event)}
-                       onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])} elementsPerRow={2} key={baseFiles.length}>
-              {baseFiles.map((file) => (
-                <Media key={baseFiles.indexOf(file)} setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
-              ))}
+                       onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
+                       elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}
+                       setElevatedState={setElevatedState}>
             </MediaList>
           </div>
         </Col>
@@ -158,23 +163,13 @@ export function Load (props: IElevatedStateProps){
             <Row>
               <Col xs={11}></Col>
               <Col xs={1} >
-                <FileDialog className="pr-4" id="maskFileUpload" mutipleSelect={true} onChange={(event) => {
-                  const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
-
-                  if(badExtensions.length > 0){
-                    setElevatedState((prev) => ({...prev,
-                      msg: badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be selected` : `The file types ${badExtensions} are not allowed to be selected`}))
-                  }
-  
-                  setMaskFiles((current) => [...current, ...filteredFiles])
-                }}>&#43;</FileDialog>
+                <FileDialog className="pr-4" id="maskFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setMaskFiles)}>&#43;</FileDialog>
               </Col>
             </Row>
             <MediaList className="mt-2 borderRadius-2 p-3" onDragOver={(event) => allowDrop(event)}
-                       onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])} elementsPerRow={2} key={maskFiles.length}>
-              {maskFiles.map((file) => (
-                <Media key={maskFiles.indexOf(file)} setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
-              ))}
+                       onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
+                       elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}
+                       setElevatedState={setElevatedState}>
             </MediaList>
           </div>
         </Col>
