@@ -68,6 +68,7 @@ export function Load (props: IElevatedStateProps){
 
     if(!baseVideo){
       setElevatedState((prev) => ({...prev, msg: "Make sure you have a priamry base media"}))
+      setFetching(false);
       return;
     }
 
