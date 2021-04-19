@@ -2,7 +2,7 @@ import { IElevatedPageState } from "../Interfaces/PageState";
 
 export function useConvertImage(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
                                 setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
-                                setData: React.Dispatch<React.SetStateAction<File>>,
+                                setData: React.Dispatch<React.SetStateAction<File>> | React.Dispatch<React.SetStateAction<File | undefined>>,
                                 imageString: () => string){
 
   function call(){

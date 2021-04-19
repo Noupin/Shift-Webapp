@@ -10,7 +10,6 @@ import { Link, useHistory } from "react-router-dom";
 import { ITrainRequestReturn } from "../../Interfaces/Train";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { defaultVideo } from "../../constants";
 import { useFetch } from "../../Hooks/Fetch";
 import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -30,10 +29,10 @@ export function AdvancedTrain (props: IElevatedStateProps){
   const [stopTrain, setStopTrain] = useState(false);
 
   const [imageString, setImageString] = useState("");
-  const [baseImage, setBaseImage] = useState(defaultVideo);
-  const [baseRemake, setBaseRemake] = useState(defaultVideo);
-  const [maskImage, setMaskmage] = useState(defaultVideo);
-  const [maskRemake, setMaskRemake] = useState(defaultVideo);
+  const [baseImage, setBaseImage] = useState<File>();
+  const [baseRemake, setBaseRemake] = useState<File>();
+  const [maskImage, setMaskmage] = useState<File>();
+  const [maskRemake, setMaskRemake] = useState<File>();
 
   const history = useHistory()
 
@@ -85,7 +84,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
       history.push("/train")
     }
 
-    if(baseImage === defaultVideo) return;
+    if(!baseImage) return;
 
     setFetching(true)
   }, [baseImage, baseRemake, maskImage, maskRemake])
@@ -93,22 +92,22 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
 
   return (
-    <Container className="d-flex justify-content-center h-100 flex-column" key={baseImage.lastModified}>
+    <Container className="d-flex justify-content-center h-100 flex-column" key={baseImage ? baseImage.size : undefined}>
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage} mediaType="video/mp4"/>
+            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage!} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage!} mediaType="video/mp4"/>
           </Row>
         </Col>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage!} mediaType="video/mp4"/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+            <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-1 w-100 p-2" mediaSrc={baseImage!} mediaType="video/mp4"/>
           </Row>
         </Col>
       </Row>

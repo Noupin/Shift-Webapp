@@ -1,2 +1,1 @@
-export const defaultVideo = new File([''], 'chris.mp4', {"type": "video/mp4"}) //Check empty constructor
 export const validMediaFileExtesnions = ['png', 'jpg', 'jpeg', 'gif', 'heic', 'mp4', 'm4a', 'mov']

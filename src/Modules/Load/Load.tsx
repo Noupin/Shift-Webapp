@@ -10,7 +10,7 @@ import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { MediaList } from "../../Components/MediaList/MediaList";
 import { FileDialog } from "../../Components/FileDialog/FileDialog"
-import { defaultVideo, validMediaFileExtesnions } from "../../constants";
+import { validMediaFileExtesnions } from "../../constants";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { validateFileList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
@@ -66,7 +66,7 @@ export function Load (props: IElevatedStateProps){
   useEffect(() => {
     if(!fetching) return;
 
-    if(baseVideo === defaultVideo){
+    if(!baseVideo){
       setElevatedState((prev) => ({...prev, msg: "Make sure you have a priamry base media"}))
       return;
     }
@@ -127,7 +127,7 @@ export function Load (props: IElevatedStateProps){
                   setElevatedState((prev) => ({...prev, msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
                 }
                 if(filteredFiles.length === 0){
-                  setBaseVideo(defaultVideo)
+                  setBaseVideo(undefined)
                 }
                 else{
                   setBaseVideo(filteredFiles[0])

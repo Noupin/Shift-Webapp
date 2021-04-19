@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { defaultVideo } from "../../constants";
 import { useFetch } from "../../Hooks/Fetch";
 import { useInterval } from "../../Hooks/Interval";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -24,7 +23,7 @@ interface shiftRequestReturn {
 export function Shift (props: IElevatedStateProps){
 	const {elevatedState, setElevatedState} = props;
 
-	const [image, setImage] = useState(defaultVideo);
+	const [image, setImage] = useState<File>();
 
 	const [shifting, setShifting] = useState(true);
 	const [stopShifting, setStopShifting] = useState(false);
@@ -99,12 +98,12 @@ export function Shift (props: IElevatedStateProps){
 
 
 	return (
-		<Container className="d-flex justify-content-center h-100 flex-column" key={image.lastModified}>
+		<Container className="d-flex justify-content-center h-100 flex-column" key={image ? image.lastModified : undefined}>
 			<Row className="mb-2">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image} mediaType="media"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image!} mediaType="media"/>
 			</Row>
 			<Row className="my-3">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={defaultVideo} mediaType="video/mp4"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image!} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>

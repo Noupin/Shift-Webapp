@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
@@ -9,7 +9,6 @@ import { useHistory } from "react-router-dom";
 import { ITrainRequestReturn } from "../../Interfaces/Train";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { defaultVideo } from "../../constants";
 import { useFetch } from "../../Hooks/Fetch";
 import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -26,7 +25,7 @@ export function Train (props: IElevatedStateProps){
   const [stopping, setStopping] = useState(false);
   const [advancedView, setAdvancedView] = useState(false);
   const [imageString, setImageString] = useState("");
-  const [image, setImage] = useState(defaultVideo);
+  const [image, setImage] = useState<File>();
 
   const history = useHistory()
 
@@ -135,9 +134,9 @@ export function Train (props: IElevatedStateProps){
 
 
   return (
-    <Container className="d-flex justify-content-center h-100 flex-column" key={image.lastModified}>
+    <Container className="d-flex justify-content-center h-100 flex-column" key={image ? image.lastModified : undefined}>
       <Row className="my-2">
-        <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image} mediaType="video/mp4"/>
+        <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image!} mediaType="video/mp4"/>
       </Row>
       <Row>
         <Col xs={2}></Col>
