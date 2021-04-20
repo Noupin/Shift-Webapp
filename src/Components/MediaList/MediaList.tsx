@@ -14,9 +14,9 @@ var hiddenButtonStyle: React.CSSProperties = {position: 'absolute',
                                               width: "60%",
                                               height: "60%",
                                               border: "none",
-                                              fontSize: "25px",
-                                              display: "none",
-                                              fontWeight: 'bolder'}
+                                              fontSize: "10vh",
+                                              display: "none"}
+
 var shownButtonStyle: React.CSSProperties = {position: 'absolute',
                                              top: "50%",
                                              left: "50%",
@@ -24,7 +24,7 @@ var shownButtonStyle: React.CSSProperties = {position: 'absolute',
                                              width: "60%",
                                              height: "60%",
                                              border: "none",
-                                             fontSize: "25px",
+                                             fontSize: "10vh",
                                              display: "flex",
                                              fontWeight: 'bolder'}
 
@@ -93,7 +93,7 @@ export function MediaList(props: IMediaList){
               {element}
 
               <Button style={deleteButtonVisible[(rowIndex*elementsPerRow)+colIndex] ? shownButtonStyle : hiddenButtonStyle}
-                      className="glassmorphic borderRadius-2 justify-content-center"
+                      className="glassmorphic borderRadius-2 justify-content-center align-items-center"
                       onClick={() => removeElement(mediaArray!, setMediaArray!, (rowIndex*elementsPerRow)+colIndex)}>
                         &#x2715;
               </Button>
