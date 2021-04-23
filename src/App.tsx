@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import { BrowserRouter as Router,
@@ -22,6 +22,7 @@ import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Shift } from "./Modules/Shift/Shift";
 import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Helpers/AuthenticateUser";
+import { defaultShiftTitle } from "./constants"
 
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
     user: "",
     defaultTrainView: "basic",
     shiftUUID: "",
+    shiftTitle: defaultShiftTitle,
     trainStatusInterval: 10,
     usePTM: false,
     prebuiltShiftModel: "",

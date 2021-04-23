@@ -5,6 +5,7 @@ export interface IElevatedPageState {
     user: string
     defaultTrainView: string
     shiftUUID: string
+    shiftTitle: string
     trainStatusInterval: number
     usePTM: boolean
     prebuiltShiftModel: string

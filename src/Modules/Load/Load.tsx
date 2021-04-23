@@ -10,13 +10,14 @@ import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { MediaList } from "../../Components/MediaList/MediaList";
 import { FileDialog } from "../../Components/FileDialog/FileDialog"
-import { validMediaFileExtesnions } from "../../constants";
+import { validMediaFileExtesnions, defaultShiftTitle } from "../../constants";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { validateFileList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
 import { useFetch } from "../../Hooks/Fetch";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { IElevatedPageState } from '../../Interfaces/PageState';
+import { TextBox } from '../../Components/TextBox/TextBox';
 
 
 interface loadRequestReturn {
@@ -42,11 +43,16 @@ const ListOfDataType: string[] = [];
 export function Load (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
 
+  const [prevTitleIsFilename, setPrevTitleIsFilename] = useState(false);
+  const [title, setTitle] = useState(elevatedState().shiftTitle);
+  const [updateTitle, setUpdateTitle] = useState(true);
+  const [titleUpdated, setTitleUpdated] = useState(false);
+
   const [trainingDataTypes, setTrainingDataTypes] = useState(ListOfDataType);
   const [files, setFiles] = useState(ListOfFiles);
   const [baseFiles, setBaseFiles] = useState(ListOfFiles);
   const [maskFiles, setMaskFiles] = useState(ListOfFiles);
-  const [baseVideo, setBaseVideo] = useState<File>();
+  const [baseMedia, setBaseMedia] = useState<File>();
 
   const history = useHistory()
 
@@ -61,12 +67,15 @@ export function Load (props: IElevatedStateProps){
   const fetchLoad = useFetch(setFetching, setElevatedState, setLoadResponse, `/api/loadData`, () => requestOptions.current, loadResponse)
 
   
-  useEffect(() => {setElevatedState((prev) => ({...prev, prebuiltShiftModel: ""}))}, []);
+  useEffect(() => {
+    setElevatedState((prev) => ({...prev, prebuiltShiftModel: "", shiftTitle: defaultShiftTitle}))
+    setTitle(elevatedState().shiftTitle)
+  }, []);
 
   useEffect(() => {
     if(!fetching) return;
 
-    if(!baseVideo){
+    if(!baseMedia){
       setElevatedState((prev) => ({...prev, msg: "Make sure you have a priamry base media"}))
       setFetching(false);
       return;
@@ -86,34 +95,83 @@ export function Load (props: IElevatedStateProps){
 
     requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
     requestOptions.current.headers = requestHeaders;
-
+    setElevatedState((prev) => ({...prev, shiftTitle: title}))
+  
     fetchLoad()
   }, [fetching]);
 
   useEffect(() => {
     if(!loadResponse) return;
+
     setElevatedState((prev) => ({...prev, shiftUUID: loadResponse!.shiftUUID}))
     setElevatedState((prev) => ({...prev, msg: loadResponse!.msg}));
   }, [loadResponse]);
 
   useEffect(() => {
     if(!elevatedState().shiftUUID || elevatedState().shiftUUID === prevShiftUUID) return;
+
     history.push(`/${elevatedState().defaultTrainView === "basic" ? "train" : "advancedTrain"}`);
   }, [elevatedState().shiftUUID]);
 
   useEffect(() => {
-    if(!baseVideo) return;
+    if(!baseMedia) return;
 
-    console.log(baseFiles)
-    console.log(maskFiles)
-
-    setFiles([baseVideo, ...baseFiles, ...maskFiles]);
+    setFiles([baseMedia, ...baseFiles, ...maskFiles]);
     setTrainingDataTypes([...fillArray("base", baseFiles.length+1), ...fillArray("mask", maskFiles.length)])
-  }, [baseVideo, baseFiles, maskFiles]);
+  }, [baseMedia, baseFiles, maskFiles]);
+
+
+  useEffect(() => {
+    if(!baseMedia) return;
+
+    if(title === defaultShiftTitle || (title !== baseMedia.name.split('.')[0] && updateTitle) || prevTitleIsFilename){
+      setTitle(baseMedia.name.split('.')[0]);
+      setTitleUpdated(true)
+      setUpdateTitle(false)
+      setPrevTitleIsFilename(true);
+    }
+
+  }, [baseMedia, updateTitle]);
+
+
+  var titleBar = (
+    <Col xs={6}>
+      <TextBox className="borderRadius-2 m-2 w-100 p-2" type="text" placeholder="Title"
+               onChange={(event) => {
+                setTitle(event.target.value)
+                setTitleUpdated(false)
+                setUpdateTitle(false)}}
+               value={title}/>
+    </Col>
+  );
+  if(!titleUpdated && baseMedia && ((title !== defaultShiftTitle) || (title !== baseMedia!.name.split('.')[0]))){
+    titleBar = (
+      <>
+        <Col xs={5}>
+          <TextBox className="borderRadius-2 my-2 w-100 py-2" type="text" placeholder="Title"
+                    onChange={(event) => {
+                      setTitle(event.target.value)
+                      setTitleUpdated(false)
+                      setUpdateTitle(false)
+                      setPrevTitleIsFilename(false)}}
+                    value={title}/>
+        </Col>
+        <Col xs={1}>
+          <Button className="borderRadius-2 my-2 py-2 align-items-center"
+                  onClick={() => setUpdateTitle(true)}>&#x21bb;</Button>
+        </Col>
+      </>
+    );
+  }
 
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
+      <Row>
+        <Col xs={3}></Col>
+        {titleBar}
+        <Col xs={3}></Col>
+      </Row>
       <h4>Base Face</h4>
       <Row>
         <Col xs={2}></Col>
@@ -121,23 +179,23 @@ export function Load (props: IElevatedStateProps){
           <Row>
             <Col xs={11}></Col>
             <Col xs={1}>
-              <FileDialog className="pr-4" id="baseVideoUpload" onChange={(event) => {
+              <FileDialog className="pr-4" id="baseMediaUpload" onChange={(event) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
                   setElevatedState((prev) => ({...prev, msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
                 }
                 if(filteredFiles.length === 0){
-                  setBaseVideo(undefined)
+                  setBaseMedia(undefined)
                 }
                 else{
-                  setBaseVideo(filteredFiles[0])
+                  setBaseMedia(filteredFiles[0])
                 }
               }}>&#x21c6;</FileDialog>
             </Col>
           </Row>
-          <Media setElevatedState={setElevatedState} className="borderRadius-2 p-2" key={!baseVideo ? "": baseVideo.name} onDragOver={(event) => allowDrop(event)}
-                 mediaSrc={baseVideo!} mediaType="video/mp4" droppable={true}/>
+          <Media setElevatedState={setElevatedState} className="borderRadius-2 p-2" key={!baseMedia ? "": baseMedia.name} onDragOver={(event) => allowDrop(event)}
+                 mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
       </Row>

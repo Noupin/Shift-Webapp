@@ -43,6 +43,7 @@ export function Train (props: IElevatedStateProps){
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({shiftUUID: elevatedState().shiftUUID,
+                            shiftTitle: elevatedState().shiftTitle,
                             usePTM: elevatedState().usePTM,
                             prebuiltShiftModel: elevatedState().prebuiltShiftModel,
                             epochs: elevatedState().trainStatusInterval,
