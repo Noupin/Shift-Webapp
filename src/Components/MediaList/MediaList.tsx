@@ -14,7 +14,7 @@ var hiddenButtonStyle: React.CSSProperties = {position: 'absolute',
                                               width: "60%",
                                               height: "60%",
                                               border: "none",
-                                              fontSize: "10vh",
+                                              fontSize: "10em",
                                               display: "none"}
 
 var shownButtonStyle: React.CSSProperties = {position: 'absolute',
@@ -24,7 +24,7 @@ var shownButtonStyle: React.CSSProperties = {position: 'absolute',
                                              width: "60%",
                                              height: "60%",
                                              border: "none",
-                                             fontSize: "10vh",
+                                             fontSize: "10rem",
                                              display: "flex",
                                              fontWeight: 'bolder'}
 
