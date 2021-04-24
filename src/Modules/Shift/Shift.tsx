@@ -46,10 +46,9 @@ export function Shift (props: IElevatedStateProps){
   }
 
 
-
 	const fetchInference = useFetch(setShifting, setElevatedState, setShiftResponse, `/api/inference`, () => requestOptions, shiftResponse)
 	const updateStatus = useFetch(setUpdateProgress, setElevatedState, setShiftResponse, `/api/inferenceStatus`, () => requestOptions, shiftResponse)
-	const getMedia = useFetch(setUpdateProgress, setElevatedState, setFileResponse, `/api/content/image/${elevatedState().shiftUUID}`, () => requestOptions, fileResponse)
+	const getMedia = useFetch(setUpdateProgress, setElevatedState, setFileResponse, `/api/content/shiftImage/${elevatedState().shiftUUID}`, () => requestOptions, fileResponse)
 
 
 	useEffect(() => {
