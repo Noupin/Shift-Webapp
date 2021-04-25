@@ -10,7 +10,8 @@ import { IElevatedPageState } from '../../Interfaces/PageState';
 
 interface IMedia extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
   setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
-  mediaSrc: File
+  mediaSrc?: File
+  srcString?: string
   mediaType?: string
   droppable?: boolean
 }
@@ -18,14 +19,17 @@ interface IMedia extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivEle
 const videoTypes: string[] = ['mp4', 'webm', 'ogg']
 
 export const Media = (props: IMedia) => {
-  const {setElevatedState, mediaSrc, mediaType, droppable, ...mediaProps} = props;
+  const {setElevatedState, mediaSrc, srcString, mediaType, droppable, ...mediaProps} = props;
   const cssClasses = mediaProps.className?.toString();
 
   let element: JSX.Element
+  var mediaSrcString = srcString;
   const [mediaSrcState, setMediaSrcState] = useState(mediaSrc);
-  const mediaSrcString = URL.createObjectURL(mediaSrcState ? mediaSrcState : new File([], ""));
+  if(!mediaSrcString){
+    mediaSrcString = URL.createObjectURL(mediaSrcState ? mediaSrcState : new File([], ""));
+  }
 
-  if (mediaSrcState && videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1){
+  if ((mediaSrcState && videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1) || (srcString && srcString.indexOf('video') !== -1)){
     if(droppable){
       element = <Video onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
                  videoSrc={mediaSrcString} videoType={mediaType!}/>;

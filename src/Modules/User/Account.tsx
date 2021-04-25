@@ -32,10 +32,7 @@ export function Account (props: IElevatedStateProps){
   const [fetchingUserShifts, setFetchingUserShifts] = useState(true);
   const [userShiftsResponse, setUserShiftsResponse] = useState<userShiftsRequestReturn>();
 
-  const [, setFetchingImage] = useState(false);
-  const [imageResponse, setImageResponse] = useState<Blob>();
-  const [profilePicture, setProfilePicture] = useState<File>();
-  const [filename, setFilename] = useState("");
+  const [profilePictureURL, setProfilePictureURL] = useState("");
   
 
   let requestOptions: RequestInit = {method: 'GET',
@@ -46,7 +43,6 @@ export function Account (props: IElevatedStateProps){
 
   const fetchProfile = useFetch(setFetchingProfile, setElevatedState, setProfileResponse, `/api/users/profile`, () => requestOptions, profileResponse);
   const fetchUserShifts = useFetch(setFetchingUserShifts, setElevatedState, setUserShiftsResponse, `/api/users/shifts`, () => requestOptions, userShiftsResponse);
-  const getMedia = useFetch(setFetchingImage, setElevatedState, setImageResponse, `/api/content/image/${filename}`, () => requestOptions, imageResponse);
 
   useEffect(() => {
     if(!fetchingProfile) return;
@@ -63,18 +59,9 @@ export function Account (props: IElevatedStateProps){
   useEffect(() => {
     if(!profileResponse) return;
 
-    setFilename(profileResponse!.profile.imageFile.split('.')[0]);
+    setProfilePictureURL(`/api/content/image/${profileResponse!.profile.imageFile.split('.')[0]}`);
     setUsername(profileResponse!.profile.username);
-
-    getMedia("blob");
-  }, [profileResponse, filename]);
-
-  useEffect(() => {
-    if(!imageResponse) return;
-
-    setProfilePicture(new File([imageResponse], profileResponse!.profile.imageFile, {type: 'media'}))
-    console.log(profilePicture)
-  }, [imageResponse])
+  }, [profileResponse]);
 
   useEffect(() => {
     if(!userShiftsResponse) return;
@@ -84,10 +71,10 @@ export function Account (props: IElevatedStateProps){
 
 
   return (
-    <Container key={profilePicture ? profilePicture.lastModified : undefined}>
+    <Container key={profilePictureURL}>
       <h2>{username}</h2>
       <p>Your Profile page.</p>
-      <Media className="neumorphic borderRadius-2 p-2" mediaSrc={profilePicture!} setElevatedState={setElevatedState}/>
+      <Media className="neumorphic borderRadius-2 p-2" srcString={profilePictureURL} setElevatedState={setElevatedState}/>
     </Container>
   );
 }

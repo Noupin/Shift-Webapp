@@ -23,14 +23,13 @@ interface shiftRequestReturn {
 export function Shift (props: IElevatedStateProps){
 	const {elevatedState, setElevatedState} = props;
 
-	const [image, setImage] = useState<File>();
+	const [shiftedMedia, setShiftedMedia] = useState("");
 
 	const [shifting, setShifting] = useState(true);
 	const [stopShifting, setStopShifting] = useState(false);
 	const [updating, setUpdating] = useState(false);
   const [shiftResponse, setShiftResponse] = useState<shiftRequestReturn>();
 	const [, setUpdateProgress] = useState(false);
-	const [fileResponse, setFileResponse] = useState<Blob>();
 
 	let requestOptions: RequestInit = {};
 
@@ -48,7 +47,6 @@ export function Shift (props: IElevatedStateProps){
 
 	const fetchInference = useFetch(setShifting, setElevatedState, setShiftResponse, `/api/inference`, () => requestOptions, shiftResponse)
 	const updateStatus = useFetch(setUpdateProgress, setElevatedState, setShiftResponse, `/api/inferenceStatus`, () => requestOptions, shiftResponse)
-	const getMedia = useFetch(setUpdateProgress, setElevatedState, setFileResponse, `/api/content/shiftImage/${elevatedState().shiftUUID}`, () => requestOptions, fileResponse)
 
 
 	useEffect(() => {
@@ -79,15 +77,9 @@ export function Shift (props: IElevatedStateProps){
 
 			if(stopShifting){
 				setUpdating(false);
-				updateRequestOptions("GET")
-				getMedia("blob");
+				
 
-				if(fileResponse == null){
-					setUpdating(true);
-					return;
-				}
-
-				setImage(new File([fileResponse], 'shifted.png', {type: "media"}))
+				setShiftedMedia(`/api/content/shiftImage/${elevatedState().shiftUUID}`)
 			}
 			else{
 				setUpdating(true);
@@ -97,12 +89,12 @@ export function Shift (props: IElevatedStateProps){
 
 
 	return (
-		<Container className="d-flex justify-content-center h-100 flex-column" key={image ? image.lastModified : undefined}>
+		<Container className="d-flex justify-content-center h-100 flex-column" key={shiftedMedia}>
 			<Row className="mb-2">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image!} mediaType="media"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" srcString={shiftedMedia} mediaType="media"/>
 			</Row>
 			<Row className="my-3">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" mediaSrc={image!} mediaType="video/mp4"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" srcString={shiftedMedia} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>
