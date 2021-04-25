@@ -19,8 +19,8 @@ interface IMedia extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivEle
 const videoTypes: string[] = ['mp4', 'webm', 'ogg']
 
 export const Media = (props: IMedia) => {
-  const {setElevatedState, mediaSrc, srcString, mediaType, droppable, ...mediaProps} = props;
-  const cssClasses = mediaProps.className?.toString();
+  const {setElevatedState, mediaSrc, srcString, mediaType, droppable, className, ...mediaProps} = props;
+  const cssClasses = className?.toString();
 
   let element: JSX.Element
   var mediaSrcString = srcString;

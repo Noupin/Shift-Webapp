@@ -6,13 +6,14 @@ import './Image.scss';
 
 interface IImage extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>{
   imageSrc: string
+  alt?: string
 }
 
 export const Image = (props: IImage) => {
-  const {imageSrc, ...imageProps} = props;
+  const {imageSrc, alt, ...imageProps} = props;
   const cssClasses = imageProps.className?.toString() + " img-fluid";
 
   return(
-    <img {...imageProps} className={cssClasses} src={imageSrc} alt=""/>
+    <img {...imageProps} className={cssClasses} src={imageSrc} alt={alt!}/>
   );
 }

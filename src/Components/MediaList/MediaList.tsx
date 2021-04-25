@@ -7,19 +7,19 @@ import Masonry from 'react-masonry-css';
 import { IElevatedPageState } from '../../Interfaces/PageState';
 import { Button } from '../Button/Button';
 import { Media } from '../Media/Media';
+import { Image } from '../Image/Image';
 import './MediaList.scss';
+import Close from "../../Assets/close-round.svg";
 
 
 var hiddenButtonStyle: React.CSSProperties = {position: 'absolute',
-                                              top: "50%",
-                                              left: "50%",
-                                              transform: "translate(-50%, -50%)",
-                                              width: "60%",
-                                              height: "60%",
-                                              border: "none",
-                                              fontSize: "100%",
-                                              cursor: 'pointer',
-                                              display: "none"}
+top: "50%",
+left: "50%",
+transform: "translate(-50%, -50%)",
+width: "60%",
+height: "60%",
+border: "none",
+display: "none"}
 
 var shownButtonStyle: React.CSSProperties = {position: 'absolute',
                                              top: "50%",
@@ -28,9 +28,7 @@ var shownButtonStyle: React.CSSProperties = {position: 'absolute',
                                              width: "60%",
                                              height: "60%",
                                              border: "none",
-                                             fontSize: "100%",
-                                             cursor: 'pointer',
-                                             display: "grid"}
+                                             display: "flex"}
 
 interface IMediaList extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
   setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
@@ -77,7 +75,10 @@ export function MediaList(props: IMediaList){
 
   return (
     <div {...mediaListProps} className={cssClasses}>
-      <Masonry breakpointCols={elementsPerRow}
+      <Masonry breakpointCols={{default: elementsPerRow,
+                                1400: elementsPerRow > 3 ? 3 : elementsPerRow,
+                                1100: elementsPerRow > 2 ? 2 : elementsPerRow,
+                                800: elementsPerRow > 1 ? 1 : elementsPerRow}}
                className="my-masonry-grid"
                columnClassName="my-masonry-grid_column">
         {elements.map((element, index) => (
@@ -88,7 +89,7 @@ export function MediaList(props: IMediaList){
             <Button style={deleteButtonVisible[index] ? shownButtonStyle : hiddenButtonStyle}
                     className="glassmorphic borderRadius-2 justify-content-center align-items-center"
                     onClick={() => removeElement(mediaArray!, setMediaArray!, index)}>
-                      &#x2715;
+                      <Image style={{maxHeight: "100%", maxWidth: "100%"}} className="object-fit-contain" imageSrc={Close} alt="X"/>
             </Button>
           </div>
         ))}
