@@ -1,10 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
-import { Row, Col } from 'react-bootstrap';
+import Masonry from 'react-masonry-css';
+
+//Frist Party Imports
 import { IElevatedPageState } from '../../Interfaces/PageState';
 import { Button } from '../Button/Button';
 import { Media } from '../Media/Media';
+import './MediaList.scss';
 
 
 var hiddenButtonStyle: React.CSSProperties = {position: 'absolute',
@@ -14,7 +17,8 @@ var hiddenButtonStyle: React.CSSProperties = {position: 'absolute',
                                               width: "60%",
                                               height: "60%",
                                               border: "none",
-                                              fontSize: "10em",
+                                              fontSize: "100%",
+                                              cursor: 'pointer',
                                               display: "none"}
 
 var shownButtonStyle: React.CSSProperties = {position: 'absolute',
@@ -24,9 +28,9 @@ var shownButtonStyle: React.CSSProperties = {position: 'absolute',
                                              width: "60%",
                                              height: "60%",
                                              border: "none",
-                                             fontSize: "10rem",
-                                             display: "flex",
-                                             fontWeight: 'bolder'}
+                                             fontSize: "100%",
+                                             cursor: 'pointer',
+                                             display: "grid"}
 
 interface IMediaList extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
   setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
@@ -40,14 +44,11 @@ export function MediaList(props: IMediaList){
   const {setElevatedState, elementsPerRow, mediaArray, setMediaArray, children, ...mediaListProps} = props;
   const cssClasses = mediaListProps.className?.toString();
   var elements: (React.ReactChild | React.ReactFragment | React.ReactPortal)[] = [];
-  let gridElements: React.ReactNode[][] = [];
-  let gridRow = -1;
-
 
   if(mediaArray){
     elements = React.Children.toArray(
       mediaArray.map((file) => (
-        <Media key={mediaArray.indexOf(file)} setElevatedState={setElevatedState} mediaSrc={file} mediaType="video/mp4"/>
+        <Media className="borderRadius-1" key={mediaArray.indexOf(file)} setElevatedState={setElevatedState} mediaSrc={file} mediaType="media"/>
       ))
     );
   }
@@ -69,14 +70,6 @@ export function MediaList(props: IMediaList){
     setItemList(itemList.filter((item, index: number) => index !== deleteIndex))
   }
 
-  for(let elementCounter = 0; elementCounter < elements.length; elementCounter++){
-    if(elementCounter % elementsPerRow === 0){
-      gridRow++;
-      gridElements = [...gridElements, []];
-    }
-    gridElements[gridRow] = [...gridElements[gridRow], elements[elementCounter]]
-  }
-
   useEffect(() => {
     setDeleteButtonVisible(deleteButtonVisible);
   }, [deleteButtonVisible])
@@ -84,23 +77,22 @@ export function MediaList(props: IMediaList){
 
   return (
     <div {...mediaListProps} className={cssClasses}>
-      {gridElements.map((row, rowIndex: number) => (
-        <Row className="my-2 mx-0" key={rowIndex}>
-          {row.map((element, colIndex: number) => (
-            <Col className="align-middle relative" key={row.indexOf(element)}
-                 onMouseEnter={() => showDeleteButton((rowIndex*elementsPerRow)+colIndex)}
-                 onMouseLeave={() => hideDeleteButton((rowIndex*elementsPerRow)+colIndex)}>
-              {element}
-
-              <Button style={deleteButtonVisible[(rowIndex*elementsPerRow)+colIndex] ? shownButtonStyle : hiddenButtonStyle}
-                      className="glassmorphic borderRadius-2 justify-content-center align-items-center"
-                      onClick={() => removeElement(mediaArray!, setMediaArray!, (rowIndex*elementsPerRow)+colIndex)}>
-                        &#x2715;
-              </Button>
-            </Col>
-          ))}
-        </Row>
-      ))}
+      <Masonry breakpointCols={elementsPerRow}
+               className="my-masonry-grid"
+               columnClassName="my-masonry-grid_column">
+        {elements.map((element, index) => (
+          <div key={index} className="masonryImageElement relative align-middle p-0"
+               onMouseEnter={() => showDeleteButton(index)}
+               onMouseLeave={() => hideDeleteButton(index)}>
+            {element}
+            <Button style={deleteButtonVisible[index] ? shownButtonStyle : hiddenButtonStyle}
+                    className="glassmorphic borderRadius-2 justify-content-center align-items-center"
+                    onClick={() => removeElement(mediaArray!, setMediaArray!, index)}>
+                      &#x2715;
+            </Button>
+          </div>
+        ))}
+      </Masonry>
     </div>
   );
 }

@@ -32,24 +32,24 @@ export const Media = (props: IMedia) => {
   if ((mediaSrcState && videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1) || (srcString && srcString.indexOf('video') !== -1)){
     if(droppable){
       element = <Video onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
-                 videoSrc={mediaSrcString} videoType={mediaType!}/>;
+                 videoSrc={mediaSrcString} videoType={mediaType!} className={cssClasses}/>;
     }
     else{
-      element = <Video videoSrc={mediaSrcString} videoType={mediaType!}/>;
+      element = <Video videoSrc={mediaSrcString} videoType={mediaType!} className={cssClasses}/>;
     }
   }
   else{
     if(droppable){
       element = <Image onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
-                 imageSrc={mediaSrcString}/>
+                 imageSrc={mediaSrcString} className={cssClasses}/>
     }
     else{
-      element = <Image imageSrc={mediaSrcString}/>
+      element = <Image imageSrc={mediaSrcString} className={cssClasses}/>
     }
   }
 
   return (
-    <div {...mediaProps} className={cssClasses}>
+    <div {...mediaProps}>
       {element}
     </div>
   );

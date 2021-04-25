@@ -20,6 +20,7 @@ import { Load } from "./Modules/Load/Load"
 import { Train } from "./Modules/Train/Train";
 import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Shift } from "./Modules/Shift/Shift";
+import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Helpers/AuthenticateUser";
 import { defaultShiftTitle } from "./constants"
@@ -128,7 +129,7 @@ export default function App() {
                   <Shift elevatedState={getElevatedState} setElevatedState={setElevatedState}></Shift>
                 </Route>
                 <Route path="/">
-                  <Home />
+                  <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
               </Switch>
 
@@ -138,8 +139,4 @@ export default function App() {
       </Container>
     </Router>
   );
-}
-
-function Home() {
-  return <h2>Home</h2>;
 }

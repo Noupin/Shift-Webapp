@@ -59,7 +59,7 @@ export function Account (props: IElevatedStateProps){
   useEffect(() => {
     if(!profileResponse) return;
 
-    setProfilePictureURL(`/api/content/image/${profileResponse!.profile.imageFile.split('.')[0]}`);
+    setProfilePictureURL(`/api/content/image/${profileResponse!.profile.imageFile}`);
     setUsername(profileResponse!.profile.username);
   }, [profileResponse]);
 
