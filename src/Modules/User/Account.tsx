@@ -10,6 +10,7 @@ import { User } from '../../Interfaces/User';
 import { Shift } from '../../Interfaces/Shift';
 import { Media } from '../../Components/Media/Media';
 import { Container } from 'react-bootstrap';
+import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 
 
 interface profileRequestReturn {
@@ -33,6 +34,7 @@ export function Account (props: IElevatedStateProps){
   const [userShiftsResponse, setUserShiftsResponse] = useState<userShiftsRequestReturn>();
 
   const [profilePictureURL, setProfilePictureURL] = useState("");
+  const [userShifts, setUserShifts] = useState<Shift[]>([]);
   
 
   let requestOptions: RequestInit = {method: 'GET',
@@ -66,7 +68,7 @@ export function Account (props: IElevatedStateProps){
   useEffect(() => {
     if(!userShiftsResponse) return;
 
-    //console.log(userShiftsResponse)
+    setUserShifts(userShiftsResponse!.shifts)
   }, [userShiftsResponse]);
 
 
@@ -74,7 +76,10 @@ export function Account (props: IElevatedStateProps){
     <Container key={profilePictureURL}>
       <h2>{username}</h2>
       <p>Your Profile page.</p>
-      <Media className="neumorphic borderRadius-2 p-2" srcString={profilePictureURL} setElevatedState={setElevatedState}/>
+      <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL} setElevatedState={setElevatedState}/>
+      {userShifts!.map((element) => (
+        <ShiftCard shift={element} onClick={() => console.log(element.title)} setElevatedState={setElevatedState}/>
+      ))}
     </Container>
   );
 }

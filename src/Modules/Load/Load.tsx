@@ -167,7 +167,7 @@ export function Load (props: IElevatedStateProps){
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
-      <Row>
+      <Row className="mb-2">
         <Col xs={3}></Col>
         {titleBar}
         <Col xs={3}></Col>
@@ -194,7 +194,7 @@ export function Load (props: IElevatedStateProps){
               }}>&#x21c6;</FileDialog>
             </Col>
           </Row>
-          <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2" key={!baseMedia ? "": baseMedia.name} onDragOver={(event) => allowDrop(event)}
+          <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain" key={!baseMedia ? "": baseMedia.name} onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
                  mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
@@ -233,7 +233,7 @@ export function Load (props: IElevatedStateProps){
           </div>
         </Col>
       </Row>
-      <Row className="mt-2">
+      <Row className="mt-3">
         <Col xs={2}></Col>
         <Col xs={8}>
           <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
