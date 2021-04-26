@@ -15,7 +15,7 @@ interface IFileDialog extends React.HTMLAttributes<HTMLElement>{
 
 export const FileDialog = (props: IFileDialog) => {
   const {mutipleSelect, id, onChange, children, ...fileDialogProps} = props;
-  const cssClasses = fileDialogProps.className?.toString() + " justify-content-center";
+  const cssClasses = fileDialogProps.className?.toString();
 
   let inputElement = <input type="file" id={id} onChange={onChange}/>
   if(mutipleSelect){

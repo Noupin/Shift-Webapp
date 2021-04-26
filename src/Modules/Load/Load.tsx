@@ -176,10 +176,10 @@ export function Load (props: IElevatedStateProps){
       <Row>
         <Col xs={2}></Col>
         <Col xs={8} className="neumorphic borderRadius-2">
-          <Row>
+          <Row className="px-4">
             <Col xs={11}></Col>
             <Col xs={1}>
-              <FileDialog className="pr-4" id="baseMediaUpload" onChange={(event) => {
+              <FileDialog className="justify-content-end" id="baseMediaUpload" onChange={(event) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
@@ -194,7 +194,7 @@ export function Load (props: IElevatedStateProps){
               }}>&#x21c6;</FileDialog>
             </Col>
           </Row>
-          <Media setElevatedState={setElevatedState} className="borderRadius-2 p-2" key={!baseMedia ? "": baseMedia.name} onDragOver={(event) => allowDrop(event)}
+          <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2" key={!baseMedia ? "": baseMedia.name} onDragOver={(event) => allowDrop(event)}
                  mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
@@ -203,10 +203,10 @@ export function Load (props: IElevatedStateProps){
         <Col>
           <h4>Extra Base Faces</h4>
           <div className="neumorphic borderRadius-2">
-            <Row>
+            <Row className="px-4">
               <Col xs={11}></Col>
               <Col xs={1} >
-                <FileDialog className="pr-4" id="baseFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setBaseFiles)}>&#43;</FileDialog>
+                <FileDialog className="justify-content-end" id="baseFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setBaseFiles)}>&#43;</FileDialog>
               </Col>
             </Row>
             <MediaList className="mt-2 p-3" onDragOver={(event) => allowDrop(event)}
@@ -219,10 +219,10 @@ export function Load (props: IElevatedStateProps){
         <Col xs>
           <h4>Mask Face</h4>
           <div className="neumorphic borderRadius-2">
-            <Row>
+            <Row className="px-4">
               <Col xs={11}></Col>
               <Col xs={1} >
-                <FileDialog className="pr-4 justify-content-end" id="maskFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setMaskFiles)}>&#43;</FileDialog>
+                <FileDialog className="justify-content-end" id="maskFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setMaskFiles)}>&#43;</FileDialog>
               </Col>
             </Row>
             <MediaList className="mt-2 borderRadius-2 p-3" onDragOver={(event) => allowDrop(event)}

@@ -26,7 +26,7 @@ export const Media = (props: IMedia) => {
   var mediaSrcString = srcString;
   const [mediaSrcState, setMediaSrcState] = useState(mediaSrc);
   if(!mediaSrcString){
-    mediaSrcString = URL.createObjectURL(mediaSrcState ? mediaSrcState : new File([], ""));
+    mediaSrcString = mediaSrcState ? URL.createObjectURL(mediaSrcState) : "";
   }
 
   if ((mediaSrcState && videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1) || (srcString && srcString.indexOf('video') !== -1)){
