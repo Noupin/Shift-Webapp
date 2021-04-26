@@ -78,7 +78,7 @@ export function Account (props: IElevatedStateProps){
       <p>Your Profile page.</p>
       <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL} setElevatedState={setElevatedState}/>
       {userShifts!.map((element) => (
-        <ShiftCard shift={element} onClick={() => console.log(element.title)} setElevatedState={setElevatedState}/>
+        <ShiftCard className="borderRadius-2 m-2 p-2" shift={element} onClick={() => console.log(element.title)} setElevatedState={setElevatedState}/>
       ))}
     </Container>
   );

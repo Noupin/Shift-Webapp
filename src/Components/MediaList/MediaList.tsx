@@ -8,27 +8,9 @@ import { IElevatedPageState } from '../../Interfaces/PageState';
 import { Button } from '../Button/Button';
 import { Media } from '../Media/Media';
 import { Image } from '../Image/Image';
-import './MediaList.scss';
 import Close from "../../Assets/close-round.svg";
+import './MediaList.scss';
 
-
-var hiddenButtonStyle: React.CSSProperties = {position: 'absolute',
-top: "50%",
-left: "50%",
-transform: "translate(-50%, -50%)",
-width: "60%",
-height: "60%",
-border: "none",
-display: "none"}
-
-var shownButtonStyle: React.CSSProperties = {position: 'absolute',
-                                             top: "50%",
-                                             left: "50%",
-                                             transform: "translate(-50%, -50%)",
-                                             width: "60%",
-                                             height: "60%",
-                                             border: "none",
-                                             display: "flex"}
 
 interface IMediaList extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
   setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
@@ -45,8 +27,9 @@ export function MediaList(props: IMediaList){
 
   if(mediaArray){
     elements = React.Children.toArray(
-      mediaArray.map((file) => (
-        <Media className="borderRadius-1" key={mediaArray.indexOf(file)} setElevatedState={setElevatedState} mediaSrc={file} mediaType="media"/>
+      mediaArray.map((file, index) => (
+        <Media className="borderRadius-1" key={index} setElevatedState={setElevatedState}
+               mediaSrc={file} mediaType="video/mp4"/>
       ))
     );
   }
@@ -55,14 +38,6 @@ export function MediaList(props: IMediaList){
   }
 
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(Array(elements.length).fill(false));
-
-  function showDeleteButton(changeIndex: number){
-    setDeleteButtonVisible((prev) => prev.map((item, index) => index !== changeIndex ? item : true))
-  }
-
-  function hideDeleteButton(changeIndex: number){
-    setDeleteButtonVisible((prev) => prev.map((item, index) => index !== changeIndex ? item : false))
-  }
   
   function removeElement(itemList: File[], setItemList: React.Dispatch<React.SetStateAction<File[]>>, deleteIndex: number){
     setItemList(itemList.filter((item, index: number) => index !== deleteIndex))
@@ -82,12 +57,9 @@ export function MediaList(props: IMediaList){
                className="my-masonry-grid"
                columnClassName="my-masonry-grid_column">
         {elements.map((element, index) => (
-          <div key={index} className="masonryImageElement relative align-middle p-0"
-               onMouseEnter={() => showDeleteButton(index)}
-               onMouseLeave={() => hideDeleteButton(index)}>
+          <div key={index} className="masonryImageElement relative align-middle hoverButton">
             {element}
-            <Button style={deleteButtonVisible[index] ? shownButtonStyle : hiddenButtonStyle}
-                    className="glassmorphic borderRadius-2 justify-content-center align-items-center"
+            <Button className="glassmorphic borderRadius-2 justify-content-center align-items-center"
                     onClick={() => removeElement(mediaArray!, setMediaArray!, index)}>
                       <Image style={{maxHeight: "100%", maxWidth: "100%"}} className="object-fit-contain" imageSrc={Close} alt="X"/>
             </Button>

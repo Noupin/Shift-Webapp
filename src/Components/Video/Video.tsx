@@ -11,12 +11,13 @@ interface IVideo extends React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLV
 
 export const Video = (props: IVideo) => {
   const {videoSrc, videoType, ...videoProps} = props;
-  const cssClasses = videoProps.className?.toString() + ' borderRadius-2 embed-responsive';
+  const cssClasses = videoProps.className?.toString() + ' embed-responsive';
+  console.log(videoType)
 
   return(
     <video {...videoProps} className={cssClasses} key={videoSrc} controls>
       <source src={videoSrc} type={videoType}/>
-      Your browser does not suppoer the video tag.
+      Your browser does not support the video tag.
     </video>
   );
 }
