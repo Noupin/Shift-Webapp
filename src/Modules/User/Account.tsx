@@ -2,6 +2,8 @@
 
 //Third Party Imports
 import { useState, useEffect } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import Masonry from 'react-masonry-css';
 
 //First Party Imports
 import { useFetch } from "../../Hooks/Fetch";
@@ -9,7 +11,6 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { User } from '../../Interfaces/User';
 import { Shift } from '../../Interfaces/Shift';
 import { Media } from '../../Components/Media/Media';
-import { Container } from 'react-bootstrap';
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 
 
@@ -74,12 +75,28 @@ export function Account (props: IElevatedStateProps){
 
   return (
     <Container key={profilePictureURL}>
-      <h2>{username}</h2>
-      <p>Your Profile page.</p>
-      <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL} setElevatedState={setElevatedState}/>
-      {userShifts!.map((element) => (
-        <ShiftCard className="borderRadius-2 m-2 p-2" shift={element} onClick={() => console.log(element.title)} setElevatedState={setElevatedState}/>
-      ))}
+      <Row>
+        <Col xs={3}>
+          <Row className="justify-content-center">
+            <h2>{username}</h2>
+          </Row>
+          <Row>
+            <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL} setElevatedState={setElevatedState}/>
+          </Row>
+        </Col>
+        <Col xs={9} className="p-2">
+          <Masonry breakpointCols={{default: 4,
+                                    1400: 3,
+                                    1100: 2,
+                                    800: 1}}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column">
+            {userShifts!.map((element, index) => (
+              <ShiftCard key={index} className="borderRadius-2 m-2 p-2" shift={element} onClick={() => console.log(element.uuid)} setElevatedState={setElevatedState}/>
+            ))}
+          </Masonry>
+        </Col>
+      </Row>
     </Container>
   );
 }

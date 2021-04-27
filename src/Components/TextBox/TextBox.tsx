@@ -12,7 +12,7 @@ export interface ITextBox extends React.DetailedHTMLProps<React.InputHTMLAttribu
 
 export const TextBox = (props: ITextBox) => {
   const {onBlur, type, placeholder, ...textboxProps} = props;
-  const cssClasses = textboxProps.className?.toString() + " neumorphic textbox";
+  const cssClasses = textboxProps.className?.toString() + " insetNeumorphic textbox";
 
   return(
     <input {...textboxProps} className={cssClasses} type={type} placeholder={placeholder} onBlur={onBlur}/>

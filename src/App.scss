@@ -88,8 +88,8 @@ label {
     outline: none;
     background-color: $sameAsBackground;
     border: 0;
-    box-shadow: inset 5px 5px 10px $dimShadow, 
-                inset -5px -5px 10px $brightShadow;
+    box-shadow: inset 5px 5px 5px $dimShadow, 
+                inset -5px -5px 5px $brightShadow;
 }
 
 

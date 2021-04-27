@@ -91,10 +91,10 @@ export function Shift (props: IElevatedStateProps){
 	return (
 		<Container className="d-flex justify-content-center h-100 flex-column" key={shiftedMedia}>
 			<Row className="mb-2">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" srcString={shiftedMedia} mediaType="media"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={shiftedMedia} mediaType="media"/>
 			</Row>
 			<Row className="my-3">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 p-2 my-2 w-100" srcString={shiftedMedia} mediaType="video/mp4"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={shiftedMedia} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>

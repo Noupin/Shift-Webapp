@@ -26,7 +26,7 @@ export function ShiftCard(props: IShiftCard){
   return (
     <Button {...cardProps} className={cssClasses} onClick={onClick} style={buttonStyle}>
       <h2>{shift.title}</h2>
-      <Media srcString={`${apiPrefix}${shift.imagePath}`} setElevatedState={setElevatedState}></Media>
+      <Media srcString={`${apiPrefix}${shift.imagePath}`} setElevatedState={setElevatedState} className="borderRadius-2"></Media>
     </Button>
   );
 }

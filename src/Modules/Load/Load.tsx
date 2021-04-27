@@ -91,6 +91,7 @@ export function Load (props: IElevatedStateProps){
     for (var fileIndex = 0; fileIndex < files.length; fileIndex++){
       data.append(`file${fileIndex}`, files[fileIndex]);
     }
+
     requestOptions.current.body = data;
 
     requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
