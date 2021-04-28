@@ -88,6 +88,8 @@ export function Train (props: IElevatedStateProps){
 
   //Update training status every second
   useEffect(() => {
+    if(updating) return;
+
     const interval = setInterval(() => {
       if(stopping && !stopTrain){
         updateRequestOptions();
@@ -139,15 +141,18 @@ export function Train (props: IElevatedStateProps){
       <Row className="my-2">
         <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image!} mediaType="video/mp4"/>
       </Row>
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={4}>
-          <Button className="p-2 mt-2 mb-2 mr-4 borderRadius-2 w-100" disabled={advancedView} onClick={() => setAdvancedView(true)}>Advanced View</Button>
+      <Row className="my-2">
+        <Col xs={1}></Col>
+        <Col xs={4} className="pr-4">
+          <Button className="p-2 borderRadius-2 w-100" disabled={advancedView} onClick={() => setAdvancedView(true)}>Advanced View</Button>
         </Col>
-        <Col xs={4}>
-          <Button className="p-2 mt-2 mb-2 ml-4 borderRadius-2 w-100" disabled={stopTrain} onClick={() => setStop(true)}>Stop Training</Button>
+        <Col xs={4} className="pl-4">
+          <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain} onClick={() => setStop(true)}>Stop Training</Button>
         </Col>
-        <Col xs={2}><Button className="p-2 mt-2 mb-2 ml-4 borderRadius-2 w-100" disabled={stopTrain} onClick={() => setUpdating(true)}>Update</Button></Col>
+        <Col xs={2} className="pl-4">
+          <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain} onClick={() => setUpdating(true)}>Update</Button>
+        </Col>
+        <Col xs={1}></Col>
       </Row>
     </Container>
   );

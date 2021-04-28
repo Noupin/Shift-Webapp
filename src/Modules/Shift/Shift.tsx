@@ -17,6 +17,7 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 interface shiftRequestReturn {
 	msg: string,
 	stopped: boolean
+	imagePath: string
 }
 
 
@@ -29,7 +30,7 @@ export function Shift (props: IElevatedStateProps){
 	const [stopShifting, setStopShifting] = useState(false);
 	const [updating, setUpdating] = useState(false);
   const [shiftResponse, setShiftResponse] = useState<shiftRequestReturn>();
-	const [, setUpdateProgress] = useState(false);
+	const [updateProgress, setUpdateProgress] = useState(false);
 
 	let requestOptions: RequestInit = {};
 
@@ -65,6 +66,8 @@ export function Shift (props: IElevatedStateProps){
 	}, [shiftResponse]);
 
 	useInterval(() => {
+		if(updateProgress) return;
+
 		if(updating || !stopShifting){
 			updateRequestOptions();
 			updateStatus();
@@ -73,13 +76,14 @@ export function Shift (props: IElevatedStateProps){
 				return;
 			}
 
+			if(shiftResponse.imagePath){
+				setShiftedMedia(`/api/content/image/${shiftResponse.imagePath}`)
+			}
+
 			setStopShifting(shiftResponse.stopped);
 
 			if(stopShifting){
 				setUpdating(false);
-				
-
-				setShiftedMedia(`/api/content/shiftImage/${elevatedState().shiftUUID}`)
 			}
 			else{
 				setUpdating(true);
@@ -98,14 +102,14 @@ export function Shift (props: IElevatedStateProps){
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>
-				<Col xs={2}>
+				<Col xs={2} className="pr-4">
 					<Link to="/train" className="w-100">
-            <Button className="borderRadius-2 p-2 mr-4 w-100" disabled={shifting}>&#x2190; Train More</Button>
+            <Button className="borderRadius-2 p-2 w-100" disabled={shifting}>&#x2190; Train More</Button>
           </Link>
 				</Col>
-				<Col xs={2}>
+				<Col xs={2} className="pl-4">
 					<Link to="/load" className="w-100">
-            <Button className="borderRadius-2 p-2 ml-4 w-100" disabled={shifting} onClick={() => setShifting(true)}>Shift Again &#x21ba;</Button>
+            <Button className="borderRadius-2 p-2 w-100" disabled={shifting} onClick={() => setShifting(true)}>Shift Again &#x21ba;</Button>
           </Link>
 				</Col>
 				<Col xs={1}></Col>
