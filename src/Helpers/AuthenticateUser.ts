@@ -17,7 +17,7 @@ export function useAuthenticate(setLoading: React.Dispatch<React.SetStateAction<
     setLoading(true);
 
     try{
-      const response = await fetch(`/api/users/isAuthenticated`, authRequestOptions);
+      const response = await fetch(`/api/users/authenticated`, authRequestOptions);
       const json = await response.json();
 
       setData(json);
