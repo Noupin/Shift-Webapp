@@ -85,20 +85,29 @@ export function Login (props: IElevatedStateProps){
 
           <br/>
 
-          <Row>
-            <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text" placeholder="Username/Email" onBlur={(event) => setUsernameOrEmail(event.target.value)}/>
-          </Row>
-          <Row>
-           <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
-          </Row>
+          <form>
+              <Row>
+                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text"
+                         placeholder="Username/Email" autoComplete="username"
+                         onChange={(event) => setUsernameOrEmail(event.target.value)}/>
+              </Row>
+              <Row>
+                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password"
+                         placeholder="Password" autoComplete="current-password"
+                         onChange={(event) => setPassword(event.target.value)}/>
+              </Row>
 
-          <Row>
-            <Col xs={2}></Col>
-            <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" disabled={fetching || authenticating} onClick={() => {setFetching(true)}}>Login &#10140;</Button>
-            </Col>
-            <Col xs={2}></Col>
-          </Row>
+            <Row>
+              <Col xs={2}></Col>
+              <Col xs={8}>
+                <Button type="submit" className="p-2 mt-4 mb-2 borderRadius-2 w-100"
+                        disabled={fetching || authenticating} onClick={() => setFetching(true)}>
+                  Login &#10140;
+                </Button>
+              </Col>
+              <Col xs={2}></Col>
+            </Row>
+          </form>
 
           <br/>
 

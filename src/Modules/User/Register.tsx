@@ -92,18 +92,24 @@ export function Register (props: IElevatedStateProps){
 
           <br/>
 
-          <Row>
-            <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text" placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
-          </Row>
-          <Row>
-            <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="email" placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
-          </Row>
-          <Row>
-            <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
-          </Row>
-          <Row>
-            <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
-          </Row>
+          <form>
+            <Row>
+              <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text" autoComplete="username"
+                       placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
+            </Row>
+            <Row>
+              <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="email" autoComplete="username"
+                       placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
+            </Row>
+            <Row>
+              <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
+                       placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
+            </Row>
+            <Row>
+              <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
+                       placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
+            </Row>
+          </form>
 
           <Row className="align-items-center">
             <Col xs={2}></Col>

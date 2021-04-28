@@ -32,7 +32,7 @@ export function ForgotPassword (props: IElevatedStateProps){
   const fetchResetPassword = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions.current, registerResponse)
 
   useEffect(() => {
-    if(fetching) return;
+    if(!fetching) return;
 
     if (password !== confirmPassword){
       setElevatedState((prev) => ({...prev, msg: "Passwords do not match"}));
@@ -66,23 +66,29 @@ export function ForgotPassword (props: IElevatedStateProps){
 
           <br/>
 
-          <Row>
-            <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" placeholder="Current Password" onBlur={(event) => setCurrentPassword(event.target.value)}/>
-          </Row>
-          <Row>
-            <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" placeholder="New Password" onBlur={(event) => setPassword(event.target.value)}/>
-          </Row>
-          <Row>
-            <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
-          </Row>
+          <form>
+            <TextBox type="text" placeholder="" autoComplete="username" style={{display: 'none'}}/>
+            <Row>
+              <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" autoComplete="current-password"
+                       placeholder="Current Password" onChange={(event) => setCurrentPassword(event.target.value)}/>
+            </Row>
+            <Row>
+              <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
+                       placeholder="New Password" onChange={(event) => setPassword(event.target.value)}/>
+            </Row>
+            <Row>
+              <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
+                       placeholder="Confirm Password" onChange={(event) => setConfirmPassword(event.target.value)}/>
+            </Row>
 
-          <Row>
-            <Col xs={2}></Col>
-            <Col xs={8}>
-              <Button className="mt-3 m-2 p-2 borderRadius-2 w-100" onClick={() => setFetching(true)}>Update &#10140;</Button>
-            </Col>
-            <Col xs={2}></Col>
-          </Row>
+            <Row>
+              <Col xs={2}></Col>
+              <Col xs={8}>
+                <Button className="mt-3 m-2 p-2 borderRadius-2 w-100" onClick={() => setFetching(true)}>Update &#10140;</Button>
+              </Col>
+              <Col xs={2}></Col>
+            </Row>
+          </form>
 
           <br/>
         </Col>
