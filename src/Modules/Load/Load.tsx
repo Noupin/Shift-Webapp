@@ -44,7 +44,7 @@ export function Load (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
 
   const [prevTitleIsFilename, setPrevTitleIsFilename] = useState(false);
-  const [title, setTitle] = useState(elevatedState().shiftTitle);
+  const [title, setTitle] = useState(defaultShiftTitle);
   const [updateTitle, setUpdateTitle] = useState(true);
   const [titleUpdated, setTitleUpdated] = useState(false);
 
@@ -69,7 +69,6 @@ export function Load (props: IElevatedStateProps){
   
   useEffect(() => {
     setElevatedState((prev) => ({...prev, prebuiltShiftModel: "", shiftTitle: defaultShiftTitle}))
-    setTitle(elevatedState().shiftTitle)
   }, []);
 
   useEffect(() => {
@@ -155,7 +154,7 @@ export function Load (props: IElevatedStateProps){
                       setTitleUpdated(false)
                       setUpdateTitle(false)
                       setPrevTitleIsFilename(false)}}
-                    value={title}/>
+                    value={title} autoFocus/>
         </Col>
         <Col xs={1}>
           <Button className="borderRadius-2 my-2 py-2 align-items-center"
@@ -210,7 +209,7 @@ export function Load (props: IElevatedStateProps){
                 <FileDialog className="justify-content-end" id="baseFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setBaseFiles)}>&#43;</FileDialog>
               </Col>
             </Row>
-            <MediaList className="mt-2 p-3" onDragOver={(event) => allowDrop(event)}
+            <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
                        onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
                        elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}
                        setElevatedState={setElevatedState}>
@@ -226,7 +225,7 @@ export function Load (props: IElevatedStateProps){
                 <FileDialog className="justify-content-end" id="maskFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setMaskFiles)}>&#43;</FileDialog>
               </Col>
             </Row>
-            <MediaList className="mt-2 borderRadius-2 p-3" onDragOver={(event) => allowDrop(event)}
+            <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
                        onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
                        elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}
                        setElevatedState={setElevatedState}>

@@ -1,6 +1,6 @@
 export interface User {
   email: string
-  imageFile: string
+  imagePath: string
   password?: string
   username: string
   _id?: {

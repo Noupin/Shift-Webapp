@@ -46,7 +46,7 @@ export function Train (props: IElevatedStateProps){
                             shiftTitle: elevatedState().shiftTitle,
                             usePTM: elevatedState().usePTM,
                             prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-                            epochs: elevatedState().trainStatusInterval,
+                            statusInterval: elevatedState().trainStatusInterval,
                             trainType: 'basic'})
     };
   }

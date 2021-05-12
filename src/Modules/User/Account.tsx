@@ -45,7 +45,7 @@ export function Account (props: IElevatedStateProps){
 
 
   const fetchProfile = useFetch(setFetchingProfile, setElevatedState, setProfileResponse, `/api/users/profile`, () => requestOptions, profileResponse);
-  const fetchUserShifts = useFetch(setFetchingUserShifts, setElevatedState, setUserShiftsResponse, `/api/users/shifts`, () => requestOptions, userShiftsResponse);
+  const fetchUserShifts = useFetch(setFetchingUserShifts, setElevatedState, setUserShiftsResponse, `/api/users/userShifts`, () => requestOptions, userShiftsResponse);
 
   useEffect(() => {
     if(!fetchingProfile) return;
@@ -60,14 +60,14 @@ export function Account (props: IElevatedStateProps){
   }, [fetchingUserShifts]);
 
   useEffect(() => {
-    if(!profileResponse) return;
+    if(!profileResponse || !profileResponse.profile) return;
 
-    setProfilePictureURL(`/api/content/image/${profileResponse!.profile.imageFile}`);
+    setProfilePictureURL(`/api/content/image/${profileResponse!.profile.imagePath}`);
     setUsername(profileResponse!.profile.username);
   }, [profileResponse]);
 
   useEffect(() => {
-    if(!userShiftsResponse) return;
+    if(!userShiftsResponse || !userShiftsResponse.shifts) return;
 
     setUserShifts(userShiftsResponse!.shifts)
   }, [userShiftsResponse]);
