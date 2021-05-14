@@ -131,7 +131,7 @@ export function Load (props: IElevatedStateProps){
       setPrevTitleIsFilename(true);
     }
 
-  }, [baseMedia, updateTitle]);
+  }, [baseMedia, updateTitle, prevTitleIsFilename]);
 
 
   var titleBar = (
@@ -140,7 +140,8 @@ export function Load (props: IElevatedStateProps){
                onChange={(event) => {
                 setTitle(event.target.value)
                 setTitleUpdated(false)
-                setUpdateTitle(false)}}
+                setUpdateTitle(false)
+                setPrevTitleIsFilename(false)}}
                value={title}/>
     </Col>
   );

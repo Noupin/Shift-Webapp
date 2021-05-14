@@ -1,0 +1,1 @@
+npx @openapitools/openapi-generator-cli generate -i OpenAPI/shift.yaml -g typescript-angular -o src/Swagger

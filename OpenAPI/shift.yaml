@@ -1,0 +1,507 @@
+definitions:
+  AuthenticatedResponse:
+    properties:
+      authenticated:
+        type: boolean
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    required:
+    - authenticated
+    type: object
+  FeaturedShiftsResponse:
+    properties:
+      shifts:
+        items:
+          $ref: '#/definitions/Shift'
+        type: array
+    type: object
+  InferenceRequest:
+    properties:
+      prebuiltShiftModel:
+        default: ''
+        type: string
+      shiftUUID:
+        type: string
+      usePTM:
+        default: false
+        type: boolean
+    required:
+    - shiftUUID
+    type: object
+  InferenceResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
+  InferenceStatusReponse:
+    properties:
+      imagePath:
+        type: string
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+      stopped:
+        type: boolean
+    required:
+    - imagePath
+    - stopped
+    type: object
+  LoadDataResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+      shiftUUID:
+        type: string
+    required:
+    - shiftUUID
+    type: object
+  LoginRequest:
+    properties:
+      password:
+        type: string
+      remember:
+        default: true
+        type: boolean
+      usernameOrEmail:
+        type: string
+    required:
+    - password
+    - usernameOrEmail
+    type: object
+  LoginResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
+  LogoutResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
+  NewShiftsResponse:
+    properties:
+      shifts:
+        items:
+          $ref: '#/definitions/Shift'
+        type: array
+    type: object
+  PopularShiftsResponse:
+    properties:
+      shifts:
+        items:
+          $ref: '#/definitions/Shift'
+        type: array
+    type: object
+  ProfileResponse:
+    properties:
+      profile:
+        $ref: '#/definitions/User'
+    type: object
+  RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  RegisterResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
+  Shift:
+    properties:
+      baseDecoderPath:
+        type: string
+      datePosted:
+        type: string
+      encoderPath:
+        type: string
+      id: {}
+      imagePath:
+        type: string
+      maskDecoderPath:
+        type: string
+      private:
+        type: boolean
+      title:
+        type: string
+      userID: {}
+      uuid:
+        format: uuid
+        type: string
+      views:
+        type: integer
+    required:
+    - baseDecoderPath
+    - encoderPath
+    - maskDecoderPath
+    - title
+    - userID
+    - uuid
+    type: object
+  StopTrainResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
+  TrainRequest:
+    properties:
+      prebuiltShiftModel:
+        default: ''
+        type: string
+      shiftTitle:
+        default: New Shift
+        type: string
+      shiftUUID:
+        type: string
+      statusInterval:
+        default: 10
+        type: integer
+      trainType:
+        default: basic
+        type: string
+      usePTM:
+        default: false
+        type: boolean
+    required:
+    - shiftUUID
+    type: object
+  TrainResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
+  TrainStatusResponse:
+    properties:
+      exhibit:
+        items:
+          type: string
+        type: array
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+      stopped:
+        type: boolean
+    required:
+    - exhibit
+    - stopped
+    type: object
+  User:
+    properties:
+      dateCreated:
+        type: string
+      email:
+        type: string
+      id: {}
+      imagePath:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  UserShiftsResponse:
+    properties:
+      shifts:
+        items:
+          $ref: '#/definitions/Shift'
+        type: array
+    type: object
+info:
+  title: Shift
+  version: 1.0.0
+paths:
+  /api/loadData:
+    post:
+      description: Given training data Shift specializes a model for the training
+        data. Yeilds more relaisitic results than just an inference though it takes
+        longer.
+      parameters:
+      - collectionFormat: multi
+        in: header
+        items:
+          type: string
+        name: trainingDataTypes
+        required: true
+        type: array
+      responses:
+        default:
+          description: Given training data Shift specializes a model for the training
+            data. Yeilds more relaisitic results than just an inference though it
+            takes longer.
+          schema:
+            $ref: '#/definitions/LoadDataResponse'
+  /api/train:
+    post:
+      description: Given training data Shift specializes a model for the training
+        data. Yeilds more relaisitic results than just an inference though it takes
+        longer.
+      parameters:
+      - description: The uuid of the shift model being inferenced with, the title
+          of the shift that is being trained, whether or not the the PTM is being
+          used, the uuid of the prebuilt shift model if one is being used, the amount
+          of epochs inbetween the training status updates, and the type of trainign
+          to send four pictures or one picture for front end.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/TrainRequest'
+      responses:
+        default:
+          description: Whether the training has started or not.
+          schema:
+            $ref: '#/definitions/TrainResponse'
+  /api/trainStatus:
+    post:
+      description: The status of of the current training task if called while training
+        the task will switch to give an update image. After a certain amount of time
+        the training will be completed automatically to allow for multiple users to
+        train.
+      parameters:
+      - description: The uuid of the shift model being inferenced with, the title
+          of the shift that is being trained, whether or not the the PTM is being
+          used, the uuid of the prebuilt shift model if one is being used, the amount
+          of epochs inbetween the training status updates, and the type of trainign
+          to send four pictures or one picture for front end.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/TrainRequest'
+      responses:
+        default:
+          description: The status of the current shift training, whether the training
+            has stopped, and encoded images to view on the front end.
+          schema:
+            $ref: '#/definitions/TrainStatusResponse'
+  /api/stopTraining:
+    post:
+      description: Stop the training with the UUID of the shift model being trained.
+      parameters:
+      - description: The uuid of the shift model being inferenced with, the title
+          of the shift that is being trained, whether or not the the PTM is being
+          used, the uuid of the prebuilt shift model if one is being used, the amount
+          of epochs inbetween the training status updates, and the type of trainign
+          to send four pictures or one picture for front end.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/TrainRequest'
+      responses:
+        default:
+          description: Whether the stop train signal was accepted.
+          schema:
+            $ref: '#/definitions/StopTrainResponse'
+  /api/users/register:
+    post:
+      description: The regitration for the user.
+      parameters:
+      - description: The name the user has picked for their account, the password
+          associated with the username of the user logging in, and the email to be
+          registered with the new account.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/RegisterRequest'
+      responses:
+        default:
+          description: The status of the register attempt.
+          schema:
+            $ref: '#/definitions/RegisterResponse'
+  /api/users/authenticated:
+    get:
+      description: Whether the user is logged in currently or not.
+      parameters: []
+      responses:
+        default:
+          description: Whether the use is authenticated or not.
+          schema:
+            $ref: '#/definitions/AuthenticatedResponse'
+  /api/users/login:
+    post:
+      description: The login for the user.
+      parameters:
+      - description: The username or email of the user logging in, the password associated
+          with the username of the user logging in, and whether or not the user should
+          be remebered when they are logged in.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      responses:
+        default:
+          description: The status of the login attempt.
+          schema:
+            $ref: '#/definitions/LoginResponse'
+  /api/users/logout:
+    get:
+      description: Logs the user out.
+      parameters: []
+      responses:
+        default:
+          description: The status of the user logging out.
+          schema:
+            $ref: '#/definitions/LogoutResponse'
+  /api/users/profile:
+    get:
+      description: The users profile to display the on users the account page
+      parameters: []
+      responses:
+        default:
+          description: The profile for the user who is logged in.
+          schema:
+            $ref: '#/definitions/ProfileResponse'
+  /api/users/userShifts:
+    get:
+      description: The users shifts to display the users account page.
+      parameters: []
+      responses:
+        default:
+          description: The shifts for the user who is logged in.
+          schema:
+            $ref: '#/definitions/UserShiftsResponse'
+  /api/inference:
+    post:
+      description: Inferencing based on a specialized pretrained model(PTM) where,
+        the input is the face to be put on the media and inferenced with PTM. Alternativley
+        inferencing with a given base video and shift face with a non specialized
+        PTM.
+      parameters:
+      - description: The uuid of the shift model being inferenced with, whether or
+          not to use the pre trained model(PTM), and if using a prebuilt shift model
+          the uuid of that shift.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/InferenceRequest'
+      responses:
+        default:
+          description: Whether the shifting/inferencing went according to plan.
+          schema:
+            $ref: '#/definitions/InferenceResponse'
+  /api/inferenceStatus:
+    post:
+      description: The status of the current shift model while inferencing on the
+        original media and whether or not it has stopped inferencing.
+      parameters:
+      - description: The uuid of the shift model being inferenced with, whether or
+          not to use the pre trained model(PTM), and if using a prebuilt shift model
+          the uuid of that shift.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/InferenceRequest'
+      responses:
+        default:
+          description: A msg describing the current state of inferencing on the original
+            media, whether or not the inferencing has been stopped or finished, and
+            the image path to pass to the cdn.
+          schema:
+            $ref: '#/definitions/InferenceStatusReponse'
+  /api/content/image/{filename}:
+    get:
+      description: The image portion of the Shift CDN.
+      parameters:
+      - in: path
+        name: filename
+        required: true
+        type: string
+      responses: {}
+  /api/content/image/{filename}/{download}:
+    get:
+      description: The image portion of the Shift CDN.
+      parameters:
+      - in: path
+        name: filename
+        required: true
+        type: string
+      - in: path
+        name: download
+        required: true
+        type: string
+      responses: {}
+  /api/content/video/{filename}:
+    get:
+      description: The video portion of the Shift CDN.
+      parameters:
+      - in: path
+        name: filename
+        required: true
+        type: string
+      responses: {}
+  /api/content/video/{filename}/{download}:
+    get:
+      description: The video portion of the Shift CDN.
+      parameters:
+      - in: path
+        name: filename
+        required: true
+        type: string
+      - in: path
+        name: download
+        required: true
+        type: string
+      responses: {}
+  /api/shift/new:
+    get:
+      description: The new shifts to display on the home page.
+      parameters: []
+      responses:
+        default:
+          description: The newest shifts.
+          schema:
+            $ref: '#/definitions/NewShiftsResponse'
+  /api/shift/popular:
+    get:
+      description: The popular shifts to display on the home page.
+      parameters: []
+      responses:
+        default:
+          description: The top 10 most popular shifts.
+          schema:
+            $ref: '#/definitions/PopularShiftsResponse'
+  /api/shift/featured:
+    get:
+      description: The featured shifts to display on the home page.
+      parameters: []
+      responses:
+        default:
+          description: The currently featured shifts.
+          schema:
+            $ref: '#/definitions/FeaturedShiftsResponse'
+swagger: '2.0'
