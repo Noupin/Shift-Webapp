@@ -133,15 +133,17 @@ export function Load (props: IElevatedStateProps){
 
   }, [baseMedia, updateTitle, prevTitleIsFilename]);
 
+  function onTitleChange(event:React.ChangeEvent<HTMLInputElement>){
+    setTitle(event.target.value)
+    setTitleUpdated(false)
+    setUpdateTitle(false)
+    setPrevTitleIsFilename(false)
+  }
 
   var titleBar = (
     <Col xs={6}>
       <TextBox className="borderRadius-2 m-2 w-100 p-2" type="text" placeholder="Title"
-               onChange={(event) => {
-                setTitle(event.target.value)
-                setTitleUpdated(false)
-                setUpdateTitle(false)
-                setPrevTitleIsFilename(false)}}
+               onChange={onTitleChange}
                value={title}/>
     </Col>
   );
@@ -150,11 +152,7 @@ export function Load (props: IElevatedStateProps){
       <>
         <Col xs={5}>
           <TextBox className="borderRadius-2 my-2 w-100 py-2" type="text" placeholder="Title"
-                    onChange={(event) => {
-                      setTitle(event.target.value)
-                      setTitleUpdated(false)
-                      setUpdateTitle(false)
-                      setPrevTitleIsFilename(false)}}
+                    onChange={onTitleChange}
                     value={title} autoFocus/>
         </Col>
         <Col xs={1}>

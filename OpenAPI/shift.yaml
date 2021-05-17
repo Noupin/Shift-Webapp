@@ -245,6 +245,7 @@ paths:
       description: Given training data Shift specializes a model for the training
         data. Yeilds more relaisitic results than just an inference though it takes
         longer.
+      operationId: loadData
       parameters:
       - collectionFormat: multi
         in: header
@@ -260,11 +261,14 @@ paths:
             takes longer.
           schema:
             $ref: '#/definitions/LoadDataResponse'
+      tags:
+      - Load
   /api/train:
     post:
       description: Given training data Shift specializes a model for the training
         data. Yeilds more relaisitic results than just an inference though it takes
         longer.
+      operationId: train
       parameters:
       - description: The uuid of the shift model being inferenced with, the title
           of the shift that is being trained, whether or not the the PTM is being
@@ -281,12 +285,15 @@ paths:
           description: Whether the training has started or not.
           schema:
             $ref: '#/definitions/TrainResponse'
+      tags:
+      - Train
   /api/trainStatus:
     post:
       description: The status of of the current training task if called while training
         the task will switch to give an update image. After a certain amount of time
         the training will be completed automatically to allow for multiple users to
         train.
+      operationId: trainStatus
       parameters:
       - description: The uuid of the shift model being inferenced with, the title
           of the shift that is being trained, whether or not the the PTM is being
@@ -304,9 +311,12 @@ paths:
             has stopped, and encoded images to view on the front end.
           schema:
             $ref: '#/definitions/TrainStatusResponse'
+      tags:
+      - Train
   /api/stopTraining:
     post:
       description: Stop the training with the UUID of the shift model being trained.
+      operationId: stopTrain
       parameters:
       - description: The uuid of the shift model being inferenced with, the title
           of the shift that is being trained, whether or not the the PTM is being
@@ -323,9 +333,12 @@ paths:
           description: Whether the stop train signal was accepted.
           schema:
             $ref: '#/definitions/StopTrainResponse'
+      tags:
+      - Train
   /api/users/register:
     post:
       description: The regitration for the user.
+      operationId: register
       parameters:
       - description: The name the user has picked for their account, the password
           associated with the username of the user logging in, and the email to be
@@ -340,18 +353,24 @@ paths:
           description: The status of the register attempt.
           schema:
             $ref: '#/definitions/RegisterResponse'
+      tags:
+      - User
   /api/users/authenticated:
     get:
       description: Whether the user is logged in currently or not.
+      operationId: authenticated
       parameters: []
       responses:
         default:
           description: Whether the use is authenticated or not.
           schema:
             $ref: '#/definitions/AuthenticatedResponse'
+      tags:
+      - User
   /api/users/login:
     post:
       description: The login for the user.
+      operationId: login
       parameters:
       - description: The username or email of the user logging in, the password associated
           with the username of the user logging in, and whether or not the user should
@@ -366,39 +385,51 @@ paths:
           description: The status of the login attempt.
           schema:
             $ref: '#/definitions/LoginResponse'
+      tags:
+      - User
   /api/users/logout:
     get:
       description: Logs the user out.
+      operationId: logout
       parameters: []
       responses:
         default:
           description: The status of the user logging out.
           schema:
             $ref: '#/definitions/LogoutResponse'
+      tags:
+      - User
   /api/users/profile:
     get:
       description: The users profile to display the on users the account page
+      operationId: profile
       parameters: []
       responses:
         default:
           description: The profile for the user who is logged in.
           schema:
             $ref: '#/definitions/ProfileResponse'
+      tags:
+      - User
   /api/users/userShifts:
     get:
       description: The users shifts to display the users account page.
+      operationId: userShfits
       parameters: []
       responses:
         default:
           description: The shifts for the user who is logged in.
           schema:
             $ref: '#/definitions/UserShiftsResponse'
+      tags:
+      - User
   /api/inference:
     post:
       description: Inferencing based on a specialized pretrained model(PTM) where,
         the input is the face to be put on the media and inferenced with PTM. Alternativley
         inferencing with a given base video and shift face with a non specialized
         PTM.
+      operationId: inference
       parameters:
       - description: The uuid of the shift model being inferenced with, whether or
           not to use the pre trained model(PTM), and if using a prebuilt shift model
@@ -413,10 +444,13 @@ paths:
           description: Whether the shifting/inferencing went according to plan.
           schema:
             $ref: '#/definitions/InferenceResponse'
+      tags:
+      - Inference
   /api/inferenceStatus:
     post:
       description: The status of the current shift model while inferencing on the
         original media and whether or not it has stopped inferencing.
+      operationId: inferenceStatus
       parameters:
       - description: The uuid of the shift model being inferenced with, whether or
           not to use the pre trained model(PTM), and if using a prebuilt shift model
@@ -433,18 +467,24 @@ paths:
             the image path to pass to the cdn.
           schema:
             $ref: '#/definitions/InferenceStatusReponse'
+      tags:
+      - Inference
   /api/content/image/{filename}:
     get:
       description: The image portion of the Shift CDN.
+      operationId: image
       parameters:
       - in: path
         name: filename
         required: true
         type: string
       responses: {}
+      tags:
+      - CDN
   /api/content/image/{filename}/{download}:
     get:
       description: The image portion of the Shift CDN.
+      operationId: image
       parameters:
       - in: path
         name: filename
@@ -455,18 +495,24 @@ paths:
         required: true
         type: string
       responses: {}
+      tags:
+      - CDN
   /api/content/video/{filename}:
     get:
       description: The video portion of the Shift CDN.
+      operationId: video
       parameters:
       - in: path
         name: filename
         required: true
         type: string
       responses: {}
+      tags:
+      - CDN
   /api/content/video/{filename}/{download}:
     get:
       description: The video portion of the Shift CDN.
+      operationId: video
       parameters:
       - in: path
         name: filename
@@ -477,31 +523,42 @@ paths:
         required: true
         type: string
       responses: {}
+      tags:
+      - CDN
   /api/shift/new:
     get:
       description: The new shifts to display on the home page.
+      operationId: new
       parameters: []
       responses:
         default:
           description: The newest shifts.
           schema:
             $ref: '#/definitions/NewShiftsResponse'
+      tags:
+      - FPN
   /api/shift/popular:
     get:
       description: The popular shifts to display on the home page.
+      operationId: popular
       parameters: []
       responses:
         default:
           description: The top 10 most popular shifts.
           schema:
             $ref: '#/definitions/PopularShiftsResponse'
+      tags:
+      - FPN
   /api/shift/featured:
     get:
       description: The featured shifts to display on the home page.
+      operationId: featured
       parameters: []
       responses:
         default:
           description: The currently featured shifts.
           schema:
             $ref: '#/definitions/FeaturedShiftsResponse'
+      tags:
+      - FPN
 swagger: '2.0'
