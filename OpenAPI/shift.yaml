@@ -237,11 +237,14 @@ definitions:
         type: array
     type: object
 info:
+  description: Shift Server API documentation
   title: Shift
   version: 1.0.0
 paths:
   /api/loadData:
     post:
+      consumes:
+      - multipart/form-data
       description: Given training data Shift specializes a model for the training
         data. Yeilds more relaisitic results than just an inference though it takes
         longer.
@@ -478,51 +481,63 @@ paths:
         name: filename
         required: true
         type: string
-      responses: {}
+      responses:
+        default:
+          description: ''
+          schema: {}
       tags:
       - CDN
   /api/content/image/{filename}/{download}:
     get:
       description: The image portion of the Shift CDN.
-      operationId: image
+      operationId: getImageDownload
       parameters:
-      - in: path
-        name: filename
-        required: true
-        type: string
       - in: path
         name: download
         required: true
         type: string
-      responses: {}
+      - in: path
+        name: filename
+        required: true
+        type: string
+      responses:
+        default:
+          description: ''
+          schema: {}
       tags:
       - CDN
   /api/content/video/{filename}:
     get:
       description: The video portion of the Shift CDN.
-      operationId: video
+      operationId: getVideo
       parameters:
       - in: path
         name: filename
         required: true
         type: string
-      responses: {}
+      responses:
+        default:
+          description: ''
+          schema: {}
       tags:
       - CDN
   /api/content/video/{filename}/{download}:
     get:
       description: The video portion of the Shift CDN.
-      operationId: video
+      operationId: getVideoDownload
       parameters:
-      - in: path
-        name: filename
-        required: true
-        type: string
       - in: path
         name: download
         required: true
         type: string
-      responses: {}
+      - in: path
+        name: filename
+        required: true
+        type: string
+      responses:
+        default:
+          description: ''
+          schema: {}
       tags:
       - CDN
   /api/shift/new:
