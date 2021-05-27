@@ -24,7 +24,7 @@ export interface TrainStatusResponse {
      * @type {Array<string>}
      * @memberof TrainStatusResponse
      */
-    exhibit: Array<string>;
+    exhibit?: Array<string> | null;
     /**
      * 
      * @type {string}
@@ -36,7 +36,7 @@ export interface TrainStatusResponse {
      * @type {boolean}
      * @memberof TrainStatusResponse
      */
-    stopped: boolean;
+    stopped?: boolean | null;
 }
 
 export function TrainStatusResponseFromJSON(json: any): TrainStatusResponse {
@@ -49,9 +49,9 @@ export function TrainStatusResponseFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'exhibit': json['exhibit'],
+        'exhibit': !exists(json, 'exhibit') ? undefined : json['exhibit'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
-        'stopped': json['stopped'],
+        'stopped': !exists(json, 'stopped') ? undefined : json['stopped'],
     };
 }
 

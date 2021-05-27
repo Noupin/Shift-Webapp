@@ -7,7 +7,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
-import { ITrainRequestReturn } from "../../Interfaces/Train";
+import { CombinedTrainResponse } from "../../Interfaces/CombinedTrain";
 import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { useFetch } from "../../Hooks/Fetch";
@@ -15,7 +15,7 @@ import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
-let trainResponse: ITrainRequestReturn = {msg: "", exhibit: [], stopped: false}
+let trainResponse: CombinedTrainResponse = {msg: "", exhibit: [], stopped: false}
 
 
 export function AdvancedTrain (props: IElevatedStateProps){
@@ -37,7 +37,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
   const history = useHistory()
 
   const [fetching, setFetching] = useState(true);
-  const [trainResponse, setTrainResponse] = useState<ITrainRequestReturn>();
+  const [trainResponse, setTrainResponse] = useState<CombinedTrainResponse>();
   const [converting, setConverting] = useState(false);
 
   let requestOptions: RequestInit = {};
@@ -67,8 +67,8 @@ export function AdvancedTrain (props: IElevatedStateProps){
   useEffect(() => {
     if(!converting || !trainResponse) return;
 
-    setElevatedState((prev) => ({...prev, msg: trainResponse!.msg}))
-    setImageString(trainResponse.exhibit[0]);
+    setElevatedState((prev) => ({...prev, msg: trainResponse!.msg!}))
+    setImageString(trainResponse.exhibit![0]);
   }, [trainResponse]);
 
   useEffect(() => {

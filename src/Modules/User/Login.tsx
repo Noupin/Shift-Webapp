@@ -1,23 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
+import { UserAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
+import { useAuthenticate } from '../../Hooks/Authenticate';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
-import { IAuthRequestReturn } from "../../Interfaces/Authenticate";
-import { useFetch } from "../../Hooks/Fetch";
-import { useAuthenticate } from '../../Helpers/AuthenticateUser';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-
-
-interface loginRequestReturn {
-  msg: string
-}
+import { LoginResponse, LoginRequest, LoginOperationRequest, AuthenticatedResponse } from '../../Swagger';
 
 
 export function Login (props: IElevatedStateProps){
@@ -28,47 +23,49 @@ export function Login (props: IElevatedStateProps){
   const [rememberMe, setRememberMe] = useState(false);
 
   const [fetching, setFetching] = useState(false);
-  const [loginResponse, setLoginResponse] = useState<loginRequestReturn>();
+  const [loginResponse, setLoginResponse] = useState<LoginResponse>();
   const [authenticating, setAuthenticating] = useState(false);
-  const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>();
+  const [authenticatedResponse, setAuthenticatedResponse] = useState<AuthenticatedResponse>();
 
   const history = useHistory();
 
-  const requestOptions = useRef<RequestInit>({});
-
-  const fetchLogin = useFetch(setFetching, setElevatedState, setLoginResponse, `/api/users/login`, () => requestOptions.current, loginResponse);
   const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse);
 
 
   useEffect(() => {
     if(!fetching) return;
 
-    requestOptions.current = {
-      method: 'POST',
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({usernameOrEmail: usernameOrEmail,
-                            password: password,
-                            remember: rememberMe})
-    };
+    const loginRequestParams: LoginRequest = {
+      usernameOrEmail: usernameOrEmail,
+      password: password,
+      remember: rememberMe
+    }
+    const loginBody: LoginOperationRequest = {
+      body: loginRequestParams
+    }
 
-    fetchLogin()
+    UserAPIInstance.login(loginBody).then((value) => {
+      setLoginResponse(value)
+    })
     setAuthenticating(true)
   }, [fetching]);
 
   useEffect(() => {
     if(!authenticating || !loginResponse) return;
-    setElevatedState((prev) => ({...prev, msg: loginResponse!.msg}));
+
+    setElevatedState((prev) => ({...prev, msg: loginResponse.msg!}));
     auth()
   }, [authenticating, loginResponse]);
 
   useEffect(() => {
     if(!authenticatedResponse) return;
+
     setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse.authenticated}))
   }, [authenticatedResponse]);
 
   useEffect(() => {
     if(!elevatedState().authenticated) return;
+
     history.push("/")
   }, [elevatedState().authenticated]);
 

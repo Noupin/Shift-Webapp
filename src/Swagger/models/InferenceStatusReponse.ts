@@ -24,7 +24,7 @@ export interface InferenceStatusReponse {
      * @type {string}
      * @memberof InferenceStatusReponse
      */
-    imagePath: string;
+    imagePath?: string | null;
     /**
      * 
      * @type {string}
@@ -36,7 +36,7 @@ export interface InferenceStatusReponse {
      * @type {boolean}
      * @memberof InferenceStatusReponse
      */
-    stopped: boolean;
+    stopped?: boolean | null;
 }
 
 export function InferenceStatusReponseFromJSON(json: any): InferenceStatusReponse {
@@ -49,9 +49,9 @@ export function InferenceStatusReponseFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'imagePath': json['imagePath'],
+        'imagePath': !exists(json, 'imagePath') ? undefined : json['imagePath'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
-        'stopped': json['stopped'],
+        'stopped': !exists(json, 'stopped') ? undefined : json['stopped'],
     };
 }
 

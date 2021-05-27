@@ -6,21 +6,11 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Masonry from 'react-masonry-css';
 
 //First Party Imports
-import { useFetch } from "../../Hooks/Fetch";
-import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { User } from '../../Interfaces/User';
-import { Shift } from '../../Interfaces/Shift';
+import { UserAPIInstance } from '../../Helpers/Api';
 import { Media } from '../../Components/Media/Media';
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
-
-
-interface profileRequestReturn {
-  profile: User,
-}
-
-interface userShiftsRequestReturn {
-  shifts: Shift[]
-}
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
+import { Shift, ProfileResponse, UserShiftsResponse } from '../../Swagger';
 
 
 export function Account (props: IElevatedStateProps){
@@ -28,36 +18,24 @@ export function Account (props: IElevatedStateProps){
 
   const [username, setUsername] = useState("");
 
-  const [fetchingProfile, setFetchingProfile] = useState(true);
-  const [profileResponse, setProfileResponse] = useState<profileRequestReturn>();
-
-  const [fetchingUserShifts, setFetchingUserShifts] = useState(true);
-  const [userShiftsResponse, setUserShiftsResponse] = useState<userShiftsRequestReturn>();
+  const [profileResponse, setProfileResponse] = useState<ProfileResponse>();
+  const [userShiftsResponse, setUserShiftsResponse] = useState<UserShiftsResponse>();
 
   const [profilePictureURL, setProfilePictureURL] = useState("");
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
   
-
-  let requestOptions: RequestInit = {method: 'GET',
-                                     credentials: "include",
-                                     headers: { 'Content-Type': 'application/json' }
-                                    };
-
-
-  const fetchProfile = useFetch(setFetchingProfile, setElevatedState, setProfileResponse, `/api/users/profile`, () => requestOptions, profileResponse);
-  const fetchUserShifts = useFetch(setFetchingUserShifts, setElevatedState, setUserShiftsResponse, `/api/users/userShifts`, () => requestOptions, userShiftsResponse);
+  
+  useEffect(() => {
+    UserAPIInstance.profile().then((value) => {
+      setProfileResponse(value!)
+    })
+  }, []);
 
   useEffect(() => {
-    if(!fetchingProfile) return;
-
-    fetchProfile()
-  }, [fetchingProfile]);
-
-  useEffect(() => {
-    if(!fetchingUserShifts) return;
-
-    fetchUserShifts()
-  }, [fetchingUserShifts]);
+    UserAPIInstance.userShifts().then((value) => {
+      setUserShiftsResponse(value!)
+    })
+  }, []);
 
   useEffect(() => {
     if(!profileResponse || !profileResponse.profile) return;

@@ -45,6 +45,10 @@ export class LoadApi extends runtime.BaseAPI {
             headerParameters['trainingDataTypes'] = requestParameters.trainingDataTypes.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
+
         const response = await this.request({
             path: `/api/loadData`,
             method: 'POST',

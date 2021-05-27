@@ -1,24 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
+import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 
 
 //First Party Imports
-import { Button } from '../../Components/Button/Button';
-import { Media } from '../../Components/Media/Media';
-import { useFetch } from "../../Hooks/Fetch";
 import { useInterval } from "../../Hooks/Interval";
+import { Media } from '../../Components/Media/Media';
+import { Button } from '../../Components/Button/Button';
+import { InferenceAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-
-
-interface shiftRequestReturn {
-	msg: string,
-	stopped: boolean
-	imagePath: string
-}
+import { CombinedInferenceResponse } from '../../Interfaces/CombinedInference';
+import { InferenceOperationRequest, InferenceRequest, InferenceStatusRequest } from '../../Swagger';
 
 
 export function Shift (props: IElevatedStateProps){
@@ -29,58 +24,65 @@ export function Shift (props: IElevatedStateProps){
 	const [shifting, setShifting] = useState(true);
 	const [stopShifting, setStopShifting] = useState(false);
 	const [updating, setUpdating] = useState(false);
-  const [shiftResponse, setShiftResponse] = useState<shiftRequestReturn>();
+  const [inferenceResponse, setInferenceResponse] = useState<CombinedInferenceResponse>();
 	const [updateProgress, setUpdateProgress] = useState(false);
-
-	let requestOptions: RequestInit = {};
-
-	function updateRequestOptions(method: string="POST"){
-    requestOptions = {
-			method: method,
-			credentials: "include",
-			headers: { 'Content-Type': 'application/json'},
-			body: method === "POST" ? JSON.stringify({shiftUUID: elevatedState().shiftUUID,
-															  usePTM: elevatedState().usePTM,
-															  prebuiltShiftModel: elevatedState().prebuiltShiftModel}) : null
-		};
-  }
-
-
-	const fetchInference = useFetch(setShifting, setElevatedState, setShiftResponse, `/api/inference`, () => requestOptions, shiftResponse)
-	const updateStatus = useFetch(setUpdateProgress, setElevatedState, setShiftResponse, `/api/inferenceStatus`, () => requestOptions, shiftResponse)
 
 
 	useEffect(() => {
 		if(!shifting) return;
 
-		updateRequestOptions();
+		const inferenceRequestParams: InferenceRequest = {
+      shiftUUID: elevatedState().shiftUUID,
+			usePTM: elevatedState().usePTM,
+			prebuiltShiftModel: elevatedState().prebuiltShiftModel
+    };
+    const inferenceBody: InferenceOperationRequest = {
+      body: inferenceRequestParams
+    }
 
-		fetchInference();
+    InferenceAPIInstance.inference(inferenceBody).then((value) => {
+      setInferenceResponse(value)
+    })
+
 		setUpdating(true);
+		setShifting(false)
 	}, [shifting]);
 
 	useEffect(() => {
-		if(!shiftResponse) return;
+		if(!inferenceResponse) return;
 
-		setElevatedState((prev) => ({...prev, msg: shiftResponse.msg}));
-	}, [shiftResponse]);
+		setElevatedState((prev) => ({...prev, msg: inferenceResponse.msg!}));
+	}, [inferenceResponse]);
 
-	useInterval(() => {
+	useInterval(async () => {
 		if(updateProgress) return;
 
 		if(updating || !stopShifting){
-			updateRequestOptions();
-			updateStatus();
+			setUpdateProgress(true)
 
-			if(shiftResponse == null){
+			const inferenceStatusRequestParams: InferenceRequest = {
+				shiftUUID: elevatedState().shiftUUID,
+				usePTM: elevatedState().usePTM,
+				prebuiltShiftModel: elevatedState().prebuiltShiftModel
+			};
+			const inferenceStatusBody: InferenceStatusRequest = {
+				body: inferenceStatusRequestParams
+			}
+	
+			await InferenceAPIInstance.inferenceStatus(inferenceStatusBody).then((value) => {
+				setInferenceResponse(value)
+			})
+			setUpdateProgress(false)
+
+			if(inferenceResponse == null){
 				return;
 			}
 
-			if(shiftResponse.imagePath){
-				setShiftedMedia(`/api/content/image/${shiftResponse.imagePath}`)
+			if(inferenceResponse.imagePath!){
+				setShiftedMedia(`/api/content/image/${inferenceResponse.imagePath!}`)
 			}
 
-			setStopShifting(shiftResponse.stopped);
+			setStopShifting(inferenceResponse.stopped!);
 
 			if(stopShifting){
 				setUpdating(false);

@@ -117,6 +117,10 @@ export class UserApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
+
         const response = await this.request({
             path: `/api/users/logout`,
             method: 'GET',
@@ -142,6 +146,10 @@ export class UserApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
 
         const response = await this.request({
             path: `/api/users/profile`,
@@ -193,10 +201,14 @@ export class UserApi extends runtime.BaseAPI {
     /**
      * The users shifts to display the users account page.
      */
-    async userShfitsRaw(): Promise<runtime.ApiResponse<UserShiftsResponse>> {
+    async userShiftsRaw(): Promise<runtime.ApiResponse<UserShiftsResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
 
         const response = await this.request({
             path: `/api/users/userShifts`,
@@ -211,8 +223,8 @@ export class UserApi extends runtime.BaseAPI {
     /**
      * The users shifts to display the users account page.
      */
-    async userShfits(): Promise<UserShiftsResponse> {
-        const response = await this.userShfitsRaw();
+    async userShifts(): Promise<UserShiftsResponse> {
+        const response = await this.userShiftsRaw();
         return await response.value();
     }
 

@@ -10,7 +10,6 @@ import { Container, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
 import { IElevatedPageState } from "./Interfaces/PageState";
-import { IAuthRequestReturn } from "./Interfaces/Authenticate"
 import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
 import { Account } from './Modules/User/Account';
@@ -22,8 +21,9 @@ import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Shift } from "./Modules/Shift/Shift";
 import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
-import { useAuthenticate } from "./Helpers/AuthenticateUser";
+import { useAuthenticate } from "./Hooks/Authenticate";
 import { defaultShiftTitle } from "./constants"
+import { AuthenticatedResponse } from './Swagger';
 
 
 export default function App() {
@@ -45,7 +45,7 @@ export default function App() {
   const [showMsg, setShowMsg] = useState(false);
 
   const [fetching, setFetching] = useState(true)
-  const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>()
+  const [authenticatedResponse, setAuthenticatedResponse] = useState<AuthenticatedResponse>()
   
     
   const auth = useAuthenticate(setFetching, setElevatedState, setAuthenticatedResponse)

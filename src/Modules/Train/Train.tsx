@@ -6,12 +6,13 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
 //First Party Imports
-import { ITrainRequestReturn } from "../../Interfaces/Train";
-import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
-import { useFetch } from "../../Hooks/Fetch";
 import { useConvertImage } from "../../Hooks/Images";
+import { TrainAPIInstance } from '../../Helpers/Api';
+import { Button } from '../../Components/Button/Button';
+import { CombinedTrainResponse } from '../../Interfaces/CombinedTrain';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
+import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
 
 
 export function Train (props: IElevatedStateProps){
@@ -29,60 +30,75 @@ export function Train (props: IElevatedStateProps){
 
   const history = useHistory()
 
-  const [training, setTraining] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [stop, setStop] = useState(false);
-  const [trainResponse, setTrainResponse] = useState<ITrainRequestReturn>();
+  const [trainResponse, setTrainResponse] = useState<CombinedTrainResponse>();
   const [, setConverting] = useState(false);
 
-  let requestOptions: RequestInit = {};
-
-  function updateRequestOptions(){
-    requestOptions = {
-      method: 'POST',
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({shiftUUID: elevatedState().shiftUUID,
-                            shiftTitle: elevatedState().shiftTitle,
-                            usePTM: elevatedState().usePTM,
-                            prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-                            statusInterval: elevatedState().trainStatusInterval,
-                            trainType: 'basic'})
-    };
-  }
-
-
-  const startTraining = useFetch(setTraining, setElevatedState, setTrainResponse, `/api/train`, () => requestOptions, trainResponse)
-  const updateStatus = useFetch(setUpdating, setElevatedState, setTrainResponse, `/api/trainStatus`, () => requestOptions, trainResponse)
-  const stopTraining = useFetch(setStop, setElevatedState, setTrainResponse, `/api/stopTraining`, () => requestOptions, trainResponse)
   const convertImage = useConvertImage(setConverting, setElevatedState, setImage, () => imageString);
 
 
   //Start training the AI on the backend
   useEffect(() => {
-    if(!training) return;
+    const trainRequestParams: TrainRequest = {
+      shiftUUID: elevatedState().shiftUUID,
+      shiftTitle: elevatedState().shiftTitle,
+      usePTM: elevatedState().usePTM,
+      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      statusInterval: elevatedState().trainStatusInterval,
+      trainType: 'basic'
+    };
+    const trainBody: TrainOperationRequest = {
+      body: trainRequestParams
+    }
 
-    updateRequestOptions()
-
-    startTraining()
-  }, [training]);
+    TrainAPIInstance.train(trainBody).then((value) => {
+      setTrainResponse(value)
+    })
+  }, []);
 
   //Get the updated shift image
   useEffect(() => {
     if(!updating) return;
 
-    updateRequestOptions()
+    const trainStatusRequestParams: TrainRequest = {
+      shiftUUID: elevatedState().shiftUUID,
+      shiftTitle: elevatedState().shiftTitle,
+      usePTM: elevatedState().usePTM,
+      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      statusInterval: elevatedState().trainStatusInterval,
+      trainType: 'basic'
+    };
+    const trainStatusBody: TrainStatusRequest = {
+      body: trainStatusRequestParams
+    }
 
-    updateStatus()
+    TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
+      setTrainResponse(value)
+    })
+    setUpdating(false)
   }, [updating]);
 
   //Stop training the AI on the backend
   useEffect(() => {
     if(!stop) return;
 
-    updateRequestOptions()
+    const stopTrainRequestParams: TrainRequest = {
+      shiftUUID: elevatedState().shiftUUID,
+      shiftTitle: elevatedState().shiftTitle,
+      usePTM: elevatedState().usePTM,
+      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      statusInterval: elevatedState().trainStatusInterval,
+      trainType: 'basic'
+    };
+    const stopTrainBody: StopTrainRequest = {
+      body: stopTrainRequestParams
+    }
 
-    stopTraining();
+    TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
+      setTrainResponse(value)
+    })
+
     setStopping(true);
   }, [stop]);
 
@@ -92,8 +108,21 @@ export function Train (props: IElevatedStateProps){
 
     const interval = setInterval(() => {
       if(stopping && !stopTrain){
-        updateRequestOptions();
-        updateStatus();
+        const trainStatusRequestParams: TrainRequest = {
+          shiftUUID: elevatedState().shiftUUID,
+          shiftTitle: elevatedState().shiftTitle,
+          usePTM: elevatedState().usePTM,
+          prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+          statusInterval: elevatedState().trainStatusInterval,
+          trainType: 'basic'
+        };
+        const trainStatusBody: TrainStatusRequest = {
+          body: trainStatusRequestParams
+        }
+    
+        TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
+          setTrainResponse(value)
+        })
       }
     }, 1000);
 
@@ -105,15 +134,15 @@ export function Train (props: IElevatedStateProps){
   useEffect(() => {
     if(!trainResponse) return;
 
-    setElevatedState((prev) => ({...prev, msg: trainResponse!.msg}));
+    setElevatedState((prev) => ({...prev, msg: trainResponse!.msg!}));
 
-    if(trainResponse!.stopped){
+    if(trainResponse.stopped!){
       setStopTrain(true);
     }
 
-    if(!trainResponse!.exhibit) return;
+    if(!trainResponse!.exhibit!) return;
 
-    setImageString(trainResponse!.exhibit[0]);
+    setImageString(trainResponse!.exhibit![0]);
   }, [trainResponse]);
 
   //Convert imageString to a useable image
@@ -133,6 +162,7 @@ export function Train (props: IElevatedStateProps){
       history.push("/advancedTrain")
     }
 
+    return;
   }, [stopTrain, advancedView])
 
 

@@ -7,50 +7,44 @@ import { NavLink } from 'react-router-dom';
 
 //First Party Imports
 import './Navbar.scss'
+import { UserAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
-import { useFetch } from "../../Hooks/Fetch";
-import { useAuthenticate } from '../../Helpers/AuthenticateUser';
-import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
+import { useAuthenticate } from '../../Hooks/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-
-
-interface logoutRequestReturn {
-  msg: string
-}
+import { AuthenticatedResponse, LogoutResponse } from '../../Swagger';
 
 
 export function UserElements (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
 
   const [authenticating, setAuthenticating] = useState(false);
-  const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>()
+  const [authenticatedResponse, setAuthenticatedResponse] = useState<AuthenticatedResponse>()
 
   const [fetching, setFetching] = useState(false);
-  const [logoutResponse, setLogoutResponse] = useState<logoutRequestReturn>();
+  const [logoutResponse, setLogoutResponse] = useState<LogoutResponse>();
 
-  const requestOptions: RequestInit = {
-    method: 'GET',
-    credentials: "include",
-    headers: { 'Content-Type': 'application/json'}
-  };
 
   const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse)
-  const fetchLogout = useFetch(setFetching, setElevatedState, setLogoutResponse, `/api/users/logout`, () => requestOptions, logoutResponse)
 
   useEffect(() => {
     if(!fetching) return;
-    fetchLogout()
+
+    UserAPIInstance.logout().then((value) => {
+      setLogoutResponse(value)
+    })
     setAuthenticating(true)
   }, [fetching]);
 
   useEffect(() => {
     if (!authenticating || !logoutResponse) return;
-    setElevatedState((prev) => ({...prev, msg: logoutResponse!.msg}))
+
+    setElevatedState((prev) => ({...prev, msg: logoutResponse.msg!}))
     auth()
   }, [authenticating, logoutResponse]);
 
   useEffect(() => {
     if (!authenticatedResponse) return;
+
     setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse!.authenticated}))
   }, [authenticatedResponse]);
 

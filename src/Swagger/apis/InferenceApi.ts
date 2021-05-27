@@ -49,6 +49,10 @@ export class InferenceApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
+
         const response = await this.request({
             path: `/api/inference`,
             method: 'POST',
@@ -77,6 +81,10 @@ export class InferenceApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
 
         const response = await this.request({
             path: `/api/inferenceStatus`,

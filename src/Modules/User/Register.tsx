@@ -1,22 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
+import { UserAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
+import { useAuthenticate } from '../../Hooks/Authenticate';
 import { TextBox } from '../../Components/TextBox/TextBox';
-import { useAuthenticate } from '../../Helpers/AuthenticateUser';
-import { useFetch } from '../../Hooks/Fetch';
-import { IAuthRequestReturn } from '../../Interfaces/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-
-
-interface registerRequestReturn {
-  msg: string
-}
+import { AuthenticatedResponse, RegisterOperationRequest, RegisterRequest, RegisterResponse } from '../../Swagger';
 
 
 export function Register (props: IElevatedStateProps){
@@ -28,17 +23,13 @@ export function Register (props: IElevatedStateProps){
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [fetching, setFetching] = useState(false);
-  const [registerResponse, setRegisterResponse] = useState<registerRequestReturn>();
+  const [registerResponse, setRegisterResponse] = useState<RegisterResponse>();
   const [authenticating, setAuthenticating] = useState(false);
-  const [authenticatedResponse, setAuthenticatedResponse] = useState<IAuthRequestReturn>();
+  const [authenticatedResponse, setAuthenticatedResponse] = useState<AuthenticatedResponse>();
 
   const history = useHistory();
 
 
-  const requestOptions = useRef<RequestInit>({});
-
-
-  const fetchRegister = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/register`, () => requestOptions.current, registerResponse)
   const auth = useAuthenticate(setAuthenticating, props.setElevatedState, setAuthenticatedResponse)
 
 
@@ -51,21 +42,25 @@ export function Register (props: IElevatedStateProps){
       return;
     }
 
-    requestOptions.current = {
-      method: 'POST',
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: username, password: password, email: email})
-    };
+    const registerReqeustParams: RegisterRequest = {
+      username: username,
+      password: password,
+      email: email
+    }
+    const registerBody: RegisterOperationRequest = {
+      body: registerReqeustParams
+    }
 
-    fetchRegister()
+    UserAPIInstance.register(registerBody).then((value) => {
+      setRegisterResponse(value)
+    })
     setAuthenticating(true)
   }, [fetching]);
 
   useEffect(() => {
     if(!authenticating || !registerResponse) return;
 
-    setElevatedState((prev) => ({...prev, msg: registerResponse!.msg}))
+    setElevatedState((prev) => ({...prev, msg: registerResponse.msg!}))
     auth()
   }, [authenticating, registerResponse]);
 
@@ -77,6 +72,7 @@ export function Register (props: IElevatedStateProps){
 
   useEffect(() => {
     if(!elevatedState().authenticated) return;
+
     history.push("/")
   }, [elevatedState().authenticated]);
 
