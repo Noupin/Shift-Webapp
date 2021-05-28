@@ -254,6 +254,14 @@ paths:
       operationId: loadData
       parameters:
       - collectionFormat: multi
+        in: formData
+        items:
+          format: binary
+          type: string
+        name: requestFiles
+        required: true
+        type: array
+      - collectionFormat: multi
         in: header
         items:
           type: string
@@ -514,11 +522,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -548,11 +556,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:

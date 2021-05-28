@@ -22,6 +22,7 @@ import {
 
 export interface LoadDataRequest {
     trainingDataTypes: Array<string>;
+    requestFiles: Array<Blob>;
 }
 
 /**
@@ -37,6 +38,10 @@ export class LoadApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('trainingDataTypes','Required parameter requestParameters.trainingDataTypes was null or undefined when calling loadData.');
         }
 
+        if (requestParameters.requestFiles === null || requestParameters.requestFiles === undefined) {
+            throw new runtime.RequiredError('requestFiles','Required parameter requestParameters.requestFiles was null or undefined when calling loadData.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -49,11 +54,34 @@ export class LoadApi extends runtime.BaseAPI {
             headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
         }
 
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.requestFiles) {
+            requestParameters.requestFiles.forEach((element) => {
+                formParams.append('requestFiles', element as any);
+            })
+        }
+
         const response = await this.request({
             path: `/api/loadData`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: formParams,
         });
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LoadDataResponseFromJSON(jsonValue));

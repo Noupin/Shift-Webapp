@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
@@ -14,16 +14,12 @@ import { validMediaFileExtesnions, defaultShiftTitle } from "../../constants";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { validateFileList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
-import { useFetch } from "../../Hooks/Fetch";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { IElevatedPageState } from '../../Interfaces/PageState';
 import { TextBox } from '../../Components/TextBox/TextBox';
+import { LoadDataResponse, LoadDataRequest } from '../../Swagger';
+import { LoadAPIInstance } from '../../Helpers/Api';
 
-
-interface loadRequestReturn {
-  msg: string,
-  shiftUUID: string
-}
 
 function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<IElevatedPageState>>, setFiles: React.Dispatch<React.SetStateAction<File[]>>){
   const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
@@ -36,9 +32,6 @@ function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.D
   setFiles((current) => [...current, ...filteredFiles])
 }
 
-const ListOfFiles: File[] = [];
-const ListOfDataType: string[] = [];
-
 
 export function Load (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
@@ -48,25 +41,21 @@ export function Load (props: IElevatedStateProps){
   const [updateTitle, setUpdateTitle] = useState(true);
   const [titleUpdated, setTitleUpdated] = useState(false);
 
-  const [trainingDataTypes, setTrainingDataTypes] = useState(ListOfDataType);
-  const [files, setFiles] = useState(ListOfFiles);
-  const [baseFiles, setBaseFiles] = useState(ListOfFiles);
-  const [maskFiles, setMaskFiles] = useState(ListOfFiles);
+  const [trainingDataTypes, setTrainingDataTypes] = useState<string[]>([]);
+  const [files, setFiles] = useState<Blob[]>([]);
+  const [baseFiles, setBaseFiles] = useState<File[]>([]);
+  const [maskFiles, setMaskFiles] = useState<File[]>([]);
   const [baseMedia, setBaseMedia] = useState<File>();
 
   const history = useHistory()
 
   const [fetching, setFetching] = useState(false);
-  const [loadResponse, setLoadResponse] = useState<loadRequestReturn>();
+  const [loadResponse, setLoadResponse] = useState<LoadDataResponse>();
 
   const prevShiftUUID = sessionStorage["shiftUUID"];
-  const requestOptions = useRef<RequestInit>({})
-  const requestHeaders = new Headers();
-
-
-  const fetchLoad = useFetch(setFetching, setElevatedState, setLoadResponse, `/api/loadData`, () => requestOptions.current, loadResponse)
 
   
+  //Load Request
   useEffect(() => {
     setElevatedState((prev) => ({...prev, prebuiltShiftModel: "", shiftTitle: defaultShiftTitle}))
   }, []);
@@ -75,44 +64,40 @@ export function Load (props: IElevatedStateProps){
     if(!fetching) return;
 
     if(!baseMedia){
-      setElevatedState((prev) => ({...prev, msg: "Make sure you have a priamry base media"}))
+      setElevatedState((prev) => ({...prev, msg: "Make sure you have a primary base media"}))
       setFetching(false);
       return;
     }
 
-    const data = new FormData();
-    requestOptions.current = {
-      method: 'POST',
-      headers: {},
-      credentials: "include",
-    };
-
-    for (var fileIndex = 0; fileIndex < files.length; fileIndex++){
-      data.append(`file${fileIndex}`, files[fileIndex]);
+    const loadDataParams: LoadDataRequest = {
+      trainingDataTypes: trainingDataTypes,
+      requestFiles: files
     }
 
-    requestOptions.current.body = data;
-
-    requestHeaders.append('trainingDataTypes', JSON.stringify(trainingDataTypes));
-    requestOptions.current.headers = requestHeaders;
     setElevatedState((prev) => ({...prev, shiftTitle: title}))
   
-    fetchLoad()
+    LoadAPIInstance.loadData(loadDataParams).then((value) => {
+      setLoadResponse(value)
+    })
+    setFetching(false)
   }, [fetching]);
 
+  //Update values from response
   useEffect(() => {
     if(!loadResponse) return;
 
-    setElevatedState((prev) => ({...prev, shiftUUID: loadResponse!.shiftUUID}))
-    setElevatedState((prev) => ({...prev, msg: loadResponse!.msg}));
+    setElevatedState((prev) => ({...prev, shiftUUID: loadResponse.shiftUUID}))
+    setElevatedState((prev) => ({...prev, msg: loadResponse.msg!}));
   }, [loadResponse]);
 
+  //Change the page from button clicks
   useEffect(() => {
     if(!elevatedState().shiftUUID || elevatedState().shiftUUID === prevShiftUUID) return;
 
     history.push(`/${elevatedState().defaultTrainView === "basic" ? "train" : "advancedTrain"}`);
   }, [elevatedState().shiftUUID]);
 
+  //Update files to send
   useEffect(() => {
     if(!baseMedia) return;
 
