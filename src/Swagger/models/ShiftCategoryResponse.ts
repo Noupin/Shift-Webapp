@@ -23,22 +23,22 @@ import {
 /**
  * 
  * @export
- * @interface FeaturedShiftsResponse
+ * @interface ShiftCategoryResponse
  */
-export interface FeaturedShiftsResponse {
+export interface ShiftCategoryResponse {
     /**
      * 
      * @type {Array<Shift>}
-     * @memberof FeaturedShiftsResponse
+     * @memberof ShiftCategoryResponse
      */
     shifts?: Array<Shift>;
 }
 
-export function FeaturedShiftsResponseFromJSON(json: any): FeaturedShiftsResponse {
-    return FeaturedShiftsResponseFromJSONTyped(json, false);
+export function ShiftCategoryResponseFromJSON(json: any): ShiftCategoryResponse {
+    return ShiftCategoryResponseFromJSONTyped(json, false);
 }
 
-export function FeaturedShiftsResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): FeaturedShiftsResponse {
+export function ShiftCategoryResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShiftCategoryResponse {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -48,7 +48,7 @@ export function FeaturedShiftsResponseFromJSONTyped(json: any, ignoreDiscriminat
     };
 }
 
-export function FeaturedShiftsResponseToJSON(value?: FeaturedShiftsResponse | null): any {
+export function ShiftCategoryResponseToJSON(value?: ShiftCategoryResponse | null): any {
     if (value === undefined) {
         return undefined;
     }

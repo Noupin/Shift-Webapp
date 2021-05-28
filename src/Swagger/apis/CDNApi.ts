@@ -16,8 +16,8 @@
 import * as runtime from '../runtime';
 
 export interface GetImageDownloadRequest {
-    download: string;
     filename: string;
+    download: string;
 }
 
 export interface GetVideoRequest {
@@ -25,8 +25,8 @@ export interface GetVideoRequest {
 }
 
 export interface GetVideoDownloadRequest {
-    download: string;
     filename: string;
+    download: string;
 }
 
 export interface ImageRequest {
@@ -42,12 +42,12 @@ export class CDNApi extends runtime.BaseAPI {
      * The image portion of the Shift CDN.
      */
     async getImageDownloadRaw(requestParameters: GetImageDownloadRequest): Promise<runtime.ApiResponse<object>> {
-        if (requestParameters.download === null || requestParameters.download === undefined) {
-            throw new runtime.RequiredError('download','Required parameter requestParameters.download was null or undefined when calling getImageDownload.');
-        }
-
         if (requestParameters.filename === null || requestParameters.filename === undefined) {
             throw new runtime.RequiredError('filename','Required parameter requestParameters.filename was null or undefined when calling getImageDownload.');
+        }
+
+        if (requestParameters.download === null || requestParameters.download === undefined) {
+            throw new runtime.RequiredError('download','Required parameter requestParameters.download was null or undefined when calling getImageDownload.');
         }
 
         const queryParameters: any = {};
@@ -55,7 +55,7 @@ export class CDNApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/content/image/{filename}/{download}`.replace(`{${"download"}}`, encodeURIComponent(String(requestParameters.download))).replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
+            path: `/api/content/image/{filename}/{download}`.replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))).replace(`{${"download"}}`, encodeURIComponent(String(requestParameters.download))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -106,12 +106,12 @@ export class CDNApi extends runtime.BaseAPI {
      * The video portion of the Shift CDN.
      */
     async getVideoDownloadRaw(requestParameters: GetVideoDownloadRequest): Promise<runtime.ApiResponse<object>> {
-        if (requestParameters.download === null || requestParameters.download === undefined) {
-            throw new runtime.RequiredError('download','Required parameter requestParameters.download was null or undefined when calling getVideoDownload.');
-        }
-
         if (requestParameters.filename === null || requestParameters.filename === undefined) {
             throw new runtime.RequiredError('filename','Required parameter requestParameters.filename was null or undefined when calling getVideoDownload.');
+        }
+
+        if (requestParameters.download === null || requestParameters.download === undefined) {
+            throw new runtime.RequiredError('download','Required parameter requestParameters.download was null or undefined when calling getVideoDownload.');
         }
 
         const queryParameters: any = {};
@@ -119,7 +119,7 @@ export class CDNApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/content/video/{filename}/{download}`.replace(`{${"download"}}`, encodeURIComponent(String(requestParameters.download))).replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
+            path: `/api/content/video/{filename}/{download}`.replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))).replace(`{${"download"}}`, encodeURIComponent(String(requestParameters.download))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

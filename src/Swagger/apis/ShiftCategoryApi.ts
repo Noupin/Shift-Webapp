@@ -15,21 +15,25 @@
 
 import * as runtime from '../runtime';
 import {
-    FeaturedShiftsResponse,
-    FeaturedShiftsResponseFromJSON,
-    FeaturedShiftsResponseToJSON,
     NewShiftsResponse,
     NewShiftsResponseFromJSON,
     NewShiftsResponseToJSON,
     PopularShiftsResponse,
     PopularShiftsResponseFromJSON,
     PopularShiftsResponseToJSON,
+    ShiftCategoryResponse,
+    ShiftCategoryResponseFromJSON,
+    ShiftCategoryResponseToJSON,
 } from '../models';
+
+export interface CategoryRequest {
+    category: string;
+}
 
 /**
  * 
  */
-export class FPNApi extends runtime.BaseAPI {
+export class ShiftCategoryApi extends runtime.BaseAPI {
 
     /**
      * The new shifts to display on the home page.
@@ -40,7 +44,7 @@ export class FPNApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/new`,
+            path: `/api/shift/category/new`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -58,28 +62,32 @@ export class FPNApi extends runtime.BaseAPI {
     }
 
     /**
-     * The featured shifts to display on the home page.
+     * The shifts for the queried category to display on the home page.
      */
-    async featuredRaw(): Promise<runtime.ApiResponse<FeaturedShiftsResponse>> {
+    async categoryRaw(requestParameters: CategoryRequest): Promise<runtime.ApiResponse<ShiftCategoryResponse>> {
+        if (requestParameters.category === null || requestParameters.category === undefined) {
+            throw new runtime.RequiredError('category','Required parameter requestParameters.category was null or undefined when calling category.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/featured`,
+            path: `/api/shift/category/{category}`.replace(`{${"category"}}`, encodeURIComponent(String(requestParameters.category))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => FeaturedShiftsResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ShiftCategoryResponseFromJSON(jsonValue));
     }
 
     /**
-     * The featured shifts to display on the home page.
+     * The shifts for the queried category to display on the home page.
      */
-    async featured(): Promise<FeaturedShiftsResponse> {
-        const response = await this.featuredRaw();
+    async category(requestParameters: CategoryRequest): Promise<ShiftCategoryResponse> {
+        const response = await this.categoryRaw(requestParameters);
         return await response.value();
     }
 
@@ -92,7 +100,7 @@ export class FPNApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/popular`,
+            path: `/api/shift/category/popular`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

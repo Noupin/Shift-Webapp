@@ -10,12 +10,10 @@ definitions:
     required:
     - authenticated
     type: object
-  FeaturedShiftsResponse:
+  IndividualShiftResponse:
     properties:
-      shifts:
-        items:
-          $ref: '#/definitions/Shift'
-        type: array
+      shift:
+        $ref: '#/definitions/Shift'
     type: object
   InferenceRequest:
     properties:
@@ -150,6 +148,8 @@ definitions:
       uuid:
         format: uuid
         type: string
+      verified:
+        type: boolean
       views:
         type: integer
     required:
@@ -159,6 +159,13 @@ definitions:
     - title
     - userID
     - uuid
+    type: object
+  ShiftCategoryResponse:
+    properties:
+      shifts:
+        items:
+          $ref: '#/definitions/Shift'
+        type: array
     type: object
   StopTrainResponse:
     properties:
@@ -215,6 +222,8 @@ definitions:
     type: object
   User:
     properties:
+      admin:
+        type: boolean
       dateCreated:
         type: string
       email:
@@ -226,6 +235,8 @@ definitions:
         type: string
       username:
         type: string
+      verified:
+        type: boolean
     required:
     - email
     - password
@@ -522,11 +533,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -556,11 +567,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -569,7 +580,23 @@ paths:
           schema: {}
       tags:
       - CDN
-  /api/shift/new:
+  /api/shift/category/{category}:
+    get:
+      description: The shifts for the queried category to display on the home page.
+      operationId: Category
+      parameters:
+      - in: path
+        name: category
+        required: true
+        type: string
+      responses:
+        default:
+          description: The shifts for the queried category.
+          schema:
+            $ref: '#/definitions/ShiftCategoryResponse'
+      tags:
+      - Shift Category
+  /api/shift/category/new:
     get:
       description: The new shifts to display on the home page.
       operationId: new
@@ -580,8 +607,8 @@ paths:
           schema:
             $ref: '#/definitions/NewShiftsResponse'
       tags:
-      - FPN
-  /api/shift/popular:
+      - Shift Category
+  /api/shift/category/popular:
     get:
       description: The popular shifts to display on the home page.
       operationId: popular
@@ -592,19 +619,23 @@ paths:
           schema:
             $ref: '#/definitions/PopularShiftsResponse'
       tags:
-      - FPN
-  /api/shift/featured:
+      - Shift Category
+  /api/shift/{uuid}:
     get:
-      description: The featured shifts to display on the home page.
-      operationId: featured
-      parameters: []
+      description: The queried shift
+      operationId: indivdualShift
+      parameters:
+      - in: path
+        name: uuid
+        required: true
+        type: string
       responses:
         default:
-          description: The currently featured shifts.
+          description: The requested shift.
           schema:
-            $ref: '#/definitions/FeaturedShiftsResponse'
+            $ref: '#/definitions/IndividualShiftResponse'
       tags:
-      - FPN
+      - Shift
 securityDefinitions:
   UserAuth:
     in: header

@@ -30,7 +30,7 @@ export function Train (props: IElevatedStateProps){
 
   const history = useHistory()
 
-  const [updating, setUpdating] = useState(false);
+  const [updating, setUpdating] = useState(true);
   const [stop, setStop] = useState(false);
   const [trainResponse, setTrainResponse] = useState<CombinedTrainResponse>();
   const [, setConverting] = useState(false);

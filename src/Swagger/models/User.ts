@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface User {
     /**
      * 
+     * @type {boolean}
+     * @memberof User
+     */
+    admin?: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof User
      */
@@ -55,6 +61,12 @@ export interface User {
      * @memberof User
      */
     username: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof User
+     */
+    verified?: boolean;
 }
 
 export function UserFromJSON(json: any): User {
@@ -67,12 +79,14 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
     }
     return {
         
+        'admin': !exists(json, 'admin') ? undefined : json['admin'],
         'dateCreated': !exists(json, 'dateCreated') ? undefined : json['dateCreated'],
         'email': json['email'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'imagePath': !exists(json, 'imagePath') ? undefined : json['imagePath'],
         'password': json['password'],
         'username': json['username'],
+        'verified': !exists(json, 'verified') ? undefined : json['verified'],
     };
 }
 
@@ -85,12 +99,14 @@ export function UserToJSON(value?: User | null): any {
     }
     return {
         
+        'admin': value.admin,
         'dateCreated': value.dateCreated,
         'email': value.email,
         'id': value.id,
         'imagePath': value.imagePath,
         'password': value.password,
         'username': value.username,
+        'verified': value.verified,
     };
 }
 

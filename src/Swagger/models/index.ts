@@ -1,5 +1,5 @@
 export * from './AuthenticatedResponse';
-export * from './FeaturedShiftsResponse';
+export * from './IndividualShiftResponse';
 export * from './InferenceRequest';
 export * from './InferenceResponse';
 export * from './InferenceStatusReponse';
@@ -13,6 +13,7 @@ export * from './ProfileResponse';
 export * from './RegisterRequest';
 export * from './RegisterResponse';
 export * from './Shift';
+export * from './ShiftCategoryResponse';
 export * from './StopTrainResponse';
 export * from './TrainRequest';
 export * from './TrainResponse';

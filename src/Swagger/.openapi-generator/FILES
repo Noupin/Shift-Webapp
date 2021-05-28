@@ -1,13 +1,14 @@
 apis/CDNApi.ts
-apis/FPNApi.ts
 apis/InferenceApi.ts
 apis/LoadApi.ts
+apis/ShiftApi.ts
+apis/ShiftCategoryApi.ts
 apis/TrainApi.ts
 apis/UserApi.ts
 apis/index.ts
 index.ts
 models/AuthenticatedResponse.ts
-models/FeaturedShiftsResponse.ts
+models/IndividualShiftResponse.ts
 models/InferenceRequest.ts
 models/InferenceResponse.ts
 models/InferenceStatusReponse.ts
@@ -21,6 +22,7 @@ models/ProfileResponse.ts
 models/RegisterRequest.ts
 models/RegisterResponse.ts
 models/Shift.ts
+models/ShiftCategoryResponse.ts
 models/StopTrainResponse.ts
 models/TrainRequest.ts
 models/TrainResponse.ts

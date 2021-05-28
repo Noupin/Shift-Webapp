@@ -81,6 +81,12 @@ export interface Shift {
     uuid: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof Shift
+     */
+    verified?: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof Shift
      */
@@ -107,6 +113,7 @@ export function ShiftFromJSONTyped(json: any, ignoreDiscriminator: boolean): Shi
         'title': json['title'],
         'userID': json['userID'],
         'uuid': json['uuid'],
+        'verified': !exists(json, 'verified') ? undefined : json['verified'],
         'views': !exists(json, 'views') ? undefined : json['views'],
     };
 }
@@ -130,6 +137,7 @@ export function ShiftToJSON(value?: Shift | null): any {
         'title': value.title,
         'userID': value.userID,
         'uuid': value.uuid,
+        'verified': value.verified,
         'views': value.views,
     };
 }
