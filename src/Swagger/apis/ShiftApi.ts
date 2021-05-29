@@ -27,12 +27,6 @@ import {
     IndividualShiftPatchResponse,
     IndividualShiftPatchResponseFromJSON,
     IndividualShiftPatchResponseToJSON,
-    IndividualShiftPutRequest,
-    IndividualShiftPutRequestFromJSON,
-    IndividualShiftPutRequestToJSON,
-    IndividualShiftPutResponse,
-    IndividualShiftPutResponseFromJSON,
-    IndividualShiftPutResponseToJSON,
 } from '../models';
 
 export interface DeleteIndivdualShiftRequest {
@@ -46,11 +40,6 @@ export interface GetIndivdualShiftRequest {
 export interface PatchIndivdualShiftRequest {
     uuid: string;
     body?: IndividualShiftPatchRequest;
-}
-
-export interface PutIndivdualShiftRequest {
-    uuid: string;
-    body?: IndividualShiftPutRequest;
 }
 
 /**
@@ -148,39 +137,6 @@ export class ShiftApi extends runtime.BaseAPI {
      */
     async patchIndivdualShift(requestParameters: PatchIndivdualShiftRequest): Promise<IndividualShiftPatchResponse> {
         const response = await this.patchIndivdualShiftRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Updates/replaces the queried shift.
-     */
-    async putIndivdualShiftRaw(requestParameters: PutIndivdualShiftRequest): Promise<runtime.ApiResponse<IndividualShiftPutResponse>> {
-        if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
-            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling putIndivdualShift.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: IndividualShiftPutRequestToJSON(requestParameters.body),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualShiftPutResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates/replaces the queried shift.
-     */
-    async putIndivdualShift(requestParameters: PutIndivdualShiftRequest): Promise<IndividualShiftPutResponse> {
-        const response = await this.putIndivdualShiftRaw(requestParameters);
         return await response.value();
     }
 

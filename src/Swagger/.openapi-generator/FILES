@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 apis/CDNApi.ts
 apis/InferenceApi.ts
 apis/LoadApi.ts
@@ -12,8 +13,6 @@ models/IndividualShiftDeleteResponse.ts
 models/IndividualShiftGetResponse.ts
 models/IndividualShiftPatchRequest.ts
 models/IndividualShiftPatchResponse.ts
-models/IndividualShiftPutRequest.ts
-models/IndividualShiftPutResponse.ts
 models/InferenceRequest.ts
 models/InferenceResponse.ts
 models/InferenceStatusReponse.ts

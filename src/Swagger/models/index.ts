@@ -3,8 +3,6 @@ export * from './IndividualShiftDeleteResponse';
 export * from './IndividualShiftGetResponse';
 export * from './IndividualShiftPatchRequest';
 export * from './IndividualShiftPatchResponse';
-export * from './IndividualShiftPutRequest';
-export * from './IndividualShiftPutResponse';
 export * from './InferenceRequest';
 export * from './InferenceResponse';
 export * from './InferenceStatusReponse';

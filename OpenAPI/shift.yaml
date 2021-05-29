@@ -38,18 +38,6 @@ definitions:
         type: string
         x-nullable: true
     type: object
-  IndividualShiftPutRequest:
-    properties:
-      requestBody:
-        $ref: '#/definitions/Shift'
-    type: object
-  IndividualShiftPutResponse:
-    properties:
-      msg:
-        default: null
-        type: string
-        x-nullable: true
-    type: object
   InferenceRequest:
     properties:
       prebuiltShiftModel:
@@ -569,11 +557,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -603,11 +591,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -706,27 +694,6 @@ paths:
           description: The status message pertaing to the update/modify.
           schema:
             $ref: '#/definitions/IndividualShiftPatchResponse'
-      tags:
-      - Shift
-    put:
-      description: Updates/replaces the queried shift.
-      operationId: putIndivdualShift
-      parameters:
-      - description: The shift to update/replace the queried shift.
-        in: body
-        name: body
-        required: false
-        schema:
-          $ref: '#/definitions/IndividualShiftPutRequest'
-      - in: path
-        name: uuid
-        required: true
-        type: string
-      responses:
-        default:
-          description: The status message pertaing to the update/replace.
-          schema:
-            $ref: '#/definitions/IndividualShiftPutResponse'
       tags:
       - Shift
 securityDefinitions:
