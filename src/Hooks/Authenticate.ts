@@ -1,5 +1,5 @@
 //First Party Imports
-import { UserAPIInstance } from '../Helpers/Api';
+import { AuthenticateAPIInstance } from '../Helpers/Api';
 import { AuthenticatedResponse } from '../Swagger';
 import { IElevatedPageState } from '../Interfaces/PageState';
 
@@ -12,7 +12,7 @@ export function useAuthenticate(setLoading: React.Dispatch<React.SetStateAction<
     setLoading(true);
 
     try{
-      UserAPIInstance.authenticated().then((value) => {
+      AuthenticateAPIInstance.authenticated().then((value) => {
         setData(value);
         setLoading(false);
       })

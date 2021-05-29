@@ -3,6 +3,7 @@ export * from './IndividualShiftDeleteResponse';
 export * from './IndividualShiftGetResponse';
 export * from './IndividualShiftPatchRequest';
 export * from './IndividualShiftPatchResponse';
+export * from './IndividualUserGetResponse';
 export * from './InferenceRequest';
 export * from './InferenceResponse';
 export * from './InferenceStatusReponse';

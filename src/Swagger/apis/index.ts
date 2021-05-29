@@ -1,3 +1,4 @@
+export * from './AuthenticateApi';
 export * from './CDNApi';
 export * from './InferenceApi';
 export * from './LoadApi';

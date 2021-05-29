@@ -6,7 +6,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
-import { UserAPIInstance } from '../../Helpers/Api';
+import { AuthenticateAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
 import { useAuthenticate } from '../../Hooks/Authenticate';
 import { TextBox } from '../../Components/TextBox/TextBox';
@@ -51,7 +51,7 @@ export function Register (props: IElevatedStateProps){
       body: registerReqeustParams
     }
 
-    UserAPIInstance.register(registerBody).then((value) => {
+    AuthenticateAPIInstance.register(registerBody).then((value) => {
       setRegisterResponse(value)
     })
     setFetching(false)

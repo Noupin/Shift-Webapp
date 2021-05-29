@@ -38,6 +38,11 @@ definitions:
         type: string
         x-nullable: true
     type: object
+  IndividualUserGetResponse:
+    properties:
+      shift:
+        $ref: '#/definitions/User'
+    type: object
   InferenceRequest:
     properties:
       prebuiltShiftModel:
@@ -392,7 +397,7 @@ paths:
       - UserAuth: []
       tags:
       - Train
-  /api/users/register:
+  /api/authenticate/register:
     post:
       description: The regitration for the user.
       operationId: register
@@ -411,8 +416,8 @@ paths:
           schema:
             $ref: '#/definitions/RegisterResponse'
       tags:
-      - User
-  /api/users/authenticated:
+      - Authenticate
+  /api/authenticate/:
     get:
       description: Whether the user is logged in currently or not.
       operationId: authenticated
@@ -423,8 +428,8 @@ paths:
           schema:
             $ref: '#/definitions/AuthenticatedResponse'
       tags:
-      - User
-  /api/users/login:
+      - Authenticate
+  /api/authenticate/login:
     post:
       description: The login for the user.
       operationId: login
@@ -443,8 +448,8 @@ paths:
           schema:
             $ref: '#/definitions/LoginResponse'
       tags:
-      - User
-  /api/users/logout:
+      - Authenticate
+  /api/authenticate/logout:
     get:
       description: Logs the user out.
       operationId: logout
@@ -457,8 +462,22 @@ paths:
       security:
       - UserAuth: []
       tags:
+      - Authenticate
+  /api/user/data/shifts:
+    get:
+      description: The users shifts to display the users account page.
+      operationId: userShifts
+      parameters: []
+      responses:
+        default:
+          description: The shifts for the user who is logged in.
+          schema:
+            $ref: '#/definitions/UserShiftsResponse'
+      security:
+      - UserAuth: []
+      tags:
       - User
-  /api/users/profile:
+  /api/user/data/profile:
     get:
       description: The users profile to display the on users the account page
       operationId: profile
@@ -472,18 +491,20 @@ paths:
       - UserAuth: []
       tags:
       - User
-  /api/users/userShifts:
+  /api/user/{username}:
     get:
-      description: The users shifts to display the users account page.
-      operationId: userShifts
-      parameters: []
+      description: The queried user
+      operationId: getIndivdualUser
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
       responses:
         default:
-          description: The shifts for the user who is logged in.
+          description: The requested user.
           schema:
-            $ref: '#/definitions/UserShiftsResponse'
-      security:
-      - UserAuth: []
+            $ref: '#/definitions/IndividualUserGetResponse'
       tags:
       - User
   /api/inference:

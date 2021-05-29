@@ -15,38 +15,19 @@
 
 import * as runtime from '../runtime';
 import {
-    AuthenticatedResponse,
-    AuthenticatedResponseFromJSON,
-    AuthenticatedResponseToJSON,
-    LoginRequest,
-    LoginRequestFromJSON,
-    LoginRequestToJSON,
-    LoginResponse,
-    LoginResponseFromJSON,
-    LoginResponseToJSON,
-    LogoutResponse,
-    LogoutResponseFromJSON,
-    LogoutResponseToJSON,
+    IndividualUserGetResponse,
+    IndividualUserGetResponseFromJSON,
+    IndividualUserGetResponseToJSON,
     ProfileResponse,
     ProfileResponseFromJSON,
     ProfileResponseToJSON,
-    RegisterRequest,
-    RegisterRequestFromJSON,
-    RegisterRequestToJSON,
-    RegisterResponse,
-    RegisterResponseFromJSON,
-    RegisterResponseToJSON,
     UserShiftsResponse,
     UserShiftsResponseFromJSON,
     UserShiftsResponseToJSON,
 } from '../models';
 
-export interface LoginOperationRequest {
-    body?: LoginRequest;
-}
-
-export interface RegisterOperationRequest {
-    body?: RegisterRequest;
+export interface GetIndivdualUserRequest {
+    username: string;
 }
 
 /**
@@ -55,87 +36,32 @@ export interface RegisterOperationRequest {
 export class UserApi extends runtime.BaseAPI {
 
     /**
-     * Whether the user is logged in currently or not.
+     * The queried user
      */
-    async authenticatedRaw(): Promise<runtime.ApiResponse<AuthenticatedResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/users/authenticated`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AuthenticatedResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Whether the user is logged in currently or not.
-     */
-    async authenticated(): Promise<AuthenticatedResponse> {
-        const response = await this.authenticatedRaw();
-        return await response.value();
-    }
-
-    /**
-     * The login for the user.
-     */
-    async loginRaw(requestParameters: LoginOperationRequest): Promise<runtime.ApiResponse<LoginResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/api/users/login`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: LoginRequestToJSON(requestParameters.body),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => LoginResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * The login for the user.
-     */
-    async login(requestParameters: LoginOperationRequest): Promise<LoginResponse> {
-        const response = await this.loginRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Logs the user out.
-     */
-    async logoutRaw(): Promise<runtime.ApiResponse<LogoutResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+    async getIndivdualUserRaw(requestParameters: GetIndivdualUserRequest): Promise<runtime.ApiResponse<IndividualUserGetResponse>> {
+        if (requestParameters.username === null || requestParameters.username === undefined) {
+            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling getIndivdualUser.');
         }
 
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
         const response = await this.request({
-            path: `/api/users/logout`,
+            path: `/api/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LogoutResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualUserGetResponseFromJSON(jsonValue));
     }
 
     /**
-     * Logs the user out.
+     * The queried user
      */
-    async logout(): Promise<LogoutResponse> {
-        const response = await this.logoutRaw();
+    async getIndivdualUser(requestParameters: GetIndivdualUserRequest): Promise<IndividualUserGetResponse> {
+        const response = await this.getIndivdualUserRaw(requestParameters);
         return await response.value();
     }
 
@@ -152,7 +78,7 @@ export class UserApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/users/profile`,
+            path: `/api/user/data/profile`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -170,35 +96,6 @@ export class UserApi extends runtime.BaseAPI {
     }
 
     /**
-     * The regitration for the user.
-     */
-    async registerRaw(requestParameters: RegisterOperationRequest): Promise<runtime.ApiResponse<RegisterResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/api/users/register`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: RegisterRequestToJSON(requestParameters.body),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => RegisterResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * The regitration for the user.
-     */
-    async register(requestParameters: RegisterOperationRequest): Promise<RegisterResponse> {
-        const response = await this.registerRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
      * The users shifts to display the users account page.
      */
     async userShiftsRaw(): Promise<runtime.ApiResponse<UserShiftsResponse>> {
@@ -211,7 +108,7 @@ export class UserApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/users/userShifts`,
+            path: `/api/user/data/shifts`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

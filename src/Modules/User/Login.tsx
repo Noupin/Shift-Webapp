@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
-import { UserAPIInstance } from '../../Helpers/Api';
+import { AuthenticateAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { useAuthenticate } from '../../Hooks/Authenticate';
@@ -44,7 +44,7 @@ export function Login (props: IElevatedStateProps){
       body: loginRequestParams
     }
 
-    UserAPIInstance.login(loginBody).then((value) => {
+    AuthenticateAPIInstance.login(loginBody).then((value) => {
       setLoginResponse(value)
     })
     setFetching(false)

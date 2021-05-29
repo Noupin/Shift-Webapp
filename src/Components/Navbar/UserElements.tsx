@@ -7,7 +7,7 @@ import { NavLink, useHistory } from 'react-router-dom';
 
 //First Party Imports
 import './Navbar.scss'
-import { UserAPIInstance } from '../../Helpers/Api';
+import { AuthenticateAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
 import { useAuthenticate } from '../../Hooks/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -30,7 +30,7 @@ export function UserElements (props: IElevatedStateProps){
   useEffect(() => {
     if(!fetching) return;
 
-    UserAPIInstance.logout().then((value) => {
+    AuthenticateAPIInstance.logout().then((value) => {
       setLogoutResponse(value)
     })
     setAuthenticating(true)
