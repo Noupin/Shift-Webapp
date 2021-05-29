@@ -22,9 +22,25 @@ definitions:
       shift:
         $ref: '#/definitions/Shift'
     type: object
+  IndividualShiftPatchRequest:
+    properties:
+      data:
+        additionalProperties:
+          x-nullable: true
+        type: object
+    required:
+    - data
+    type: object
+  IndividualShiftPatchResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
   IndividualShiftPutRequest:
     properties:
-      shift:
+      requestBody:
         $ref: '#/definitions/Shift'
     type: object
   IndividualShiftPutResponse:
@@ -553,11 +569,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -587,11 +603,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -651,7 +667,7 @@ paths:
         type: string
       responses:
         default:
-          description: Deletes the requested shift.
+          description: The status message pertaing to the delete.
           schema:
             $ref: '#/definitions/IndividualShiftDeleteResponse'
       tags:
@@ -671,8 +687,29 @@ paths:
             $ref: '#/definitions/IndividualShiftGetResponse'
       tags:
       - Shift
+    patch:
+      description: Updates/modifies the queried shift.
+      operationId: patchIndivdualShift
+      parameters:
+      - description: The field name and updated value to update the queried shift.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/IndividualShiftPatchRequest'
+      - in: path
+        name: uuid
+        required: true
+        type: string
+      responses:
+        default:
+          description: The status message pertaing to the update/modify.
+          schema:
+            $ref: '#/definitions/IndividualShiftPatchResponse'
+      tags:
+      - Shift
     put:
-      description: Updates/repalces the queried shift.
+      description: Updates/replaces the queried shift.
       operationId: putIndivdualShift
       parameters:
       - description: The shift to update/replace the queried shift.
@@ -687,7 +724,7 @@ paths:
         type: string
       responses:
         default:
-          description: Updates the requested Shift.
+          description: The status message pertaing to the update/replace.
           schema:
             $ref: '#/definitions/IndividualShiftPutResponse'
       tags:

@@ -21,6 +21,12 @@ import {
     IndividualShiftGetResponse,
     IndividualShiftGetResponseFromJSON,
     IndividualShiftGetResponseToJSON,
+    IndividualShiftPatchRequest,
+    IndividualShiftPatchRequestFromJSON,
+    IndividualShiftPatchRequestToJSON,
+    IndividualShiftPatchResponse,
+    IndividualShiftPatchResponseFromJSON,
+    IndividualShiftPatchResponseToJSON,
     IndividualShiftPutRequest,
     IndividualShiftPutRequestFromJSON,
     IndividualShiftPutRequestToJSON,
@@ -35,6 +41,11 @@ export interface DeleteIndivdualShiftRequest {
 
 export interface GetIndivdualShiftRequest {
     uuid: string;
+}
+
+export interface PatchIndivdualShiftRequest {
+    uuid: string;
+    body?: IndividualShiftPatchRequest;
 }
 
 export interface PutIndivdualShiftRequest {
@@ -108,7 +119,40 @@ export class ShiftApi extends runtime.BaseAPI {
     }
 
     /**
-     * Updates/repalces the queried shift.
+     * Updates/modifies the queried shift.
+     */
+    async patchIndivdualShiftRaw(requestParameters: PatchIndivdualShiftRequest): Promise<runtime.ApiResponse<IndividualShiftPatchResponse>> {
+        if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
+            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling patchIndivdualShift.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IndividualShiftPatchRequestToJSON(requestParameters.body),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualShiftPatchResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates/modifies the queried shift.
+     */
+    async patchIndivdualShift(requestParameters: PatchIndivdualShiftRequest): Promise<IndividualShiftPatchResponse> {
+        const response = await this.patchIndivdualShiftRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Updates/replaces the queried shift.
      */
     async putIndivdualShiftRaw(requestParameters: PutIndivdualShiftRequest): Promise<runtime.ApiResponse<IndividualShiftPutResponse>> {
         if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
@@ -133,7 +177,7 @@ export class ShiftApi extends runtime.BaseAPI {
     }
 
     /**
-     * Updates/repalces the queried shift.
+     * Updates/replaces the queried shift.
      */
     async putIndivdualShift(requestParameters: PutIndivdualShiftRequest): Promise<IndividualShiftPutResponse> {
         const response = await this.putIndivdualShiftRaw(requestParameters);

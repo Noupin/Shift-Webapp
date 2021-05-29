@@ -31,7 +31,7 @@ export interface IndividualShiftPutRequest {
      * @type {Shift}
      * @memberof IndividualShiftPutRequest
      */
-    shift?: Shift;
+    requestBody?: Shift;
 }
 
 export function IndividualShiftPutRequestFromJSON(json: any): IndividualShiftPutRequest {
@@ -44,7 +44,7 @@ export function IndividualShiftPutRequestFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'shift': !exists(json, 'shift') ? undefined : ShiftFromJSON(json['shift']),
+        'requestBody': !exists(json, 'requestBody') ? undefined : ShiftFromJSON(json['requestBody']),
     };
 }
 
@@ -57,7 +57,7 @@ export function IndividualShiftPutRequestToJSON(value?: IndividualShiftPutReques
     }
     return {
         
-        'shift': ShiftToJSON(value.shift),
+        'requestBody': ShiftToJSON(value.requestBody),
     };
 }
 

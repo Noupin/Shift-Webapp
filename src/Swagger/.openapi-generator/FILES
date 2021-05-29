@@ -10,6 +10,8 @@ index.ts
 models/AuthenticatedResponse.ts
 models/IndividualShiftDeleteResponse.ts
 models/IndividualShiftGetResponse.ts
+models/IndividualShiftPatchRequest.ts
+models/IndividualShiftPatchResponse.ts
 models/IndividualShiftPutRequest.ts
 models/IndividualShiftPutResponse.ts
 models/InferenceRequest.ts
