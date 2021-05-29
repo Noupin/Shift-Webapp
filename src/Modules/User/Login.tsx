@@ -47,6 +47,7 @@ export function Login (props: IElevatedStateProps){
     UserAPIInstance.login(loginBody).then((value) => {
       setLoginResponse(value)
     })
+    setFetching(false)
     setAuthenticating(true)
   }, [fetching]);
 

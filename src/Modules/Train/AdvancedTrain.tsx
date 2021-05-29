@@ -15,9 +15,6 @@ import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
-let trainResponse: CombinedTrainResponse = {msg: "", exhibit: [], stopped: false}
-
-
 export function AdvancedTrain (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
   useEffect(() => {

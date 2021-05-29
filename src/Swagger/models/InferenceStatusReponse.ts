@@ -24,7 +24,7 @@ export interface InferenceStatusReponse {
      * @type {string}
      * @memberof InferenceStatusReponse
      */
-    imagePath?: string | null;
+    mediaFilename?: string | null;
     /**
      * 
      * @type {string}
@@ -49,7 +49,7 @@ export function InferenceStatusReponseFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'imagePath': !exists(json, 'imagePath') ? undefined : json['imagePath'],
+        'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
         'stopped': !exists(json, 'stopped') ? undefined : json['stopped'],
     };
@@ -64,7 +64,7 @@ export function InferenceStatusReponseToJSON(value?: InferenceStatusReponse | nu
     }
     return {
         
-        'imagePath': value.imagePath,
+        'mediaFilename': value.mediaFilename,
         'msg': value.msg,
         'stopped': value.stopped,
     };

@@ -54,6 +54,7 @@ export function Register (props: IElevatedStateProps){
     UserAPIInstance.register(registerBody).then((value) => {
       setRegisterResponse(value)
     })
+    setFetching(false)
     setAuthenticating(true)
   }, [fetching]);
 

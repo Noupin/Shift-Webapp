@@ -10,10 +10,29 @@ definitions:
     required:
     - authenticated
     type: object
-  IndividualShiftResponse:
+  IndividualShiftDeleteResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
+  IndividualShiftGetResponse:
     properties:
       shift:
         $ref: '#/definitions/Shift'
+    type: object
+  IndividualShiftPutRequest:
+    properties:
+      shift:
+        $ref: '#/definitions/Shift'
+    type: object
+  IndividualShiftPutResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
     type: object
   InferenceRequest:
     properties:
@@ -37,7 +56,7 @@ definitions:
     type: object
   InferenceStatusReponse:
     properties:
-      imagePath:
+      mediaFilename:
         default: null
         type: string
         x-nullable: true
@@ -129,6 +148,8 @@ definitions:
     type: object
   Shift:
     properties:
+      author:
+        $ref: '#/definitions/User'
       baseDecoderPath:
         type: string
       datePosted:
@@ -136,15 +157,14 @@ definitions:
       encoderPath:
         type: string
       id: {}
-      imagePath:
-        type: string
       maskDecoderPath:
+        type: string
+      mediaFilename:
         type: string
       private:
         type: boolean
       title:
         type: string
-      userID: {}
       uuid:
         format: uuid
         type: string
@@ -153,11 +173,11 @@ definitions:
       views:
         type: integer
     required:
+    - author
     - baseDecoderPath
     - encoderPath
     - maskDecoderPath
     - title
-    - userID
     - uuid
     type: object
   ShiftCategoryResponse:
@@ -229,7 +249,7 @@ definitions:
       email:
         type: string
       id: {}
-      imagePath:
+      mediaFilename:
         type: string
       password:
         type: string
@@ -533,11 +553,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -567,11 +587,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -621,9 +641,24 @@ paths:
       tags:
       - Shift Category
   /api/shift/{uuid}:
+    delete:
+      description: Deletes the queried shift.
+      operationId: deleteIndivdualShift
+      parameters:
+      - in: path
+        name: uuid
+        required: true
+        type: string
+      responses:
+        default:
+          description: Deletes the requested shift.
+          schema:
+            $ref: '#/definitions/IndividualShiftDeleteResponse'
+      tags:
+      - Shift
     get:
       description: The queried shift
-      operationId: indivdualShift
+      operationId: getIndivdualShift
       parameters:
       - in: path
         name: uuid
@@ -633,7 +668,28 @@ paths:
         default:
           description: The requested shift.
           schema:
-            $ref: '#/definitions/IndividualShiftResponse'
+            $ref: '#/definitions/IndividualShiftGetResponse'
+      tags:
+      - Shift
+    put:
+      description: Updates/repalces the queried shift.
+      operationId: putIndivdualShift
+      parameters:
+      - description: The shift to update/replace the queried shift.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/IndividualShiftPutRequest'
+      - in: path
+        name: uuid
+        required: true
+        type: string
+      responses:
+        default:
+          description: Updates the requested Shift.
+          schema:
+            $ref: '#/definitions/IndividualShiftPutResponse'
       tags:
       - Shift
 securityDefinitions:

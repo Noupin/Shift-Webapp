@@ -48,7 +48,7 @@ export interface User {
      * @type {string}
      * @memberof User
      */
-    imagePath?: string;
+    mediaFilename?: string;
     /**
      * 
      * @type {string}
@@ -83,7 +83,7 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'dateCreated': !exists(json, 'dateCreated') ? undefined : json['dateCreated'],
         'email': json['email'],
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'imagePath': !exists(json, 'imagePath') ? undefined : json['imagePath'],
+        'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
         'password': json['password'],
         'username': json['username'],
         'verified': !exists(json, 'verified') ? undefined : json['verified'],
@@ -103,7 +103,7 @@ export function UserToJSON(value?: User | null): any {
         'dateCreated': value.dateCreated,
         'email': value.email,
         'id': value.id,
-        'imagePath': value.imagePath,
+        'mediaFilename': value.mediaFilename,
         'password': value.password,
         'username': value.username,
         'verified': value.verified,

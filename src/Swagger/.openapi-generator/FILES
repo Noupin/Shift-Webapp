@@ -8,7 +8,10 @@ apis/UserApi.ts
 apis/index.ts
 index.ts
 models/AuthenticatedResponse.ts
-models/IndividualShiftResponse.ts
+models/IndividualShiftDeleteResponse.ts
+models/IndividualShiftGetResponse.ts
+models/IndividualShiftPutRequest.ts
+models/IndividualShiftPutResponse.ts
 models/InferenceRequest.ts
 models/InferenceResponse.ts
 models/InferenceStatusReponse.ts

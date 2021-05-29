@@ -2,7 +2,7 @@
 
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 
 //First Party Imports
@@ -23,6 +23,7 @@ export function UserElements (props: IElevatedStateProps){
   const [fetching, setFetching] = useState(false);
   const [logoutResponse, setLogoutResponse] = useState<LogoutResponse>();
 
+  const history = useHistory();
 
   const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse)
 
@@ -46,6 +47,7 @@ export function UserElements (props: IElevatedStateProps){
     if (!authenticatedResponse) return;
 
     setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse!.authenticated}))
+    history.push("/")
   }, [authenticatedResponse]);
 
 

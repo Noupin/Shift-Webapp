@@ -15,13 +15,31 @@
 
 import * as runtime from '../runtime';
 import {
-    IndividualShiftResponse,
-    IndividualShiftResponseFromJSON,
-    IndividualShiftResponseToJSON,
+    IndividualShiftDeleteResponse,
+    IndividualShiftDeleteResponseFromJSON,
+    IndividualShiftDeleteResponseToJSON,
+    IndividualShiftGetResponse,
+    IndividualShiftGetResponseFromJSON,
+    IndividualShiftGetResponseToJSON,
+    IndividualShiftPutRequest,
+    IndividualShiftPutRequestFromJSON,
+    IndividualShiftPutRequestToJSON,
+    IndividualShiftPutResponse,
+    IndividualShiftPutResponseFromJSON,
+    IndividualShiftPutResponseToJSON,
 } from '../models';
 
-export interface IndivdualShiftRequest {
+export interface DeleteIndivdualShiftRequest {
     uuid: string;
+}
+
+export interface GetIndivdualShiftRequest {
+    uuid: string;
+}
+
+export interface PutIndivdualShiftRequest {
+    uuid: string;
+    body?: IndividualShiftPutRequest;
 }
 
 /**
@@ -30,11 +48,41 @@ export interface IndivdualShiftRequest {
 export class ShiftApi extends runtime.BaseAPI {
 
     /**
+     * Deletes the queried shift.
+     */
+    async deleteIndivdualShiftRaw(requestParameters: DeleteIndivdualShiftRequest): Promise<runtime.ApiResponse<IndividualShiftDeleteResponse>> {
+        if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
+            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling deleteIndivdualShift.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualShiftDeleteResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes the queried shift.
+     */
+    async deleteIndivdualShift(requestParameters: DeleteIndivdualShiftRequest): Promise<IndividualShiftDeleteResponse> {
+        const response = await this.deleteIndivdualShiftRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * The queried shift
      */
-    async indivdualShiftRaw(requestParameters: IndivdualShiftRequest): Promise<runtime.ApiResponse<IndividualShiftResponse>> {
+    async getIndivdualShiftRaw(requestParameters: GetIndivdualShiftRequest): Promise<runtime.ApiResponse<IndividualShiftGetResponse>> {
         if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
-            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling indivdualShift.');
+            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling getIndivdualShift.');
         }
 
         const queryParameters: any = {};
@@ -48,14 +96,47 @@ export class ShiftApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualShiftResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualShiftGetResponseFromJSON(jsonValue));
     }
 
     /**
      * The queried shift
      */
-    async indivdualShift(requestParameters: IndivdualShiftRequest): Promise<IndividualShiftResponse> {
-        const response = await this.indivdualShiftRaw(requestParameters);
+    async getIndivdualShift(requestParameters: GetIndivdualShiftRequest): Promise<IndividualShiftGetResponse> {
+        const response = await this.getIndivdualShiftRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Updates/repalces the queried shift.
+     */
+    async putIndivdualShiftRaw(requestParameters: PutIndivdualShiftRequest): Promise<runtime.ApiResponse<IndividualShiftPutResponse>> {
+        if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
+            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling putIndivdualShift.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IndividualShiftPutRequestToJSON(requestParameters.body),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualShiftPutResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates/repalces the queried shift.
+     */
+    async putIndivdualShift(requestParameters: PutIndivdualShiftRequest): Promise<IndividualShiftPutResponse> {
+        const response = await this.putIndivdualShiftRaw(requestParameters);
         return await response.value();
     }
 

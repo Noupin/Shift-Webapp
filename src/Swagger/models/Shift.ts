@@ -13,12 +13,25 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    User,
+    UserFromJSON,
+    UserFromJSONTyped,
+    UserToJSON,
+} from './';
+
 /**
  * 
  * @export
  * @interface Shift
  */
 export interface Shift {
+    /**
+     * 
+     * @type {User}
+     * @memberof Shift
+     */
+    author: User;
     /**
      * 
      * @type {string}
@@ -48,13 +61,13 @@ export interface Shift {
      * @type {string}
      * @memberof Shift
      */
-    imagePath?: string;
+    maskDecoderPath: string;
     /**
      * 
      * @type {string}
      * @memberof Shift
      */
-    maskDecoderPath: string;
+    mediaFilename?: string;
     /**
      * 
      * @type {boolean}
@@ -67,12 +80,6 @@ export interface Shift {
      * @memberof Shift
      */
     title: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof Shift
-     */
-    userID: object;
     /**
      * 
      * @type {string}
@@ -103,15 +110,15 @@ export function ShiftFromJSONTyped(json: any, ignoreDiscriminator: boolean): Shi
     }
     return {
         
+        'author': UserFromJSON(json['author']),
         'baseDecoderPath': json['baseDecoderPath'],
         'datePosted': !exists(json, 'datePosted') ? undefined : json['datePosted'],
         'encoderPath': json['encoderPath'],
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'imagePath': !exists(json, 'imagePath') ? undefined : json['imagePath'],
         'maskDecoderPath': json['maskDecoderPath'],
+        'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
         '_private': !exists(json, 'private') ? undefined : json['private'],
         'title': json['title'],
-        'userID': json['userID'],
         'uuid': json['uuid'],
         'verified': !exists(json, 'verified') ? undefined : json['verified'],
         'views': !exists(json, 'views') ? undefined : json['views'],
@@ -127,15 +134,15 @@ export function ShiftToJSON(value?: Shift | null): any {
     }
     return {
         
+        'author': UserToJSON(value.author),
         'baseDecoderPath': value.baseDecoderPath,
         'datePosted': value.datePosted,
         'encoderPath': value.encoderPath,
         'id': value.id,
-        'imagePath': value.imagePath,
         'maskDecoderPath': value.maskDecoderPath,
+        'mediaFilename': value.mediaFilename,
         'private': value._private,
         'title': value.title,
-        'userID': value.userID,
         'uuid': value.uuid,
         'verified': value.verified,
         'views': value.views,

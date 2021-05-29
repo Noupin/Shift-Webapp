@@ -78,8 +78,8 @@ export function Shift (props: IElevatedStateProps){
 				return;
 			}
 
-			if(inferenceResponse.imagePath!){
-				setShiftedMedia(`/api/content/image/${inferenceResponse.imagePath!}`)
+			if(inferenceResponse.mediaFilename!){
+				setShiftedMedia(`/api/content/image/${inferenceResponse.mediaFilename!}`)
 			}
 
 			setStopShifting(inferenceResponse.stopped!);
