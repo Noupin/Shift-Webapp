@@ -75,7 +75,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
   useEffect(() => {
     if(stopTrain){
-      history.push("/shift")
+      history.push("/inference")
     }
     if(basicView){
       history.push("/train")

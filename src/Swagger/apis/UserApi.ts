@@ -15,19 +15,44 @@
 
 import * as runtime from '../runtime';
 import {
+    IndividualUserDeleteResponse,
+    IndividualUserDeleteResponseFromJSON,
+    IndividualUserDeleteResponseToJSON,
     IndividualUserGetResponse,
     IndividualUserGetResponseFromJSON,
     IndividualUserGetResponseToJSON,
+    IndividualUserPatchRequest,
+    IndividualUserPatchRequestFromJSON,
+    IndividualUserPatchRequestToJSON,
+    IndividualUserPatchResponse,
+    IndividualUserPatchResponseFromJSON,
+    IndividualUserPatchResponseToJSON,
     ProfileResponse,
     ProfileResponseFromJSON,
     ProfileResponseToJSON,
+    UpdatePictureResponse,
+    UpdatePictureResponseFromJSON,
+    UpdatePictureResponseToJSON,
     UserShiftsResponse,
     UserShiftsResponseFromJSON,
     UserShiftsResponseToJSON,
 } from '../models';
 
+export interface DeleteIndivdualUserRequest {
+    username: string;
+}
+
 export interface GetIndivdualUserRequest {
     username: string;
+}
+
+export interface PatchIndivdualUserRequest {
+    username: string;
+    body?: IndividualUserPatchRequest;
+}
+
+export interface UpdatePictureRequest {
+    requestFile: Blob;
 }
 
 /**
@@ -36,7 +61,41 @@ export interface GetIndivdualUserRequest {
 export class UserApi extends runtime.BaseAPI {
 
     /**
-     * The queried user
+     * Deletes the queried user.
+     */
+    async deleteIndivdualUserRaw(requestParameters: DeleteIndivdualUserRequest): Promise<runtime.ApiResponse<IndividualUserDeleteResponse>> {
+        if (requestParameters.username === null || requestParameters.username === undefined) {
+            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling deleteIndivdualUser.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/api/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualUserDeleteResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes the queried user.
+     */
+    async deleteIndivdualUser(requestParameters: DeleteIndivdualUserRequest): Promise<IndividualUserDeleteResponse> {
+        const response = await this.deleteIndivdualUserRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * The queried user.
      */
     async getIndivdualUserRaw(requestParameters: GetIndivdualUserRequest): Promise<runtime.ApiResponse<IndividualUserGetResponse>> {
         if (requestParameters.username === null || requestParameters.username === undefined) {
@@ -58,10 +117,47 @@ export class UserApi extends runtime.BaseAPI {
     }
 
     /**
-     * The queried user
+     * The queried user.
      */
     async getIndivdualUser(requestParameters: GetIndivdualUserRequest): Promise<IndividualUserGetResponse> {
         const response = await this.getIndivdualUserRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Updates/modifies the queried user.
+     */
+    async patchIndivdualUserRaw(requestParameters: PatchIndivdualUserRequest): Promise<runtime.ApiResponse<IndividualUserPatchResponse>> {
+        if (requestParameters.username === null || requestParameters.username === undefined) {
+            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling patchIndivdualUser.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/api/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IndividualUserPatchRequestToJSON(requestParameters.body),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IndividualUserPatchResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates/modifies the queried user.
+     */
+    async patchIndivdualUser(requestParameters: PatchIndivdualUserRequest): Promise<IndividualUserPatchResponse> {
+        const response = await this.patchIndivdualUserRaw(requestParameters);
         return await response.value();
     }
 
@@ -92,6 +188,61 @@ export class UserApi extends runtime.BaseAPI {
      */
     async profile(): Promise<ProfileResponse> {
         const response = await this.profileRaw();
+        return await response.value();
+    }
+
+    /**
+     * Changes the users profile picture to the uploaded picture.
+     */
+    async updatePictureRaw(requestParameters: UpdatePictureRequest): Promise<runtime.ApiResponse<UpdatePictureResponse>> {
+        if (requestParameters.requestFile === null || requestParameters.requestFile === undefined) {
+            throw new runtime.RequiredError('requestFile','Required parameter requestParameters.requestFile was null or undefined when calling updatePicture.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
+
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.requestFile !== undefined) {
+            formParams.append('requestFile', requestParameters.requestFile as any);
+        }
+
+        const response = await this.request({
+            path: `/api/user/data/updatePicture`,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdatePictureResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes the users profile picture to the uploaded picture.
+     */
+    async updatePicture(requestParameters: UpdatePictureRequest): Promise<UpdatePictureResponse> {
+        const response = await this.updatePictureRaw(requestParameters);
         return await response.value();
     }
 

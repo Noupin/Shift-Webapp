@@ -43,7 +43,7 @@ export interface Shift {
      * @type {string}
      * @memberof Shift
      */
-    datePosted?: string;
+    dateCreated?: string;
     /**
      * 
      * @type {string}
@@ -112,7 +112,7 @@ export function ShiftFromJSONTyped(json: any, ignoreDiscriminator: boolean): Shi
         
         'author': UserFromJSON(json['author']),
         'baseDecoderPath': json['baseDecoderPath'],
-        'datePosted': !exists(json, 'datePosted') ? undefined : json['datePosted'],
+        'dateCreated': !exists(json, 'dateCreated') ? undefined : json['dateCreated'],
         'encoderPath': json['encoderPath'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'maskDecoderPath': json['maskDecoderPath'],
@@ -136,7 +136,7 @@ export function ShiftToJSON(value?: Shift | null): any {
         
         'author': UserToJSON(value.author),
         'baseDecoderPath': value.baseDecoderPath,
-        'datePosted': value.datePosted,
+        'dateCreated': value.dateCreated,
         'encoderPath': value.encoderPath,
         'id': value.id,
         'maskDecoderPath': value.maskDecoderPath,

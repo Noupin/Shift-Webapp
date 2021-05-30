@@ -155,7 +155,7 @@ export function Train (props: IElevatedStateProps){
   //Move the user to other pages on button clicks
   useEffect(() => {
     if(stopTrain){
-      history.push("/shift")
+      history.push("/inference")
     }
 
     if(advancedView){

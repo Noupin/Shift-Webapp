@@ -18,7 +18,7 @@ import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load"
 import { Train } from "./Modules/Train/Train";
 import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
-import { Shift } from "./Modules/Shift/Shift";
+import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Hooks/Authenticate";
@@ -125,8 +125,8 @@ export default function App() {
                 <Route path="/advancedTrain">
                   <AdvancedTrain elevatedState={getElevatedState} setElevatedState={setElevatedState}></AdvancedTrain>
                 </Route>
-                <Route path="/shift">
-                  <Shift elevatedState={getElevatedState} setElevatedState={setElevatedState}></Shift>
+                <Route path="/inference">
+                  <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}></Inference>
                 </Route>
                 <Route path="/">
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>

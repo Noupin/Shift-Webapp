@@ -16,20 +16,20 @@ import { CombinedInferenceResponse } from '../../Interfaces/CombinedInference';
 import { InferenceOperationRequest, InferenceRequest, InferenceStatusRequest } from '../../Swagger';
 
 
-export function Shift (props: IElevatedStateProps){
+export function Inference (props: IElevatedStateProps){
 	const {elevatedState, setElevatedState} = props;
 
-	const [shiftedMedia, setShiftedMedia] = useState("");
+	const [inferenceMedia, setInferenceMedia] = useState("");
 
-	const [shifting, setShifting] = useState(true);
-	const [stopShifting, setStopShifting] = useState(false);
+	const [inference, setInference] = useState(true);
+	const [stopInference, setStopInference] = useState(false);
 	const [updating, setUpdating] = useState(false);
   const [inferenceResponse, setInferenceResponse] = useState<CombinedInferenceResponse>();
 	const [updateProgress, setUpdateProgress] = useState(false);
 
 
 	useEffect(() => {
-		if(!shifting) return;
+		if(!inference) return;
 
 		const inferenceRequestParams: InferenceRequest = {
       shiftUUID: elevatedState().shiftUUID,
@@ -45,8 +45,8 @@ export function Shift (props: IElevatedStateProps){
     })
 
 		setUpdating(true);
-		setShifting(false)
-	}, [shifting]);
+		setInference(false)
+	}, [inference]);
 
 	useEffect(() => {
 		if(!inferenceResponse) return;
@@ -57,7 +57,7 @@ export function Shift (props: IElevatedStateProps){
 	useInterval(async () => {
 		if(updateProgress) return;
 
-		if(updating || !stopShifting){
+		if(updating || !stopInference){
 			setUpdateProgress(true)
 
 			const inferenceStatusRequestParams: InferenceRequest = {
@@ -79,12 +79,12 @@ export function Shift (props: IElevatedStateProps){
 			}
 
 			if(inferenceResponse.mediaFilename!){
-				setShiftedMedia(`/api/content/image/${inferenceResponse.mediaFilename!}`)
+				setInferenceMedia(`/api/content/image/${inferenceResponse.mediaFilename!}`)
 			}
 
-			setStopShifting(inferenceResponse.stopped!);
+			setStopInference(inferenceResponse.stopped!);
 
-			if(stopShifting){
+			if(stopInference){
 				setUpdating(false);
 			}
 			else{
@@ -95,28 +95,28 @@ export function Shift (props: IElevatedStateProps){
 
 
 	return (
-		<Container className="d-flex justify-content-center h-100 flex-column" key={shiftedMedia}>
+		<Container className="d-flex justify-content-center h-100 flex-column" key={inferenceMedia}>
 			<Row className="mb-2">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={shiftedMedia} mediaType="media"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={inferenceMedia} mediaType="media"/>
 			</Row>
 			<Row className="my-3">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={shiftedMedia} mediaType="video/mp4"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={inferenceMedia} mediaType="video/mp4"/>
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>
 				<Col xs={2} className="pr-4">
 					<Link to="/train" className="w-100">
-            <Button className="borderRadius-2 p-2 w-100" disabled={shifting}>&#x2190; Train More</Button>
+            <Button className="borderRadius-2 p-2 w-100" disabled={inference}>&#x2190; Train More</Button>
           </Link>
 				</Col>
 				<Col xs={2} className="pl-4">
 					<Link to="/load" className="w-100">
-            <Button className="borderRadius-2 p-2 w-100" disabled={shifting} onClick={() => setShifting(true)}>Shift Again &#x21ba;</Button>
+            <Button className="borderRadius-2 p-2 w-100" disabled={inference} onClick={() => setInference(true)}>Shift Again &#x21ba;</Button>
           </Link>
 				</Col>
 				<Col xs={1}></Col>
 				<Col xs={5}>
-					<Button className="borderRadius-2 p-2 w-100" disabled={shifting}>Share</Button>
+					<Button className="borderRadius-2 p-2 w-100" disabled={inference}>Share</Button>
 				</Col>
 				<Col xs={1}></Col>
 			</Row>

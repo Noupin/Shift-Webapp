@@ -59,6 +59,10 @@ export class ShiftApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
+
         const response = await this.request({
             path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
             method: 'DELETE',
@@ -120,6 +124,10 @@ export class ShiftApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
 
         const response = await this.request({
             path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),

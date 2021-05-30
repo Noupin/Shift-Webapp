@@ -13,7 +13,10 @@ models/IndividualShiftDeleteResponse.ts
 models/IndividualShiftGetResponse.ts
 models/IndividualShiftPatchRequest.ts
 models/IndividualShiftPatchResponse.ts
+models/IndividualUserDeleteResponse.ts
 models/IndividualUserGetResponse.ts
+models/IndividualUserPatchRequest.ts
+models/IndividualUserPatchResponse.ts
 models/InferenceRequest.ts
 models/InferenceResponse.ts
 models/InferenceStatusReponse.ts
@@ -32,6 +35,7 @@ models/StopTrainResponse.ts
 models/TrainRequest.ts
 models/TrainResponse.ts
 models/TrainStatusResponse.ts
+models/UpdatePictureResponse.ts
 models/User.ts
 models/UserShiftsResponse.ts
 models/index.ts

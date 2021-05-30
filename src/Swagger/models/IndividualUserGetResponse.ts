@@ -31,7 +31,7 @@ export interface IndividualUserGetResponse {
      * @type {User}
      * @memberof IndividualUserGetResponse
      */
-    shift?: User;
+    user?: User;
 }
 
 export function IndividualUserGetResponseFromJSON(json: any): IndividualUserGetResponse {
@@ -44,7 +44,7 @@ export function IndividualUserGetResponseFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'shift': !exists(json, 'shift') ? undefined : UserFromJSON(json['shift']),
+        'user': !exists(json, 'user') ? undefined : UserFromJSON(json['user']),
     };
 }
 
@@ -57,7 +57,7 @@ export function IndividualUserGetResponseToJSON(value?: IndividualUserGetRespons
     }
     return {
         
-        'shift': UserToJSON(value.shift),
+        'user': UserToJSON(value.user),
     };
 }
 

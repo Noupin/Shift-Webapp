@@ -38,10 +38,33 @@ definitions:
         type: string
         x-nullable: true
     type: object
+  IndividualUserDeleteResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
+    type: object
   IndividualUserGetResponse:
     properties:
-      shift:
+      user:
         $ref: '#/definitions/User'
+    type: object
+  IndividualUserPatchRequest:
+    properties:
+      data:
+        additionalProperties:
+          x-nullable: true
+        type: object
+    required:
+    - data
+    type: object
+  IndividualUserPatchResponse:
+    properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
     type: object
   InferenceRequest:
     properties:
@@ -161,7 +184,7 @@ definitions:
         $ref: '#/definitions/User'
       baseDecoderPath:
         type: string
-      datePosted:
+      dateCreated:
         type: string
       encoderPath:
         type: string
@@ -247,6 +270,13 @@ definitions:
       stopped:
         default: null
         type: boolean
+        x-nullable: true
+    type: object
+  UpdatePictureResponse:
+    properties:
+      msg:
+        default: null
+        type: string
         x-nullable: true
     type: object
   User:
@@ -491,9 +521,46 @@ paths:
       - UserAuth: []
       tags:
       - User
+  /api/user/data/updatePicture:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Changes the users profile picture to the uploaded picture.
+      operationId: updatePicture
+      parameters:
+      - in: formData
+        name: requestFile
+        required: true
+        type: file
+      responses:
+        default:
+          description: Whether the picture has been updated or not.
+          schema:
+            $ref: '#/definitions/UpdatePictureResponse'
+      security:
+      - UserAuth: []
+      tags:
+      - User
   /api/user/{username}:
+    delete:
+      description: Deletes the queried user.
+      operationId: deleteIndivdualUser
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
+      responses:
+        default:
+          description: The status message pertaing to the delete.
+          schema:
+            $ref: '#/definitions/IndividualUserDeleteResponse'
+      security:
+      - UserAuth: []
+      tags:
+      - User
     get:
-      description: The queried user
+      description: The queried user.
       operationId: getIndivdualUser
       parameters:
       - in: path
@@ -505,6 +572,29 @@ paths:
           description: The requested user.
           schema:
             $ref: '#/definitions/IndividualUserGetResponse'
+      tags:
+      - User
+    patch:
+      description: Updates/modifies the queried user.
+      operationId: patchIndivdualUser
+      parameters:
+      - description: The field name and updated value to update the queried user.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/IndividualUserPatchRequest'
+      - in: path
+        name: username
+        required: true
+        type: string
+      responses:
+        default:
+          description: The status message pertaing to the patch.
+          schema:
+            $ref: '#/definitions/IndividualUserPatchResponse'
+      security:
+      - UserAuth: []
       tags:
       - User
   /api/inference:
@@ -679,6 +769,8 @@ paths:
           description: The status message pertaing to the delete.
           schema:
             $ref: '#/definitions/IndividualShiftDeleteResponse'
+      security:
+      - UserAuth: []
       tags:
       - Shift
     get:
@@ -715,6 +807,8 @@ paths:
           description: The status message pertaing to the update/modify.
           schema:
             $ref: '#/definitions/IndividualShiftPatchResponse'
+      security:
+      - UserAuth: []
       tags:
       - Shift
 securityDefinitions:
