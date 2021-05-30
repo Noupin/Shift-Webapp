@@ -32,7 +32,7 @@ export function Account (props: IElevatedStateProps){
   }, []);
 
   useEffect(() => {
-    UserAPIInstance.userShifts().then((value) => {
+    UserAPIInstance.shifts().then((value) => {
       setUserShiftsResponse(value!)
     })
   }, []);
