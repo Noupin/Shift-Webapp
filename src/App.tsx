@@ -24,6 +24,8 @@ import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Hooks/Authenticate";
 import { defaultShiftTitle } from "./constants"
 import { AuthenticatedResponse } from './Swagger';
+import { ShiftPage } from "./Modules/ShiftPage"
+import { UserPage } from "./Modules/User/UserPage"
 
 
 export default function App() {
@@ -127,6 +129,12 @@ export default function App() {
                 </Route>
                 <Route path="/inference">
                   <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}></Inference>
+                </Route>
+                <Route path="/shift/:uuid">
+                  <ShiftPage elevatedState={getElevatedState} setElevatedState={setElevatedState}></ShiftPage>
+                </Route>
+                <Route path="/user/:username">
+                  <UserPage elevatedState={getElevatedState} setElevatedState={setElevatedState}></UserPage>
                 </Route>
                 <Route path="/">
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>

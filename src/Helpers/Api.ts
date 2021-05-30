@@ -6,7 +6,7 @@ import { CDNApi, ShiftCategoryApi, InferenceApi,
 export const CDNAPIInstance = new CDNApi()
 export const LoadAPIInstance = new LoadApi(IncludeCredentials)
 export const UserAPIInstance = new UserApi(IncludeCredentials)
-export const ShiftAPIInstace = new ShiftApi(IncludeCredentials)
+export const ShiftAPIInstance = new ShiftApi(IncludeCredentials)
 export const TrainAPIInstance = new TrainApi(IncludeCredentials)
 export const InferenceAPIInstance = new InferenceApi(IncludeCredentials)
 export const AuthenticateAPIInstance = new AuthenticateApi(IncludeCredentials)

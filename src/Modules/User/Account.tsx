@@ -70,7 +70,7 @@ export function Account (props: IElevatedStateProps){
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column">
             {userShifts!.map((element, index) => (
-              <ShiftCard key={index} className="borderRadius-2 m-2 p-2" shift={element} onClick={() => console.log(element.uuid)} setElevatedState={setElevatedState}/>
+              <ShiftCard key={index} className="borderRadius-2 m-2 p-2" shift={element} setElevatedState={setElevatedState}/>
             ))}
           </Masonry>
         </Col>
