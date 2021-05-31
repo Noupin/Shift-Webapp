@@ -57,21 +57,21 @@ export function ShiftPage (props: IElevatedStateProps){
 
   if(shiftResponse){
     shiftTitleComponent = (
-      <h1>
+      <h1 className="text-left">
         {shiftResponse.shift!.title} {shiftResponse.shift!.verified ?
         <Image style={{height: "0.75em", width: "auto"}} 
             className="object-fit-contain"
-            imageSrc={Admin} alt="Admin"/> : <></>}
+            imageSrc={Verified} alt="Verified"/> : <></>}
       </h1>
-    )
+  )
     if(shiftResponse.owner){
       editShiftComponent = (
-        <Row className="mt-2">
+        <Row>
           <Col>
-            <Button className="borderRadius-2 p-2 w-100 mx-1">Edit</Button>
+            <Button className="borderRadius-2 p-2 w-100 mx-2">Edit</Button>
           </Col>
           <Col>
-            <Button className="borderRadius-2 p-2 text-danger w-100 mx-1">Delete</Button>
+            <Button className="borderRadius-2 p-2 text-danger w-100 mx-2">Delete</Button>
           </Col>
         </Row>
       )
@@ -100,15 +100,18 @@ export function ShiftPage (props: IElevatedStateProps){
 
   return (
     <Container>
-      <Row className="justify-content-center">
-        {shiftTitleComponent}
-      </Row>
       <Row>
-        <Col xs={3} className="p-2">
-          {userComponent}
-          {editShiftComponent}
-        </Col>
         <Col xs={9} className="p-2">
+          <Row>
+            <Col xs={1}></Col>
+            <Col xs={5}>
+              {shiftTitleComponent}
+            </Col>
+            <Col xs={4}>
+              {editShiftComponent}
+            </Col>
+            <Col xs={1}></Col>
+          </Row>
           <Row>
             <Col xs={2}></Col>
             <Col xs={8}>
@@ -141,6 +144,9 @@ export function ShiftPage (props: IElevatedStateProps){
             </Col>
             <Col xs={1}></Col>
           </Row>
+        </Col>
+        <Col xs={3} className="p-2">
+          {userComponent}
         </Col>
       </Row>
     </Container>
