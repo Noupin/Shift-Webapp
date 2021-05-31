@@ -43,6 +43,12 @@ export interface Shift {
      * @type {string}
      * @memberof Shift
      */
+    baseMediaFilename?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Shift
+     */
     dateCreated?: string;
     /**
      * 
@@ -62,6 +68,12 @@ export interface Shift {
      * @memberof Shift
      */
     maskDecoderPath: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Shift
+     */
+    maskMediaFilename?: string;
     /**
      * 
      * @type {string}
@@ -112,10 +124,12 @@ export function ShiftFromJSONTyped(json: any, ignoreDiscriminator: boolean): Shi
         
         'author': UserFromJSON(json['author']),
         'baseDecoderPath': json['baseDecoderPath'],
+        'baseMediaFilename': !exists(json, 'baseMediaFilename') ? undefined : json['baseMediaFilename'],
         'dateCreated': !exists(json, 'dateCreated') ? undefined : json['dateCreated'],
         'encoderPath': json['encoderPath'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'maskDecoderPath': json['maskDecoderPath'],
+        'maskMediaFilename': !exists(json, 'maskMediaFilename') ? undefined : json['maskMediaFilename'],
         'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
         '_private': !exists(json, 'private') ? undefined : json['private'],
         'title': json['title'],
@@ -136,10 +150,12 @@ export function ShiftToJSON(value?: Shift | null): any {
         
         'author': UserToJSON(value.author),
         'baseDecoderPath': value.baseDecoderPath,
+        'baseMediaFilename': value.baseMediaFilename,
         'dateCreated': value.dateCreated,
         'encoderPath': value.encoderPath,
         'id': value.id,
         'maskDecoderPath': value.maskDecoderPath,
+        'maskMediaFilename': value.maskMediaFilename,
         'mediaFilename': value.mediaFilename,
         'private': value._private,
         'title': value.title,

@@ -8,11 +8,15 @@ import Masonry from 'react-masonry-css';
 
 //First Party Imports
 import { UserAPIInstance } from '../../Helpers/Api';
+import { Image } from '../../Components/Image/Image';
 import { Media } from '../../Components/Media/Media';
+import { Button } from '../../Components/Button/Button';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { IndividualUserGetResponse } from '../../Swagger/models/IndividualUserGetResponse';
 import { GetIndivdualUserRequest, UserShiftsRequest, Shift, UserShiftsResponse } from '../../Swagger';
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
+import Verified from "../../Assets/verified_checkmark.svg";
+import Admin from "../../Assets/admin.svg";
 
 
 export function UserPage (props: IElevatedStateProps){
@@ -20,7 +24,7 @@ export function UserPage (props: IElevatedStateProps){
 
   const { username } = useParams<GetIndivdualUserRequest>();
 
-  const [profileResponse, setProfileResponse] = useState<IndividualUserGetResponse>();
+  const [userResponse, setUserResponse] = useState<IndividualUserGetResponse>();
   const [userShiftsResponse, setUserShiftsResponse] = useState<UserShiftsResponse>();
   const [profilePictureURL, setProfilePictureURL] = useState("");
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
@@ -32,7 +36,7 @@ export function UserPage (props: IElevatedStateProps){
     }
 
     UserAPIInstance.getIndivdualUser(urlParams).then((value) => {
-      setProfileResponse(value!)
+      setUserResponse(value!)
     })
   }, []);
 
@@ -47,10 +51,10 @@ export function UserPage (props: IElevatedStateProps){
   }, []);
 
   useEffect(() => {
-    if(!profileResponse || !profileResponse.user) return;
+    if(!userResponse || !userResponse.user) return;
 
-    setProfilePictureURL(`/api/content/image/${profileResponse!.user.mediaFilename}`);
-  }, [profileResponse]);
+    setProfilePictureURL(`/api/content/image/${userResponse!.user.mediaFilename}`);
+  }, [userResponse]);
 
   useEffect(() => {
     if(!userShiftsResponse || !userShiftsResponse.shifts) return;
@@ -59,16 +63,45 @@ export function UserPage (props: IElevatedStateProps){
   }, [userShiftsResponse]);
 
 
+  let userComponent = <></>
+  let updateUserComponent = <></>
+  if(userResponse){
+    if(userResponse.owner){
+      updateUserComponent = (
+        <Row>
+          <Button className="borderRadius-2 p-2 mt-2">Edit Profile</Button>
+        </Row>
+      )
+    }
+    userComponent = (
+      <>
+        <Row>
+          <h2>
+            {username} {userResponse.user!.verified! ?
+            <Image style={{height: "0.75em", width: "auto"}} 
+                className="object-fit-contain"
+                imageSrc={Admin} alt="Admin"/> : <></>} {userResponse.user!.admin! ?
+            <Image style={{height: "0.75em", width: "auto"}} 
+                className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
+          </h2>
+        </Row>
+        <Row>
+          <p>{userResponse.user!.email}</p>
+        </Row>
+        <Row>
+          <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL} setElevatedState={setElevatedState}/>
+        </Row>
+        {updateUserComponent}
+      </>
+    )
+  }
+
+
   return (
     <Container key={profilePictureURL}>
       <Row>
         <Col xs={3}>
-          <Row className="justify-content-center">
-            <h2>{username}</h2>
-          </Row>
-          <Row>
-            <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL} setElevatedState={setElevatedState}/>
-          </Row>
+          {userComponent}
         </Col>
         <Col xs={9} className="p-2">
           <Masonry breakpointCols={{default: 4,

@@ -2,6 +2,7 @@
 
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
+import { Container, Row } from 'react-bootstrap';
 import { ShiftCategoryAPIInstance } from '../Helpers/Api';
 
 //First Party Imports
@@ -54,40 +55,48 @@ export function Home (props: IElevatedStateProps){
   }, [])
 
   return (
-    <>
-      <h1>Shift</h1>
+    <Container>
+      <Row className="justify-content-center">
+        <h1>Shift</h1>
+      </Row>
 
-      <h4>Featured</h4>
-      <HorizontalScrollMenu setElevatedState={setElevatedState}>
-        {featuredShifts.map((element, index) => (
-          <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
-        ))}
-      </HorizontalScrollMenu>
+      <Row>
+        <h5>Featured</h5>
+        <HorizontalScrollMenu setElevatedState={setElevatedState}>
+          {featuredShifts.map((element, index) => (
+            <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
+          ))}
+        </HorizontalScrollMenu>
+      </Row>
 
-      <h4>Popular</h4>
-      <HorizontalScrollMenu setElevatedState={setElevatedState}>
-        {popularShifts.map((element, index) => (
-          <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
-        ))}
-      </HorizontalScrollMenu>
+      <Row>
+        <h5>Popular</h5>
+        <HorizontalScrollMenu setElevatedState={setElevatedState}>
+          {popularShifts.map((element, index) => (
+            <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
+          ))}
+        </HorizontalScrollMenu>
+      </Row>
 
-      <h4>New</h4>
-      <HorizontalScrollMenu setElevatedState={setElevatedState}>
-        {newShifts.map((element, index) => (
-          <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
-        ))}
-      </HorizontalScrollMenu>
+      <Row>
+        <h5>New</h5>
+        <HorizontalScrollMenu setElevatedState={setElevatedState}>
+          {newShifts.map((element, index) => (
+            <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
+          ))}
+        </HorizontalScrollMenu>
+      </Row>
 
       {shiftCategories.map((category) => (
-        <>
-          {category.category ? <h4>{category.category}</h4> : <></>}
+        <Row>
+          {category.category ? <h5>{category.category}</h5> : <></>}
           {category.shifts!.length > 0 ? <HorizontalScrollMenu setElevatedState={setElevatedState}>
             {category.shifts!.map((element, index) => (
               <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
             ))}
           </HorizontalScrollMenu> : <></>}
-        </>
+        </Row>
       ))}
-    </>
+    </Container>
   );
 }
