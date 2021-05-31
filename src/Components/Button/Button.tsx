@@ -6,7 +6,7 @@ import './Button.scss';
 
 interface IButton extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
   children: React.ReactNode
-  onClick?: () => void
+  onClick?: (event?: any) => void
 }
 
 export const Button = (props: IButton) => {

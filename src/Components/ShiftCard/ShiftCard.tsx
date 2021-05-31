@@ -25,12 +25,13 @@ export function ShiftCard(props: IShiftCard){
 
   const history = useHistory();
 
-  function goToShift(uuid: string){
+  function goToShift(event: Event, uuid: string){
+    event.preventDefault()
     history.push(`/shift/${uuid}`)
   }
 
   return (
-    <Button {...cardProps} className={cssClasses} onClick={() => goToShift(shift.uuid)} style={buttonStyle}>
+    <Button {...cardProps} className={cssClasses} onClick={(event: Event) => goToShift(event, shift.uuid)} style={buttonStyle}>
       <h2>{shift.title}</h2>
       <Media srcString={`${apiPrefix}${shift.mediaFilename}`} 
         setElevatedState={setElevatedState} className="borderRadius-2">
