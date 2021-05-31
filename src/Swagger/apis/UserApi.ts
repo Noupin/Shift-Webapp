@@ -27,9 +27,6 @@ import {
     IndividualUserPatchResponse,
     IndividualUserPatchResponseFromJSON,
     IndividualUserPatchResponseToJSON,
-    ProfileResponse,
-    ProfileResponseFromJSON,
-    ProfileResponseToJSON,
     UpdatePictureResponse,
     UpdatePictureResponseFromJSON,
     UpdatePictureResponseToJSON,
@@ -46,10 +43,6 @@ export interface GetIndivdualUserRequest {
     username: string;
 }
 
-export interface GetUsersShiftsRequest {
-    username: string;
-}
-
 export interface PatchIndivdualUserRequest {
     username: string;
     body?: IndividualUserPatchRequest;
@@ -57,6 +50,10 @@ export interface PatchIndivdualUserRequest {
 
 export interface UpdatePictureRequest {
     requestFile: Blob;
+}
+
+export interface UserShiftsRequest {
+    username: string;
 }
 
 /**
@@ -129,36 +126,6 @@ export class UserApi extends runtime.BaseAPI {
     }
 
     /**
-     * The shifts associated with the queried user.
-     */
-    async getUsersShiftsRaw(requestParameters: GetUsersShiftsRequest): Promise<runtime.ApiResponse<UserShiftsResponse>> {
-        if (requestParameters.username === null || requestParameters.username === undefined) {
-            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling getUsersShifts.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/user/{username}/shifts`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserShiftsResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * The shifts associated with the queried user.
-     */
-    async getUsersShifts(requestParameters: GetUsersShiftsRequest): Promise<UserShiftsResponse> {
-        const response = await this.getUsersShiftsRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
      * Updates/modifies the queried user.
      */
     async patchIndivdualUserRaw(requestParameters: PatchIndivdualUserRequest): Promise<runtime.ApiResponse<IndividualUserPatchResponse>> {
@@ -192,66 +159,6 @@ export class UserApi extends runtime.BaseAPI {
      */
     async patchIndivdualUser(requestParameters: PatchIndivdualUserRequest): Promise<IndividualUserPatchResponse> {
         const response = await this.patchIndivdualUserRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * The users profile to display the on users the account page
-     */
-    async profileRaw(): Promise<runtime.ApiResponse<ProfileResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/api/user/data/profile`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * The users profile to display the on users the account page
-     */
-    async profile(): Promise<ProfileResponse> {
-        const response = await this.profileRaw();
-        return await response.value();
-    }
-
-    /**
-     * The users shifts to display the users account page.
-     */
-    async shiftsRaw(): Promise<runtime.ApiResponse<UserShiftsResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/api/user/data/shifts`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserShiftsResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * The users shifts to display the users account page.
-     */
-    async shifts(): Promise<UserShiftsResponse> {
-        const response = await this.shiftsRaw();
         return await response.value();
     }
 
@@ -307,6 +214,36 @@ export class UserApi extends runtime.BaseAPI {
      */
     async updatePicture(requestParameters: UpdatePictureRequest): Promise<UpdatePictureResponse> {
         const response = await this.updatePictureRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * The shifts associated with the queried user.
+     */
+    async userShiftsRaw(requestParameters: UserShiftsRequest): Promise<runtime.ApiResponse<UserShiftsResponse>> {
+        if (requestParameters.username === null || requestParameters.username === undefined) {
+            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling userShifts.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/user/{username}/shifts`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserShiftsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * The shifts associated with the queried user.
+     */
+    async userShifts(requestParameters: UserShiftsRequest): Promise<UserShiftsResponse> {
+        const response = await this.userShiftsRaw(requestParameters);
         return await response.value();
     }
 

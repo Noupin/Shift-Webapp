@@ -28,6 +28,12 @@ import {
 export interface IndividualShiftGetResponse {
     /**
      * 
+     * @type {boolean}
+     * @memberof IndividualShiftGetResponse
+     */
+    owner: boolean;
+    /**
+     * 
      * @type {Shift}
      * @memberof IndividualShiftGetResponse
      */
@@ -44,6 +50,7 @@ export function IndividualShiftGetResponseFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
+        'owner': json['owner'],
         'shift': !exists(json, 'shift') ? undefined : ShiftFromJSON(json['shift']),
     };
 }
@@ -57,6 +64,7 @@ export function IndividualShiftGetResponseToJSON(value?: IndividualShiftGetRespo
     }
     return {
         
+        'owner': value.owner,
         'shift': ShiftToJSON(value.shift),
     };
 }

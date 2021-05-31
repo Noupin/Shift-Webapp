@@ -26,7 +26,6 @@ models/LoginResponse.ts
 models/LogoutResponse.ts
 models/NewShiftsResponse.ts
 models/PopularShiftsResponse.ts
-models/ProfileResponse.ts
 models/RegisterRequest.ts
 models/RegisterResponse.ts
 models/Shift.ts

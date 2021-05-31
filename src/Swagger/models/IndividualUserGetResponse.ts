@@ -28,6 +28,12 @@ import {
 export interface IndividualUserGetResponse {
     /**
      * 
+     * @type {boolean}
+     * @memberof IndividualUserGetResponse
+     */
+    owner: boolean;
+    /**
+     * 
      * @type {User}
      * @memberof IndividualUserGetResponse
      */
@@ -44,6 +50,7 @@ export function IndividualUserGetResponseFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
+        'owner': json['owner'],
         'user': !exists(json, 'user') ? undefined : UserFromJSON(json['user']),
     };
 }
@@ -57,6 +64,7 @@ export function IndividualUserGetResponseToJSON(value?: IndividualUserGetRespons
     }
     return {
         
+        'owner': value.owner,
         'user': UserToJSON(value.user),
     };
 }

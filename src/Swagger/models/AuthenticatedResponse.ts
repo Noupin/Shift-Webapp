@@ -31,6 +31,12 @@ export interface AuthenticatedResponse {
      * @memberof AuthenticatedResponse
      */
     msg?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthenticatedResponse
+     */
+    username?: string | null;
 }
 
 export function AuthenticatedResponseFromJSON(json: any): AuthenticatedResponse {
@@ -45,6 +51,7 @@ export function AuthenticatedResponseFromJSONTyped(json: any, ignoreDiscriminato
         
         'authenticated': json['authenticated'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
+        'username': !exists(json, 'username') ? undefined : json['username'],
     };
 }
 
@@ -59,6 +66,7 @@ export function AuthenticatedResponseToJSON(value?: AuthenticatedResponse | null
         
         'authenticated': value.authenticated,
         'msg': value.msg,
+        'username': value.username,
     };
 }
 

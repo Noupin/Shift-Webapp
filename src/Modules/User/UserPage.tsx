@@ -11,7 +11,7 @@ import { UserAPIInstance } from '../../Helpers/Api';
 import { Media } from '../../Components/Media/Media';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { IndividualUserGetResponse } from '../../Swagger/models/IndividualUserGetResponse';
-import { GetIndivdualUserRequest, GetUsersShiftsRequest, Shift, UserShiftsResponse } from '../../Swagger';
+import { GetIndivdualUserRequest, UserShiftsRequest, Shift, UserShiftsResponse } from '../../Swagger';
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 
 
@@ -37,11 +37,11 @@ export function UserPage (props: IElevatedStateProps){
   }, []);
 
   useEffect(() => {
-    const urlParams: GetUsersShiftsRequest = {
+    const urlParams: UserShiftsRequest = {
       username: username
     }
 
-    UserAPIInstance.getUsersShifts(urlParams).then((value) => {
+    UserAPIInstance.userShifts(urlParams).then((value) => {
       setUserShiftsResponse(value!)
     })
   }, []);
@@ -78,7 +78,7 @@ export function UserPage (props: IElevatedStateProps){
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column">
             {userShifts!.map((element, index) => (
-              <ShiftCard key={index} className="borderRadius-2 m-2 p-2" shift={element} setElevatedState={setElevatedState}/>
+              <ShiftCard key={index} className="m-2 p-2" shift={element} setElevatedState={setElevatedState}/>
             ))}
           </Masonry>
         </Col>

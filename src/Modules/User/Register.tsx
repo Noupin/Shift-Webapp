@@ -11,7 +11,7 @@ import { Button } from '../../Components/Button/Button';
 import { useAuthenticate } from '../../Hooks/Authenticate';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { AuthenticatedResponse, RegisterOperationRequest, RegisterRequest, RegisterResponse } from '../../Swagger';
+import { RegisterOperationRequest, RegisterRequest, RegisterResponse } from '../../Swagger';
 
 
 export function Register (props: IElevatedStateProps){
@@ -25,12 +25,11 @@ export function Register (props: IElevatedStateProps){
   const [fetching, setFetching] = useState(false);
   const [registerResponse, setRegisterResponse] = useState<RegisterResponse>();
   const [authenticating, setAuthenticating] = useState(false);
-  const [authenticatedResponse, setAuthenticatedResponse] = useState<AuthenticatedResponse>();
 
   const history = useHistory();
 
 
-  const auth = useAuthenticate(setAuthenticating, props.setElevatedState, setAuthenticatedResponse)
+  const auth = useAuthenticate(setAuthenticating, props.setElevatedState)
 
 
   useEffect(() => {
@@ -64,12 +63,6 @@ export function Register (props: IElevatedStateProps){
     setElevatedState((prev) => ({...prev, msg: registerResponse.msg!}))
     auth()
   }, [authenticating, registerResponse]);
-
-  useEffect(() => {
-    if(!authenticatedResponse) return;
-
-    setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse.authenticated}))
-  }, [authenticatedResponse]);
 
   useEffect(() => {
     if(!elevatedState().authenticated) return;

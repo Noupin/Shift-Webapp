@@ -7,6 +7,10 @@ definitions:
         default: null
         type: string
         x-nullable: true
+      username:
+        default: null
+        type: string
+        x-nullable: true
     required:
     - authenticated
     type: object
@@ -19,8 +23,12 @@ definitions:
     type: object
   IndividualShiftGetResponse:
     properties:
+      owner:
+        type: boolean
       shift:
         $ref: '#/definitions/Shift'
+    required:
+    - owner
     type: object
   IndividualShiftPatchRequest:
     properties:
@@ -47,8 +55,12 @@ definitions:
     type: object
   IndividualUserGetResponse:
     properties:
+      owner:
+        type: boolean
       user:
         $ref: '#/definitions/User'
+    required:
+    - owner
     type: object
   IndividualUserPatchRequest:
     properties:
@@ -152,11 +164,6 @@ definitions:
         items:
           $ref: '#/definitions/Shift'
         type: array
-    type: object
-  ProfileResponse:
-    properties:
-      profile:
-        $ref: '#/definitions/User'
     type: object
   RegisterRequest:
     properties:
@@ -454,7 +461,8 @@ paths:
       parameters: []
       responses:
         default:
-          description: Whether the use is authenticated or not.
+          description: Whether the use is authenticated or not and their username
+            if they are authenticated.
           schema:
             $ref: '#/definitions/AuthenticatedResponse'
       tags:
@@ -493,38 +501,10 @@ paths:
       - UserAuth: []
       tags:
       - Authenticate
-  /api/user/data/shifts:
-    get:
-      description: The users shifts to display the users account page.
-      operationId: shifts
-      parameters: []
-      responses:
-        default:
-          description: The shifts for the user who is logged in.
-          schema:
-            $ref: '#/definitions/UserShiftsResponse'
-      security:
-      - UserAuth: []
-      tags:
-      - User
-  /api/user/data/profile:
-    get:
-      description: The users profile to display the on users the account page
-      operationId: profile
-      parameters: []
-      responses:
-        default:
-          description: The profile for the user who is logged in.
-          schema:
-            $ref: '#/definitions/ProfileResponse'
-      security:
-      - UserAuth: []
-      tags:
-      - User
   /api/user/{username}/shifts:
     get:
       description: The shifts associated with the queried user.
-      operationId: getUsersShifts
+      operationId: userShifts
       parameters:
       - in: path
         name: username
@@ -684,11 +664,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -718,11 +698,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:

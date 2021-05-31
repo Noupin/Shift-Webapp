@@ -12,7 +12,6 @@ import { Container, Row, Col, Alert } from "react-bootstrap";
 import { IElevatedPageState } from "./Interfaces/PageState";
 import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
-import { Account } from './Modules/User/Account';
 import { ForgotPassword } from "./Modules/User/ForgotPassword";
 import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load"
@@ -23,7 +22,6 @@ import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Hooks/Authenticate";
 import { defaultShiftTitle } from "./constants"
-import { AuthenticatedResponse } from './Swagger';
 import { ShiftPage } from "./Modules/ShiftPage"
 import { UserPage } from "./Modules/User/UserPage"
 
@@ -33,7 +31,7 @@ export default function App() {
     msg: "",
     error: null,
     authenticated: false,
-    user: "",
+    username: "",
     defaultTrainView: "basic",
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
@@ -47,10 +45,9 @@ export default function App() {
   const [showMsg, setShowMsg] = useState(false);
 
   const [fetching, setFetching] = useState(true)
-  const [authenticatedResponse, setAuthenticatedResponse] = useState<AuthenticatedResponse>()
   
     
-  const auth = useAuthenticate(setFetching, setElevatedState, setAuthenticatedResponse)
+  const auth = useAuthenticate(setFetching, setElevatedState)
 
   useEffect(() => {
     setElevatedState({...elevatedState, shiftUUID: sessionStorage.getItem("shiftUUID")!})
@@ -62,11 +59,6 @@ export default function App() {
   }, [fetching]);
 
   useEffect(() => {
-    if(!authenticatedResponse) return;
-    setElevatedState({...elevatedState, authenticated: authenticatedResponse!.authenticated})
-  }, [authenticatedResponse]);
-
-  useEffect(() => {
     if(!elevatedState.msg) return;
 
     setShowMsg(true);
@@ -74,8 +66,15 @@ export default function App() {
 
   useEffect(() => {
     if(!elevatedState.shiftUUID) return;
+
     sessionStorage.setItem("shiftUUID", elevatedState.shiftUUID);
   }, [elevatedState.shiftUUID]);
+
+  useEffect(() => {
+    if(!elevatedState.username) return;
+
+    sessionStorage.setItem("username", elevatedState.username);
+  }, [elevatedState.username]);
 
   useEffect(() => {
     if(!elevatedState.error) return;
@@ -111,9 +110,6 @@ export default function App() {
                 </Route>
                 <Route path="/login">
                   <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}></Login>
-                </Route>
-                <Route path="/account">
-                  <Account elevatedState={getElevatedState} setElevatedState={setElevatedState}></Account>
                 </Route>
                 <Route path="/forgotPassword">
                   <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}></ForgotPassword>

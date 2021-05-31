@@ -16,7 +16,6 @@ export * from './LoginResponse';
 export * from './LogoutResponse';
 export * from './NewShiftsResponse';
 export * from './PopularShiftsResponse';
-export * from './ProfileResponse';
 export * from './RegisterRequest';
 export * from './RegisterResponse';
 export * from './Shift';

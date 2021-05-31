@@ -2,7 +2,7 @@ export interface IElevatedPageState {
     msg: string
     error: Error | null
     authenticated: boolean
-    user: string
+    username: string
     defaultTrainView: string
     shiftUUID: string
     shiftTitle: string

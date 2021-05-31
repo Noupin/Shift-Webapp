@@ -12,7 +12,7 @@ import { TextBox } from '../../Components/TextBox/TextBox';
 import { useAuthenticate } from '../../Hooks/Authenticate';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { LoginResponse, LoginRequest, LoginOperationRequest, AuthenticatedResponse } from '../../Swagger';
+import { LoginResponse, LoginRequest, LoginOperationRequest } from '../../Swagger';
 
 
 export function Login (props: IElevatedStateProps){
@@ -25,11 +25,10 @@ export function Login (props: IElevatedStateProps){
   const [fetching, setFetching] = useState(false);
   const [loginResponse, setLoginResponse] = useState<LoginResponse>();
   const [authenticating, setAuthenticating] = useState(false);
-  const [authenticatedResponse, setAuthenticatedResponse] = useState<AuthenticatedResponse>();
 
   const history = useHistory();
 
-  const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse);
+  const auth = useAuthenticate(setAuthenticating, setElevatedState);
 
 
   useEffect(() => {
@@ -57,12 +56,6 @@ export function Login (props: IElevatedStateProps){
     setElevatedState((prev) => ({...prev, msg: loginResponse.msg!}));
     auth()
   }, [authenticating, loginResponse]);
-
-  useEffect(() => {
-    if(!authenticatedResponse) return;
-
-    setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse.authenticated}))
-  }, [authenticatedResponse]);
 
   useEffect(() => {
     if(!elevatedState().authenticated) return;

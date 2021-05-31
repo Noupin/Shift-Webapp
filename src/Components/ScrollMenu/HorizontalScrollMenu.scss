@@ -1,0 +1,10 @@
+.scrollMenu {
+    overflow: auto;
+    white-space: nowrap;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.scrollMenu::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}

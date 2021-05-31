@@ -11,21 +11,20 @@ import { AuthenticateAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
 import { useAuthenticate } from '../../Hooks/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { AuthenticatedResponse, LogoutResponse } from '../../Swagger';
+import { LogoutResponse } from '../../Swagger';
 
 
 export function UserElements (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
 
   const [authenticating, setAuthenticating] = useState(false);
-  const [authenticatedResponse, setAuthenticatedResponse] = useState<AuthenticatedResponse>()
 
   const [fetching, setFetching] = useState(false);
   const [logoutResponse, setLogoutResponse] = useState<LogoutResponse>();
 
   const history = useHistory();
 
-  const auth = useAuthenticate(setAuthenticating, setElevatedState, setAuthenticatedResponse)
+  const auth = useAuthenticate(setAuthenticating, setElevatedState)
 
   useEffect(() => {
     if(!fetching) return;
@@ -44,18 +43,17 @@ export function UserElements (props: IElevatedStateProps){
   }, [authenticating, logoutResponse]);
 
   useEffect(() => {
-    if (!authenticatedResponse) return;
+    if (!elevatedState().authenticated) return;
 
-    setElevatedState((prev) => ({...prev, authenticated: authenticatedResponse!.authenticated}))
     history.push("/")
-  }, [authenticatedResponse]);
+  }, [elevatedState().authenticated]);
 
 
   if(elevatedState().authenticated){
     return (
       <>
       <div className="mx-1 my-1">
-        <NavLink to="/account" activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
+        <NavLink to={`/user/${elevatedState().username}`} activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
           Account
         </NavLink>
       </div>
