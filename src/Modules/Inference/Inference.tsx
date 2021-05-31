@@ -21,6 +21,7 @@ export function Inference (props: IElevatedStateProps){
 	const {elevatedState, setElevatedState} = props;
 
 	const [inferenceMedia, setInferenceMedia] = useState("");
+	const [baseMediaString, setBaseMediaString] = useState("")
 
 	const [inference, setInference] = useState(true);
 	const [stopInference, setStopInference] = useState(false);
@@ -81,6 +82,7 @@ export function Inference (props: IElevatedStateProps){
 
 			if(inferenceResponse.mediaFilename!){
 				setInferenceMedia(`${videoTypes.indexOf(inferenceResponse.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${inferenceResponse.mediaFilename!}`)
+				setBaseMediaString(`${videoTypes.indexOf(inferenceResponse.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${inferenceResponse.baseMediaFilename!}`)
 			}
 
 			setStopInference(inferenceResponse.stopped!);
@@ -101,7 +103,7 @@ export function Inference (props: IElevatedStateProps){
 				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={inferenceMedia} mediaType="media"/>
 			</Row>
 			<Row className="my-3">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={inferenceMedia} mediaType="video/mp4"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={baseMediaString} mediaType="media"/>
 			</Row>
 			<Row className="my-2">
 				<Col xs={1}></Col>

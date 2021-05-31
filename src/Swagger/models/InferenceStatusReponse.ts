@@ -24,6 +24,18 @@ export interface InferenceStatusReponse {
      * @type {string}
      * @memberof InferenceStatusReponse
      */
+    baseMediaFilename?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof InferenceStatusReponse
+     */
+    maskMediaFilename?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof InferenceStatusReponse
+     */
     mediaFilename?: string | null;
     /**
      * 
@@ -49,6 +61,8 @@ export function InferenceStatusReponseFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
+        'baseMediaFilename': !exists(json, 'baseMediaFilename') ? undefined : json['baseMediaFilename'],
+        'maskMediaFilename': !exists(json, 'maskMediaFilename') ? undefined : json['maskMediaFilename'],
         'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
         'stopped': !exists(json, 'stopped') ? undefined : json['stopped'],
@@ -64,6 +78,8 @@ export function InferenceStatusReponseToJSON(value?: InferenceStatusReponse | nu
     }
     return {
         
+        'baseMediaFilename': value.baseMediaFilename,
+        'maskMediaFilename': value.maskMediaFilename,
         'mediaFilename': value.mediaFilename,
         'msg': value.msg,
         'stopped': value.stopped,

@@ -19,7 +19,7 @@ interface IShiftCard extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<
 
 export function ShiftCard(props: IShiftCard){
   const {shift, setElevatedState, ...cardProps} = props;
-  const cssClasses = cardProps.className?.toString() + " neuPress neuHover neumorphic borderRadius-2";
+  const cssClasses = cardProps.className?.toString() + " neuPress neuHover neumorphic borderRadius-2 forceTextWrap";
   const buttonStyle: React.CSSProperties = {objectFit: 'contain', border: 'none'};
   const apiPrefix = videoTypes.indexOf(shift.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'
 

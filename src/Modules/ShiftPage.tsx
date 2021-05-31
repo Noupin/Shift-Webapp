@@ -41,7 +41,7 @@ export function ShiftPage (props: IElevatedStateProps){
     ShiftAPIInstance.getIndivdualShift(urlParams).then((value) => {
       setShiftResponse(value!)
     })
-  }, []);
+  }, [uuid]);
 
   useEffect(() => {
     if (!shiftResponse) return;
@@ -53,7 +53,7 @@ export function ShiftPage (props: IElevatedStateProps){
 
   let userComponent = <></>
   let shiftTitleComponent = <></>
-  let updateShiftComponent = <></>
+  let editShiftComponent = <></>
 
   if(shiftResponse){
     shiftTitleComponent = (
@@ -65,9 +65,14 @@ export function ShiftPage (props: IElevatedStateProps){
       </h1>
     )
     if(shiftResponse.owner){
-      updateShiftComponent = (
-        <Row>
-          <Button className="borderRadius-2 p-2 mt-2">Edit Shift</Button>
+      editShiftComponent = (
+        <Row className="mt-2">
+          <Col>
+            <Button className="borderRadius-2 p-2 w-100 mx-1">Edit</Button>
+          </Col>
+          <Col>
+            <Button className="borderRadius-2 p-2 text-danger w-100 mx-1">Delete</Button>
+          </Col>
         </Row>
       )
     }
@@ -101,7 +106,7 @@ export function ShiftPage (props: IElevatedStateProps){
       <Row>
         <Col xs={3} className="p-2">
           {userComponent}
-          {updateShiftComponent}
+          {editShiftComponent}
         </Col>
         <Col xs={9} className="p-2">
           <Row>

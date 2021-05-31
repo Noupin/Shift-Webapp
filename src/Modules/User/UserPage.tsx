@@ -38,7 +38,7 @@ export function UserPage (props: IElevatedStateProps){
     UserAPIInstance.getIndivdualUser(urlParams).then((value) => {
       setUserResponse(value!)
     })
-  }, []);
+  }, [username]);
 
   useEffect(() => {
     const urlParams: UserShiftsRequest = {
@@ -48,7 +48,7 @@ export function UserPage (props: IElevatedStateProps){
     UserAPIInstance.userShifts(urlParams).then((value) => {
       setUserShiftsResponse(value!)
     })
-  }, []);
+  }, [username]);
 
   useEffect(() => {
     if(!userResponse || !userResponse.user) return;
@@ -98,7 +98,7 @@ export function UserPage (props: IElevatedStateProps){
 
 
   return (
-    <Container key={profilePictureURL}>
+    <Container key={username}>
       <Row>
         <Col xs={3}>
           {userComponent}

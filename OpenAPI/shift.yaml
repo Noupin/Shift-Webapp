@@ -80,6 +80,10 @@ definitions:
     type: object
   InferenceRequest:
     properties:
+      msg:
+        default: null
+        type: string
+        x-nullable: true
       prebuiltShiftModel:
         default: ''
         type: string
@@ -100,6 +104,14 @@ definitions:
     type: object
   InferenceStatusReponse:
     properties:
+      baseMediaFilename:
+        default: null
+        type: string
+        x-nullable: true
+      maskMediaFilename:
+        default: null
+        type: string
+        x-nullable: true
       mediaFilename:
         default: null
         type: string
@@ -640,7 +652,8 @@ paths:
         default:
           description: A msg describing the current state of inferencing on the original
             media, whether or not the inferencing has been stopped or finished, and
-            the image path to pass to the cdn.
+            the image path to pass to the cdn for the shifted media, and the base
+            and the mask previews.
           schema:
             $ref: '#/definitions/InferenceStatusReponse'
       security:
