@@ -17,6 +17,7 @@ import Verified from "../Assets/verified_checkmark.svg";
 import Admin from "../Assets/admin.svg";
 import LeftCurvedArrow from "../Assets/LeftCurvedArrow.svg"
 import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
+import { videoTypes } from '../constants';
 
 
 export function ShiftPage (props: IElevatedStateProps){
@@ -45,14 +46,15 @@ export function ShiftPage (props: IElevatedStateProps){
   useEffect(() => {
     if (!shiftResponse) return;
 
-    setShiftMediaURL(`/api/content/image/${shiftResponse.shift!.mediaFilename!}`)
-    setBaseMediaURL(`/api/content/image/${shiftResponse.shift!.baseMediaFilename!}`)
-    setMaskMediaURL(`/api/content/image/${shiftResponse.shift!.maskMediaFilename!}`)
+    setShiftMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.mediaFilename!}`)
+    setBaseMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.baseMediaFilename!}`)
+    setMaskMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.maskMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.maskMediaFilename!}`)
   }, [shiftResponse])
 
   let userComponent = <></>
   let shiftTitleComponent = <></>
   let updateShiftComponent = <></>
+
   if(shiftResponse){
     shiftTitleComponent = (
       <h1>

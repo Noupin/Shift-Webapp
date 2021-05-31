@@ -14,6 +14,7 @@ import { InferenceAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { CombinedInferenceResponse } from '../../Interfaces/CombinedInference';
 import { InferenceOperationRequest, InferenceRequest, InferenceStatusRequest } from '../../Swagger';
+import { videoTypes } from "../../constants";
 
 
 export function Inference (props: IElevatedStateProps){
@@ -79,7 +80,7 @@ export function Inference (props: IElevatedStateProps){
 			}
 
 			if(inferenceResponse.mediaFilename!){
-				setInferenceMedia(`/api/content/image/${inferenceResponse.mediaFilename!}`)
+				setInferenceMedia(`${videoTypes.indexOf(inferenceResponse.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${inferenceResponse.mediaFilename!}`)
 			}
 
 			setStopInference(inferenceResponse.stopped!);
