@@ -19,6 +19,7 @@ import { IElevatedPageState } from '../../Interfaces/PageState';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { LoadDataResponse, LoadDataRequest } from '../../Swagger';
 import { LoadAPIInstance } from '../../Helpers/Api';
+import { Loader } from '../../Components/Loader/Loader';
 
 
 function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<IElevatedPageState>>, setFiles: React.Dispatch<React.SetStateAction<File[]>>){
@@ -222,7 +223,9 @@ export function Load (props: IElevatedStateProps){
         <Col xs={8}>
           <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
         </Col>
-        <Col xs={2}></Col>
+        <Col xs={2}>
+          {fetching ? <Loader/> : <></>}
+        </Col>
       </Row>
     </Container>
   );

@@ -15,6 +15,7 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { CombinedInferenceResponse } from '../../Interfaces/CombinedInference';
 import { InferenceOperationRequest, InferenceRequest, InferenceStatusRequest } from '../../Swagger';
 import { videoTypes } from "../../constants";
+import { Loader } from "../../Components/Loader/Loader";
 
 
 export function Inference (props: IElevatedStateProps){
@@ -105,6 +106,7 @@ export function Inference (props: IElevatedStateProps){
 			<Row className="my-3">
 				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={baseMediaString} mediaType="media"/>
 			</Row>
+			{updating ? <Row><Loader/></Row> : <></>}
 			<Row className="my-2">
 				<Col xs={1}></Col>
 				<Col xs={2} className="pr-4">

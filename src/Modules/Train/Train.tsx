@@ -13,6 +13,7 @@ import { Button } from '../../Components/Button/Button';
 import { CombinedTrainResponse } from '../../Interfaces/CombinedTrain';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
+import { Loader } from '../../Components/Loader/Loader';
 
 
 export function Train (props: IElevatedStateProps){
@@ -171,6 +172,7 @@ export function Train (props: IElevatedStateProps){
       <Row className="my-2">
         <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image!} mediaType="video/mp4"/>
       </Row>
+      {updating || stop ? <Row><Loader/></Row> : <></>}
       <Row className="my-2">
         <Col xs={1}></Col>
         <Col xs={4} className="pr-4">
@@ -182,7 +184,8 @@ export function Train (props: IElevatedStateProps){
         <Col xs={2} className="pl-4">
           <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain} onClick={() => setUpdating(true)}>Update</Button>
         </Col>
-        <Col xs={1}></Col>
+        <Col xs={1}>
+        </Col>
       </Row>
     </Container>
   );
