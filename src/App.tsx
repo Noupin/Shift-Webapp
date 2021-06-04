@@ -106,33 +106,33 @@ export default function App() {
 
               <Switch>
                 <Route path="/register">
-                  <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}></Register>
+                  <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/login">
-                  <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}></Login>
+                  <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/forgotPassword">
-                  <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}></ForgotPassword>
+                  <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/load">
-                  <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}></Load>
+                  <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/train">
-                  <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}></Train>
+                  <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/advancedTrain">
-                  <AdvancedTrain elevatedState={getElevatedState} setElevatedState={setElevatedState}></AdvancedTrain>
+                  <AdvancedTrain elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/inference">
-                  <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}></Inference>
+                  <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/shift/:uuid">
-                  <ShiftPage elevatedState={getElevatedState} setElevatedState={setElevatedState}></ShiftPage>
+                  <ShiftPage elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/user/:username">
-                  <UserPage elevatedState={getElevatedState} setElevatedState={setElevatedState}></UserPage>
+                  <UserPage elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <Route path="/">
+                <Route exact path="/">
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
               </Switch>

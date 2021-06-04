@@ -20,7 +20,6 @@ export function Train (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
   useEffect(() => {
     setElevatedState((prev) => ({...prev, shiftUUID: sessionStorage["shiftUUID"]}))
-    setElevatedState((prev) => ({...prev, prebuiltShiftModel: elevatedState().shiftUUID}))
   }, []);
 
   const [stopTrain, setStopTrain] = useState(false);
@@ -172,7 +171,7 @@ export function Train (props: IElevatedStateProps){
       <Row className="my-2">
         <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image!} mediaType="video/mp4"/>
       </Row>
-      {updating || stop ? <Row><Loader/></Row> : <></>}
+      {(updating || stop) ? <Row className="justify-content-center"><Loader/></Row> : <></>}
       <Row className="my-2">
         <Col xs={1}></Col>
         <Col xs={4} className="pr-4">

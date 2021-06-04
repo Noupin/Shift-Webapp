@@ -103,10 +103,13 @@ export function Inference (props: IElevatedStateProps){
 			<Row className="mb-2">
 				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={inferenceMedia} mediaType="media"/>
 			</Row>
+			<Row className="justify-content-center">
+				<h1>&#x2191;</h1>
+			</Row>
 			<Row className="my-3">
 				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={baseMediaString} mediaType="media"/>
 			</Row>
-			{updating ? <Row><Loader/></Row> : <></>}
+			{updating ? <Row className="justify-content-center"><Loader/></Row> : <></>}
 			<Row className="my-2">
 				<Col xs={1}></Col>
 				<Col xs={2} className="pr-4">

@@ -37,12 +37,6 @@ export interface Shift {
      * @type {string}
      * @memberof Shift
      */
-    baseDecoderPath: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Shift
-     */
     baseMediaFilename?: string;
     /**
      * 
@@ -52,22 +46,10 @@ export interface Shift {
     dateCreated?: string;
     /**
      * 
-     * @type {string}
-     * @memberof Shift
-     */
-    encoderPath: string;
-    /**
-     * 
      * @type {object}
      * @memberof Shift
      */
     id?: object;
-    /**
-     * 
-     * @type {string}
-     * @memberof Shift
-     */
-    maskDecoderPath: string;
     /**
      * 
      * @type {string}
@@ -123,12 +105,9 @@ export function ShiftFromJSONTyped(json: any, ignoreDiscriminator: boolean): Shi
     return {
         
         'author': UserFromJSON(json['author']),
-        'baseDecoderPath': json['baseDecoderPath'],
         'baseMediaFilename': !exists(json, 'baseMediaFilename') ? undefined : json['baseMediaFilename'],
         'dateCreated': !exists(json, 'dateCreated') ? undefined : json['dateCreated'],
-        'encoderPath': json['encoderPath'],
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'maskDecoderPath': json['maskDecoderPath'],
         'maskMediaFilename': !exists(json, 'maskMediaFilename') ? undefined : json['maskMediaFilename'],
         'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
         '_private': !exists(json, 'private') ? undefined : json['private'],
@@ -149,12 +128,9 @@ export function ShiftToJSON(value?: Shift | null): any {
     return {
         
         'author': UserToJSON(value.author),
-        'baseDecoderPath': value.baseDecoderPath,
         'baseMediaFilename': value.baseMediaFilename,
         'dateCreated': value.dateCreated,
-        'encoderPath': value.encoderPath,
         'id': value.id,
-        'maskDecoderPath': value.maskDecoderPath,
         'maskMediaFilename': value.maskMediaFilename,
         'mediaFilename': value.mediaFilename,
         'private': value._private,

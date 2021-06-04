@@ -121,7 +121,7 @@ definitions:
         type: string
         x-nullable: true
       stopped:
-        default: null
+        default: false
         type: boolean
         x-nullable: true
     type: object
@@ -201,17 +201,11 @@ definitions:
     properties:
       author:
         $ref: '#/definitions/User'
-      baseDecoderPath:
-        type: string
       baseMediaFilename:
         type: string
       dateCreated:
         type: string
-      encoderPath:
-        type: string
       id: {}
-      maskDecoderPath:
-        type: string
       maskMediaFilename:
         type: string
       mediaFilename:
@@ -229,9 +223,6 @@ definitions:
         type: integer
     required:
     - author
-    - baseDecoderPath
-    - encoderPath
-    - maskDecoderPath
     - title
     - uuid
     type: object
@@ -681,11 +672,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -715,11 +706,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:

@@ -20,6 +20,7 @@ import { TextBox } from '../../Components/TextBox/TextBox';
 import { LoadDataResponse, LoadDataRequest } from '../../Swagger';
 import { LoadAPIInstance } from '../../Helpers/Api';
 import { Loader } from '../../Components/Loader/Loader';
+import { Checkbox } from '../../Components/Checkbox/Checkbox';
 
 
 function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<IElevatedPageState>>, setFiles: React.Dispatch<React.SetStateAction<File[]>>){
@@ -218,13 +219,17 @@ export function Load (props: IElevatedStateProps){
           </div>
         </Col>
       </Row>
+      {fetching ? <Row className="justify-content-center"><Loader/></Row> : <></>}
       <Row className="mt-3">
-        <Col xs={2}></Col>
-        <Col xs={8}>
+        <Col xs={10}>
           <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
         </Col>
-        <Col xs={2}>
-          {fetching ? <Loader/> : <></>}
+        <Col xs={1} className=" justify-content-center my-auto">
+          <h5 className="m-0">PTM:</h5>
+        </Col>
+        <Col xs={1} className="p-2">
+          <Checkbox checked={elevatedState().usePTM}
+            onChange={() => setElevatedState((prev) => ({...prev, usePTM: !elevatedState().usePTM}))}/>
         </Col>
       </Row>
     </Container>
