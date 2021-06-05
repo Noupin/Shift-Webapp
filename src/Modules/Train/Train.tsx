@@ -40,6 +40,8 @@ export function Train (props: IElevatedStateProps){
 
   //Start training the AI on the backend
   useEffect(() => {
+    document.title = "Shift - Training"
+
     const trainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,

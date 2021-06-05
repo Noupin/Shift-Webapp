@@ -57,11 +57,12 @@ export function Load (props: IElevatedStateProps){
   const prevShiftUUID = sessionStorage["shiftUUID"];
 
   
-  //Load Request
   useEffect(() => {
+    document.title = `Shift - Load`
     setElevatedState((prev) => ({...prev, prebuiltShiftModel: "", shiftTitle: defaultShiftTitle}))
   }, []);
 
+  //Load Request
   useEffect(() => {
     if(!fetching) return;
 

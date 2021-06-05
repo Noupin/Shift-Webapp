@@ -322,7 +322,7 @@ definitions:
           $ref: '#/definitions/Shift'
         type: array
     type: object
-host: localhost:5000
+host: 75.118.211.6:25565
 info:
   description: Shift Server API documentation
   title: Shift

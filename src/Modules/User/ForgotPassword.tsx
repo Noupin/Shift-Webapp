@@ -28,8 +28,12 @@ export function ForgotPassword (props: IElevatedStateProps){
 
   const requestOptions = useRef<RequestInit>({});
 
-
   const fetchResetPassword = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions.current, registerResponse)
+
+
+  useEffect(() => {
+    document.title = `Shift - Forgot Password`
+  }, [])
 
   useEffect(() => {
     if(!fetching) return;

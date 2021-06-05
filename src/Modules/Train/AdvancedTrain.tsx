@@ -45,6 +45,10 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
 
   useEffect(() => {
+    document.title = `Shift - Advanced Train`
+  }, [])
+
+  useEffect(() => {
     if(!fetching || stopTrain || basicView) return;
 
     requestOptions = {

@@ -28,7 +28,11 @@ export function UserPage (props: IElevatedStateProps){
   const [userShiftsResponse, setUserShiftsResponse] = useState<UserShiftsResponse>();
   const [profilePictureURL, setProfilePictureURL] = useState("");
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
-  
+
+
+  useEffect(() => {
+    document.title = `Shift - ${username}`
+  }, [])
   
   useEffect(() => {
     const urlParams: GetIndivdualUserRequest = {

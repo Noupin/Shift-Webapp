@@ -21,6 +21,11 @@ export function Home (props: IElevatedStateProps){
   const [newShifts, setNewShifts] = useState<Shift[]>([])
   const [shiftCategories, setShiftCategories] = useState<ShiftCategories[]>([])
 
+
+  useEffect(() => {
+    document.title = `Shift - Home`
+  }, [])
+
   useEffect(() => {
     ShiftCategoryAPIInstance.popular().then((value) => setPopularShifts(value.shifts!))
   }, [])

@@ -32,6 +32,10 @@ export function Login (props: IElevatedStateProps){
 
 
   useEffect(() => {
+    document.title = "Shift - Login"
+  }, [])
+
+  useEffect(() => {
     if(!fetching) return;
 
     const loginRequestParams: LoginRequest = {

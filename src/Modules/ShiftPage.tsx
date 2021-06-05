@@ -34,6 +34,10 @@ export function ShiftPage (props: IElevatedStateProps){
   
   
   useEffect(() => {
+    document.title = `Shift`
+  }, [])
+
+  useEffect(() => {
     const urlParams: GetIndivdualShiftRequest = {
       uuid: uuid
     }
@@ -45,6 +49,8 @@ export function ShiftPage (props: IElevatedStateProps){
 
   useEffect(() => {
     if (!shiftResponse) return;
+
+    document.title = `Shift - ${shiftResponse.shift!.title}`
 
     setShiftMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.mediaFilename!}`)
     setBaseMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.baseMediaFilename!}`)

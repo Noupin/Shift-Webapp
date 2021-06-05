@@ -32,6 +32,10 @@ export function Inference (props: IElevatedStateProps){
 
 
 	useEffect(() => {
+    document.title = `Shift - Inference`
+  }, [])
+
+	useEffect(() => {
 		if(!inference) return;
 
 		const inferenceRequestParams: InferenceRequest = {

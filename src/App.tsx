@@ -50,6 +50,7 @@ export default function App() {
   const auth = useAuthenticate(setFetching, setElevatedState)
 
   useEffect(() => {
+    document.title = "Shift"
     setElevatedState({...elevatedState, shiftUUID: sessionStorage.getItem("shiftUUID")!})
   }, [])
 

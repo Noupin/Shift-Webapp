@@ -33,6 +33,10 @@ export function Register (props: IElevatedStateProps){
 
 
   useEffect(() => {
+    document.title = "Shift - Register"
+  }, [])
+
+  useEffect(() => {
     if(!fetching) return;
 
     if (password !== confirmPassword){
