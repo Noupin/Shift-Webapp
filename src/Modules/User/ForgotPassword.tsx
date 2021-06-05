@@ -7,6 +7,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
+import { pageTitles } from '../../constants';
 import { useFetch } from "../../Hooks/Fetch";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
@@ -32,7 +33,7 @@ export function ForgotPassword (props: IElevatedStateProps){
 
 
   useEffect(() => {
-    document.title = `Shift - Forgot Password`
+    document.title = pageTitles["forgotPassword"]
   }, [])
 
   useEffect(() => {

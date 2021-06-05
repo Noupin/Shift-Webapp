@@ -21,7 +21,7 @@ import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Hooks/Authenticate";
-import { defaultShiftTitle } from "./constants"
+import { defaultShiftTitle, pageTitles } from "./constants"
 import { ShiftPage } from "./Modules/ShiftPage"
 import { UserPage } from "./Modules/User/UserPage"
 
@@ -50,7 +50,7 @@ export default function App() {
   const auth = useAuthenticate(setFetching, setElevatedState)
 
   useEffect(() => {
-    document.title = "Shift"
+    document.title = pageTitles[""]
     setElevatedState({...elevatedState, shiftUUID: sessionStorage.getItem("shiftUUID")!})
   }, [])
 

@@ -13,6 +13,7 @@ import { useAuthenticate } from '../../Hooks/Authenticate';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { LoginResponse, LoginRequest, LoginOperationRequest } from '../../Swagger';
+import { pageTitles } from '../../constants';
 
 
 export function Login (props: IElevatedStateProps){
@@ -32,7 +33,7 @@ export function Login (props: IElevatedStateProps){
 
 
   useEffect(() => {
-    document.title = "Shift - Login"
+    document.title = pageTitles["login"]
   }, [])
 
   useEffect(() => {

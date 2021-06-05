@@ -11,6 +11,7 @@ import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { ShiftCategories } from '../Interfaces/ShiftCategories';
 import { HorizontalScrollMenu } from '../Components/ScrollMenu/HorizontalScrollMenu';
 import { ShiftCard } from '../Components/ShiftCard/ShiftCard';
+import { pageTitles } from '../constants';
 
 
 export function Home (props: IElevatedStateProps){
@@ -23,7 +24,7 @@ export function Home (props: IElevatedStateProps){
 
 
   useEffect(() => {
-    document.title = `Shift - Home`
+    document.title = pageTitles["home"]
   }, [])
 
   useEffect(() => {

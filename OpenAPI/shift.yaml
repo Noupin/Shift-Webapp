@@ -322,7 +322,7 @@ definitions:
           $ref: '#/definitions/Shift'
         type: array
     type: object
-host: 75.118.211.6:25565
+host: localhost:5000
 info:
   description: Shift Server API documentation
   title: Shift
@@ -672,11 +672,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -706,11 +706,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:

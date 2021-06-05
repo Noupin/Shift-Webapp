@@ -12,6 +12,7 @@ import { useAuthenticate } from '../../Hooks/Authenticate';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { RegisterOperationRequest, RegisterRequest, RegisterResponse } from '../../Swagger';
+import { pageTitles } from '../../constants';
 
 
 export function Register (props: IElevatedStateProps){
@@ -33,7 +34,7 @@ export function Register (props: IElevatedStateProps){
 
 
   useEffect(() => {
-    document.title = "Shift - Register"
+    document.title = pageTitles["register"]
   }, [])
 
   useEffect(() => {

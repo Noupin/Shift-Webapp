@@ -17,6 +17,7 @@ import { GetIndivdualUserRequest, UserShiftsRequest, Shift, UserShiftsResponse }
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 import Verified from "../../Assets/verified_checkmark.svg";
 import Admin from "../../Assets/admin.svg";
+import { pageTitles } from '../../constants';
 
 
 export function UserPage (props: IElevatedStateProps){
@@ -31,7 +32,7 @@ export function UserPage (props: IElevatedStateProps){
 
 
   useEffect(() => {
-    document.title = `Shift - ${username}`
+    document.title = pageTitles["user"](username)
   }, [])
   
   useEffect(() => {

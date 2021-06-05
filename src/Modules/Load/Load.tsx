@@ -10,7 +10,7 @@ import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { MediaList } from "../../Components/MediaList/MediaList";
 import { FileDialog } from "../../Components/FileDialog/FileDialog"
-import { validMediaFileExtesnions, defaultShiftTitle } from "../../constants";
+import { validMediaFileExtesnions, defaultShiftTitle, pageTitles } from "../../constants";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { validateFileList } from '../../Helpers/Files';
 import { fillArray } from "../../Helpers/Arrays";
@@ -58,7 +58,7 @@ export function Load (props: IElevatedStateProps){
 
   
   useEffect(() => {
-    document.title = `Shift - Load`
+    document.title = pageTitles["load"]
     setElevatedState((prev) => ({...prev, prebuiltShiftModel: "", shiftTitle: defaultShiftTitle}))
   }, []);
 

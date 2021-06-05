@@ -17,7 +17,7 @@ import Verified from "../Assets/verified_checkmark.svg";
 import Admin from "../Assets/admin.svg";
 import LeftCurvedArrow from "../Assets/LeftCurvedArrow.svg"
 import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
-import { videoTypes } from '../constants';
+import { pageTitles, videoTypes } from '../constants';
 
 
 export function ShiftPage (props: IElevatedStateProps){
@@ -34,7 +34,7 @@ export function ShiftPage (props: IElevatedStateProps){
   
   
   useEffect(() => {
-    document.title = `Shift`
+    document.title = pageTitles[""]
   }, [])
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export function ShiftPage (props: IElevatedStateProps){
   useEffect(() => {
     if (!shiftResponse) return;
 
-    document.title = `Shift - ${shiftResponse.shift!.title}`
+    document.title = pageTitles["shift"](shiftResponse.shift!.title)
 
     setShiftMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.mediaFilename!}`)
     setBaseMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.baseMediaFilename!}`)

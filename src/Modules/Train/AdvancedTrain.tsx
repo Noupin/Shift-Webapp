@@ -13,6 +13,7 @@ import { Media } from '../../Components/Media/Media';
 import { useFetch } from "../../Hooks/Fetch";
 import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
+import { pageTitles } from '../../constants';
 
 
 export function AdvancedTrain (props: IElevatedStateProps){
@@ -45,7 +46,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
 
   useEffect(() => {
-    document.title = `Shift - Advanced Train`
+    document.title = pageTitles["advancedTrain"]
   }, [])
 
   useEffect(() => {

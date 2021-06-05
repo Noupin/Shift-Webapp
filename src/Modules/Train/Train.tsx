@@ -14,6 +14,7 @@ import { CombinedTrainResponse } from '../../Interfaces/CombinedTrain';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
 import { Loader } from '../../Components/Loader/Loader';
+import { pageTitles } from '../../constants';
 
 
 export function Train (props: IElevatedStateProps){
@@ -40,7 +41,7 @@ export function Train (props: IElevatedStateProps){
 
   //Start training the AI on the backend
   useEffect(() => {
-    document.title = "Shift - Training"
+    document.title = pageTitles["train"]
 
     const trainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,

@@ -14,7 +14,7 @@ import { InferenceAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { CombinedInferenceResponse } from '../../Interfaces/CombinedInference';
 import { InferenceOperationRequest, InferenceRequest, InferenceStatusRequest } from '../../Swagger';
-import { videoTypes } from "../../constants";
+import { pageTitles, videoTypes } from "../../constants";
 import { Loader } from "../../Components/Loader/Loader";
 
 
@@ -32,7 +32,7 @@ export function Inference (props: IElevatedStateProps){
 
 
 	useEffect(() => {
-    document.title = `Shift - Inference`
+    document.title = pageTitles["infernce"]
   }, [])
 
 	useEffect(() => {
