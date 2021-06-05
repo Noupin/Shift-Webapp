@@ -9,7 +9,7 @@ import { useHistory, useParams } from 'react-router';
 import { ShiftAPIInstance } from '../Helpers/Api';
 import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { IndividualShiftGetResponse } from '../Swagger/models/IndividualShiftGetResponse';
-import { GetIndivdualShiftRequest } from '../Swagger';
+import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest } from '../Swagger';
 import { Media } from '../Components/Media/Media';
 import { Image } from '../Components/Image/Image';
 import { Button } from '../Components/Button/Button';
@@ -51,6 +51,16 @@ export function ShiftPage (props: IElevatedStateProps){
     setMaskMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.maskMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.maskMediaFilename!}`)
   }, [shiftResponse])
 
+  function deleteShift(){
+    const urlParams: DeleteIndivdualShiftRequest = {
+      uuid: uuid
+    }
+
+    ShiftAPIInstance.deleteIndivdualShift(urlParams).then((value) => {
+      setElevatedState((prev) => ({...prev, msg: value!.msg!}))
+    })
+  }
+
   let userComponent = <></>
   let shiftTitleComponent = <></>
   let editShiftComponent = <></>
@@ -71,7 +81,10 @@ export function ShiftPage (props: IElevatedStateProps){
             <Button className="borderRadius-2 p-2 w-100 mx-2">Edit</Button>
           </Col>
           <Col>
-            <Button className="borderRadius-2 p-2 text-danger w-100 mx-2">Delete</Button>
+            <Button className="borderRadius-2 p-2 text-danger w-100 mx-2"
+                    onClick={deleteShift}>
+              Delete
+            </Button>
           </Col>
         </Row>
       )
