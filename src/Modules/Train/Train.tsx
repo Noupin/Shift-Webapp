@@ -39,7 +39,7 @@ export function Train (props: IElevatedStateProps){
     setImage, () => trainResponse!.exhibit!.length > 0 ? trainResponse!.exhibit![0] : "");
 
 
-  function trainStatus(){
+  async function trainStatus(){
     const trainStatusRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
@@ -52,12 +52,12 @@ export function Train (props: IElevatedStateProps){
       body: trainStatusRequestParams
     }
 
-    TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
+    await TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
       setTrainResponse(value)
     })
   }
 
-  function stopTraining(){
+  async function stopTraining(){
     const stopTrainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
@@ -70,7 +70,7 @@ export function Train (props: IElevatedStateProps){
       body: stopTrainRequestParams
     }
 
-    TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
+    await TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
       setTrainResponse(value)
     })
   }
@@ -97,7 +97,7 @@ export function Train (props: IElevatedStateProps){
     })
 
     return () => {
-      if(!stopTrain && !advancedView){
+      if(!stopTrain || !advancedView){
         stopTraining()
       }
     }
@@ -105,10 +105,14 @@ export function Train (props: IElevatedStateProps){
 
   //Get the updated shift image
   useEffect(() => {
-    if(!updating) return;
+    async function update(){
+      if(!updating) return;
 
-    trainStatus()
-    setUpdating(false)
+      await trainStatus()
+      setUpdating(false)
+    }
+
+    update()
   }, [updating]);
 
   //Stop training the AI on the backend
@@ -163,27 +167,29 @@ export function Train (props: IElevatedStateProps){
 
 
   return (
-    <Container className="d-flex justify-content-center h-100 flex-column" key={image ? image.lastModified : undefined}>
+    <Container className="d-flex justify-content-center h-100 flex-column" 
+               key={image ? image.lastModified : undefined}>
       <Row className="my-2">
-        <Media setElevatedState={setElevatedState} className="neumorphic borderRadius-2 my-2 w-100 p-2" mediaSrc={image!} mediaType="video/mp4"/>
+        <Media setElevatedState={setElevatedState}
+          className="neumorphic borderRadius-2 my-2 w-100 p-2"
+          mediaSrc={image!} mediaType="video/mp4"/>
       </Row>
       {(updating || stop) ? <Row className="justify-content-center"><Loader/></Row> : <></>}
       <Row className="my-2">
         <Col xs={1}></Col>
         <Col xs={4} className="pr-4">
-          <Button className="p-2 borderRadius-2 w-100" disabled={advancedView || stopTrain}
+          <Button className="p-2 borderRadius-2 w-100" disabled={advancedView || stop}
             onClick={() => setAdvancedView(true)}>Advanced View</Button>
         </Col>
         <Col xs={4} className="pl-4">
-          <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain || stopTrain}
+          <Button className="p-2 borderRadius-2 w-100" disabled={stop}
             onClick={() => setStop(true)}>Stop Training</Button>
         </Col>
         <Col xs={2} className="pl-4">
-          <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain || updating}
+          <Button className="p-2 borderRadius-2 w-100" disabled={stop || updating}
             onClick={() => setUpdating(true)}>Update</Button>
         </Col>
-        <Col xs={1}>
-        </Col>
+        <Col xs={1}></Col>
       </Row>
     </Container>
   );

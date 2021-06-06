@@ -87,11 +87,6 @@ export function AdvancedTrain (props: IElevatedStateProps){
   }
 
 
-  useEffect(() => {
-    document.title = pageTitles["advancedTrain"]
-  }, [])
-
-
   //Start training the AI on the backend
   useEffect(() => {
     document.title = pageTitles["advancedTrain"]
@@ -113,7 +108,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
     })
 
     return () => {
-      if(!stopTrain && !basicView){
+      if(!stopTrain || !basicView){
         stopTraining()
       }
     }
@@ -121,10 +116,14 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
   //Get the updated shift image
   useEffect(() => {
-    if(!updating) return;
+    async function update(){
+      if(!updating) return;
 
-    trainStatus()
-    setUpdating(false)
+      await trainStatus()
+      setUpdating(false)
+    }
+
+    update()
   }, [updating]);
 
   //Stop training the AI on the backend
@@ -181,7 +180,8 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
 
   return (
-    <Container className="d-flex justify-content-center h-100 flex-column" key={baseImage ? baseImage.size : undefined}>
+    <Container className="d-flex justify-content-center h-100 flex-column"
+               key={baseImage ? baseImage.size : undefined}>
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
@@ -209,10 +209,10 @@ export function AdvancedTrain (props: IElevatedStateProps){
         </Col>
       </Row>
       {(updating || stop) ? <Row className="justify-content-center"><Loader/></Row> : <></>}
-      <Row>
+      <Row className="my-2">
         <Col xs={1}></Col>
-        <Col xs={4} className="m-2">
-          <Button className="borderRadius-2 p-2 mr-2 w-100" disabled={basicView || stop}
+        <Col xs={4} className="pr-4">
+          <Button className="p-2 borderRadius-2 w-100" disabled={basicView || stop}
                   onClick={() => setBasicView(true)}>Basic View</Button>
         </Col>
         <Col xs={4} className="pl-4">

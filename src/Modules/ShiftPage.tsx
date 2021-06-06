@@ -50,7 +50,7 @@ export function ShiftPage (props: IElevatedStateProps){
   useEffect(() => {
     if (!shiftResponse) return;
 
-    document.title = pageTitles["shift"](shiftResponse.shift!.title)
+    document.title = pageTitles["shift"](shiftResponse.shift!.author.username, shiftResponse.shift!.title)
 
     setShiftMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.mediaFilename!}`)
     setBaseMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.baseMediaFilename!}`)

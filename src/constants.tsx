@@ -13,8 +13,8 @@ export const pageTitles = {
   'forgotPassword': pageTitleTemplate("Forgot Password"),
   'login': pageTitleTemplate("Login"),
   'register': pageTitleTemplate("Register"),
-  'user': (username: string) => pageTitleTemplate(`User - ${username}`),
-  'shift': (title: string) => pageTitleTemplate(`${title}`),
+  'user': (username: string) => pageTitleTemplate(`${username}`),
+  'shift': (username: string, title: string) => pageTitleTemplate(`${username}: ${title}`),
   'home': pageTitleTemplate("Home"),
   '': "Shift"
 }

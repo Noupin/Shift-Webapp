@@ -14,16 +14,16 @@ import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
 import { ForgotPassword } from "./Modules/User/ForgotPassword";
 import { NavBar } from "./Components/Navbar/Navbar";
-import { Load } from "./Modules/Load/Load"
+import { Load } from "./Modules/Load/Load";
 import { Train } from "./Modules/Train/Train";
 import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Hooks/Authenticate";
-import { defaultShiftTitle, pageTitles } from "./constants"
-import { ShiftPage } from "./Modules/ShiftPage"
-import { UserPage } from "./Modules/User/UserPage"
+import { defaultShiftTitle, pageTitles } from "./constants";
+import { ShiftPage } from "./Modules/ShiftPage";
+import { UserPage } from "./Modules/User/UserPage";
 
 
 export default function App() {
@@ -32,7 +32,7 @@ export default function App() {
     error: null,
     authenticated: false,
     username: "",
-    defaultTrainView: "advanced",
+    defaultTrainView: "basic",
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
     trainStatusInterval: 10,
@@ -106,6 +106,9 @@ export default function App() {
               </Alert>
 
               <Switch>
+                <Route exact path="/">
+                  <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                </Route>
                 <Route path="/register">
                   <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
@@ -132,9 +135,6 @@ export default function App() {
                 </Route>
                 <Route path="/user/:username">
                   <UserPage elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route exact path="/">
-                  <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
               </Switch>
 
