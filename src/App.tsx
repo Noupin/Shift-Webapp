@@ -116,18 +116,18 @@ export default function App() {
                 <ProtectedRoute elevatedState={getElevatedState} path="/forgotPassword">
                   <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <Route path="/load">
+                <ProtectedRoute elevatedState={getElevatedState} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route path="/train">
+                </ProtectedRoute>
+                <ProtectedRoute elevatedState={getElevatedState} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route path="/advancedTrain">
+                </ProtectedRoute>
+                <ProtectedRoute elevatedState={getElevatedState} path="/advancedTrain">
                   <AdvancedTrain elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route path="/inference">
+                </ProtectedRoute>
+                <ProtectedRoute elevatedState={getElevatedState} path="/inference">
                   <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
+                </ProtectedRoute>
                 <Route path="/shift/:uuid">
                   <ShiftPage elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
