@@ -26,7 +26,6 @@ export function Train (props: IElevatedStateProps){
   const [stopTrain, setStopTrain] = useState(false);
   const [stopping, setStopping] = useState(false);
   const [advancedView, setAdvancedView] = useState(false);
-  const [imageString, setImageString] = useState("");
   const [image, setImage] = useState<File>();
 
   const history = useHistory()
@@ -36,10 +35,48 @@ export function Train (props: IElevatedStateProps){
   const [trainResponse, setTrainResponse] = useState<CombinedTrainResponse>();
   const [, setConverting] = useState(false);
 
-  const convertImage = useConvertImage(setConverting, setElevatedState, setImage, () => imageString);
+  const convertImage = useConvertImage(setConverting, setElevatedState,
+    setImage, () => trainResponse!.exhibit!.length > 0 ? trainResponse!.exhibit![0] : "");
 
 
-  //Start training the AI on the backend
+  function trainStatus(){
+    const trainStatusRequestParams: TrainRequest = {
+      shiftUUID: elevatedState().shiftUUID,
+      shiftTitle: elevatedState().shiftTitle,
+      usePTM: elevatedState().usePTM,
+      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      statusInterval: elevatedState().trainStatusInterval,
+      trainType: 'basic'
+    };
+    const trainStatusBody: TrainStatusRequest = {
+      body: trainStatusRequestParams
+    }
+
+    TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
+      setTrainResponse(value)
+    })
+  }
+
+  function stopTraining(){
+    const stopTrainRequestParams: TrainRequest = {
+      shiftUUID: elevatedState().shiftUUID,
+      shiftTitle: elevatedState().shiftTitle,
+      usePTM: elevatedState().usePTM,
+      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      statusInterval: elevatedState().trainStatusInterval,
+      trainType: 'basic'
+    };
+    const stopTrainBody: StopTrainRequest = {
+      body: stopTrainRequestParams
+    }
+
+    TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
+      setTrainResponse(value)
+    })
+  }
+
+
+  //Start training the AI on the backend and stop on page leave.
   useEffect(() => {
     document.title = pageTitles["train"]
 
@@ -58,27 +95,19 @@ export function Train (props: IElevatedStateProps){
     TrainAPIInstance.train(trainBody).then((value) => {
       setTrainResponse(value)
     })
+
+    return () => {
+      if(!stopTrain && !advancedView){
+        stopTraining()
+      }
+    }
   }, []);
 
   //Get the updated shift image
   useEffect(() => {
     if(!updating) return;
 
-    const trainStatusRequestParams: TrainRequest = {
-      shiftUUID: elevatedState().shiftUUID,
-      shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
-      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      statusInterval: elevatedState().trainStatusInterval,
-      trainType: 'basic'
-    };
-    const trainStatusBody: TrainStatusRequest = {
-      body: trainStatusRequestParams
-    }
-
-    TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
-      setTrainResponse(value)
-    })
+    trainStatus()
     setUpdating(false)
   }, [updating]);
 
@@ -86,22 +115,7 @@ export function Train (props: IElevatedStateProps){
   useEffect(() => {
     if(!stop) return;
 
-    const stopTrainRequestParams: TrainRequest = {
-      shiftUUID: elevatedState().shiftUUID,
-      shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
-      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      statusInterval: elevatedState().trainStatusInterval,
-      trainType: 'basic'
-    };
-    const stopTrainBody: StopTrainRequest = {
-      body: stopTrainRequestParams
-    }
-
-    TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
-      setTrainResponse(value)
-    })
-
+    stopTraining()
     setStopping(true);
   }, [stop]);
 
@@ -111,21 +125,7 @@ export function Train (props: IElevatedStateProps){
 
     const interval = setInterval(() => {
       if(stopping && !stopTrain){
-        const trainStatusRequestParams: TrainRequest = {
-          shiftUUID: elevatedState().shiftUUID,
-          shiftTitle: elevatedState().shiftTitle,
-          usePTM: elevatedState().usePTM,
-          prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-          statusInterval: elevatedState().trainStatusInterval,
-          trainType: 'basic'
-        };
-        const trainStatusBody: TrainStatusRequest = {
-          body: trainStatusRequestParams
-        }
-    
-        TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
-          setTrainResponse(value)
-        })
+        trainStatus()
       }
     }, 1000);
 
@@ -145,15 +145,8 @@ export function Train (props: IElevatedStateProps){
 
     if(!trainResponse!.exhibit!) return;
 
-    setImageString(trainResponse!.exhibit![0]);
+    convertImage()
   }, [trainResponse]);
-
-  //Convert imageString to a useable image
-  useEffect(() => {
-    if(!imageString) return;
-
-		convertImage()
-	}, [imageString]);
 
   //Move the user to other pages on button clicks
   useEffect(() => {
@@ -178,13 +171,16 @@ export function Train (props: IElevatedStateProps){
       <Row className="my-2">
         <Col xs={1}></Col>
         <Col xs={4} className="pr-4">
-          <Button className="p-2 borderRadius-2 w-100" disabled={advancedView} onClick={() => setAdvancedView(true)}>Advanced View</Button>
+          <Button className="p-2 borderRadius-2 w-100" disabled={advancedView || stopTrain}
+            onClick={() => setAdvancedView(true)}>Advanced View</Button>
         </Col>
         <Col xs={4} className="pl-4">
-          <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain} onClick={() => setStop(true)}>Stop Training</Button>
+          <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain || stopTrain}
+            onClick={() => setStop(true)}>Stop Training</Button>
         </Col>
         <Col xs={2} className="pl-4">
-          <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain} onClick={() => setUpdating(true)}>Update</Button>
+          <Button className="p-2 borderRadius-2 w-100" disabled={stopTrain || updating}
+            onClick={() => setUpdating(true)}>Update</Button>
         </Col>
         <Col xs={1}>
         </Col>

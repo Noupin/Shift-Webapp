@@ -19,7 +19,7 @@ models/IndividualUserPatchRequest.ts
 models/IndividualUserPatchResponse.ts
 models/InferenceRequest.ts
 models/InferenceResponse.ts
-models/InferenceStatusReponse.ts
+models/InferenceStatusResponse.ts
 models/LoadDataResponse.ts
 models/LoginRequest.ts
 models/LoginResponse.ts

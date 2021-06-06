@@ -24,12 +24,6 @@ export interface InferenceRequest {
      * @type {string}
      * @memberof InferenceRequest
      */
-    msg?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof InferenceRequest
-     */
     prebuiltShiftModel?: string;
     /**
      * 
@@ -55,7 +49,6 @@ export function InferenceRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'msg': !exists(json, 'msg') ? undefined : json['msg'],
         'prebuiltShiftModel': !exists(json, 'prebuiltShiftModel') ? undefined : json['prebuiltShiftModel'],
         'shiftUUID': json['shiftUUID'],
         'usePTM': !exists(json, 'usePTM') ? undefined : json['usePTM'],
@@ -71,7 +64,6 @@ export function InferenceRequestToJSON(value?: InferenceRequest | null): any {
     }
     return {
         
-        'msg': value.msg,
         'prebuiltShiftModel': value.prebuiltShiftModel,
         'shiftUUID': value.shiftUUID,
         'usePTM': value.usePTM,

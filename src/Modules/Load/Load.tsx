@@ -89,7 +89,7 @@ export function Load (props: IElevatedStateProps){
   useEffect(() => {
     if(!loadResponse) return;
 
-    setElevatedState((prev) => ({...prev, shiftUUID: loadResponse.shiftUUID}))
+    setElevatedState((prev) => ({...prev, shiftUUID: loadResponse.shiftUUID!}))
     setElevatedState((prev) => ({...prev, msg: loadResponse.msg!}));
   }, [loadResponse]);
 

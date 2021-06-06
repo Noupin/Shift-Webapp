@@ -2,22 +2,21 @@ definitions:
   AuthenticatedResponse:
     properties:
       authenticated:
+        default: false
         type: boolean
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
       username:
         default: null
         type: string
         x-nullable: true
-    required:
-    - authenticated
     type: object
   IndividualShiftDeleteResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
@@ -42,14 +41,14 @@ definitions:
   IndividualShiftPatchResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
   IndividualUserDeleteResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
@@ -74,16 +73,12 @@ definitions:
   IndividualUserPatchResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
   InferenceRequest:
     properties:
-      msg:
-        default: null
-        type: string
-        x-nullable: true
       prebuiltShiftModel:
         default: ''
         type: string
@@ -98,11 +93,11 @@ definitions:
   InferenceResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
-  InferenceStatusReponse:
+  InferenceStatusResponse:
     properties:
       baseMediaFilename:
         default: null
@@ -117,7 +112,7 @@ definitions:
         type: string
         x-nullable: true
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
       stopped:
@@ -128,13 +123,12 @@ definitions:
   LoadDataResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
       shiftUUID:
+        default: ''
         type: string
-    required:
-    - shiftUUID
     type: object
   LoginRequest:
     properties:
@@ -152,14 +146,14 @@ definitions:
   LoginResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
   LogoutResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
@@ -193,7 +187,7 @@ definitions:
   RegisterResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
@@ -236,7 +230,7 @@ definitions:
   StopTrainResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
@@ -265,7 +259,7 @@ definitions:
   TrainResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
@@ -278,18 +272,18 @@ definitions:
         type: array
         x-nullable: true
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
       stopped:
-        default: null
+        default: false
         type: boolean
         x-nullable: true
     type: object
   UpdatePictureResponse:
     properties:
       msg:
-        default: null
+        default: ''
         type: string
         x-nullable: true
     type: object
@@ -646,7 +640,7 @@ paths:
             the image path to pass to the cdn for the shifted media, and the base
             and the mask previews.
           schema:
-            $ref: '#/definitions/InferenceStatusReponse'
+            $ref: '#/definitions/InferenceStatusResponse'
       security:
       - UserAuth: []
       tags:

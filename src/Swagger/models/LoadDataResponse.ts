@@ -30,7 +30,7 @@ export interface LoadDataResponse {
      * @type {string}
      * @memberof LoadDataResponse
      */
-    shiftUUID: string;
+    shiftUUID?: string;
 }
 
 export function LoadDataResponseFromJSON(json: any): LoadDataResponse {
@@ -44,7 +44,7 @@ export function LoadDataResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
-        'shiftUUID': json['shiftUUID'],
+        'shiftUUID': !exists(json, 'shiftUUID') ? undefined : json['shiftUUID'],
     };
 }
 

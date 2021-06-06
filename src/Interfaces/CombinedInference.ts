@@ -1,3 +1,3 @@
-import { InferenceResponse, InferenceStatusReponse } from "../Swagger";
+import { InferenceResponse, InferenceStatusResponse } from "../Swagger";
 
-export interface CombinedInferenceResponse extends InferenceResponse, InferenceStatusReponse {}
+export interface CombinedInferenceResponse extends InferenceResponse, InferenceStatusResponse {}

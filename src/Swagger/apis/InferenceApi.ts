@@ -21,9 +21,9 @@ import {
     InferenceResponse,
     InferenceResponseFromJSON,
     InferenceResponseToJSON,
-    InferenceStatusReponse,
-    InferenceStatusReponseFromJSON,
-    InferenceStatusReponseToJSON,
+    InferenceStatusResponse,
+    InferenceStatusResponseFromJSON,
+    InferenceStatusResponseToJSON,
 } from '../models';
 
 export interface InferenceOperationRequest {
@@ -75,7 +75,7 @@ export class InferenceApi extends runtime.BaseAPI {
     /**
      * The status of the current shift model while inferencing on the original media and whether or not it has stopped inferencing.
      */
-    async inferenceStatusRaw(requestParameters: InferenceStatusRequest): Promise<runtime.ApiResponse<InferenceStatusReponse>> {
+    async inferenceStatusRaw(requestParameters: InferenceStatusRequest): Promise<runtime.ApiResponse<InferenceStatusResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -94,13 +94,13 @@ export class InferenceApi extends runtime.BaseAPI {
             body: InferenceRequestToJSON(requestParameters.body),
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InferenceStatusReponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InferenceStatusResponseFromJSON(jsonValue));
     }
 
     /**
      * The status of the current shift model while inferencing on the original media and whether or not it has stopped inferencing.
      */
-    async inferenceStatus(requestParameters: InferenceStatusRequest): Promise<InferenceStatusReponse> {
+    async inferenceStatus(requestParameters: InferenceStatusRequest): Promise<InferenceStatusResponse> {
         const response = await this.inferenceStatusRaw(requestParameters);
         return await response.value();
     }

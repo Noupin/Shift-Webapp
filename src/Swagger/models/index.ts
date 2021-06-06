@@ -9,7 +9,7 @@ export * from './IndividualUserPatchRequest';
 export * from './IndividualUserPatchResponse';
 export * from './InferenceRequest';
 export * from './InferenceResponse';
-export * from './InferenceStatusReponse';
+export * from './InferenceStatusResponse';
 export * from './LoadDataResponse';
 export * from './LoginRequest';
 export * from './LoginResponse';

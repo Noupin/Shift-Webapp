@@ -65,6 +65,7 @@ export function ShiftPage (props: IElevatedStateProps){
     ShiftAPIInstance.deleteIndivdualShift(urlParams).then((value) => {
       setElevatedState((prev) => ({...prev, msg: value!.msg!}))
     })
+    history.push("/")
   }
 
   let userComponent = <></>

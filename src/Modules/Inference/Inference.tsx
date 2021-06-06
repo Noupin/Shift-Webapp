@@ -103,7 +103,7 @@ export function Inference (props: IElevatedStateProps){
 
 
 	return (
-		<Container className="d-flex justify-content-center h-100 flex-column" key={inferenceMedia}>
+		<Container className="d-flex justify-content-center h-100 flex-column" key={`${inferenceMedia}${baseMediaString}`}>
 			<Row className="mb-2">
 				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={inferenceMedia} mediaType="media"/>
 			</Row>

@@ -14,14 +14,14 @@ export function useAuthenticate(setLoading: React.Dispatch<React.SetStateAction<
         if (value.username){
           setElevatedState((prev) => ({
             ...prev,
-            authenticated: value.authenticated,
+            authenticated: value.authenticated!,
             username: value.username!
           }));
         }
         else{
           setElevatedState((prev) => ({
             ...prev,
-            authenticated: value.authenticated
+            authenticated: value.authenticated!
           }));
         }
         setLoading(false);

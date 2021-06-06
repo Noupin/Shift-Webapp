@@ -24,7 +24,7 @@ export interface AuthenticatedResponse {
      * @type {boolean}
      * @memberof AuthenticatedResponse
      */
-    authenticated: boolean;
+    authenticated?: boolean;
     /**
      * 
      * @type {string}
@@ -49,7 +49,7 @@ export function AuthenticatedResponseFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'authenticated': json['authenticated'],
+        'authenticated': !exists(json, 'authenticated') ? undefined : json['authenticated'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
         'username': !exists(json, 'username') ? undefined : json['username'],
     };
