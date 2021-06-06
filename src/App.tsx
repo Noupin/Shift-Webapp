@@ -24,6 +24,7 @@ import { useAuthenticate } from "./Hooks/Authenticate";
 import { defaultShiftTitle, pageTitles } from "./constants";
 import { ShiftPage } from "./Modules/ShiftPage";
 import { UserPage } from "./Modules/User/UserPage";
+import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 
 
 export default function App() {
@@ -32,7 +33,7 @@ export default function App() {
     error: null,
     authenticated: false,
     username: "",
-    defaultTrainView: "basic",
+    defaultTrainView: "advanced",
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
     trainStatusInterval: 10,
@@ -106,18 +107,15 @@ export default function App() {
               </Alert>
 
               <Switch>
-                <Route exact path="/">
-                  <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
                 <Route path="/register">
                   <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/login">
                   <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <Route path="/forgotPassword">
+                <ProtectedRoute elevatedState={getElevatedState} path="/forgotPassword">
                   <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
+                </ProtectedRoute>
                 <Route path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
@@ -135,6 +133,9 @@ export default function App() {
                 </Route>
                 <Route path="/user/:username">
                   <UserPage elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                </Route>
+                <Route exact path="/">
+                  <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
               </Switch>
 
