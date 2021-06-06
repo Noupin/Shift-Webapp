@@ -50,7 +50,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
     setMaskRemake, () => trainResponse!.exhibit!.length > 3 ? trainResponse!.exhibit![3] : "");
 
 
-  function trainStatus(){
+  async function trainStatus(){
     const trainStatusRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
@@ -63,12 +63,12 @@ export function AdvancedTrain (props: IElevatedStateProps){
       body: trainStatusRequestParams
     }
 
-    TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
+    await TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
       setTrainResponse(value)
     })
   }
 
-  function stopTraining(){
+  async function stopTraining(){
     const stopTrainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
@@ -81,7 +81,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
       body: stopTrainRequestParams
     }
 
-    TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
+    await TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
       setTrainResponse(value)
     })
   }
