@@ -8,18 +8,28 @@ import './FileDialog.scss';
 interface IFileDialog extends React.HTMLAttributes<HTMLElement>{
   mutipleSelect?: boolean
   id: string
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onFileInput?: (event: React.ChangeEvent<HTMLInputElement>) => void
   children: React.ReactNode
+  uniqueFiles?: boolean
 }
 
 
 export const FileDialog = (props: IFileDialog) => {
-  const {mutipleSelect, id, onChange, children, ...fileDialogProps} = props;
+  const {mutipleSelect, id, onFileInput, children, uniqueFiles, ...fileDialogProps} = props;
   const cssClasses = fileDialogProps.className?.toString();
 
-  let inputElement = <input type="file" id={id} onChange={onChange}/>
+  function onFileChange(event: React.ChangeEvent<HTMLInputElement>){
+    if(onFileInput){
+      onFileInput(event)
+    }
+    if(!uniqueFiles!){
+      event.target.value = ""
+    }
+  }
+
+  let inputElement = <input type="file" id={id} onChange={onFileChange}/>
   if(mutipleSelect){
-    inputElement = <input type="file" id={id} multiple onChange={onChange}/>
+    inputElement = <input type="file" id={id} multiple onChange={onFileChange}/>
   }
   
   return (

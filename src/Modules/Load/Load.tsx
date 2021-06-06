@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
@@ -44,7 +45,7 @@ export function Load (props: IElevatedStateProps){
   const [titleUpdated, setTitleUpdated] = useState(false);
 
   const [trainingDataTypes, setTrainingDataTypes] = useState<string[]>([]);
-  const [files, setFiles] = useState<Blob[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [baseFiles, setBaseFiles] = useState<File[]>([]);
   const [maskFiles, setMaskFiles] = useState<File[]>([]);
   const [baseMedia, setBaseMedia] = useState<File>();
@@ -72,9 +73,13 @@ export function Load (props: IElevatedStateProps){
       return;
     }
 
+    let renamedFiles: Blob[] = files.map((file: File) => {
+      return new File([file], `${uuidv4()}.${file.name.split('.').pop()!.toLowerCase()}`, {type: file.type})
+    })
+
     const loadDataParams: LoadDataRequest = {
       trainingDataTypes: trainingDataTypes,
-      requestFiles: files
+      requestFiles: renamedFiles
     }
 
     setElevatedState((prev) => ({...prev, shiftTitle: title}))
@@ -105,14 +110,16 @@ export function Load (props: IElevatedStateProps){
     if(!baseMedia) return;
 
     setFiles([baseMedia, ...baseFiles, ...maskFiles]);
-    setTrainingDataTypes([...fillArray("base", baseFiles.length+1), ...fillArray("mask", maskFiles.length)])
+    setTrainingDataTypes([...fillArray("base", baseFiles.length+1),
+                          ...fillArray("mask", maskFiles.length)])
   }, [baseMedia, baseFiles, maskFiles]);
 
 
   useEffect(() => {
     if(!baseMedia) return;
 
-    if(title === defaultShiftTitle || (title !== baseMedia.name.split('.')[0] && updateTitle) || prevTitleIsFilename){
+    if(title === defaultShiftTitle ||
+      (title !== baseMedia.name.split('.')[0] && updateTitle)|| prevTitleIsFilename){
       setTitle(baseMedia.name.split('.')[0]);
       setTitleUpdated(true)
       setUpdateTitle(false)
@@ -120,6 +127,7 @@ export function Load (props: IElevatedStateProps){
     }
 
   }, [baseMedia, updateTitle, prevTitleIsFilename]);
+
 
   function onTitleChange(event:React.ChangeEvent<HTMLInputElement>){
     setTitle(event.target.value)
@@ -135,7 +143,8 @@ export function Load (props: IElevatedStateProps){
                value={title}/>
     </Col>
   );
-  if(!titleUpdated && baseMedia && ((title !== defaultShiftTitle) || (title !== baseMedia!.name.split('.')[0]))){
+  if(!titleUpdated && baseMedia && ((title !== defaultShiftTitle)
+     || (title !== baseMedia!.name.split('.')[0]))){
     titleBar = (
       <>
         <Col xs={5}>
@@ -166,11 +175,12 @@ export function Load (props: IElevatedStateProps){
           <Row className="px-4">
             <Col xs={11}></Col>
             <Col xs={1}>
-              <FileDialog className="justify-content-end" id="baseMediaUpload" onChange={(event) => {
+              <FileDialog className="justify-content-end" id="baseMediaUpload" onFileInput={(event) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
-                  setElevatedState((prev) => ({...prev, msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                  setElevatedState((prev) => ({...prev,
+                    msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
                 }
                 if(filteredFiles.length === 0){
                   setBaseMedia(undefined)
@@ -181,7 +191,9 @@ export function Load (props: IElevatedStateProps){
               }}>&#x21c6;</FileDialog>
             </Col>
           </Row>
-          <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain" key={!baseMedia ? "": baseMedia.name} onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+          <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain"
+                 key={!baseMedia ? "": baseMedia.name}
+                 onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
                  mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
         </Col>
         <Col xs={2}></Col>
@@ -193,7 +205,10 @@ export function Load (props: IElevatedStateProps){
             <Row className="px-4">
               <Col xs={11}></Col>
               <Col xs={1} >
-                <FileDialog className="justify-content-end" id="baseFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setBaseFiles)}>&#43;</FileDialog>
+                <FileDialog className="justify-content-end" id="baseFileUpload" mutipleSelect={true}
+                            onFileInput={(event) => checkFile(event, setElevatedState, setBaseFiles)}>
+                  &#43;
+                </FileDialog>
               </Col>
             </Row>
             <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
@@ -209,7 +224,10 @@ export function Load (props: IElevatedStateProps){
             <Row className="px-4">
               <Col xs={11}></Col>
               <Col xs={1} >
-                <FileDialog className="justify-content-end" id="maskFileUpload" mutipleSelect={true} onChange={(event) => checkFile(event, setElevatedState, setMaskFiles)}>&#43;</FileDialog>
+                <FileDialog className="justify-content-end" id="maskFileUpload" mutipleSelect={true}
+                            onFileInput={(event) => checkFile(event, setElevatedState, setMaskFiles)}>
+                  &#43;
+                </FileDialog>
               </Col>
             </Row>
             <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}

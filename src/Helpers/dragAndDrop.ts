@@ -9,7 +9,9 @@ export function allowDrop(event: React.DragEvent){
   event.preventDefault();
 }
 
-export function dropFiles(event: React.DragEvent, setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>, allowedExtenstion?: string[]){
+export function dropFiles(event: React.DragEvent,
+                          setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
+                          allowedExtenstion?: string[]){
   let droppedFiles: File[] = []
   let badExtensions: string[] = []
   event.preventDefault();
@@ -25,6 +27,6 @@ export function dropFiles(event: React.DragEvent, setElevatedState: React.Dispat
     setElevatedState((prev) => ({...prev,
       msg: badExtensions.length <= 1 ? `The file type ${badExtensions[0]} is not allowed to be dropped` : `The file types ${badExtensions} are not allowed to be dropped`}));
   }
-  
+
   return droppedFiles;
 }

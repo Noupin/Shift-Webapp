@@ -41,19 +41,24 @@ export const Media = (props: IMediaImage | IMediaVideo) => {
   }
 
 
-  if ((mediaSrcState && videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1) || (srcString && srcString.indexOf('video') !== -1)){
+  if ((mediaSrcState && videoTypes.indexOf(mediaSrcState.name.split('.').pop()!) !== -1)
+      || (srcString && srcString.indexOf('video') !== -1)){
     if(droppable){
-      element = <Video onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
-                 videoSrc={mediaSrcString} videoType={mediaType!} className={cssClasses} {...videoProps}/>;
+      element = <Video onDragOver={(event) => allowDrop(event)}
+                       onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
+                       videoSrc={mediaSrcString} videoType={mediaType!}
+                       className={cssClasses} {...videoProps}/>;
     }
     else{
-      element = <Video videoSrc={mediaSrcString} videoType={mediaType!} className={cssClasses} {...videoProps}/>;
+      element = <Video videoSrc={mediaSrcString} videoType={mediaType!}
+                       className={cssClasses} {...videoProps}/>;
     }
   }
   else{
     if(droppable){
-      element = <Image onDragOver={(event) => allowDrop(event)} onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
-                 imageSrc={mediaSrcString} className={cssClasses} {...imageProps}/>
+      element = <Image onDragOver={(event) => allowDrop(event)}
+                       onDrop={(event) => setMediaSrcState(dropFiles(event, setElevatedState, validMediaFileExtesnions)[0])}
+                       imageSrc={mediaSrcString} className={cssClasses} {...imageProps}/>
     }
     else{
       element = <Image imageSrc={mediaSrcString} className={cssClasses} {...imageProps}/>
