@@ -73,6 +73,12 @@ export function Load (props: IElevatedStateProps){
       return;
     }
 
+    if(title.length < 1){
+      setElevatedState((prev) => ({...prev, msg: "That title is not valid."}))
+      setFetching(false);
+      return;
+    }
+
     let renamedFiles: Blob[] = files.map((file: File) => {
       return new File([file], `${uuidv4()}.${file.name.split('.').pop()!.toLowerCase()}`, {type: file.type})
     })
