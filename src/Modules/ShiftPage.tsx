@@ -19,8 +19,7 @@ import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
 import { pageTitles, videoTypes } from '../constants';
 import { TextBox } from '../Components/TextBox/TextBox';
 import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftPatchRequest,
-  IndividualShiftPatchResponse,
-  PatchIndivdualShiftRequest } from '../Swagger';
+  IndividualShiftPatchResponse, PatchIndivdualShiftRequest } from '../Swagger';
 
 
 export function ShiftPage (props: IElevatedStateProps){
@@ -30,7 +29,7 @@ export function ShiftPage (props: IElevatedStateProps){
   let { uuid } = useParams<GetIndivdualShiftRequest>();
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [title, setTitle] = useState("")
+  const [shiftChanges, setShiftChanges] = useState<IndividualShiftPatchRequest["data"]>({})
 
 
   const [shiftGetResponse, setShiftGetResponse] = useState<IndividualShiftGetResponse>();
@@ -45,6 +44,8 @@ export function ShiftPage (props: IElevatedStateProps){
   }, [])
 
   useEffect(() => {
+    if(editing) return;
+
     const urlParams: GetIndivdualShiftRequest = {
       uuid: uuid
     }
@@ -53,13 +54,13 @@ export function ShiftPage (props: IElevatedStateProps){
       setShiftGetResponse(value!)
     })
 
-  }, [uuid, shiftPatchResponse]);
+  }, [uuid, shiftPatchResponse, editing]);
 
   useEffect(() => {
     if (!shiftGetResponse) return;
 
     document.title = pageTitles["shift"](shiftGetResponse.shift!.author.username, shiftGetResponse.shift!.title)
-    setTitle(shiftGetResponse.shift!.title)
+    setShiftChanges(prev => ({...prev, title: shiftGetResponse.shift!.title}))
 
     setShiftMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.mediaFilename!}`)
     setBaseMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.baseMediaFilename!}`)
@@ -71,7 +72,7 @@ export function ShiftPage (props: IElevatedStateProps){
   
     async function patchUser(){
       const requestBody: IndividualShiftPatchRequest = {
-        data: { title: title }
+        data: shiftChanges
       }
 
       const urlParams: PatchIndivdualShiftRequest = {
@@ -115,7 +116,8 @@ export function ShiftPage (props: IElevatedStateProps){
       shiftTitleComponent = (
         <>
           <TextBox className="text-left borderRadius-2 p-2" type="text"
-            defaultValue={title} placeholder="Title" onBlur={(event) => setTitle(event.target.value)}/>
+            defaultValue={shiftChanges.title!} placeholder="Title"
+            onBlur={(event) => setShiftChanges(prev => ({...prev, title: event.target.value}))}/>
           {shiftGetResponse.shift!.verified ?
             <Image style={{height: "0.75em", width: "auto"}} 
                 className="object-fit-contain"
@@ -126,7 +128,7 @@ export function ShiftPage (props: IElevatedStateProps){
     else{
       shiftTitleComponent = (
         <h1 className="text-left">
-          {title} {shiftGetResponse.shift!.verified ?
+          {shiftChanges.title!} {shiftGetResponse.shift!.verified ?
           <Image style={{height: "0.75em", width: "auto"}} 
               className="object-fit-contain"
               imageSrc={Verified} alt="Verified"/> : <></>}
@@ -175,6 +177,7 @@ export function ShiftPage (props: IElevatedStateProps){
         </Row>
       )
     }
+
     userComponent = (
       <div onClick={() => history.push(`/user/${shiftGetResponse.shift!.author.username}`)}
         style={{cursor: "pointer"}}>

@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface IndividualUserPatchRequest {
     /**
      * 
-     * @type {{ [key: string]: object; }}
+     * @type {{ [key: string]: string; }}
      * @memberof IndividualUserPatchRequest
      */
-    data: { [key: string]: object; };
+    data: { [key: string]: string; };
 }
 
 export function IndividualUserPatchRequestFromJSON(json: any): IndividualUserPatchRequest {
