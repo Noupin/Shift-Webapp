@@ -33,7 +33,7 @@ export default function App() {
     error: null,
     authenticated: false,
     username: "",
-    defaultTrainView: "advanced",
+    defaultTrainView: "basic",
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
     trainStatusInterval: 10,

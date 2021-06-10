@@ -33,7 +33,7 @@ definitions:
     properties:
       data:
         additionalProperties:
-          x-nullable: true
+          type: string
         type: object
     required:
     - data

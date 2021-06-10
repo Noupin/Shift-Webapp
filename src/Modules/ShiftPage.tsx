@@ -9,7 +9,6 @@ import { useHistory, useParams } from 'react-router';
 import { ShiftAPIInstance } from '../Helpers/Api';
 import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { IndividualShiftGetResponse } from '../Swagger/models/IndividualShiftGetResponse';
-import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest } from '../Swagger';
 import { Media } from '../Components/Media/Media';
 import { Image } from '../Components/Image/Image';
 import { Button } from '../Components/Button/Button';
@@ -18,6 +17,10 @@ import Admin from "../Assets/admin.svg";
 import LeftCurvedArrow from "../Assets/LeftCurvedArrow.svg"
 import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
 import { pageTitles, videoTypes } from '../constants';
+import { TextBox } from '../Components/TextBox/TextBox';
+import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftPatchRequest,
+  IndividualShiftPatchResponse,
+  PatchIndivdualShiftRequest } from '../Swagger';
 
 
 export function ShiftPage (props: IElevatedStateProps){
@@ -25,9 +28,13 @@ export function ShiftPage (props: IElevatedStateProps){
   const history = useHistory()
 
   let { uuid } = useParams<GetIndivdualShiftRequest>();
+  const [editing, setEditing] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [title, setTitle] = useState("")
 
 
-  const [shiftResponse, setShiftResponse] = useState<IndividualShiftGetResponse>();
+  const [shiftGetResponse, setShiftGetResponse] = useState<IndividualShiftGetResponse>();
+  const [shiftPatchResponse, setShiftPatchResponse] = useState<IndividualShiftPatchResponse>();
   const [shiftMediaURL, setShiftMediaURL] = useState("");
   const [baseMediaURL, setBaseMediaURL] = useState("");
   const [maskMediaURL, setMaskMediaURL] = useState("");
@@ -43,19 +50,50 @@ export function ShiftPage (props: IElevatedStateProps){
     }
 
     ShiftAPIInstance.getIndivdualShift(urlParams).then((value) => {
-      setShiftResponse(value!)
+      setShiftGetResponse(value!)
     })
-  }, [uuid]);
+
+  }, [uuid, shiftPatchResponse]);
 
   useEffect(() => {
-    if (!shiftResponse) return;
+    if (!shiftGetResponse) return;
 
-    document.title = pageTitles["shift"](shiftResponse.shift!.author.username, shiftResponse.shift!.title)
+    document.title = pageTitles["shift"](shiftGetResponse.shift!.author.username, shiftGetResponse.shift!.title)
+    setTitle(shiftGetResponse.shift!.title)
 
-    setShiftMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.mediaFilename!}`)
-    setBaseMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.baseMediaFilename!}`)
-    setMaskMediaURL(`${videoTypes.indexOf(shiftResponse.shift!.maskMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftResponse.shift!.maskMediaFilename!}`)
-  }, [shiftResponse])
+    setShiftMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.mediaFilename!}`)
+    setBaseMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.baseMediaFilename!}`)
+    setMaskMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.maskMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.maskMediaFilename!}`)
+  }, [shiftGetResponse])
+
+  useEffect(() => {
+    if(!saving) return;
+  
+    async function patchUser(){
+      const requestBody: IndividualShiftPatchRequest = {
+        data: { title: title }
+      }
+
+      const urlParams: PatchIndivdualShiftRequest = {
+        uuid: uuid,
+        body: requestBody
+      }
+  
+      await ShiftAPIInstance.patchIndivdualShift(urlParams).then((value) => {
+        setShiftPatchResponse(value!)
+      })
+    }
+
+    patchUser()
+    setSaving(false)
+  }, [saving])
+
+  useEffect(() => {
+    if (!shiftPatchResponse) return;
+
+    setElevatedState((prev) => ({...prev, msg: shiftPatchResponse.msg!}))
+  }, [shiftPatchResponse])
+
 
   function deleteShift(){
     const urlParams: DeleteIndivdualShiftRequest = {
@@ -72,20 +110,46 @@ export function ShiftPage (props: IElevatedStateProps){
   let shiftTitleComponent = <></>
   let editShiftComponent = <></>
 
-  if(shiftResponse){
-    shiftTitleComponent = (
-      <h1 className="text-left">
-        {shiftResponse.shift!.title} {shiftResponse.shift!.verified ?
-        <Image style={{height: "0.75em", width: "auto"}} 
-            className="object-fit-contain"
-            imageSrc={Verified} alt="Verified"/> : <></>}
-      </h1>
-  )
-    if(shiftResponse.owner){
+  if(shiftGetResponse){
+    if(editing){
+      shiftTitleComponent = (
+        <>
+          <TextBox className="text-left borderRadius-2 p-2" type="text"
+            defaultValue={title} placeholder="Title" onBlur={(event) => setTitle(event.target.value)}/>
+          {shiftGetResponse.shift!.verified ?
+            <Image style={{height: "0.75em", width: "auto"}} 
+                className="object-fit-contain"
+                imageSrc={Verified} alt="Verified"/> : <></>}
+        </>
+      )
+    }
+    else{
+      shiftTitleComponent = (
+        <h1 className="text-left">
+          {title} {shiftGetResponse.shift!.verified ?
+          <Image style={{height: "0.75em", width: "auto"}} 
+              className="object-fit-contain"
+              imageSrc={Verified} alt="Verified"/> : <></>}
+        </h1>
+      )
+    }
+
+    if(shiftGetResponse.owner){
       editShiftComponent = (
         <Row>
           <Col>
-            <Button className="borderRadius-2 p-2 w-100 mx-2">Edit</Button>
+            {editing ?
+            <Button className="borderRadius-2 p-2 w-100 mx-2"
+            onClick={() => {
+              setEditing(false);
+              setSaving(true)
+            }}>
+              Save
+            </Button>
+            :
+            <Button className="borderRadius-2 p-2 w-100 mx-2" onClick={() => setEditing(true)}>
+              Edit
+            </Button> }
           </Col>
           <Col>
             <Button className="borderRadius-2 p-2 text-danger w-100 mx-2"
@@ -97,21 +161,21 @@ export function ShiftPage (props: IElevatedStateProps){
       )
     }
     userComponent = (
-      <div onClick={() => history.push(`/user/${shiftResponse.shift!.author.username}`)}
+      <div onClick={() => history.push(`/user/${shiftGetResponse.shift!.author.username}`)}
         style={{cursor: "pointer"}}>
         <Row>
           <h4>
-            {shiftResponse.shift!.author.username} {shiftResponse.shift!.author.verified! ?
+            {shiftGetResponse.shift!.author.username} {shiftGetResponse.shift!.author.verified! ?
             <Image style={{height: "0.75em", width: "auto"}} 
                 className="object-fit-contain"
-                imageSrc={Admin} alt="Admin"/> : <></>} {shiftResponse.shift!.author.admin! ?
+                imageSrc={Admin} alt="Admin"/> : <></>} {shiftGetResponse.shift!.author.admin! ?
             <Image style={{height: "0.75em", width: "auto"}} 
                 className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
           </h4>
         </Row>
         <Row>
           <Media className="neumorphic borderRadius-3 p-2"
-                 srcString={`/api/content/image/${shiftResponse.shift!.author.mediaFilename!}`}
+                 srcString={`/api/content/image/${shiftGetResponse.shift!.author.mediaFilename!}`}
                  setElevatedState={setElevatedState}/>
         </Row>
       </div>

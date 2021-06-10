@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface IndividualShiftPatchRequest {
     /**
      * 
-     * @type {{ [key: string]: object; }}
+     * @type {{ [key: string]: string; }}
      * @memberof IndividualShiftPatchRequest
      */
-    data: { [key: string]: object; };
+    data: { [key: string]: string; };
 }
 
 export function IndividualShiftPatchRequestFromJSON(json: any): IndividualShiftPatchRequest {
