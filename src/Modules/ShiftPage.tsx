@@ -137,26 +137,41 @@ export function ShiftPage (props: IElevatedStateProps){
     if(shiftGetResponse.owner){
       editShiftComponent = (
         <Row>
-          <Col>
-            {editing ?
-            <Button className="borderRadius-2 p-2 w-100 mx-2"
-            onClick={() => {
-              setEditing(false);
-              setSaving(true)
-            }}>
-              Save
-            </Button>
-            :
-            <Button className="borderRadius-2 p-2 w-100 mx-2" onClick={() => setEditing(true)}>
-              Edit
-            </Button> }
-          </Col>
-          <Col>
-            <Button className="borderRadius-2 p-2 text-danger w-100 mx-2"
-                    onClick={deleteShift}>
-              Delete
-            </Button>
-          </Col>
+          {editing ?
+            <>
+              <Col>
+                <Button className="borderRadius-2 p-2 w-100 mx-2"
+                onClick={() => {
+                  setEditing(false);
+                  setSaving(true)
+                }}>
+                  Save
+                </Button>
+              </Col>
+              <Col>
+                <Button className="borderRadius-2 p-2 w-100 mx-2 text-danger"
+                onClick={() => {
+                  setEditing(false);
+                }}>
+                  Cancel
+                </Button>
+              </Col>
+            </>
+          :
+            <>
+              <Col>
+                <Button className="borderRadius-2 p-2 w-100 mx-2" onClick={() => setEditing(true)}>
+                  Edit
+                </Button>
+              </Col>
+              <Col>
+                <Button className="borderRadius-2 p-2 text-danger w-100 mx-2"
+                        onClick={deleteShift}>
+                  Delete
+                </Button>
+              </Col>
+            </>
+          }
         </Row>
       )
     }
