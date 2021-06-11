@@ -11,11 +11,9 @@ import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { IndividualShiftGetResponse } from '../Swagger/models/IndividualShiftGetResponse';
 import { Media } from '../Components/Media/Media';
 import { Image } from '../Components/Image/Image';
-import Verified from "../Assets/verified_checkmark.svg";
 import LeftCurvedArrow from "../Assets/LeftCurvedArrow.svg"
 import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
 import { pageTitles, videoTypes } from '../constants';
-import { TextBox } from '../Components/TextBox/TextBox';
 import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftPatchRequest,
   IndividualShiftPatchResponse, PatchIndivdualShiftRequest } from '../Swagger';
 import { ShiftButtonsComponent } from '../Components/Shift/ShiftButtonsComponent';

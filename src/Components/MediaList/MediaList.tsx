@@ -62,7 +62,8 @@ export function MediaList(props: IMediaList){
             {element}
             <Button className="glassmorphic borderRadius-2 justify-content-center align-items-center"
                     onClick={() => removeElement(mediaArray!, setMediaArray!, index)}>
-                      <Image style={{maxHeight: "100%", maxWidth: "100%"}} className="object-fit-contain" imageSrc={Close} alt="X"/>
+              <Image style={{maxHeight: "100%", maxWidth: "100%"}} className="object-fit-contain"
+                imageSrc={Close} alt="X"/>
             </Button>
           </div>
         ))}

@@ -12,7 +12,7 @@ import Verified from "../../Assets/verified_checkmark.svg";
 import Admin from "../../Assets/admin.svg";
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { GetIndivdualUserRequest, IndividualUserPatchRequest, IndividualUserPatchResponse,
-  PatchIndivdualUserRequest, UpdatePictureResponse, IndividualUserGetResponse} from '../../Swagger';
+  PatchIndivdualUserRequest, UpdatePictureResponse, IndividualUserGetResponse, UpdatePictureRequest} from '../../Swagger';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { UserButtonComponent } from './UserButtonsComponent';
 import { ProfileMediaComponent } from './ProfileMediaComponent';
@@ -35,6 +35,7 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
   const [userPatchResponse, setUserPatchResponse] = useState<IndividualUserPatchResponse>();
   const [updatePictureResponse, setUpdatePictureResponse] = useState<UpdatePictureResponse>()
   const [profilePictureURL, setProfilePictureURL] = useState("");
+  const [profilePicture, setProfilePicture] = useState<File>();
 
 
   useEffect(() => {
@@ -72,7 +73,20 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
       })
     }
 
+    async function changeProfilePicture(){
+      if(!profilePicture) return;
+
+      const requestParams: UpdatePictureRequest = {
+        requestFile: profilePicture
+      }
+
+      await UserAPIInstance.updatePicture(requestParams).then((value) => {
+        setUpdatePictureResponse(value)
+      })
+    }
+
     patchUser()
+    changeProfilePicture()
     setSaving(false)
   }, [saving])
 
@@ -113,8 +127,8 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
           <p>{userGetResponse.user!.email}</p>
         </Row>
         <Row>
-          <ProfileMediaComponent setElevatedState={setElevatedState}
-            profilePictureURL={profilePictureURL} editing={editing}/>
+          <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
+            setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
         </Row>
         <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving}/>
       </>
@@ -154,8 +168,8 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
               }}/>
           </Row>
           <Row>
-            <ProfileMediaComponent setElevatedState={setElevatedState}
-              profilePictureURL={profilePictureURL} editing={editing}/>
+            <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
+              setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
           </Row>
           <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving}/>
         </>
