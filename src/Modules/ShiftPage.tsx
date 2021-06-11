@@ -11,20 +11,21 @@ import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { IndividualShiftGetResponse } from '../Swagger/models/IndividualShiftGetResponse';
 import { Media } from '../Components/Media/Media';
 import { Image } from '../Components/Image/Image';
-import { Button } from '../Components/Button/Button';
 import Verified from "../Assets/verified_checkmark.svg";
-import Admin from "../Assets/admin.svg";
 import LeftCurvedArrow from "../Assets/LeftCurvedArrow.svg"
 import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
 import { pageTitles, videoTypes } from '../constants';
 import { TextBox } from '../Components/TextBox/TextBox';
 import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftPatchRequest,
   IndividualShiftPatchResponse, PatchIndivdualShiftRequest } from '../Swagger';
+import { ShiftButtonsComponent } from '../Components/Shift/ShiftButtonsComponent';
+import { ShiftUserComponent } from '../Components/Shift/ShiftUserComponent';
+import { ShiftTitleComponent } from '../Components/Shift/ShiftTitleComponent';
 
 
 export function ShiftPage (props: IElevatedStateProps){
   const {setElevatedState} = props;
-  const history = useHistory()
+  const history = useHistory();
 
   let { uuid } = useParams<GetIndivdualShiftRequest>();
   const [editing, setEditing] = useState(false)
@@ -107,98 +108,6 @@ export function ShiftPage (props: IElevatedStateProps){
     history.push("/")
   }
 
-  let userComponent = <></>
-  let shiftTitleComponent = <></>
-  let editShiftComponent = <></>
-
-  if(shiftGetResponse){
-    if(editing){
-      shiftTitleComponent = (
-        <>
-          <TextBox className="text-left borderRadius-2 p-2" type="text"
-            defaultValue={shiftChanges.title!} placeholder="Title"
-            onBlur={(event) => setShiftChanges(prev => ({...prev, title: event.target.value}))}/>
-          {shiftGetResponse.shift!.verified ?
-            <Image style={{height: "0.75em", width: "auto"}} 
-                className="object-fit-contain"
-                imageSrc={Verified} alt="Verified"/> : <></>}
-        </>
-      )
-    }
-    else{
-      shiftTitleComponent = (
-        <h1 className="text-left">
-          {shiftChanges.title!} {shiftGetResponse.shift!.verified ?
-          <Image style={{height: "0.75em", width: "auto"}} 
-              className="object-fit-contain"
-              imageSrc={Verified} alt="Verified"/> : <></>}
-        </h1>
-      )
-    }
-
-    if(shiftGetResponse.owner){
-      editShiftComponent = (
-        <Row>
-          {editing ?
-            <>
-              <Col>
-                <Button className="borderRadius-2 p-2 w-100 mx-2"
-                onClick={() => {
-                  setEditing(false);
-                  setSaving(true)
-                }}>
-                  Save
-                </Button>
-              </Col>
-              <Col>
-                <Button className="borderRadius-2 p-2 w-100 mx-2 text-danger"
-                onClick={() => {
-                  setEditing(false);
-                }}>
-                  Cancel
-                </Button>
-              </Col>
-            </>
-          :
-            <>
-              <Col>
-                <Button className="borderRadius-2 p-2 w-100 mx-2" onClick={() => setEditing(true)}>
-                  Edit
-                </Button>
-              </Col>
-              <Col>
-                <Button className="borderRadius-2 p-2 text-danger w-100 mx-2"
-                        onClick={deleteShift}>
-                  Delete
-                </Button>
-              </Col>
-            </>
-          }
-        </Row>
-      )
-    }
-
-    userComponent = (
-      <div onClick={() => history.push(`/user/${shiftGetResponse.shift!.author.username}`)}
-        style={{cursor: "pointer"}}>
-        <Row>
-          <h4>
-            {shiftGetResponse.shift!.author.username} {shiftGetResponse.shift!.author.verified! ?
-            <Image style={{height: "0.75em", width: "auto"}} 
-                className="object-fit-contain"
-                imageSrc={Admin} alt="Admin"/> : <></>} {shiftGetResponse.shift!.author.admin! ?
-            <Image style={{height: "0.75em", width: "auto"}} 
-                className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
-          </h4>
-        </Row>
-        <Row>
-          <Media className="neumorphic borderRadius-3 p-2"
-                 srcString={`/api/content/image/${shiftGetResponse.shift!.author.mediaFilename!}`}
-                 setElevatedState={setElevatedState}/>
-        </Row>
-      </div>
-    )
-  }
 
   return (
     <Container>
@@ -207,10 +116,16 @@ export function ShiftPage (props: IElevatedStateProps){
           <Row>
             <Col xs={1}></Col>
             <Col xs={5}>
-              {shiftTitleComponent}
+              {shiftGetResponse ? 
+                <ShiftTitleComponent owner={shiftGetResponse.owner} shift={shiftGetResponse.shift}
+                  editing={editing} shiftChanges={shiftChanges} setShiftChanges={setShiftChanges}/>
+                : <></>}
             </Col>
             <Col xs={4}>
-              {editShiftComponent}
+              {shiftGetResponse && shiftGetResponse.owner ? 
+                <ShiftButtonsComponent editing={editing} setEditing={setEditing}
+                  setSaving={setSaving} deleteShift={deleteShift}/>
+                : <></>}
             </Col>
             <Col xs={1}></Col>
           </Row>
@@ -248,7 +163,10 @@ export function ShiftPage (props: IElevatedStateProps){
           </Row>
         </Col>
         <Col xs={3} className="p-2">
-          {userComponent}
+          {shiftGetResponse ?
+            <ShiftUserComponent owner={shiftGetResponse.owner} shift={shiftGetResponse.shift}
+              setElevatedState={setElevatedState} />
+          : <></>}
         </Col>
       </Row>
     </Container>
