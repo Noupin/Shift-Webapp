@@ -61,6 +61,13 @@ label {
     word-wrap: break-word;      /* IE */
 }
 
+.textBorder{
+    text-shadow: -1px 1px 0 $borderColor,
+                 1px 1px 0 $borderColor,
+                 1px -1px 0 $borderColor,
+                 -1px -1px 0 $borderColor;
+}
+
 
 //Border Radius
 .borderRadius-1{

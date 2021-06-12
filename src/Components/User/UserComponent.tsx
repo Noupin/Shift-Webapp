@@ -96,7 +96,6 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
     setElevatedState((prev) => ({...prev, msg: userPatchResponse.msg!}))
 
     if(userChanges.username! && userChanges.username! !== username){
-      console.log(userChanges.username!)
       history.push(`/user/${userChanges.username!}`)
     }
   }, [userPatchResponse])
