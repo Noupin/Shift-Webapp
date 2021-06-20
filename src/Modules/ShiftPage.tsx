@@ -67,7 +67,7 @@ export function ShiftPage (props: IElevatedStateProps){
   }, [shiftGetResponse])
 
   useEffect(() => {
-    if(!saving) return;
+    if(!saving || Object.keys(shiftChanges).length === 0) return;
   
     async function patchUser(){
       const requestBody: IndividualShiftPatchRequest = {

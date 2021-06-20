@@ -55,7 +55,7 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
   }, [userGetResponse]);
 
   useEffect(() => {
-    if(!saving) return;
+    if(!saving || Object.keys(userChanges).length === 0) return;
 
   
     async function patchUser(){
