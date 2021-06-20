@@ -138,9 +138,9 @@ export function AdvancedTrain (props: IElevatedStateProps){
   useEffect(() => {
     if(updating) return;
 
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       if(stopping && !stopTrain){
-        trainStatus()
+        await trainStatus()
       }
     }, 1000);
 
