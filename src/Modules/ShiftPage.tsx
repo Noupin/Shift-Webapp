@@ -59,7 +59,6 @@ export function ShiftPage (props: IElevatedStateProps){
     if (!shiftGetResponse) return;
 
     document.title = pageTitles["shift"](shiftGetResponse.shift!.author.username, shiftGetResponse.shift!.title)
-    setShiftChanges(prev => ({...prev, title: shiftGetResponse.shift!.title}))
 
     setShiftMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.mediaFilename!}`)
     setBaseMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.baseMediaFilename!}`)
@@ -116,7 +115,7 @@ export function ShiftPage (props: IElevatedStateProps){
             <Col xs={5}>
               {shiftGetResponse ? 
                 <ShiftTitleComponent owner={shiftGetResponse.owner} shift={shiftGetResponse.shift}
-                  editing={editing} shiftChanges={shiftChanges} setShiftChanges={setShiftChanges}/>
+                  editing={editing} setShiftChanges={setShiftChanges}/>
                 : <></>}
             </Col>
             <Col xs={4}>
