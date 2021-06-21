@@ -66,9 +66,11 @@ export function ShiftPage (props: IElevatedStateProps){
   }, [shiftGetResponse])
 
   useEffect(() => {
-    if(!saving || Object.keys(shiftChanges).length === 0) return;
-  
+    if(!saving) return;
+
     async function patchUser(){
+      if(Object.keys(shiftChanges).length === 0) return
+
       const requestBody: IndividualShiftPatchRequest = {
         data: shiftChanges
       }
@@ -77,7 +79,7 @@ export function ShiftPage (props: IElevatedStateProps){
         uuid: uuid,
         body: requestBody
       }
-  
+
       await ShiftAPIInstance.patchIndivdualShift(urlParams).then((value) => {
         setShiftPatchResponse(value!)
       })

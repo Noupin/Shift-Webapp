@@ -39,6 +39,8 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
 
 
   useEffect(() => {
+    if(editing) return
+
     const urlParams: GetIndivdualUserRequest = {
       username: username
     }
@@ -55,10 +57,11 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
   }, [userGetResponse]);
 
   useEffect(() => {
-    if(!saving || (Object.keys(userChanges).length === 0 && !profilePicture)) return;
+    if(!saving) return;
 
-  
     async function patchUser(){
+      if(Object.keys(userChanges).length === 0) return
+
       const requestBody: IndividualUserPatchRequest = {
         data: userChanges
       }

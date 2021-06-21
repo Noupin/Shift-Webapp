@@ -4,7 +4,7 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //First Party Imports
 import { CombinedTrainResponse } from "../../Interfaces/CombinedTrain";
@@ -16,11 +16,12 @@ import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
 import { TrainAPIInstance } from '../../Helpers/Api';
 import { Loader } from '../../Components/Loader/Loader';
-import { useInterval } from '../../Hooks/Interval';
 
 
 export function AdvancedTrain (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
+  let leavingPage = false
+
   useEffect(() => {
     setElevatedState((prev) => ({...prev, shiftUUID: sessionStorage["shiftUUID"]}))
   }, []);
@@ -87,7 +88,9 @@ export function AdvancedTrain (props: IElevatedStateProps){
     }
 
     await TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
-      setTrainResponse(value)
+      if(!leavingPage){
+        setTrainResponse(value)
+      }
     })
   }
 
@@ -107,13 +110,14 @@ export function AdvancedTrain (props: IElevatedStateProps){
     const trainBody: TrainOperationRequest = {
       body: trainRequestParams
     }
-
+    
     TrainAPIInstance.train(trainBody).then((value) => {
       setTrainResponse(value)
     })
 
     return () => {
       if(!stopTrain || !basicView){
+        leavingPage = true
         stopTraining()
       }
     }

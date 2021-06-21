@@ -19,6 +19,8 @@ import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 
 export function Train (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
+  let leavingPage = false
+
   useEffect(() => {
     setElevatedState((prev) => ({...prev, shiftUUID: sessionStorage["shiftUUID"]}))
   }, []);
@@ -71,7 +73,9 @@ export function Train (props: IElevatedStateProps){
     }
 
     await TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
-      setTrainResponse(value)
+      if (!leavingPage){
+        setTrainResponse(value)
+      }
     })
   }
 
@@ -98,6 +102,7 @@ export function Train (props: IElevatedStateProps){
 
     return () => {
       if(!stopTrain || !advancedView){
+        leavingPage = true
         stopTraining()
       }
     }
