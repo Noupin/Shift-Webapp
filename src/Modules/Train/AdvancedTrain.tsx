@@ -12,10 +12,11 @@ import { Button } from '../../Components/Button/Button';
 import { Media } from '../../Components/Media/Media';
 import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { pageTitles } from '../../constants';
+import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
 import { TrainAPIInstance } from '../../Helpers/Api';
 import { Loader } from '../../Components/Loader/Loader';
+import { useInterval } from '../../Hooks/Interval';
 
 
 export function AdvancedTrain (props: IElevatedStateProps){
@@ -63,9 +64,13 @@ export function AdvancedTrain (props: IElevatedStateProps){
       body: trainStatusRequestParams
     }
 
+    setUpdating(true)
+
     await TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
       setTrainResponse(value)
     })
+
+    setUpdating(false)
   }
 
   async function stopTraining(){
@@ -120,7 +125,6 @@ export function AdvancedTrain (props: IElevatedStateProps){
       if(!updating) return;
 
       await trainStatus()
-      setUpdating(false)
     }
 
     update()
@@ -138,11 +142,16 @@ export function AdvancedTrain (props: IElevatedStateProps){
   useEffect(() => {
     if(updating) return;
 
-    const interval = setInterval(async () => {
-      if(stopping && !stopTrain){
-        await trainStatus()
+    const interval = setInterval(() => {
+      async function update(){
+        if(stopping && !stopTrain){
+          await trainStatus()
+          setUpdating(false)
+        }
       }
-    }, 1000);
+  
+      update()
+    }, TRAIN_STATUS_INTERVAL);
 
     return () => clearInterval(interval);
   }, [stopping]);

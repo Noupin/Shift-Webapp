@@ -19,3 +19,5 @@ export const pageTitles = {
   'home': pageTitleTemplate("Home"),
   '': "Shift"
 }
+
+export const TRAIN_STATUS_INTERVAL = 1000;

@@ -55,7 +55,7 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
   }, [userGetResponse]);
 
   useEffect(() => {
-    if(!saving || Object.keys(userChanges).length === 0) return;
+    if(!saving || (Object.keys(userChanges).length === 0 && !profilePicture)) return;
 
   
     async function patchUser(){
@@ -88,6 +88,7 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
     patchUser()
     changeProfilePicture()
     setSaving(false)
+    setProfilePicture(undefined)
   }, [saving])
 
   useEffect(() => {

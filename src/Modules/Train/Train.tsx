@@ -14,7 +14,7 @@ import { CombinedTrainResponse } from '../../Interfaces/CombinedTrain';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
 import { Loader } from '../../Components/Loader/Loader';
-import { pageTitles } from '../../constants';
+import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 
 
 export function Train (props: IElevatedStateProps){
@@ -127,15 +127,19 @@ export function Train (props: IElevatedStateProps){
   useEffect(() => {
     if(updating) return;
 
-    const interval = setInterval(async () => {
-      if(stopping && !stopTrain){
-        await trainStatus()
+    const interval = setInterval(() => {
+      async function update(){
+        if(stopping && !stopTrain){
+          await trainStatus()
+          setUpdating(false)
+        }
       }
-    }, 1000);
+  
+      update()
+    }, TRAIN_STATUS_INTERVAL);
 
     return () => clearInterval(interval);
   }, [stopping]);
-
 
   //Update the image displayed to the user and stop the training interval
   useEffect(() => {
