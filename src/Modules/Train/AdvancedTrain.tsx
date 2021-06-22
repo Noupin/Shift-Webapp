@@ -16,6 +16,7 @@ import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
 import { TrainAPIInstance } from '../../Helpers/Api';
 import { Loader } from '../../Components/Loader/Loader';
+import { useInterval } from '../../Hooks/Interval';
 
 
 export function AdvancedTrain (props: IElevatedStateProps){
@@ -143,22 +144,13 @@ export function AdvancedTrain (props: IElevatedStateProps){
   }, [stop]);
 
   //Update training status every second
-  useEffect(() => {
-    if(updating) return;
+  useInterval(() => {
+    if (updating) return
 
-    const interval = setInterval(() => {
-      async function update(){
-        if(stopping && !stopTrain){
-          await trainStatus()
-          setUpdating(false)
-        }
-      }
-  
-      update()
-    }, TRAIN_STATUS_INTERVAL);
-
-    return () => clearInterval(interval);
-  }, [stopping]);
+    if(stopping && !stopTrain){
+      setUpdating(true)
+    }
+  }, TRAIN_STATUS_INTERVAL)
 
   //Update the image displayed to the user and stop the training interval
   useEffect(() => {
