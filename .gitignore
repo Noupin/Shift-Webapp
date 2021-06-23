@@ -3,11 +3,11 @@
 **/Assets
 
 # dependencies
-/Client/node_modules
+**/node_modules
 /shift-env
 
 # production
-/build
+Client/build/*
 
 #Privacy
 .env

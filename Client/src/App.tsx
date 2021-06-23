@@ -14,8 +14,8 @@ import { Login } from "./Modules/User/Login";
 import { ForgotPassword } from "./Modules/User/ForgotPassword";
 import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load";
-import { Train } from "./Modules/Train/Train";
-import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
+/*import { Train } from "./Modules/Train/Train";
+import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";*/
 import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
@@ -119,12 +119,12 @@ export default function App() {
                 <ProtectedRoute elevatedState={getElevatedState} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute elevatedState={getElevatedState} path="/train">
+                {/*<ProtectedRoute elevatedState={getElevatedState} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <ProtectedRoute elevatedState={getElevatedState} path="/advancedTrain">
                   <AdvancedTrain elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </ProtectedRoute>
+                </ProtectedRoute>*/}
                 <ProtectedRoute elevatedState={getElevatedState} path="/inference">
                   <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
