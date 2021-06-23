@@ -9,4 +9,6 @@ export interface IElevatedPageState {
     trainStatusInterval: number
     usePTM: boolean
     prebuiltShiftModel: string
+    trainingShift: boolean
+    canTrain: boolean
 }

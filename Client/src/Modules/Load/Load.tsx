@@ -108,7 +108,12 @@ export function Load (props: IElevatedStateProps){
   useEffect(() => {
     if(!elevatedState().shiftUUID || elevatedState().shiftUUID === prevShiftUUID) return;
 
-    history.push(`/${elevatedState().defaultTrainView === "basic" ? "train" : "advancedTrain"}`);
+    if(elevatedState().trainingShift){
+      history.push(`/${elevatedState().defaultTrainView === "basic" ? "train" : "advancedTrain"}`);
+    }
+    else{
+      history.push(`/inference`)
+    }
   }, [elevatedState().shiftUUID]);
 
   //Update files to send
@@ -167,17 +172,11 @@ export function Load (props: IElevatedStateProps){
   }
 
 
-  return (
-    <Container className="d-flex justify-content-center h-100 flex-column">
-      <Row className="mb-2">
-        <Col xs={3}></Col>
-        {titleBar}
-        <Col xs={3}></Col>
-      </Row>
-      <h4>Base Face</h4>
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={8} className="neumorphic borderRadius-2">
+  let loadMediaComponent = (
+    <>
+      <Row className="mt-4">
+        <Col>
+          <h2>Base Media</h2>
           <Row className="px-4">
             <Col xs={11}></Col>
             <Col xs={1}>
@@ -202,48 +201,121 @@ export function Load (props: IElevatedStateProps){
                  onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
                  mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
         </Col>
-        <Col xs={2}></Col>
-      </Row>
-      <Row className="mt-4">
         <Col>
-          <h4>Extra Base Faces</h4>
-          <div className="neumorphic borderRadius-2">
-            <Row className="px-4">
-              <Col xs={11}></Col>
-              <Col xs={1} >
-                <FileDialog className="justify-content-end" id="baseFileUpload" mutipleSelect={true}
-                            onFileInput={(event) => checkFile(event, setElevatedState, setBaseFiles)}>
-                  &#43;
-                </FileDialog>
-              </Col>
-            </Row>
-            <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
-                       onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
-                       elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}
-                       setElevatedState={setElevatedState}>
-            </MediaList>
-          </div>
-        </Col>
-        <Col xs>
-          <h4>Mask Face</h4>
-          <div className="neumorphic borderRadius-2">
-            <Row className="px-4">
-              <Col xs={11}></Col>
-              <Col xs={1} >
-                <FileDialog className="justify-content-end" id="maskFileUpload" mutipleSelect={true}
-                            onFileInput={(event) => checkFile(event, setElevatedState, setMaskFiles)}>
-                  &#43;
-                </FileDialog>
-              </Col>
-            </Row>
-            <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
-                       onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
-                       elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}
-                       setElevatedState={setElevatedState}>
-            </MediaList>
-          </div>
+          <h2>Mask Media</h2>
+          <Row className="px-4">
+            <Col xs={11}></Col>
+            <Col xs={1}>
+              <FileDialog className="justify-content-end" id="maskMediaUpload" onFileInput={(event) => {
+                const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+                if(badExtensions.length > 0){
+                  setElevatedState((prev) => ({...prev,
+                    msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                }
+                if(filteredFiles.length === 0){
+                  setMaskFiles([])
+                }
+                else{
+                  setMaskFiles([filteredFiles[0]])
+                }
+              }}>&#x21c6;</FileDialog>
+            </Col>
+          </Row>
+          <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain"
+                 key={!maskFiles[0] ? "": maskFiles[0].name}
+                 onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                 mediaSrc={maskFiles[0]!} mediaType="video/mp4" droppable={true}/>
         </Col>
       </Row>
+    </>
+  )
+
+  if(elevatedState().trainingShift){
+    loadMediaComponent = (
+      <>
+        <h4>Base Face</h4>
+        <Row>
+          <Col xs={2}></Col>
+          <Col xs={8} className="neumorphic borderRadius-2">
+            <Row className="px-4">
+              <Col xs={11}></Col>
+              <Col xs={1}>
+                <FileDialog className="justify-content-end" id="baseMediaUpload" onFileInput={(event) => {
+                  const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+                  if(badExtensions.length > 0){
+                    setElevatedState((prev) => ({...prev,
+                      msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                  }
+                  if(filteredFiles.length === 0){
+                    setBaseMedia(undefined)
+                  }
+                  else{
+                    setBaseMedia(filteredFiles[0])
+                  }
+                }}>&#x21c6;</FileDialog>
+              </Col>
+            </Row>
+            <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain"
+                  key={!baseMedia ? "": baseMedia.name}
+                  onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                  mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
+          </Col>
+          <Col xs={2}></Col>
+        </Row>
+        <Row className="mt-4">
+          <Col>
+            <h4>Extra Base Faces</h4>
+            <div className="neumorphic borderRadius-2">
+              <Row className="px-4">
+                <Col xs={11}></Col>
+                <Col xs={1} >
+                  <FileDialog className="justify-content-end" id="baseFileUpload" mutipleSelect={true}
+                              onFileInput={(event) => checkFile(event, setElevatedState, setBaseFiles)}>
+                    &#43;
+                  </FileDialog>
+                </Col>
+              </Row>
+              <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
+                        onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
+                        elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}
+                        setElevatedState={setElevatedState}>
+              </MediaList>
+            </div>
+          </Col>
+          <Col>
+            <h4>Mask Face</h4>
+            <div className="neumorphic borderRadius-2">
+              <Row className="px-4">
+                <Col xs={11}></Col>
+                <Col xs={1} >
+                  <FileDialog className="justify-content-end" id="maskFileUpload" mutipleSelect={true}
+                              onFileInput={(event) => checkFile(event, setElevatedState, setMaskFiles)}>
+                    &#43;
+                  </FileDialog>
+                </Col>
+              </Row>
+              <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
+                        onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
+                        elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}
+                        setElevatedState={setElevatedState}>
+              </MediaList>
+            </div>
+          </Col>
+        </Row>
+      </>
+    );
+  }
+
+  return (
+    <Container className="d-flex justify-content-center h-100 flex-column">
+      <Row className="mb-2">
+        <Col xs={3}></Col>
+        {titleBar}
+        <Col xs={3}></Col>
+      </Row>
+      {loadMediaComponent}
       {fetching ? <Row className="justify-content-center"><Loader/></Row> : <></>}
       <Row className="mt-3">
         <Col xs={10}>
