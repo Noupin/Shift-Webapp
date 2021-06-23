@@ -1,16 +1,19 @@
+#Customization
 /.vscode
 **/Assets
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
+/Client/node_modules
+/shift-env
 
 # production
 /build
+
+#Privacy
+.env
+
+#Caches
+__pycache__/
 
 # misc
 .DS_Store

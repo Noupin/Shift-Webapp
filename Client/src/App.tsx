@@ -3,7 +3,6 @@
 //Third Party Imports
 import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.scss';
 import { BrowserRouter as Router,
          Switch, Route } from "react-router-dom";
 import { Container, Row, Col, Alert } from "react-bootstrap";
@@ -25,6 +24,7 @@ import { defaultShiftTitle, pageTitles } from "./constants";
 import { ShiftPage } from "./Modules/ShiftPage";
 import { UserPage } from "./Modules/User/UserPage";
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
+import './App.scss';
 
 
 export default function App() {

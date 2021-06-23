@@ -29,13 +29,13 @@ export const ProfileMediaComponent: FC<IUserButtons> = ({setElevatedState, profi
 
   if (editing){
     profileMediaComponent = (
-      <div className="hoverInput justify-content-center aling-items-center" style={{position: "relative"}}>
+      <div className="hoverInput" style={{position: "relative"}}>
         <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL}
           setElevatedState={setElevatedState}/>
         <div id="hoverFileDialogButton" style={{maxHeight: "70%", maxWidth: "70%"}}
-             className="align-middle align-items-center justify-content-center">
-          <FileDialog className="glassmorphic borderRadius-2 justify-content-center
-          align-items-center neumorphic neuHover" id="userProfileMedia"
+          className="justify-content-center">
+          <FileDialog className="justify-content-center align-items-center glassmorphic
+          borderRadius-2 neumorphic neuHover" id="userProfileMedia" style={{display: "flex"}}
           onFileInput={(event) => {
             const [filteredFiles, badExtensions] = validateFileList(event.target.files!, imageTypes)
 

@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d4572579.chunk.css",
+    "main.js": "/static/js/main.ff97c387.chunk.js",
+    "main.js.map": "/static/js/main.ff97c387.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.0f735002.js",
+    "runtime-main.js.map": "/static/js/runtime-main.0f735002.js.map",
+    "static/css/2.325dfaf0.chunk.css": "/static/css/2.325dfaf0.chunk.css",
+    "static/js/2.e514143c.chunk.js": "/static/js/2.e514143c.chunk.js",
+    "static/js/2.e514143c.chunk.js.map": "/static/js/2.e514143c.chunk.js.map",
+    "static/js/3.c22acdea.chunk.js": "/static/js/3.c22acdea.chunk.js",
+    "static/js/3.c22acdea.chunk.js.map": "/static/js/3.c22acdea.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.325dfaf0.chunk.css.map": "/static/css/2.325dfaf0.chunk.css.map",
+    "static/css/main.d4572579.chunk.css.map": "/static/css/main.d4572579.chunk.css.map",
+    "static/js/2.e514143c.chunk.js.LICENSE.txt": "/static/js/2.e514143c.chunk.js.LICENSE.txt",
+    "static/media/LeftCurvedArrow.7bec2445.svg": "/static/media/LeftCurvedArrow.7bec2445.svg",
+    "static/media/RightCurvedArrow.f733178d.svg": "/static/media/RightCurvedArrow.f733178d.svg",
+    "static/media/admin.b6f373a0.svg": "/static/media/admin.b6f373a0.svg",
+    "static/media/close-round.394f9124.svg": "/static/media/close-round.394f9124.svg",
+    "static/media/verified_checkmark.c18af60f.svg": "/static/media/verified_checkmark.c18af60f.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0f735002.js",
+    "static/css/2.325dfaf0.chunk.css",
+    "static/js/2.e514143c.chunk.js",
+    "static/css/main.d4572579.chunk.css",
+    "static/js/main.ff97c387.chunk.js"
+  ]
+}

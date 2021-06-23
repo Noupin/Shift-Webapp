@@ -73,7 +73,7 @@
       "patterns": [
         "src"
       ],
-      "extensions": "ts,tsx"
+      "extensions": "ts,tsx,css,js,html,scss,jsx"
     }
   }
 }
