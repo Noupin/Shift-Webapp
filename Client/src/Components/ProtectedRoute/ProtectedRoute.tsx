@@ -2,19 +2,16 @@
 import React from 'react'
 import { Redirect, Route, RouteProps } from 'react-router-dom'
 
-//First Party Imports
-import { IElevatedPageState } from '../../Interfaces/PageState';
-
 
 interface IProtectedRoute extends RouteProps {
-  elevatedState: () => IElevatedPageState
+  expression: boolean
   children: React.ReactNode
 }
 
-function ProtectedRoute ({elevatedState, children, ...rest }: IProtectedRoute) {
+function ProtectedRoute ({expression, children, ...rest }: IProtectedRoute) {
   return (
     <Route {...rest} render={() => {
-      return elevatedState().authenticated === true
+      return expression
         ? children
         : <Redirect to='/login' />
     }} />

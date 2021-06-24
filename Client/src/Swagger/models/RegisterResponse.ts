@@ -24,7 +24,25 @@ export interface RegisterResponse {
      * @type {string}
      * @memberof RegisterResponse
      */
+    emailMessage?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterResponse
+     */
     msg?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterResponse
+     */
+    passwordMessage?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterResponse
+     */
+    usernameMessage?: string;
 }
 
 export function RegisterResponseFromJSON(json: any): RegisterResponse {
@@ -37,7 +55,10 @@ export function RegisterResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
+        'emailMessage': !exists(json, 'emailMessage') ? undefined : json['emailMessage'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
+        'passwordMessage': !exists(json, 'passwordMessage') ? undefined : json['passwordMessage'],
+        'usernameMessage': !exists(json, 'usernameMessage') ? undefined : json['usernameMessage'],
     };
 }
 
@@ -50,7 +71,10 @@ export function RegisterResponseToJSON(value?: RegisterResponse | null): any {
     }
     return {
         
+        'emailMessage': value.emailMessage,
         'msg': value.msg,
+        'passwordMessage': value.passwordMessage,
+        'usernameMessage': value.usernameMessage,
     };
 }
 

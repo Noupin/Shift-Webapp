@@ -149,6 +149,12 @@ definitions:
         default: ''
         type: string
         x-nullable: true
+      passwordMessage:
+        default: ''
+        type: string
+      usernameMessage:
+        default: ''
+        type: string
     type: object
   LogoutResponse:
     properties:
@@ -186,10 +192,19 @@ definitions:
     type: object
   RegisterResponse:
     properties:
+      emailMessage:
+        default: ''
+        type: string
       msg:
         default: ''
         type: string
         x-nullable: true
+      passwordMessage:
+        default: ''
+        type: string
+      usernameMessage:
+        default: ''
+        type: string
     type: object
   Shift:
     properties:
@@ -227,6 +242,56 @@ definitions:
           $ref: '#/definitions/Shift'
         type: array
     type: object
+  StopTrainResponse:
+    properties:
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+    type: object
+  TrainRequest:
+    properties:
+      prebuiltShiftModel:
+        default: ''
+        type: string
+      shiftTitle:
+        default: New Shift
+        type: string
+      shiftUUID:
+        type: string
+      trainType:
+        default: basic
+        type: string
+      usePTM:
+        default: false
+        type: boolean
+    required:
+    - shiftUUID
+    type: object
+  TrainResponse:
+    properties:
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+    type: object
+  TrainStatusResponse:
+    properties:
+      exhibit:
+        default: null
+        items:
+          type: string
+        type: array
+        x-nullable: true
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+      stopped:
+        default: false
+        type: boolean
+        x-nullable: true
+    type: object
   UpdatePictureResponse:
     properties:
       msg:
@@ -237,6 +302,8 @@ definitions:
   User:
     properties:
       admin:
+        type: boolean
+      canTrain:
         type: boolean
       dateCreated:
         type: string
@@ -304,6 +371,84 @@ paths:
       - UserAuth: []
       tags:
       - Load
+  /api/train:
+    post:
+      description: Given training data Shift specializes a model for the training
+        data. Yeilds more relaisitic results than just an inference though it takes
+        longer.
+      operationId: train
+      parameters:
+      - description: The uuid of the shift model being inferenced with, the title
+          of the shift that is being trained, whether or not the the PTM is being
+          used, the uuid of the prebuilt shift model if one is being used, the amount
+          of epochs inbetween the training status updates, and the type of trainign
+          to send four pictures or one picture for front end.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/TrainRequest'
+      responses:
+        default:
+          description: Whether the training has started or not.
+          schema:
+            $ref: '#/definitions/TrainResponse'
+      security:
+      - UserAuth: []
+      tags:
+      - Train
+  /api/trainStatus:
+    post:
+      description: The status of of the current training task if called while training
+        the task will switch to give an update image. After a certain amount of time
+        the training will be completed automatically to allow for multiple users to
+        train.
+      operationId: trainStatus
+      parameters:
+      - description: The uuid of the shift model being inferenced with, the title
+          of the shift that is being trained, whether or not the the PTM is being
+          used, the uuid of the prebuilt shift model if one is being used, the amount
+          of epochs inbetween the training status updates, and the type of trainign
+          to send four pictures or one picture for front end.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/TrainRequest'
+      responses:
+        default:
+          description: The status of the current shift training, whether the training
+            has stopped, and encoded images to view on the front end.
+          schema:
+            $ref: '#/definitions/TrainStatusResponse'
+      security:
+      - UserAuth: []
+      tags:
+      - Train
+  /api/stopTraining:
+    post:
+      description: Stop the training with the UUID of the shift model being trained.
+      operationId: stopTrain
+      parameters:
+      - description: The uuid of the shift model being inferenced with, the title
+          of the shift that is being trained, whether or not the the PTM is being
+          used, the uuid of the prebuilt shift model if one is being used, the amount
+          of epochs inbetween the training status updates, and the type of trainign
+          to send four pictures or one picture for front end.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/TrainRequest'
+      responses:
+        default:
+          description: Whether the stop train signal was accepted.
+          schema:
+            $ref: '#/definitions/StopTrainResponse'
+      security:
+      - UserAuth: []
+      tags:
+      - Train
   /api/authenticate/register:
     post:
       description: The regitration for the user.
@@ -319,7 +464,9 @@ paths:
           $ref: '#/definitions/RegisterRequest'
       responses:
         default:
-          description: The status of the register attempt.
+          description: The status of the register attempt, a specific message for
+            the username, a specific message for the email, and a specific message
+            for the password.
           schema:
             $ref: '#/definitions/RegisterResponse'
       tags:
@@ -352,7 +499,8 @@ paths:
           $ref: '#/definitions/LoginRequest'
       responses:
         default:
-          description: The status of the login attempt.
+          description: The status of the login attempt, a specific message for the
+            username and a specific message for the password.
           schema:
             $ref: '#/definitions/LoginResponse'
       tags:
@@ -535,11 +683,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -569,11 +717,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:

@@ -25,6 +25,18 @@ export interface LoginResponse {
      * @memberof LoginResponse
      */
     msg?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginResponse
+     */
+    passwordMessage?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginResponse
+     */
+    usernameMessage?: string;
 }
 
 export function LoginResponseFromJSON(json: any): LoginResponse {
@@ -38,6 +50,8 @@ export function LoginResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
+        'passwordMessage': !exists(json, 'passwordMessage') ? undefined : json['passwordMessage'],
+        'usernameMessage': !exists(json, 'usernameMessage') ? undefined : json['usernameMessage'],
     };
 }
 
@@ -51,6 +65,8 @@ export function LoginResponseToJSON(value?: LoginResponse | null): any {
     return {
         
         'msg': value.msg,
+        'passwordMessage': value.passwordMessage,
+        'usernameMessage': value.usernameMessage,
     };
 }
 

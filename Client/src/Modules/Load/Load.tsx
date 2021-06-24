@@ -321,10 +321,28 @@ export function Load (props: IElevatedStateProps){
                 }}>&#x21c6;</FileDialog>
               </Col>
             </Row>
-            <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
-                   object-fit-contain" key={!baseMedia ? "": baseMedia.name}
-                   onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
-                   mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
+            {baseMedia ? 
+              <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
+                     object-fit-contain" key={!baseMedia ? "": baseMedia.name}
+                     onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                     mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
+              :
+              <FileDialog className="mb-4" id="baseMediaUpload" onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+                if(badExtensions.length > 0){
+                  setElevatedState((prev) => ({...prev,
+                    msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                }
+                if(filteredFiles.length === 0){
+                  setBaseMedia(undefined)
+                }
+                else{
+                  setBaseMedia(filteredFiles[0])
+                }
+              }}>
+                <FontAwesomeIcon icon={faPhotoVideo} style={{fontSize: "8vh"}}/>
+              </FileDialog>}
           </Col>
           <Col xs={2}></Col>
         </Row>
@@ -341,11 +359,17 @@ export function Load (props: IElevatedStateProps){
                   </FileDialog>
                 </Col>
               </Row>
+              {baseFiles.length > 0 ?
               <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
-                        onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
-                        elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}
-                        setElevatedState={setElevatedState}>
-              </MediaList>
+                onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
+                elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}
+                setElevatedState={setElevatedState}/>
+              :
+              <FileDialog className="mb-4" id="baseFileUpload" mutipleSelect={true}
+                          onFileInput={(event) => checkFile(event, setElevatedState, setBaseFiles)}>
+                <FontAwesomeIcon icon={faPhotoVideo} style={{fontSize: "8vh"}}/>
+              </FileDialog>
+              }
             </div>
           </Col>
           <Col>
@@ -360,11 +384,17 @@ export function Load (props: IElevatedStateProps){
                   </FileDialog>
                 </Col>
               </Row>
+              {maskFiles.length > 0 ?
               <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
-                        onDrop={(event) => setMaskFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
-                        elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}
-                        setElevatedState={setElevatedState}>
-              </MediaList>
+                onDrop={(event) => setBaseFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
+                elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}
+                setElevatedState={setElevatedState}/>
+              :
+              <FileDialog className="mb-4" id="maskFileUpload" mutipleSelect={true}
+                          onFileInput={(event) => checkFile(event, setElevatedState, setMaskFiles)}>
+                <FontAwesomeIcon icon={faPhotoVideo} style={{fontSize: "8vh"}}/>
+              </FileDialog>
+              }
             </div>
           </Col>
         </Row>

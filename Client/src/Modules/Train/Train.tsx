@@ -48,7 +48,6 @@ export function Train (props: IElevatedStateProps){
       shiftTitle: elevatedState().shiftTitle,
       usePTM: elevatedState().usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      statusInterval: elevatedState().trainStatusInterval,
       trainType: 'basic'
     };
     const trainStatusBody: TrainStatusRequest = {
@@ -65,7 +64,6 @@ export function Train (props: IElevatedStateProps){
       shiftTitle: elevatedState().shiftTitle,
       usePTM: elevatedState().usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      statusInterval: elevatedState().trainStatusInterval,
       trainType: 'basic'
     };
     const stopTrainBody: StopTrainRequest = {
@@ -89,7 +87,6 @@ export function Train (props: IElevatedStateProps){
       shiftTitle: elevatedState().shiftTitle,
       usePTM: elevatedState().usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      statusInterval: elevatedState().trainStatusInterval,
       trainType: 'basic'
     };
     const trainBody: TrainOperationRequest = {
@@ -140,6 +137,7 @@ export function Train (props: IElevatedStateProps){
   //Update the image displayed to the user and stop the training interval
   useEffect(() => {
     if(!trainResponse) return;
+    console.log(trainResponse!.msg!)
 
     setElevatedState((prev) => ({...prev, msg: trainResponse!.msg!}));
 

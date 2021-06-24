@@ -27,6 +27,12 @@ export interface User {
     admin?: boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof User
+     */
+    canTrain?: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof User
      */
@@ -80,6 +86,7 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
     return {
         
         'admin': !exists(json, 'admin') ? undefined : json['admin'],
+        'canTrain': !exists(json, 'canTrain') ? undefined : json['canTrain'],
         'dateCreated': !exists(json, 'dateCreated') ? undefined : json['dateCreated'],
         'email': json['email'],
         'id': !exists(json, 'id') ? undefined : json['id'],
@@ -100,6 +107,7 @@ export function UserToJSON(value?: User | null): any {
     return {
         
         'admin': value.admin,
+        'canTrain': value.canTrain,
         'dateCreated': value.dateCreated,
         'email': value.email,
         'id': value.id,

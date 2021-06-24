@@ -39,12 +39,6 @@ export interface TrainRequest {
     shiftUUID: string;
     /**
      * 
-     * @type {number}
-     * @memberof TrainRequest
-     */
-    statusInterval?: number;
-    /**
-     * 
      * @type {string}
      * @memberof TrainRequest
      */
@@ -70,7 +64,6 @@ export function TrainRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'prebuiltShiftModel': !exists(json, 'prebuiltShiftModel') ? undefined : json['prebuiltShiftModel'],
         'shiftTitle': !exists(json, 'shiftTitle') ? undefined : json['shiftTitle'],
         'shiftUUID': json['shiftUUID'],
-        'statusInterval': !exists(json, 'statusInterval') ? undefined : json['statusInterval'],
         'trainType': !exists(json, 'trainType') ? undefined : json['trainType'],
         'usePTM': !exists(json, 'usePTM') ? undefined : json['usePTM'],
     };
@@ -88,7 +81,6 @@ export function TrainRequestToJSON(value?: TrainRequest | null): any {
         'prebuiltShiftModel': value.prebuiltShiftModel,
         'shiftTitle': value.shiftTitle,
         'shiftUUID': value.shiftUUID,
-        'statusInterval': value.statusInterval,
         'trainType': value.trainType,
         'usePTM': value.usePTM,
     };

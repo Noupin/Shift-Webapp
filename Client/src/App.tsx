@@ -14,8 +14,8 @@ import { Login } from "./Modules/User/Login";
 import { ForgotPassword } from "./Modules/User/ForgotPassword";
 import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load";
-/*import { Train } from "./Modules/Train/Train";
-import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";*/
+import { Train } from "./Modules/Train/Train";
+import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
@@ -39,8 +39,8 @@ export default function App() {
     trainStatusInterval: 10,
     usePTM: false,
     prebuiltShiftModel: "",
-    trainingShift: false,
-    canTrain: false,
+    trainingShift: true,
+    canTrain: true,
   })
 
   const getElevatedState = function(){ return elevatedState };
@@ -115,19 +115,19 @@ export default function App() {
                 <Route path="/login">
                   <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <ProtectedRoute elevatedState={getElevatedState} path="/forgotPassword">
+                <ProtectedRoute expression={getElevatedState().authenticated} path="/forgotPassword">
                   <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <Route path="/load">
+                <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                {/*<ProtectedRoute elevatedState={getElevatedState} path="/train">
+                </ProtectedRoute>
+                <ProtectedRoute expression={getElevatedState().canTrain} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute elevatedState={getElevatedState} path="/advancedTrain">
+                <ProtectedRoute expression={getElevatedState().canTrain} path="/advancedTrain">
                   <AdvancedTrain elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </ProtectedRoute>*/}
-                <ProtectedRoute elevatedState={getElevatedState} path="/inference">
+                </ProtectedRoute>
+                <ProtectedRoute expression={getElevatedState().authenticated} path="/inference">
                   <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <Route path="/shift/:uuid">

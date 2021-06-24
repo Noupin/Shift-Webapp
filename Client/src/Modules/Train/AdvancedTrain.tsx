@@ -59,7 +59,6 @@ export function AdvancedTrain (props: IElevatedStateProps){
       shiftTitle: elevatedState().shiftTitle,
       usePTM: elevatedState().usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      statusInterval: elevatedState().trainStatusInterval,
       trainType: 'advanced'
     };
     const trainStatusBody: TrainStatusRequest = {
@@ -81,7 +80,6 @@ export function AdvancedTrain (props: IElevatedStateProps){
       shiftTitle: elevatedState().shiftTitle,
       usePTM: elevatedState().usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      statusInterval: elevatedState().trainStatusInterval,
       trainType: 'advanced'
     };
     const stopTrainBody: StopTrainRequest = {
@@ -105,7 +103,6 @@ export function AdvancedTrain (props: IElevatedStateProps){
       shiftTitle: elevatedState().shiftTitle,
       usePTM: elevatedState().usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      statusInterval: elevatedState().trainStatusInterval,
       trainType: 'advanced'
     };
     const trainBody: TrainOperationRequest = {
