@@ -5,6 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons'
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
@@ -112,6 +114,7 @@ export function Load (props: IElevatedStateProps){
       history.push(`/${elevatedState().defaultTrainView === "basic" ? "train" : "advancedTrain"}`);
     }
     else{
+      setElevatedState((prev) => ({...prev, prebuiltShiftModel: "PTM"}))
       history.push(`/inference`)
     }
   }, [elevatedState().shiftUUID]);
@@ -172,15 +175,51 @@ export function Load (props: IElevatedStateProps){
   }
 
 
+  let loadButtonsComponent = (
+    <>
+      <Col xs={2}></Col>
+      <Col xs={8}>
+        <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
+      </Col>
+      <Col xs={2}></Col>
+    </>
+  )
+
   let loadMediaComponent = (
     <>
       <Row className="mt-4">
-        <Col>
-          <h2>Base Media</h2>
-          <Row className="px-4">
-            <Col xs={11}></Col>
-            <Col xs={1}>
-              <FileDialog className="justify-content-end" id="baseMediaUpload" onFileInput={(event) => {
+        <Col className="mr-1">
+          <Row className="justify-content-center p-1">
+            <h3>Base Media</h3>
+          </Row>
+          <Row>
+            <Col className="neumorphic borderRadius-2 p-0">
+              <Row className="px-4">
+                <Col xs={11}></Col>
+                <Col xs={1}>
+                  <FileDialog className="justify-content-end" id="baseMediaUpload" onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+                    if(badExtensions.length > 0){
+                      setElevatedState((prev) => ({...prev,
+                        msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                    }
+                    if(filteredFiles.length === 0){
+                      setBaseMedia(undefined)
+                    }
+                    else{
+                      setBaseMedia(filteredFiles[0])
+                    }
+                  }}>&#x21c6;</FileDialog>
+                </Col>
+              </Row>
+              {baseMedia ? 
+              <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
+                     object-fit-contain" key={!baseMedia ? "": baseMedia.name}
+                     onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                     mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
+              :
+              <FileDialog className="mb-4" id="baseMediaUpload" onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
@@ -193,20 +232,44 @@ export function Load (props: IElevatedStateProps){
                 else{
                   setBaseMedia(filteredFiles[0])
                 }
-              }}>&#x21c6;</FileDialog>
+              }}>
+                <FontAwesomeIcon icon={faPhotoVideo} style={{fontSize: "8vh"}}/>
+              </FileDialog>}
             </Col>
           </Row>
-          <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain"
-                 key={!baseMedia ? "": baseMedia.name}
-                 onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
-                 mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
         </Col>
-        <Col>
-          <h2>Mask Media</h2>
-          <Row className="px-4">
-            <Col xs={11}></Col>
-            <Col xs={1}>
-              <FileDialog className="justify-content-end" id="maskMediaUpload" onFileInput={(event) => {
+        <Col className="ml-1">
+          <Row className="justify-content-center p-1">
+            <h3>Mask Media</h3>
+          </Row>
+          <Row>
+            <Col className="neumorphic borderRadius-2 p-0">
+              <Row className="px-4">
+                <Col xs={11}></Col>
+                <Col xs={1}>
+                  <FileDialog className="justify-content-end" id="maskMediaUpload" onFileInput={(event) => {
+                    const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+
+                    if(badExtensions.length > 0){
+                      setElevatedState((prev) => ({...prev,
+                        msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                    }
+                    if(filteredFiles.length === 0){
+                      setMaskFiles([])
+                    }
+                    else{
+                      setMaskFiles([filteredFiles[0]])
+                    }
+                  }}>&#x21c6;</FileDialog>
+                </Col>
+              </Row>
+              {maskFiles.length > 0 ?
+              <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain"
+                     key={!maskFiles[0] ? "": maskFiles[0].name}
+                     onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                     mediaSrc={maskFiles[0]!} mediaType="video/mp4" droppable={true}/>
+              :
+              <FileDialog className="pb-4" id="maskMediaUpload" onFileInput={(event) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
@@ -219,13 +282,12 @@ export function Load (props: IElevatedStateProps){
                 else{
                   setMaskFiles([filteredFiles[0]])
                 }
-              }}>&#x21c6;</FileDialog>
+              }}>
+                <FontAwesomeIcon icon={faPhotoVideo} style={{fontSize: "8vh"}}/>
+              </FileDialog>
+              }
             </Col>
           </Row>
-          <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain"
-                 key={!maskFiles[0] ? "": maskFiles[0].name}
-                 onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
-                 mediaSrc={maskFiles[0]!} mediaType="video/mp4" droppable={true}/>
         </Col>
       </Row>
     </>
@@ -257,10 +319,10 @@ export function Load (props: IElevatedStateProps){
                 }}>&#x21c6;</FileDialog>
               </Col>
             </Row>
-            <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2 object-fit-contain"
-                  key={!baseMedia ? "": baseMedia.name}
-                  onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
-                  mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
+            <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
+                   object-fit-contain" key={!baseMedia ? "": baseMedia.name}
+                   onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                   mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
           </Col>
           <Col xs={2}></Col>
         </Row>
@@ -306,6 +368,21 @@ export function Load (props: IElevatedStateProps){
         </Row>
       </>
     );
+
+    loadButtonsComponent = (
+      <>
+        <Col xs={10}>
+          <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
+        </Col>
+        <Col xs={1} className=" justify-content-center my-auto">
+          <h5 className="m-0">PTM:</h5>
+        </Col>
+        <Col xs={1} className="p-2">
+          <Checkbox checked={elevatedState().usePTM}
+            onChange={() => setElevatedState((prev) => ({...prev, usePTM: !elevatedState().usePTM}))}/>
+        </Col>
+      </>
+    )
   }
 
   return (
@@ -318,16 +395,7 @@ export function Load (props: IElevatedStateProps){
       {loadMediaComponent}
       {fetching ? <Row className="justify-content-center"><Loader/></Row> : <></>}
       <Row className="mt-3">
-        <Col xs={10}>
-          <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
-        </Col>
-        <Col xs={1} className=" justify-content-center my-auto">
-          <h5 className="m-0">PTM:</h5>
-        </Col>
-        <Col xs={1} className="p-2">
-          <Checkbox checked={elevatedState().usePTM}
-            onChange={() => setElevatedState((prev) => ({...prev, usePTM: !elevatedState().usePTM}))}/>
-        </Col>
+        {loadButtonsComponent}
       </Row>
     </Container>
   );
