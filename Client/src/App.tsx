@@ -39,8 +39,8 @@ export default function App() {
     trainStatusInterval: 10,
     usePTM: false,
     prebuiltShiftModel: "",
-    trainingShift: true,
-    canTrain: true,
+    trainingShift: false,
+    canTrain: false,
   })
 
   const getElevatedState = function(){ return elevatedState };
@@ -118,9 +118,9 @@ export default function App() {
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/forgotPassword">
                   <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <Route path="/load">
+                <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </Route>
+                </ProtectedRoute>
                 <ProtectedRoute expression={getElevatedState().canTrain} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
