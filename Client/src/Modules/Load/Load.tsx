@@ -185,6 +185,8 @@ export function Load (props: IElevatedStateProps){
     </>
   )
 
+  let titleComponent = <></>;
+
   let loadMediaComponent = (
     <>
       <Row className="mt-4">
@@ -383,15 +385,19 @@ export function Load (props: IElevatedStateProps){
         </Col>
       </>
     )
+
+    titleComponent = (
+      <Row className="mb-2">
+        <Col xs={3}></Col>
+          {titleBar}
+        <Col xs={3}></Col>
+      </Row>
+    )
   }
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
-      <Row className="mb-2">
-        <Col xs={3}></Col>
-        {titleBar}
-        <Col xs={3}></Col>
-      </Row>
+      {titleComponent}
       {loadMediaComponent}
       {fetching ? <Row className="justify-content-center"><Loader/></Row> : <></>}
       <Row className="mt-3">
