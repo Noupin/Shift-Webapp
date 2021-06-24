@@ -7,14 +7,14 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import './TextBox.scss';
 
 export interface ITextBox extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>{
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void,
-  type: string,
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
+  type: string
   placeholder: string
 }
 
 export const TextBox = (props: ITextBox) => {
   const {onBlur, type, placeholder, ...textboxProps} = props;
-  const cssClasses = textboxProps.className?.toString() + " insetNeumorphic textbox";
+  const cssClasses = textboxProps.className?.toString() + " textbox";
 
   const [hidden, setHidden] = useState(true);
 

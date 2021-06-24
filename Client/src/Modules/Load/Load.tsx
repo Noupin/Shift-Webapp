@@ -152,9 +152,8 @@ export function Load (props: IElevatedStateProps){
 
   var titleBar = (
     <Col xs={6}>
-      <TextBox className="borderRadius-2 m-2 w-100 p-2" type="text" placeholder="Title"
-               onChange={onTitleChange}
-               value={title}/>
+      <TextBox className="borderRadius-2 m-2 w-100 p-2" type="text" placeholder="My Shift"
+               onChange={onTitleChange}/>
     </Col>
   );
   if(!titleUpdated && baseMedia && ((title !== defaultShiftTitle)
@@ -162,9 +161,8 @@ export function Load (props: IElevatedStateProps){
     titleBar = (
       <>
         <Col xs={5}>
-          <TextBox className="borderRadius-2 my-2 w-100 py-2" type="text" placeholder="Title"
-                    onChange={onTitleChange}
-                    value={title} autoFocus/>
+          <TextBox className="borderRadius-2 my-2 w-100 py-2" type="text" placeholder="My Shift"
+                    onChange={onTitleChange} autoFocus/>
         </Col>
         <Col xs={1}>
           <Button className="borderRadius-2 my-2 py-2 align-items-center"

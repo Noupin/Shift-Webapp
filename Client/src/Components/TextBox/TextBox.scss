@@ -1,7 +1,13 @@
 @import "../../variables.scss";
+@import "../../App.scss";
 
 .textbox{
+    @extend .insetNeumorphic;
     text-align: center;
     border: 0;
     outline: none;
+}
+
+.textbox:focus{
+    @extend .neumorphic;
 }

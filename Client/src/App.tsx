@@ -118,9 +118,9 @@ export default function App() {
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/forgotPassword">
                   <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
+                <Route path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </ProtectedRoute>
+                </Route>
                 <ProtectedRoute expression={getElevatedState().canTrain} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
