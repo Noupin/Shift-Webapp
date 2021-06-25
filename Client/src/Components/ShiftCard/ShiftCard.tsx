@@ -20,13 +20,15 @@ interface IShiftCard extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<
 
 export function ShiftCard(props: IShiftCard){
   const {shift, setElevatedState, imageCssClassNames, ...cardProps} = props;
-  const cssClasses = cardProps.className?.toString() + " borderRadius-2";
-  const buttonStyle: React.CSSProperties = { border: 'none', position: "relative"};
+  const cssClasses = cardProps.className?.toString() + " borderRadius-2 p-0 forceTextWrap p-2";
+  const buttonStyle: React.CSSProperties = { border: 'none'};
   const apiPrefix = videoTypes.indexOf(shift.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'
   
   const history = useHistory();
 
-  let imageCssClass = "borderRadius-1";
+  const mediaBorderRaduis = "borderRadius-1";
+
+  let imageCssClass = `${mediaBorderRaduis}`;
   if(imageCssClassNames){
     imageCssClass = imageCssClass + ` ${imageCssClassNames}`;
   }
@@ -39,17 +41,16 @@ export function ShiftCard(props: IShiftCard){
   return (
     <Button {...cardProps} className={cssClasses} style={buttonStyle}
       onClick={(event: Event) => goToShift(event, shift.uuid)}>
-      <p className="lighterGlassmorphic w-75 position-absolute m-0 borderRadius-1 pl-2"
-        style={{top: 0, left: 0, textAlign: "left", fontSize: 26}}>
-        {shift.title}
-      </p>
-      <p className="lighterGlassmorphic w-75 position-absolute m-0 borderRadius-1 pr-2"
-        style={{bottom: 0, right: 0, textAlign: "right", fontSize: 16}}>
-        @{shift.author.username}
-      </p>
-      <Media srcString={`${apiPrefix}${shift.mediaFilename}`}
-        className={imageCssClass}
-        setElevatedState={setElevatedState}/>
+      <div className="h-100" style={{position: "relative"}}>
+        <p className={`lighterGlassmorphic w-auto position-absolute
+          m-0 ${mediaBorderRaduis} px-2`}
+          style={{bottom: 0, left: 0, textAlign: "center", fontSize: 26}}>
+          {shift.title}
+        </p>
+        <Media srcString={`${apiPrefix}${shift.mediaFilename}`}
+          className={imageCssClass}
+          setElevatedState={setElevatedState}/>
+      </div>
     </Button>
   );
 }

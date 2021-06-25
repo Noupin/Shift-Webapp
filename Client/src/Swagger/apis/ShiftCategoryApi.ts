@@ -27,7 +27,7 @@ import {
 } from '../models';
 
 export interface CategoryRequest {
-    category: string;
+    categoryName: string;
 }
 
 /**
@@ -65,8 +65,8 @@ export class ShiftCategoryApi extends runtime.BaseAPI {
      * The shifts for the queried category to display on the home page.
      */
     async categoryRaw(requestParameters: CategoryRequest): Promise<runtime.ApiResponse<ShiftCategoryResponse>> {
-        if (requestParameters.category === null || requestParameters.category === undefined) {
-            throw new runtime.RequiredError('category','Required parameter requestParameters.category was null or undefined when calling category.');
+        if (requestParameters.categoryName === null || requestParameters.categoryName === undefined) {
+            throw new runtime.RequiredError('categoryName','Required parameter requestParameters.categoryName was null or undefined when calling category.');
         }
 
         const queryParameters: any = {};
@@ -74,7 +74,7 @@ export class ShiftCategoryApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/category/{category}`.replace(`{${"category"}}`, encodeURIComponent(String(requestParameters.category))),
+            path: `/api/shift/category/{categoryName}`.replace(`{${"categoryName"}}`, encodeURIComponent(String(requestParameters.categoryName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

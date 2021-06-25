@@ -6,12 +6,11 @@ import { Container, Row } from 'react-bootstrap';
 import { ShiftCategoryAPIInstance } from '../Helpers/Api';
 
 //First Party Imports
-import { CategoryRequest, Shift } from '../Swagger';
+import { CategoryRequest, Shift, ShiftCategoryResponse } from '../Swagger';
 import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { ShiftCategories } from '../Interfaces/ShiftCategories';
 import { ShiftCard } from '../Components/ShiftCard/ShiftCard';
 import { pageTitles } from '../constants';
-import { HorizontalMasonry } from '../Components/Masonry/HorizontalMasonry'
 import { HorizontalScrollMenu } from '../Components/HorizontalScrollMenu/HorizontalScrollMenu';
 
 
@@ -22,6 +21,16 @@ export function Home (props: IElevatedStateProps){
   const [popularShifts, setPopularShifts] = useState<Shift[]>([])
   const [newShifts, setNewShifts] = useState<Shift[]>([])
   const [shiftCategories, setShiftCategories] = useState<ShiftCategories[]>([])
+
+  async function getCategoryShifts(categoryName: string="Featured"): Promise<ShiftCategoryResponse>{
+    const categoryParams: CategoryRequest = {
+      categoryName: categoryName
+    }
+
+    const categoryResponse = await ShiftCategoryAPIInstance.category(categoryParams)
+    
+    return categoryResponse;
+  }
 
 
   useEffect(() => {
@@ -37,28 +46,29 @@ export function Home (props: IElevatedStateProps){
   }, [])
 
   useEffect(() => {
-    const categoryParams: CategoryRequest = {
-      category: "featured"
+    async function featuredShifts(){
+      const featuredResponse = await getCategoryShifts();
+      setFeaturedShifts(featuredResponse.shifts!)
+      console.log(featuredResponse)
     }
-
-    ShiftCategoryAPIInstance.category(categoryParams).then((value) => setFeaturedShifts(value.shifts!))
+    
+    featuredShifts();
   }, [])
 
   useEffect(() => {
-    const categoryParams: CategoryRequest = {
-      category: "marvel"
-    }
-
-    let categoryResponse: ShiftCategories = {category: "", shifts: []};
-
-    ShiftCategoryAPIInstance.category(categoryParams).then((value) => {
-      categoryResponse = {
-        category: categoryParams.category,
-        shifts: value.shifts!
+    async function getShifts(){
+      let categoryShifts: ShiftCategories = { category: "", shifts: [] };
+  
+      const categoryResponse = await getCategoryShifts("Marvel");
+      categoryShifts = {
+        category: "Marvel",
+        shifts: categoryResponse.shifts!
       }
-    })
-
-    setShiftCategories((prev) => [...prev, categoryResponse])
+      setShiftCategories((prev) => [...prev, categoryShifts])
+      console.log(categoryShifts)
+    }
+    
+    getShifts();
   }, [])
 
   return (

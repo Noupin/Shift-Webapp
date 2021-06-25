@@ -12,8 +12,8 @@
 
 .navSelected {
     background: $sameAsBackground;
-    box-shadow: inset 5px 5px 10px $dimShadow, 
-                inset -5px -5px 10px $brightShadow;
+    box-shadow: inset 5px 5px 10px $lightModeDimShadow, 
+                inset -5px -5px 10px $lightModeBrightShadow;
 }
 
 button.navbar-toggler{
