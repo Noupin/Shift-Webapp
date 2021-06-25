@@ -1,5 +1,5 @@
 //Third Party Imports
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 //First Party Imports
 import { IElevatedPageState } from '../../Interfaces/PageState';
@@ -8,21 +8,22 @@ import "./HorizontalScrollMenu.scss"
 
 interface IHorizontalScrollMenu extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
   setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
-  children?: React.ReactNode | null
+  children?: ReactElement[] | null
 }
 
 
 export function HorizontalScrollMenu(props: IHorizontalScrollMenu){
   const {children, setElevatedState, ...scrollMenuProps} = props;
-  scrollMenuProps.className = scrollMenuProps.className?.toString() + " scrollMenu borderRadius-3 p-2";
-
-  const elements = React.Children.toArray(children)
+  scrollMenuProps.className = scrollMenuProps.className?.toString() + " horizontalScrollMenu borderRadius-3 p-2";
 
   return (
     <div {...scrollMenuProps}>
-      {elements.map((element) => (
-        element
-      ))}
+      {children ? React.Children.map(children, child => (
+        <>
+          {React.cloneElement(child, { className: child.props.className! + " h-100 mx-2"})}
+        </>
+      )) :
+      <></>}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 //Third Party Imports
-import React from 'react';
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 
 //First Party Imports
 import { IElevatedPageState } from '../../Interfaces/PageState';
@@ -21,7 +20,7 @@ export function HorizontalMasonry(props: IHorizontalMasonry){
     <div {...masonryProps}>
       {children ? React.Children.map(children, child => (
         <figure className="h-masonry-brick">
-          {React.cloneElement(child, { className: child.props.className! + " h-100"})}
+          {React.cloneElement(child, { className: child.props.className! + " h-100 w-100"})}
         </figure>
       )) :
       <></>}

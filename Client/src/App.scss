@@ -14,9 +14,9 @@ html, body{
     height: 100%;
 }
 
-/*.container{
+.fullScreen{
     max-width: 90%;
-}*/
+}
 
 #root{
     min-width: 100%;
@@ -51,6 +51,10 @@ label {
 
 .object-fit-contain{
     object-fit: contain;
+}
+
+.object-fit-cover{
+    object-fit: cover;
 }
 
 .forceTextWrap { 
@@ -120,3 +124,9 @@ label {
     z-index: 2;
     backdrop-filter: blur(2rem);
 }
+
+.lighterGlassmorphic{
+    z-index: 2;
+    backdrop-filter: blur(3rem);
+}
+

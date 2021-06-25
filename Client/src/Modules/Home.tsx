@@ -9,10 +9,10 @@ import { ShiftCategoryAPIInstance } from '../Helpers/Api';
 import { CategoryRequest, Shift } from '../Swagger';
 import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { ShiftCategories } from '../Interfaces/ShiftCategories';
-import { HorizontalScrollMenu } from '../Components/ScrollMenu/HorizontalScrollMenu';
 import { ShiftCard } from '../Components/ShiftCard/ShiftCard';
 import { pageTitles } from '../constants';
 import { HorizontalMasonry } from '../Components/Masonry/HorizontalMasonry'
+import { HorizontalScrollMenu } from '../Components/HorizontalScrollMenu/HorizontalScrollMenu';
 
 
 export function Home (props: IElevatedStateProps){
@@ -62,50 +62,62 @@ export function Home (props: IElevatedStateProps){
   }, [])
 
   return (
-    <Container>
+    <Container className="fullScreen">
       <Row className="justify-content-center">
         <h1>Shift</h1>
       </Row>
 
       <Row>
-        <h5>Featured</h5>
-        <HorizontalMasonry setElevatedState={setElevatedState}>
+        <h3>Featured</h3>
+      </Row>
+      <Row>
+        <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
           {featuredShifts.map((element, index) => (
             <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
               imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
           ))}
-        </HorizontalMasonry>
+        </HorizontalScrollMenu>
       </Row>
 
       <Row>
-        <h5>Popular</h5>
-        <HorizontalMasonry setElevatedState={setElevatedState}>
+        <h3>Popular</h3>
+      </Row>
+      <Row>
+        <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
           {popularShifts.map((element, index) => (
             <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
               imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
           ))}
-        </HorizontalMasonry>
+        </HorizontalScrollMenu>
       </Row>
 
-      {/*<Row>
-        <h5>New</h5>
-        <HorizontalScrollMenu setElevatedState={setElevatedState}>
+      <Row>
+        <h3>New</h3>
+      </Row>
+      <Row>
+        <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
           {newShifts.map((element, index) => (
-            <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
+            <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+              imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
           ))}
         </HorizontalScrollMenu>
-      </Row>*/}
+      </Row>
 
       {shiftCategories.map((category) => (
-        <Row>
-          {category.category ? <h5>{category.category}</h5> : <></>}
-          {category.shifts!.length > 0 ?
-          <HorizontalScrollMenu setElevatedState={setElevatedState}>
-            {category.shifts!.map((element, index) => (
-              <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
-            ))}
-          </HorizontalScrollMenu> : <></>}
-        </Row>
+        <>
+          <Row>
+            {category.category ? <h3>{category.category}</h3> : <></>}
+          </Row>
+          <Row>
+            {category.shifts!.length > 0 ?
+            <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+              {category.shifts!.map((element, index) => (
+                <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+                  imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
+              ))}
+            </HorizontalScrollMenu> : <></>}
+          </Row>
+        </>
       ))}
     </Container>
   );

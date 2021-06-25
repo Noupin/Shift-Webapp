@@ -9,7 +9,6 @@ import { Button } from '../Button/Button';
 import { videoTypes } from '../../constants';
 import "./ShiftCard.scss"
 import { Shift } from '../../Swagger';
-import { Container, Row } from 'react-bootstrap';
 
 
 interface IShiftCard extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
@@ -21,7 +20,7 @@ interface IShiftCard extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<
 
 export function ShiftCard(props: IShiftCard){
   const {shift, setElevatedState, imageCssClassNames, ...cardProps} = props;
-  const cssClasses = cardProps.className?.toString() + " borderRadius-2 p-1";
+  const cssClasses = cardProps.className?.toString() + " borderRadius-2";
   const buttonStyle: React.CSSProperties = { border: 'none', position: "relative"};
   const apiPrefix = videoTypes.indexOf(shift.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'
   
@@ -40,12 +39,12 @@ export function ShiftCard(props: IShiftCard){
   return (
     <Button {...cardProps} className={cssClasses} style={buttonStyle}
       onClick={(event: Event) => goToShift(event, shift.uuid)}>
-      <p className="glassmorphic w-75 position-absolute m-0 mt-1 ml-1"
-        style={{textAlign: "left"}}>
+      <p className="lighterGlassmorphic w-75 position-absolute m-0 borderRadius-1 pl-2"
+        style={{top: 0, left: 0, textAlign: "left", fontSize: 26}}>
         {shift.title}
       </p>
-      <p className="glassmorphic w-75 position-absolute m-0 mr-1 mb-1"
-        style={{bottom: 0, right: 0, textAlign: "right"}}>
+      <p className="lighterGlassmorphic w-75 position-absolute m-0 borderRadius-1 pr-2"
+        style={{bottom: 0, right: 0, textAlign: "right", fontSize: 16}}>
         @{shift.author.username}
       </p>
       <Media srcString={`${apiPrefix}${shift.mediaFilename}`}
