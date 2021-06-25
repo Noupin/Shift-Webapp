@@ -61,11 +61,18 @@ label {
     word-wrap: break-word;      /* IE */
 }
 
-.textBorder{
-    text-shadow: -1px 1px 0 $borderColor,
-                 1px 1px 0 $borderColor,
-                 1px -1px 0 $borderColor,
-                 -1px -1px 0 $borderColor;
+.lightTextBorder{
+    text-shadow: -1px 1px 0 $color,
+                 1px 1px 0 $color,
+                 1px -1px 0 $color,
+                 -1px -1px 0 $color;
+}
+
+.darkTextBorder{
+    text-shadow: -1px 1px 0 $darkColor,
+                 1px 1px 0 $darkColor,
+                 1px -1px 0 $darkColor,
+                 -1px -1px 0 $darkColor;
 }
 
 

@@ -12,6 +12,7 @@ import { ShiftCategories } from '../Interfaces/ShiftCategories';
 import { HorizontalScrollMenu } from '../Components/ScrollMenu/HorizontalScrollMenu';
 import { ShiftCard } from '../Components/ShiftCard/ShiftCard';
 import { pageTitles } from '../constants';
+import { HorizontalMasonry } from '../Components/Masonry/HorizontalMasonry'
 
 
 export function Home (props: IElevatedStateProps){
@@ -68,35 +69,38 @@ export function Home (props: IElevatedStateProps){
 
       <Row>
         <h5>Featured</h5>
-        <HorizontalScrollMenu setElevatedState={setElevatedState}>
+        <HorizontalMasonry setElevatedState={setElevatedState}>
           {featuredShifts.map((element, index) => (
-            <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
+            <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+              imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
           ))}
-        </HorizontalScrollMenu>
+        </HorizontalMasonry>
       </Row>
 
       <Row>
         <h5>Popular</h5>
-        <HorizontalScrollMenu setElevatedState={setElevatedState}>
+        <HorizontalMasonry setElevatedState={setElevatedState}>
           {popularShifts.map((element, index) => (
-            <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
+            <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+              imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
           ))}
-        </HorizontalScrollMenu>
+        </HorizontalMasonry>
       </Row>
 
-      <Row>
+      {/*<Row>
         <h5>New</h5>
         <HorizontalScrollMenu setElevatedState={setElevatedState}>
           {newShifts.map((element, index) => (
             <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
           ))}
         </HorizontalScrollMenu>
-      </Row>
+      </Row>*/}
 
       {shiftCategories.map((category) => (
         <Row>
           {category.category ? <h5>{category.category}</h5> : <></>}
-          {category.shifts!.length > 0 ? <HorizontalScrollMenu setElevatedState={setElevatedState}>
+          {category.shifts!.length > 0 ?
+          <HorizontalScrollMenu setElevatedState={setElevatedState}>
             {category.shifts!.map((element, index) => (
               <ShiftCard className="mx-2" key={index} shift={element} setElevatedState={setElevatedState}/>
             ))}

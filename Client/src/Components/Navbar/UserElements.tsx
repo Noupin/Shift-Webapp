@@ -58,7 +58,7 @@ export function UserElements (props: IElevatedStateProps){
         </NavLink>
       </div>
       <div className="mx-1 my-1">
-        <Button className="neumorphic borderRadius-2 py-2 px-3 w-100" onClick={() => setFetching(true)} disabled={fetching || authenticating}>
+        <Button className="neumorphic borderRadius-2 py-2 px-3 w-100 nav-link" onClick={() => setFetching(true)} disabled={fetching || authenticating}>
           Logout
         </Button>
       </div>
