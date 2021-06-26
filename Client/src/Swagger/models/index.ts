@@ -1,4 +1,5 @@
 export * from './AuthenticatedResponse';
+export * from './CategoriesResponse';
 export * from './IndividualShiftDeleteResponse';
 export * from './IndividualShiftGetResponse';
 export * from './IndividualShiftPatchRequest';

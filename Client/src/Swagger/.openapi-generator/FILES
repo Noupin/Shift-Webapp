@@ -1,14 +1,15 @@
 apis/AuthenticateApi.ts
 apis/CDNApi.ts
+apis/CategoryApi.ts
 apis/InferenceApi.ts
 apis/LoadApi.ts
 apis/ShiftApi.ts
-apis/ShiftCategoryApi.ts
 apis/TrainApi.ts
 apis/UserApi.ts
 apis/index.ts
 index.ts
 models/AuthenticatedResponse.ts
+models/CategoriesResponse.ts
 models/IndividualShiftDeleteResponse.ts
 models/IndividualShiftGetResponse.ts
 models/IndividualShiftPatchRequest.ts

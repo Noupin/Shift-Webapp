@@ -3,15 +3,15 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { ShiftCategoryAPIInstance } from '../Helpers/Api';
 
 //First Party Imports
-import { CategoryRequest, Shift, ShiftCategoryResponse } from '../Swagger';
-import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
-import { ShiftCategories } from '../Interfaces/ShiftCategories';
+import { CATEGORIES_TO_GET, CATEGORIES_TO_REMOVE, pageTitles } from '../constants';
+import { CategoryAPIInstance } from '../Helpers/Api';
 import { ShiftCard } from '../Components/ShiftCard/ShiftCard';
-import { pageTitles } from '../constants';
+import { ShiftCategories } from '../Interfaces/ShiftCategories';
+import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { HorizontalScrollMenu } from '../Components/HorizontalScrollMenu/HorizontalScrollMenu';
+import { CategoriesRequest, CategoriesResponse, CategoryRequest, Shift, ShiftCategoryResponse } from '../Swagger';
 
 
 export function Home (props: IElevatedStateProps){
@@ -27,7 +27,7 @@ export function Home (props: IElevatedStateProps){
       categoryName: categoryName
     }
 
-    const categoryResponse = await ShiftCategoryAPIInstance.category(categoryParams)
+    const categoryResponse = await CategoryAPIInstance.category(categoryParams)
     
     return categoryResponse;
   }
@@ -38,34 +38,51 @@ export function Home (props: IElevatedStateProps){
   }, [])
 
   useEffect(() => {
-    ShiftCategoryAPIInstance.popular().then((value) => setPopularShifts(value.shifts!))
+    CategoryAPIInstance.popular().then((value) => setPopularShifts(value.shifts!))
   }, [])
 
   useEffect(() => {
-    ShiftCategoryAPIInstance._new().then((value) => setNewShifts(value.shifts!))
+    CategoryAPIInstance._new().then((value) => setNewShifts(value.shifts!))
   }, [])
 
   useEffect(() => {
     async function featuredShifts(){
       const featuredResponse = await getCategoryShifts();
       setFeaturedShifts(featuredResponse.shifts!)
-      console.log(featuredResponse)
     }
     
     featuredShifts();
   }, [])
 
   useEffect(() => {
-    async function getShifts(){
-      let categoryShifts: ShiftCategories = { category: "", shifts: [] };
-  
-      const categoryResponse = await getCategoryShifts("Marvel");
-      categoryShifts = {
-        category: "Marvel",
-        shifts: categoryResponse.shifts!
+    async function getCategories(maximum=CATEGORIES_TO_GET): Promise<CategoriesResponse["categories"]>{
+      let categoryNames: CategoriesResponse["categories"] = [];
+
+      const categoriesParams: CategoriesRequest = {
+        maximum: maximum
       }
-      setShiftCategories((prev) => [...prev, categoryShifts])
-      console.log(categoryShifts)
+
+      const categoriesResponse = await CategoryAPIInstance.categories(categoriesParams);
+      categoryNames = categoriesResponse.categories.filter(
+        (category: string) => CATEGORIES_TO_REMOVE.indexOf(category) === -1
+      )
+      console.log(categoryNames)
+
+      return categoryNames
+    }
+
+    async function getShifts(){
+      const categoryNames = await getCategories()
+
+      categoryNames.forEach(async (category) => {
+        const categoryResponse = await getCategoryShifts(category);
+        let categoryShifts: ShiftCategories = {
+          category: category,
+          shifts: categoryResponse.shifts!
+        }
+
+        setShiftCategories((prev) => [...prev, categoryShifts])
+      })
     }
     
     getShifts();

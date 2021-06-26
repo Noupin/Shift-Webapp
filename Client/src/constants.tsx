@@ -21,3 +21,6 @@ export const pageTitles = {
 }
 
 export const TRAIN_STATUS_INTERVAL = 1000;
+
+export const CATEGORIES_TO_GET = -1;
+export const CATEGORIES_TO_REMOVE = ["Featured"]

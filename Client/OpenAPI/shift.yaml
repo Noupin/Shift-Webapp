@@ -13,6 +13,15 @@ definitions:
         type: string
         x-nullable: true
     type: object
+  CategoriesResponse:
+    properties:
+      categories:
+        items:
+          type: string
+        type: array
+    required:
+    - categories
+    type: object
   IndividualShiftDeleteResponse:
     properties:
       msg:
@@ -677,17 +686,13 @@ paths:
           schema: {}
       tags:
       - CDN
-  /api/content/image/{filename}/{download}:
+  /api/content/video/{filename}:
     get:
-      description: The image portion of the Shift CDN.
-      operationId: getImageDownload
+      description: The video portion of the Shift CDN.
+      operationId: getVideo
       parameters:
       - in: path
         name: filename
-        required: true
-        type: string
-      - in: path
-        name: download
         required: true
         type: string
       responses:
@@ -696,11 +701,15 @@ paths:
           schema: {}
       tags:
       - CDN
-  /api/content/video/{filename}:
+  /api/content/image/{filename}/{download}:
     get:
-      description: The video portion of the Shift CDN.
-      operationId: getVideo
+      description: The image portion of the Shift CDN.
+      operationId: getImageDownload
       parameters:
+      - in: path
+        name: download
+        required: true
+        type: string
       - in: path
         name: filename
         required: true
@@ -717,11 +726,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -730,6 +739,47 @@ paths:
           schema: {}
       tags:
       - CDN
+  /api/shift/category/new:
+    get:
+      description: The new shifts to display on the home page.
+      operationId: new
+      parameters: []
+      responses:
+        default:
+          description: The newest shifts.
+          schema:
+            $ref: '#/definitions/NewShiftsResponse'
+      tags:
+      - Category
+  /api/shift/category/categories/{maximum}:
+    get:
+      description: The shifts for the queried category to display on the home page.
+      operationId: Categories
+      parameters:
+      - format: int32
+        in: path
+        name: maximum
+        required: true
+        type: integer
+      responses:
+        default:
+          description: The category names for the requested amount of categories.
+          schema:
+            $ref: '#/definitions/CategoriesResponse'
+      tags:
+      - Category
+  /api/shift/category/popular:
+    get:
+      description: The popular shifts to display on the home page.
+      operationId: popular
+      parameters: []
+      responses:
+        default:
+          description: The top 10 most popular shifts.
+          schema:
+            $ref: '#/definitions/PopularShiftsResponse'
+      tags:
+      - Category
   /api/shift/category/{categoryName}:
     get:
       description: The shifts for the queried category to display on the home page.
@@ -745,31 +795,7 @@ paths:
           schema:
             $ref: '#/definitions/ShiftCategoryResponse'
       tags:
-      - Shift Category
-  /api/shift/category/new:
-    get:
-      description: The new shifts to display on the home page.
-      operationId: new
-      parameters: []
-      responses:
-        default:
-          description: The newest shifts.
-          schema:
-            $ref: '#/definitions/NewShiftsResponse'
-      tags:
-      - Shift Category
-  /api/shift/category/popular:
-    get:
-      description: The popular shifts to display on the home page.
-      operationId: popular
-      parameters: []
-      responses:
-        default:
-          description: The top 10 most popular shifts.
-          schema:
-            $ref: '#/definitions/PopularShiftsResponse'
-      tags:
-      - Shift Category
+      - Category
   /api/shift/{uuid}:
     delete:
       description: Deletes the queried shift.
