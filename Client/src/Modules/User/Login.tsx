@@ -23,6 +23,9 @@ export function Login (props: IElevatedStateProps){
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
+  const [usernameMessage, setUsernameMessage] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
+
   const [fetching, setFetching] = useState(false);
   const [loginResponse, setLoginResponse] = useState<LoginResponse>();
   const [authenticating, setAuthenticating] = useState(false);
@@ -38,6 +41,9 @@ export function Login (props: IElevatedStateProps){
 
   useEffect(() => {
     if(!fetching) return;
+
+    setUsernameMessage("")
+    setPasswordMessage("")
 
     const loginRequestParams: LoginRequest = {
       usernameOrEmail: usernameOrEmail,
@@ -58,6 +64,14 @@ export function Login (props: IElevatedStateProps){
   useEffect(() => {
     if(!authenticating || !loginResponse) return;
 
+    if(loginResponse.usernameMessage){
+      setUsernameMessage(loginResponse.usernameMessage)
+    }
+
+    if(loginResponse.passwordMessage){
+      setPasswordMessage(loginResponse.passwordMessage)
+    }
+
     setElevatedState((prev) => ({...prev, msg: loginResponse.msg!}));
     auth()
   }, [authenticating, loginResponse]);
@@ -71,7 +85,7 @@ export function Login (props: IElevatedStateProps){
 
 
   return (
-    <Container className="d-flex justify-content-center h-100 flex-column">
+    <Container className="d-flex justify-content-center h-100 flex-column fullScreen">
       <Row className="mt-auto mb-auto">
         <Col xs={3}></Col>
         <Col xs={6}>
@@ -82,16 +96,33 @@ export function Login (props: IElevatedStateProps){
           <br/>
 
           <form>
-              <Row>
+            <Row>
+              <Col xs={2}></Col>
+              <Col xs={8}>
                 <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text"
-                         placeholder="Username/Email" autoComplete="username"
-                         onChange={(event) => setUsernameOrEmail(event.target.value)}/>
-              </Row>
-              <Row>
+                          placeholder="Username/Email" autoComplete="username"
+                          onChange={(event) => setUsernameOrEmail(event.target.value)}/>
+              </Col>
+              <Col xs={2}>
+              <p className="neumorphic borderRadius-2 p-2 mr-2"
+                  style={{position: "absolute", right: "-25%", top: 0, bottom: 0}}
+                  hidden={usernameMessage === ""}>
+                  {usernameMessage}
+                </p>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
                 <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password"
-                         placeholder="Password" autoComplete="current-password"
-                         onChange={(event) => setPassword(event.target.value)}/>
-              </Row>
+                          placeholder="Password" autoComplete="current-password"
+                          onChange={(event) => setPassword(event.target.value)}/>
+                <p className="neumorphic borderRadius-2 p-2 mr-2"
+                  style={{position: "absolute", right: "-25%", top: 0, bottom: 0}}
+                  hidden={passwordMessage === ""}>
+                  {passwordMessage}
+                </p>
+              </Col>
+            </Row>
 
             <Row>
               <Col xs={2}></Col>
@@ -101,7 +132,8 @@ export function Login (props: IElevatedStateProps){
                   Login &#10140;
                 </Button>
               </Col>
-              <Col xs={2}></Col>
+              <Col xs={2}>
+              </Col>
             </Row>
           </form>
 
