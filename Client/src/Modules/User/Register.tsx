@@ -2,7 +2,7 @@
 
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
@@ -16,16 +16,20 @@ import { pageTitles } from '../../constants';
 
 
 export function Register (props: IElevatedStateProps){
-  const {elevatedState, setElevatedState} = props;
+  const {elevatedState} = props;
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [usernameMessage, setUsernameMessage] = useState("");
-  const [emailMessage, setEmailMessage] = useState("");
-  const [passwordMessage, setPasswordMessage] = useState("");
+  const [registerErrors, setResigterErrors] = useState({
+    username: false,
+    email: false,
+    password: false,
+    confirmPassword: false
+  })
+  const [registerErrorMessage, setResgisterErrorMessage] = useState("");
 
   const [fetching, setFetching] = useState(false);
   const [registerResponse, setRegisterResponse] = useState<RegisterResponse>();
@@ -44,49 +48,61 @@ export function Register (props: IElevatedStateProps){
   useEffect(() => {
     if(!fetching) return;
 
-    setUsernameMessage("")
-    setEmailMessage("")
-    setPasswordMessage("")
-
-    if (password !== confirmPassword){
-      setPasswordMessage("Make sure your passwords match.")
-      setFetching(false)
-
-      return;
-    }
-
-    const registerReqeustParams: RegisterRequest = {
-      username: username,
-      password: password,
-      email: email
-    }
-    const registerBody: RegisterOperationRequest = {
-      body: registerReqeustParams
-    }
-
-    AuthenticateAPIInstance.register(registerBody).then((value) => {
-      setRegisterResponse(value)
+    setResigterErrors({
+      username: false,
+      email: false,
+      password: false,
+      confirmPassword: false
     })
-    setFetching(false)
-    setAuthenticating(true)
+    setResgisterErrorMessage("")
+
+    async function register(){
+      if (password !== confirmPassword){
+        setResigterErrors(prev => ({...prev, confirmPassword: true}))
+        setResgisterErrorMessage("Make sure your passwords match.")
+        setFetching(false)
+  
+        return;
+      }
+  
+      const registerReqeustParams: RegisterRequest = {
+        username: username,
+        password: password,
+        email: email
+      }
+      const registerBody: RegisterOperationRequest = {
+        body: registerReqeustParams
+      }
+  
+      AuthenticateAPIInstance.register(registerBody).then((value) => {
+        setRegisterResponse(value)
+      })
+      setFetching(false)
+      setAuthenticating(true)
+    }
+
+    register()
   }, [fetching]);
 
   useEffect(() => {
     if(!authenticating || !registerResponse) return;
 
     if(registerResponse.usernameMessage){
-      setUsernameMessage(registerResponse.usernameMessage)
+      setResigterErrors(prev => ({...prev, username: true}))
+      setResgisterErrorMessage(registerResponse.usernameMessage)
     }
 
     if(registerResponse.emailMessage){
-      setEmailMessage(registerResponse.emailMessage)
+      setResigterErrors(prev => ({...prev, email: true}))
+      setResgisterErrorMessage(registerResponse.emailMessage)
     }
 
     if(registerResponse.passwordMessage){
-      setPasswordMessage(registerResponse.passwordMessage)
+      setResigterErrors(prev => ({...prev, password: true}))
+      setResgisterErrorMessage(registerResponse.passwordMessage)
     }
 
-    setElevatedState((prev) => ({...prev, msg: registerResponse.msg!}))
+    //setElevatedState((prev) => ({...prev, msg: registerResponse.msg!}))
     auth()
   }, [authenticating, registerResponse]);
 
@@ -99,6 +115,17 @@ export function Register (props: IElevatedStateProps){
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
+      <Alert show={registerErrorMessage !== ""} variant="danger">
+        <Row className="flex-grow-1">
+          <Col xs={9}>{registerErrorMessage}</Col>
+          <Col xs={3}>
+            <Button className="borderRadius-2 p-2 w-100" onClick={() => {
+              setResgisterErrorMessage("")
+              }}>Close</Button>
+          </Col>
+        </Row>
+      </Alert>
+
       <Row className="mt-auto mb-auto">
         <Col xs={3}></Col>
         <Col xs={6}>
@@ -110,43 +137,24 @@ export function Register (props: IElevatedStateProps){
 
           <form>
             <Row>
-              <Col className="p-0">
-                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text" autoComplete="username"
-                         placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
-                <p className="neumorphic borderRadius-2 p-2 mr-2"
-                  style={{position: "absolute", right: "-25%", bottom: 0}}
-                  hidden={usernameMessage === ""}>
-                  {usernameMessage}
-                </p>
-              </Col>
+              <TextBox className={`p-2 mt-2 mb-2 borderRadius-2 w-100 ${registerErrors.username ? "alert-danger":""}`}
+                type="text" autoComplete="username" placeholder="Username"
+                onBlur={(event) => setUsername(event.target.value)}/>
             </Row>
             <Row>
-              <Col className="p-0">
-                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="email" autoComplete="username"
-                        placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
-                <p className="neumorphic borderRadius-2 p-2 mr-2"
-                  style={{position: "absolute", right: "-25%", bottom: 0}}
-                  hidden={emailMessage === ""}>
-                  {emailMessage}
-                </p>
-              </Col>
+              <TextBox className={`p-2 mt-2 mb-2 borderRadius-2 w-100 ${registerErrors.email ? "alert-danger":""}`}
+                type="email" autoComplete="username" placeholder="Email"
+                onBlur={(event) => setEmail(event.target.value)}/>
             </Row>
             <Row>
-              <Col className="p-0">
-                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
-                        placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
-                <p className="neumorphic borderRadius-2 p-2 mr-2"
-                  style={{position: "absolute", right: "-25%", bottom: 0}}
-                  hidden={passwordMessage === ""}>
-                  {passwordMessage}
-                </p>
-              </Col>
+              <TextBox className={`p-2 mt-2 mb-2 borderRadius-2 w-100 ${registerErrors.password ? "alert-danger":""}`}
+                type="password" autoComplete="new-password" placeholder="Password"
+                onBlur={(event) => setPassword(event.target.value)}/>
             </Row>
             <Row>
-              <Col className="p-0">
-                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
-                        placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
-              </Col>
+              <TextBox className={`p-2 mt-2 mb-2 borderRadius-2 w-100 ${registerErrors.confirmPassword ? "alert-danger":""}`}
+                type="password" autoComplete="new-password" placeholder="Confirm Password"
+                onBlur={(event) => setConfirmPassword(event.target.value)}/>
             </Row>
           </form>
 

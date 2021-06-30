@@ -15,10 +15,6 @@ html, body{
     color: $lightModetextColor !important;
 }
 
-.fullScreen{
-    max-width: 90%;
-}
-
 #root{
     min-width: 100%;
 }
@@ -41,12 +37,26 @@ li{
     }
 }
 
+label {
+    margin: 0;
+}
+
+
+.fullScreen{
+    max-width: 100%;
+}
+
+.wideScreen{
+    max-width: 90%;
+}
+
+//Danger background shows over neumorphic
 .flexContentParent {
     flex-wrap: wrap;
 }
 
-label {
-    margin: 0;
+.alert-danger{
+    background-color: #f8d7da !important;
 }
 
 

@@ -2,7 +2,7 @@
 
 //Third Party Imports
 import { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
 
 //First Party Imports
@@ -23,8 +23,11 @@ export function Login (props: IElevatedStateProps){
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [usernameMessage, setUsernameMessage] = useState("");
-  const [passwordMessage, setPasswordMessage] = useState("");
+  const [loginErrors, setLoginErrors] = useState({
+    username: false,
+    password: false
+  })
+  const [loginErrorMessage, setLoginErrorMessage] = useState("");
 
   const [fetching, setFetching] = useState(false);
   const [loginResponse, setLoginResponse] = useState<LoginResponse>();
@@ -42,37 +45,46 @@ export function Login (props: IElevatedStateProps){
   useEffect(() => {
     if(!fetching) return;
 
-    setUsernameMessage("")
-    setPasswordMessage("")
-
-    const loginRequestParams: LoginRequest = {
-      usernameOrEmail: usernameOrEmail,
-      password: password,
-      remember: rememberMe
-    }
-    const loginBody: LoginOperationRequest = {
-      body: loginRequestParams
-    }
-
-    AuthenticateAPIInstance.login(loginBody).then((value) => {
-      setLoginResponse(value)
+    setLoginErrors({
+      username: false,
+      password: false
     })
-    setFetching(false)
-    setAuthenticating(true)
+    setLoginErrorMessage("")
+
+    async function login(){
+      const loginRequestParams: LoginRequest = {
+        usernameOrEmail: usernameOrEmail,
+        password: password,
+        remember: rememberMe
+      }
+      const loginBody: LoginOperationRequest = {
+        body: loginRequestParams
+      }
+  
+      await AuthenticateAPIInstance.login(loginBody).then((value) => {
+        setLoginResponse(value)
+      })
+      setFetching(false)
+      setAuthenticating(true)
+    }
+
+    login()
   }, [fetching]);
 
   useEffect(() => {
     if(!authenticating || !loginResponse) return;
 
     if(loginResponse.usernameMessage){
-      setUsernameMessage(loginResponse.usernameMessage)
+      setLoginErrors(prev => ({...prev, username: true}))
+      setLoginErrorMessage(loginResponse.usernameMessage)
     }
 
     if(loginResponse.passwordMessage){
-      setPasswordMessage(loginResponse.passwordMessage)
+      setLoginErrors(prev => ({...prev, password: true}))
+      setLoginErrorMessage(loginResponse.passwordMessage)
     }
 
-    setElevatedState((prev) => ({...prev, msg: loginResponse.msg!}));
+    //setElevatedState((prev) => ({...prev, msg: loginResponse.msg!}));
     auth()
   }, [authenticating, loginResponse]);
 
@@ -86,6 +98,17 @@ export function Login (props: IElevatedStateProps){
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column fullScreen">
+      <Alert show={loginErrorMessage !== ""} variant="danger">
+        <Row className="flex-grow-1">
+          <Col xs={9}>{loginErrorMessage}</Col>
+          <Col xs={3}>
+            <Button className="borderRadius-2 p-2 w-100" onClick={() => {
+              setLoginErrorMessage("")
+              }}>Close</Button>
+          </Col>
+        </Row>
+      </Alert>
+
       <Row className="mt-auto mb-auto">
         <Col xs={3}></Col>
         <Col xs={6}>
@@ -97,28 +120,14 @@ export function Login (props: IElevatedStateProps){
 
           <form>
             <Row>
-              <Col className="p-0">
-                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text"
-                          placeholder="Username/Email" autoComplete="username"
-                          onChange={(event) => setUsernameOrEmail(event.target.value)}/>
-                <p className="neumorphic borderRadius-2 p-2 mr-2"
-                  style={{position: "absolute", right: "-25%", top: 0}}
-                  hidden={usernameMessage === ""}>
-                  {usernameMessage}
-                </p>
-              </Col>
+              <TextBox className={`p-2 mt-2 mb-2 borderRadius-2 w-100 ${loginErrors.username ? "alert-danger":""}`}
+                type="text" placeholder="Username/Email" autoComplete="username"
+                onChange={(event) => setUsernameOrEmail(event.target.value)}/>
             </Row>
             <Row>
-              <Col className="p-0">
-                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password"
-                          placeholder="Password" autoComplete="current-password"
-                          onChange={(event) => setPassword(event.target.value)}/>
-                <p className="neumorphic borderRadius-2 p-2 mr-2"
-                  style={{position: "absolute", right: "-25%", top: 0}}
-                  hidden={passwordMessage === ""}>
-                  {passwordMessage}
-                </p>
-              </Col>
+              <TextBox className={`p-2 mt-2 mb-2 borderRadius-2 w-100 ${loginErrors.password ? "alert-danger":""}`}
+                type="password" placeholder="Password" autoComplete="current-password"
+                onChange={(event) => setPassword(event.target.value)}/>
             </Row>
 
             <Row>

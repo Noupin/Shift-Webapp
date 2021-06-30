@@ -89,7 +89,7 @@ export function Home (props: IElevatedStateProps){
   }, [])
 
   return (
-    <Container className="fullScreen">
+    <Container className="wideScreen">
       <Row className="justify-content-center">
         <h1>Shift</h1>
       </Row>
