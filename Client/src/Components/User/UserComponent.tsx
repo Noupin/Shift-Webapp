@@ -12,10 +12,12 @@ import Verified from "../../Assets/verified_checkmark.svg";
 import Admin from "../../Assets/admin.svg";
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { GetIndivdualUserRequest, IndividualUserPatchRequest, IndividualUserPatchResponse,
-  PatchIndivdualUserRequest, UpdatePictureResponse, IndividualUserGetResponse, UpdatePictureRequest} from '../../Swagger';
+  PatchIndivdualUserRequest, UpdatePictureResponse, IndividualUserGetResponse,
+  UpdatePictureRequest, DeleteIndivdualUserRequest, IndividualShiftDeleteResponse} from '../../Swagger';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { UserButtonComponent } from './UserButtonsComponent';
 import { ProfileMediaComponent } from './ProfileMediaComponent';
+import { useAuthenticate } from '../../Hooks/Authenticate';
 
 
 interface IUserComponent{
@@ -29,13 +31,18 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
 
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [userChanges, setUserChanges] = useState<IndividualUserPatchRequest["data"]>({})
 
   const [userGetResponse, setUserGetResponse] = useState<IndividualUserGetResponse>();
   const [userPatchResponse, setUserPatchResponse] = useState<IndividualUserPatchResponse>();
-  const [updatePictureResponse, setUpdatePictureResponse] = useState<UpdatePictureResponse>()
+  const [userDeleteResponse, setUserDeleteResponse] = useState<IndividualShiftDeleteResponse>();
+  const [updatePictureResponse, setUpdatePictureResponse] = useState<UpdatePictureResponse>();
   const [profilePictureURL, setProfilePictureURL] = useState("");
   const [profilePicture, setProfilePicture] = useState<File>();
+
+  const [, setFetching] = useState(false)
+  const auth = useAuthenticate(setFetching, setElevatedState)
 
 
   useEffect(() => {
@@ -49,6 +56,24 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
       setUserGetResponse(value!)
     })
   }, [username, userPatchResponse, editing, updatePictureResponse]);
+
+  useEffect(() => {
+    if (!deleting) return;
+
+    async function deleteUser(){
+      const urlParams: DeleteIndivdualUserRequest = {
+        username: username
+      }
+  
+      UserAPIInstance.deleteIndivdualUser(urlParams).then((value) => {
+        setUserDeleteResponse(value!)
+      })
+
+      auth()
+    }
+
+    deleteUser()
+  }, [deleting])
 
   useEffect(() => {
     if(!userGetResponse || !userGetResponse.user) return;
@@ -105,6 +130,12 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
   }, [userPatchResponse])
 
   useEffect(() => {
+    if (!userDeleteResponse) return;
+
+    setElevatedState((prev) => ({...prev, msg: userDeleteResponse.msg!}))
+  }, [userDeleteResponse])
+
+  useEffect(() => {
     if (!updatePictureResponse) return;
 
     setElevatedState((prev) => ({...prev, msg: updatePictureResponse.msg!}))
@@ -119,10 +150,10 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
         <Row>
           <h2>
             {username} {userGetResponse.user!.verified! ?
-            <Image style={{height: "0.75em", width: "auto"}} 
+            <Image style={{height: "0.65em", width: "auto"}} 
                 className="object-fit-contain"
                 imageSrc={Admin} alt="Admin"/> : <></>} {userGetResponse.user!.admin! ?
-            <Image style={{height: "0.75em", width: "auto"}} 
+            <Image style={{height: "0.65em", width: "auto"}} 
                 className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
           </h2>
         </Row>
@@ -133,7 +164,7 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
           <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
             setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
         </Row>
-        <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving}/>
+        <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>
       </>
     )
 
@@ -141,7 +172,7 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
       userComponent = (
         <>
           <Row>
-            <Col xs={8}>
+            <Col xs={12}>
               <TextBox className="text-left borderRadius-2 p-2 m-1" placeholder="Username"
                 type="text" defaultValue={username}
                 onBlur={(event) => {
@@ -149,32 +180,30 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
                     setUserChanges(prev => ({...prev, username: event.target.value}))
                   }
                 }}/>
-            </Col>
-            <Col xs={4}>
-              {userGetResponse.user!.verified! ?
-              <Image style={{height: "0.75em", width: "auto"}} 
-                  className="object-fit-contain"
-                  imageSrc={Admin} alt="Admin"/> : <></>}
-              {userGetResponse.user!.admin! ?
-              <Image style={{height: "0.75em", width: "auto"}} 
-                  className="object-fit-contain"
-                  imageSrc={Verified} alt="Verified"/> : <></>}
+              <div style={{position: "absolute", right: "10%", top: "50%",transform: "translateY(-50%)"}}>
+                {userGetResponse.user!.verified! ?
+                <Image className="object-fit-contain" imageSrc={Admin} alt="Admin"/> : <></>}
+                {userGetResponse.user!.admin! ?
+                <Image className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
+              </div>
             </Col>
           </Row>
           <Row>
-            <TextBox className="text-left borderRadius-2 py-1 px-2 m-1" placeholder="Email"
-              type="text" defaultValue={userGetResponse.user!.email}
-              onBlur={(event) => {
-                if(event.target.value !== userGetResponse.user!.email){
-                  setUserChanges(prev => ({...prev, email: event.target.value}))
-                }
-              }}/>
+            <Col xs={12}>
+              <TextBox className="text-left borderRadius-2 p-2 m-1" placeholder="Email"
+                type="text" defaultValue={userGetResponse.user!.email}
+                onBlur={(event) => {
+                  if(event.target.value !== userGetResponse.user!.email){
+                    setUserChanges(prev => ({...prev, email: event.target.value}))
+                  }
+                }}/>
+            </Col>
           </Row>
           <Row>
             <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
               setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
           </Row>
-          <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving}/>
+          <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>
         </>
       )
     }

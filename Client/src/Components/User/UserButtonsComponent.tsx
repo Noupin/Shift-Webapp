@@ -12,10 +12,11 @@ interface IUserButtons{
   editing: boolean
   setEditing: React.Dispatch<React.SetStateAction<boolean>>
   setSaving: React.Dispatch<React.SetStateAction<boolean>>
+  setDeleting: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-export const UserButtonComponent: FC<IUserButtons> = ({editing, setEditing, setSaving}): ReactElement => {
+export const UserButtonComponent: FC<IUserButtons> = ({editing, setEditing, setSaving, setDeleting}): ReactElement => {
   let userButtonComponent = (
     <Row>
       <Col>
@@ -24,7 +25,7 @@ export const UserButtonComponent: FC<IUserButtons> = ({editing, setEditing, setS
         </Button>
       </Col>
       <Col>
-        <Button className="borderRadius-2 p-2 mt-2 w-100 text-danger">
+        <Button className="borderRadius-2 p-2 mt-2 w-100 text-danger" onClick={() => setDeleting(true)}>
           Delete
         </Button>
       </Col>
