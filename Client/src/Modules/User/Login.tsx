@@ -97,27 +97,24 @@ export function Login (props: IElevatedStateProps){
 
           <form>
             <Row>
-              <Col xs={2}></Col>
-              <Col xs={8}>
+              <Col className="p-0">
                 <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text"
                           placeholder="Username/Email" autoComplete="username"
                           onChange={(event) => setUsernameOrEmail(event.target.value)}/>
-              </Col>
-              <Col xs={2}>
-              <p className="neumorphic borderRadius-2 p-2 mr-2"
-                  style={{position: "absolute", right: "-25%", top: 0, bottom: 0}}
+                <p className="neumorphic borderRadius-2 p-2 mr-2"
+                  style={{position: "absolute", right: "-25%", top: 0}}
                   hidden={usernameMessage === ""}>
                   {usernameMessage}
                 </p>
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col className="p-0">
                 <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password"
                           placeholder="Password" autoComplete="current-password"
                           onChange={(event) => setPassword(event.target.value)}/>
                 <p className="neumorphic borderRadius-2 p-2 mr-2"
-                  style={{position: "absolute", right: "-25%", top: 0, bottom: 0}}
+                  style={{position: "absolute", right: "-25%", top: 0}}
                   hidden={passwordMessage === ""}>
                   {passwordMessage}
                 </p>

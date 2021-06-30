@@ -23,6 +23,10 @@ export function Register (props: IElevatedStateProps){
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [usernameMessage, setUsernameMessage] = useState("");
+  const [emailMessage, setEmailMessage] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
+
   const [fetching, setFetching] = useState(false);
   const [registerResponse, setRegisterResponse] = useState<RegisterResponse>();
   const [authenticating, setAuthenticating] = useState(false);
@@ -40,9 +44,14 @@ export function Register (props: IElevatedStateProps){
   useEffect(() => {
     if(!fetching) return;
 
+    setUsernameMessage("")
+    setEmailMessage("")
+    setPasswordMessage("")
+
     if (password !== confirmPassword){
-      setElevatedState((prev) => ({...prev, msg: "Passwords do not match"}))
+      setPasswordMessage("Make sure your passwords match.")
       setFetching(false)
+
       return;
     }
 
@@ -64,6 +73,18 @@ export function Register (props: IElevatedStateProps){
 
   useEffect(() => {
     if(!authenticating || !registerResponse) return;
+
+    if(registerResponse.usernameMessage){
+      setUsernameMessage(registerResponse.usernameMessage)
+    }
+
+    if(registerResponse.emailMessage){
+      setEmailMessage(registerResponse.emailMessage)
+    }
+
+    if(registerResponse.passwordMessage){
+      setPasswordMessage(registerResponse.passwordMessage)
+    }
 
     setElevatedState((prev) => ({...prev, msg: registerResponse.msg!}))
     auth()
@@ -89,20 +110,43 @@ export function Register (props: IElevatedStateProps){
 
           <form>
             <Row>
-              <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text" autoComplete="username"
-                       placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
+              <Col className="p-0">
+                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="text" autoComplete="username"
+                         placeholder="Username" onBlur={(event) => setUsername(event.target.value)}/>
+                <p className="neumorphic borderRadius-2 p-2 mr-2"
+                  style={{position: "absolute", right: "-25%", bottom: 0}}
+                  hidden={usernameMessage === ""}>
+                  {usernameMessage}
+                </p>
+              </Col>
             </Row>
             <Row>
-              <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="email" autoComplete="username"
-                       placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
+              <Col className="p-0">
+                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="email" autoComplete="username"
+                        placeholder="Email" onBlur={(event) => setEmail(event.target.value)}/>
+                <p className="neumorphic borderRadius-2 p-2 mr-2"
+                  style={{position: "absolute", right: "-25%", bottom: 0}}
+                  hidden={emailMessage === ""}>
+                  {emailMessage}
+                </p>
+              </Col>
             </Row>
             <Row>
-              <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
-                       placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
+              <Col className="p-0">
+                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
+                        placeholder="Password" onBlur={(event) => setPassword(event.target.value)}/>
+                <p className="neumorphic borderRadius-2 p-2 mr-2"
+                  style={{position: "absolute", right: "-25%", bottom: 0}}
+                  hidden={passwordMessage === ""}>
+                  {passwordMessage}
+                </p>
+              </Col>
             </Row>
             <Row>
-              <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
-                       placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
+              <Col className="p-0">
+                <TextBox className="p-2 mt-2 mb-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
+                        placeholder="Confirm Password" onBlur={(event) => setConfirmPassword(event.target.value)}/>
+              </Col>
             </Row>
           </form>
 
