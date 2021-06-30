@@ -22,6 +22,49 @@ definitions:
     required:
     - categories
     type: object
+  ChangePasswordRequest:
+    properties:
+      currentPassword:
+        type: string
+      newPassword:
+        type: string
+    required:
+    - currentPassword
+    - newPassword
+    type: object
+  ChangePasswordResponse:
+    properties:
+      currentPasswordMessage:
+        default: ''
+        type: string
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+      newPasswordMessage:
+        default: ''
+        type: string
+    type: object
+  ForgotPasswordRequest:
+    properties:
+      newPassword:
+        type: string
+    required:
+    - newPassword
+    type: object
+  ForgotPasswordResponse:
+    properties:
+      currentPasswordMessage:
+        default: ''
+        type: string
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+      newPasswordMessage:
+        default: ''
+        type: string
+    type: object
   IndividualShiftDeleteResponse:
     properties:
       msg:
@@ -618,6 +661,51 @@ paths:
             $ref: '#/definitions/IndividualUserPatchResponse'
       security:
       - UserAuth: []
+      tags:
+      - User
+  /api/user/changePassword:
+    patch:
+      description: Updates/modifies users password.
+      operationId: changePassword
+      parameters:
+      - description: The users current password to check and the new password to update
+          to.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/ChangePasswordRequest'
+      responses:
+        default:
+          description: The status message pertaing to the patch, the current password
+            message, and the new password message.
+          schema:
+            $ref: '#/definitions/ChangePasswordResponse'
+      security:
+      - UserAuth: []
+      tags:
+      - User
+  /api/user/forgotPassword/{uuid}:
+    patch:
+      description: Updates/modifies users password.
+      operationId: forgotPassword
+      parameters:
+      - description: The new password to update to.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/ForgotPasswordRequest'
+      - in: path
+        name: uuid
+        required: true
+        type: string
+      responses:
+        default:
+          description: The status message pertaing to the patch, and the new password
+            message.
+          schema:
+            $ref: '#/definitions/ForgotPasswordResponse'
       tags:
       - User
   /api/inference:

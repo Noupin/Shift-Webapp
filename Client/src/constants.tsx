@@ -11,6 +11,7 @@ export const pageTitles = {
   'load': pageTitleTemplate("Load"),
   'train': pageTitleTemplate("Train"),
   'advancedTrain': pageTitleTemplate("Advanced Train"),
+  'changePassword': pageTitleTemplate("Change Password"),
   'forgotPassword': pageTitleTemplate("Forgot Password"),
   'login': pageTitleTemplate("Login"),
   'register': pageTitleTemplate("Register"),

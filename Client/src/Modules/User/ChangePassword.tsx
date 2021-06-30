@@ -17,7 +17,7 @@ interface resetPasswordRequestReturn {
 }
 
 
-export function ForgotPassword (props: IElevatedStateProps){
+export function ChangePassword (props: IElevatedStateProps){
   const {setElevatedState} = props;
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -33,7 +33,7 @@ export function ForgotPassword (props: IElevatedStateProps){
 
 
   useEffect(() => {
-    document.title = pageTitles["forgotPassword"]
+    document.title = pageTitles["changePassword"]
   }, [])
 
   useEffect(() => {
@@ -72,7 +72,6 @@ export function ForgotPassword (props: IElevatedStateProps){
           <br/>
 
           <form>
-            <TextBox type="text" placeholder="" autoComplete="username" style={{display: 'none'}}/>
             <Row>
               <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" autoComplete="current-password"
                        placeholder="Current Password" onChange={(event) => setCurrentPassword(event.target.value)}/>

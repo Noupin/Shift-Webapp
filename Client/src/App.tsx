@@ -11,7 +11,7 @@ import { Container, Row, Col, Alert } from "react-bootstrap";
 import { IElevatedPageState } from "./Interfaces/PageState";
 import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
-import { ForgotPassword } from "./Modules/User/ForgotPassword";
+import { ChangePassword } from "./Modules/User/ChangePassword";
 import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load";
 import { Train } from "./Modules/Train/Train";
@@ -116,7 +116,7 @@ export default function App() {
                   <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/forgotPassword">
-                  <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <ChangePassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
