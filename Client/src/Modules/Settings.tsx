@@ -11,7 +11,7 @@ export function Settings (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
 
   return (
-    <Container className="d-flex justify-content-center h-100 flex-column">
+    <Container>
       <h2>Settings</h2>
     </Container>
   );
