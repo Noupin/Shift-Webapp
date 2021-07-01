@@ -15,6 +15,18 @@
 
 import * as runtime from '../runtime';
 import {
+    ChangePasswordRequest,
+    ChangePasswordRequestFromJSON,
+    ChangePasswordRequestToJSON,
+    ChangePasswordResponse,
+    ChangePasswordResponseFromJSON,
+    ChangePasswordResponseToJSON,
+    ForgotPasswordRequest,
+    ForgotPasswordRequestFromJSON,
+    ForgotPasswordRequestToJSON,
+    ForgotPasswordResponse,
+    ForgotPasswordResponseFromJSON,
+    ForgotPasswordResponseToJSON,
     IndividualUserDeleteResponse,
     IndividualUserDeleteResponseFromJSON,
     IndividualUserDeleteResponseToJSON,
@@ -35,8 +47,17 @@ import {
     UserShiftsResponseToJSON,
 } from '../models';
 
+export interface ChangePasswordOperationRequest {
+    body?: ChangePasswordRequest;
+}
+
 export interface DeleteIndivdualUserRequest {
     username: string;
+}
+
+export interface ForgotPasswordOperationRequest {
+    uuid: string;
+    body?: ForgotPasswordRequest;
 }
 
 export interface GetIndivdualUserRequest {
@@ -60,6 +81,39 @@ export interface UserShiftsRequest {
  * 
  */
 export class UserApi extends runtime.BaseAPI {
+
+    /**
+     * Updates/modifies users password.
+     */
+    async changePasswordRaw(requestParameters: ChangePasswordOperationRequest): Promise<runtime.ApiResponse<ChangePasswordResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/api/user/changePassword`,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ChangePasswordRequestToJSON(requestParameters.body),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChangePasswordResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates/modifies users password.
+     */
+    async changePassword(requestParameters: ChangePasswordOperationRequest): Promise<ChangePasswordResponse> {
+        const response = await this.changePasswordRaw(requestParameters);
+        return await response.value();
+    }
 
     /**
      * Deletes the queried user.
@@ -92,6 +146,39 @@ export class UserApi extends runtime.BaseAPI {
      */
     async deleteIndivdualUser(requestParameters: DeleteIndivdualUserRequest): Promise<IndividualUserDeleteResponse> {
         const response = await this.deleteIndivdualUserRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Updates/modifies users password.
+     */
+    async forgotPasswordRaw(requestParameters: ForgotPasswordOperationRequest): Promise<runtime.ApiResponse<ForgotPasswordResponse>> {
+        if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
+            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling forgotPassword.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/user/forgotPassword/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ForgotPasswordRequestToJSON(requestParameters.body),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ForgotPasswordResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates/modifies users password.
+     */
+    async forgotPassword(requestParameters: ForgotPasswordOperationRequest): Promise<ForgotPasswordResponse> {
+        const response = await this.forgotPasswordRaw(requestParameters);
         return await response.value();
     }
 

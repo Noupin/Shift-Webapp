@@ -10,6 +10,10 @@ apis/index.ts
 index.ts
 models/AuthenticatedResponse.ts
 models/CategoriesResponse.ts
+models/ChangePasswordRequest.ts
+models/ChangePasswordResponse.ts
+models/ForgotPasswordRequest.ts
+models/ForgotPasswordResponse.ts
 models/IndividualShiftDeleteResponse.ts
 models/IndividualShiftGetResponse.ts
 models/IndividualShiftPatchRequest.ts

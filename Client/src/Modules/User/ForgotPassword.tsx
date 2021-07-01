@@ -3,6 +3,7 @@
 //Third Party Imports
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { useParams } from 'react-router';
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
@@ -19,8 +20,8 @@ interface resetPasswordRequestReturn {
 
 export function ForgotPassword (props: IElevatedStateProps){
   const {setElevatedState} = props;
+  const { uuid } = useParams<{uuid: string | undefined}>()
 
-  const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -49,15 +50,11 @@ export function ForgotPassword (props: IElevatedStateProps){
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({currentPassword: currentPassword, password: password})
+      body: JSON.stringify({newPassword: password})
     };
 
     fetchResetPassword()
   }, [fetching]);
-
-  useEffect(() => {
-    if(!registerResponse) return;
-  }, [registerResponse]);
 
 
   return (

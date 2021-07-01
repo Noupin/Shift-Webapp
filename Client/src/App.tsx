@@ -120,7 +120,7 @@ export default function App() {
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/forgotPassword">
                   <ChangePassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <Route path="/forgotPassword">
+                <Route path="/forgotPassword/:uuid">
                   <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
