@@ -12,7 +12,7 @@ html, body{
     padding: 0;
     width: 100%;
     height: 100%;
-    color: $lightModetextColor !important;
+    color: $lightModeTextColor;
 }
 
 #root{
@@ -74,6 +74,10 @@ label {
     white-space: -pre-wrap;     /* Opera <7 */   
     white-space: -o-pre-wrap;   /* Opera 7 */    
     word-wrap: break-word;      /* IE */
+}
+
+.textColor{
+    color: $lightModeTextColor !important;
 }
 
 .lightTextBorder{

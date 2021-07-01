@@ -84,7 +84,6 @@ export function Login (props: IElevatedStateProps){
       setLoginErrorMessage(loginResponse.passwordMessage)
     }
 
-    //setElevatedState((prev) => ({...prev, msg: loginResponse.msg!}));
     auth()
   }, [authenticating, loginResponse]);
 

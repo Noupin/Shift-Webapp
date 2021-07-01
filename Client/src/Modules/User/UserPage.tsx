@@ -5,6 +5,9 @@ import React, { useState, useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import Masonry from 'react-masonry-css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCog } from '@fortawesome/free-solid-svg-icons'
+import { NavLink } from 'react-router-dom';
 
 //First Party Imports
 import { UserAPIInstance } from '../../Helpers/Api';
@@ -17,7 +20,7 @@ import { UserComponent } from '../../Components/User/UserComponent';
 
 
 export function UserPage (props: IElevatedStateProps){
-  const {setElevatedState} = props;
+  const {elevatedState, setElevatedState} = props;
 
   const { username } = useParams<GetIndivdualUserRequest>();
 
@@ -51,19 +54,27 @@ export function UserPage (props: IElevatedStateProps){
     <Container key={username}>
       <Row>
         <Col xs={3}>
-          <UserComponent username={username} setElevatedState={setElevatedState}/>
+          <UserComponent username={username} elevatedState={elevatedState} setElevatedState={setElevatedState}/>
         </Col>
         <Col xs={9} className="p-2">
-          <Masonry breakpointCols={{default: 4,
-                                    1400: 3,
-                                    1100: 2,
-                                    800: 1}}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column">
-            {userShifts!.map((element, index) => (
-              <ShiftCard key={index} className="m-2 p-2" shift={element} setElevatedState={setElevatedState}/>
-            ))}
-          </Masonry>
+          {username === elevatedState().username &&
+          <Row className="justify-content-end">
+            <NavLink to="/settings" className="textColor" style={{fontSize: "1.5em"}}>
+              <FontAwesomeIcon icon={faCog}/>
+            </NavLink>
+          </Row>}
+          <Row>
+            <Masonry breakpointCols={{default: 4,
+                                      1400: 3,
+                                      1100: 2,
+                                      800: 1}}
+                  className="my-masonry-grid"
+                  columnClassName="my-masonry-grid_column">
+              {userShifts!.map((element, index) => (
+                <ShiftCard key={index} className="m-2 p-2" shift={element} setElevatedState={setElevatedState}/>
+              ))}
+            </Masonry>
+          </Row>
         </Col>
       </Row>
     </Container>

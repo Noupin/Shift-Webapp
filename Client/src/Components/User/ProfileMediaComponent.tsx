@@ -32,8 +32,8 @@ export const ProfileMediaComponent: FC<IUserButtons> = ({setElevatedState, profi
       <div className="hoverInput" style={{position: "relative"}}>
         <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL}
           setElevatedState={setElevatedState}/>
-        <div id="hoverFileDialogButton" style={{maxHeight: "85%", maxWidth: "85%"}}
-          className="justify-content-center">
+        <div id="hoverFileDialogButton" style={{maxHeight: "90%", maxWidth: "90%"}}
+          className="justify-content-center p-2">
           <FileDialog className="justify-content-center align-items-center glassmorphic
           borderRadius-2 neumorphic neuHover" id="userProfileMedia" style={{display: "flex"}}
           onFileInput={(event) => {

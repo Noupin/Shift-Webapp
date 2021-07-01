@@ -21,12 +21,13 @@ import { useAuthenticate } from '../../Hooks/Authenticate';
 
 
 interface IUserComponent{
+  elevatedState: IElevatedStateProps["elevatedState"]
   setElevatedState: IElevatedStateProps["setElevatedState"]
   username: string
 }
 
 
-export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}): ReactElement => {
+export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedState, username}): ReactElement => {
   const history = useHistory()
 
   const [editing, setEditing] = useState(false)
@@ -164,7 +165,8 @@ export const UserComponent: FC<IUserComponent> = ({setElevatedState, username}):
           <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
             setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
         </Row>
-        <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>
+        {username === elevatedState().username && 
+        <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>}
       </>
     )
 

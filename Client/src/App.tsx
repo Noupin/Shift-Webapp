@@ -24,6 +24,8 @@ import { defaultShiftTitle, pageTitles } from "./constants";
 import { ShiftPage } from "./Modules/ShiftPage";
 import { UserPage } from "./Modules/User/UserPage";
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
+import { ForgotPassword } from './Modules/User/ForgotPassword';
+import { Settings } from './Modules/Settings';
 import './App.scss';
 
 
@@ -118,6 +120,9 @@ export default function App() {
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/forgotPassword">
                   <ChangePassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
+                <Route path="/forgotPassword">
+                  <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                </Route>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
@@ -135,6 +140,9 @@ export default function App() {
                 </Route>
                 <Route path="/user/:username">
                   <UserPage elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                </Route>
+                <Route path="/settings">
+                  <Settings elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route exact path="/">
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
