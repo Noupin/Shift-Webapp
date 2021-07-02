@@ -48,15 +48,15 @@ export function Register (props: IElevatedStateProps){
   useEffect(() => {
     if(!fetching) return;
 
-    setResigterErrors({
-      username: false,
-      email: false,
-      password: false,
-      confirmPassword: false
-    })
-    setResgisterErrorMessage("")
-
     async function register(){
+      setResigterErrors({
+        username: false,
+        email: false,
+        password: false,
+        confirmPassword: false
+      })
+      setResgisterErrorMessage("")
+
       if (password !== confirmPassword){
         setResigterErrors(prev => ({...prev, confirmPassword: true}))
         setResgisterErrorMessage("Make sure your passwords match.")
@@ -74,7 +74,7 @@ export function Register (props: IElevatedStateProps){
         body: registerReqeustParams
       }
   
-      AuthenticateAPIInstance.register(registerBody).then((value) => {
+      await AuthenticateAPIInstance.register(registerBody).then((value) => {
         setRegisterResponse(value)
       })
       setFetching(false)
@@ -102,7 +102,6 @@ export function Register (props: IElevatedStateProps){
       setResgisterErrorMessage(registerResponse.passwordMessage)
     }
 
-    //setElevatedState((prev) => ({...prev, msg: registerResponse.msg!}))
     auth()
   }, [authenticating, registerResponse]);
 

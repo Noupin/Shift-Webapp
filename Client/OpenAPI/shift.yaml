@@ -389,6 +389,8 @@ definitions:
         type: string
       password:
         type: string
+      passwordSalt:
+        type: string
       username:
         type: string
       verified:
@@ -396,6 +398,7 @@ definitions:
     required:
     - email
     - password
+    - passwordSalt
     - username
     type: object
   UserShiftsResponse:
@@ -837,11 +840,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -856,11 +859,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
