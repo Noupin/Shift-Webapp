@@ -39,6 +39,12 @@ import {
     IndividualUserPatchResponse,
     IndividualUserPatchResponseFromJSON,
     IndividualUserPatchResponseToJSON,
+    ResetPasswordRequest,
+    ResetPasswordRequestFromJSON,
+    ResetPasswordRequestToJSON,
+    ResetPasswordResponse,
+    ResetPasswordResponseFromJSON,
+    ResetPasswordResponseToJSON,
     UpdatePictureResponse,
     UpdatePictureResponseFromJSON,
     UpdatePictureResponseToJSON,
@@ -56,7 +62,6 @@ export interface DeleteIndivdualUserRequest {
 }
 
 export interface ForgotPasswordOperationRequest {
-    uuid: string;
     body?: ForgotPasswordRequest;
 }
 
@@ -67,6 +72,11 @@ export interface GetIndivdualUserRequest {
 export interface PatchIndivdualUserRequest {
     username: string;
     body?: IndividualUserPatchRequest;
+}
+
+export interface ResetPasswordOperationRequest {
+    token: string;
+    body?: ResetPasswordRequest;
 }
 
 export interface UpdatePictureRequest {
@@ -153,10 +163,6 @@ export class UserApi extends runtime.BaseAPI {
      * Updates/modifies users password.
      */
     async forgotPasswordRaw(requestParameters: ForgotPasswordOperationRequest): Promise<runtime.ApiResponse<ForgotPasswordResponse>> {
-        if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
-            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling forgotPassword.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -164,8 +170,8 @@ export class UserApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/user/forgotPassword/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
-            method: 'PATCH',
+            path: `/api/user/forgotPassword`,
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: ForgotPasswordRequestToJSON(requestParameters.body),
@@ -246,6 +252,39 @@ export class UserApi extends runtime.BaseAPI {
      */
     async patchIndivdualUser(requestParameters: PatchIndivdualUserRequest): Promise<IndividualUserPatchResponse> {
         const response = await this.patchIndivdualUserRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Updates/modifies users password.
+     */
+    async resetPasswordRaw(requestParameters: ResetPasswordOperationRequest): Promise<runtime.ApiResponse<ResetPasswordResponse>> {
+        if (requestParameters.token === null || requestParameters.token === undefined) {
+            throw new runtime.RequiredError('token','Required parameter requestParameters.token was null or undefined when calling resetPassword.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/user/resetPassword/{token}`.replace(`{${"token"}}`, encodeURIComponent(String(requestParameters.token))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ResetPasswordRequestToJSON(requestParameters.body),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResetPasswordResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates/modifies users password.
+     */
+    async resetPassword(requestParameters: ResetPasswordOperationRequest): Promise<ResetPasswordResponse> {
+        const response = await this.resetPasswordRaw(requestParameters);
         return await response.value();
     }
 

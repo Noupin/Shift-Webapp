@@ -23,6 +23,8 @@ export * from './NewShiftsResponse';
 export * from './PopularShiftsResponse';
 export * from './RegisterRequest';
 export * from './RegisterResponse';
+export * from './ResetPasswordRequest';
+export * from './ResetPasswordResponse';
 export * from './Shift';
 export * from './ShiftCategoryResponse';
 export * from './StopTrainResponse';

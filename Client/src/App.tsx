@@ -15,7 +15,6 @@ import { ChangePassword } from "./Modules/User/ChangePassword";
 import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load";
 import { Train } from "./Modules/Train/Train";
-import { AdvancedTrain } from "./Modules/Train/AdvancedTrain";
 import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home";
 import { Button } from "./Components/Button/Button";
@@ -24,9 +23,10 @@ import { defaultShiftTitle, pageTitles } from "./constants";
 import { ShiftPage } from "./Modules/ShiftPage";
 import { UserPage } from "./Modules/User/UserPage";
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
-import { ForgotPassword } from './Modules/User/ForgotPassword';
+import { ResetPassword } from './Modules/User/ResetPassword';
 import { Settings } from './Modules/Settings';
 import './App.scss';
+import { ForgotPassword } from './Modules/User/ForgotPassword';
 
 
 export default function App() {
@@ -117,20 +117,20 @@ export default function App() {
                 <Route path="/login">
                   <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <ProtectedRoute expression={getElevatedState().authenticated} path="/forgotPassword">
+                <ProtectedRoute expression={getElevatedState().authenticated} path="/change-password">
                   <ChangePassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <Route path="/forgotPassword/:uuid">
+                <Route path="/forgot-password">
                   <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                </Route>
+                <Route path="/reset-password/:token">
+                  <ResetPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <ProtectedRoute expression={getElevatedState().canTrain} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
-                </ProtectedRoute>
-                <ProtectedRoute expression={getElevatedState().canTrain} path="/advancedTrain">
-                  <AdvancedTrain elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/inference">
                   <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}/>

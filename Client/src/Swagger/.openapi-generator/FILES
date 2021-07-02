@@ -33,6 +33,8 @@ models/NewShiftsResponse.ts
 models/PopularShiftsResponse.ts
 models/RegisterRequest.ts
 models/RegisterResponse.ts
+models/ResetPasswordRequest.ts
+models/ResetPasswordResponse.ts
 models/Shift.ts
 models/ShiftCategoryResponse.ts
 models/StopTrainResponse.ts

@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface ChangePasswordResponse {
     /**
      * 
+     * @type {boolean}
+     * @memberof ChangePasswordResponse
+     */
+    complete?: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof ChangePasswordResponse
      */
@@ -49,6 +55,7 @@ export function ChangePasswordResponseFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
+        'complete': !exists(json, 'complete') ? undefined : json['complete'],
         'currentPasswordMessage': !exists(json, 'currentPasswordMessage') ? undefined : json['currentPasswordMessage'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
         'newPasswordMessage': !exists(json, 'newPasswordMessage') ? undefined : json['newPasswordMessage'],
@@ -64,6 +71,7 @@ export function ChangePasswordResponseToJSON(value?: ChangePasswordResponse | nu
     }
     return {
         
+        'complete': value.complete,
         'currentPasswordMessage': value.currentPasswordMessage,
         'msg': value.msg,
         'newPasswordMessage': value.newPasswordMessage,

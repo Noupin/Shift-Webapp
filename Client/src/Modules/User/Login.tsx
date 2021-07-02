@@ -155,7 +155,7 @@ export function Login (props: IElevatedStateProps){
             <Col xs={2}></Col>
             <Col xs={1}></Col>
             <Col xs={3}>
-              <Link to="/forgotPassword">Forgot Password?</Link>
+              <Link to="/forgot-password">Forgot Password?</Link>
             </Col>
             <Col xs={1}></Col>
           </Row>

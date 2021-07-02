@@ -16,46 +16,46 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ForgotPasswordResponse
+ * @interface ResetPasswordResponse
  */
-export interface ForgotPasswordResponse {
+export interface ResetPasswordResponse {
     /**
      * 
      * @type {boolean}
-     * @memberof ForgotPasswordResponse
+     * @memberof ResetPasswordResponse
      */
     complete?: boolean;
     /**
      * 
      * @type {string}
-     * @memberof ForgotPasswordResponse
+     * @memberof ResetPasswordResponse
      */
-    emailMessage?: string;
+    msg?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ForgotPasswordResponse
+     * @memberof ResetPasswordResponse
      */
-    msg?: string | null;
+    newPasswordMsg?: string;
 }
 
-export function ForgotPasswordResponseFromJSON(json: any): ForgotPasswordResponse {
-    return ForgotPasswordResponseFromJSONTyped(json, false);
+export function ResetPasswordResponseFromJSON(json: any): ResetPasswordResponse {
+    return ResetPasswordResponseFromJSONTyped(json, false);
 }
 
-export function ForgotPasswordResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ForgotPasswordResponse {
+export function ResetPasswordResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResetPasswordResponse {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'complete': !exists(json, 'complete') ? undefined : json['complete'],
-        'emailMessage': !exists(json, 'emailMessage') ? undefined : json['emailMessage'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
+        'newPasswordMsg': !exists(json, 'newPasswordMsg') ? undefined : json['newPasswordMsg'],
     };
 }
 
-export function ForgotPasswordResponseToJSON(value?: ForgotPasswordResponse | null): any {
+export function ResetPasswordResponseToJSON(value?: ResetPasswordResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -65,8 +65,8 @@ export function ForgotPasswordResponseToJSON(value?: ForgotPasswordResponse | nu
     return {
         
         'complete': value.complete,
-        'emailMessage': value.emailMessage,
         'msg': value.msg,
+        'newPasswordMsg': value.newPasswordMsg,
     };
 }
 

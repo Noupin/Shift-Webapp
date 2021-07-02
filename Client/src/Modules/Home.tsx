@@ -66,7 +66,6 @@ export function Home (props: IElevatedStateProps){
       categoryNames = categoriesResponse.categories.filter(
         (category: string) => CATEGORIES_TO_REMOVE.indexOf(category) === -1
       )
-      console.log(categoryNames)
 
       return categoryNames
     }

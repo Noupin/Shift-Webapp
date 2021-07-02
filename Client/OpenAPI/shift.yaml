@@ -34,6 +34,9 @@ definitions:
     type: object
   ChangePasswordResponse:
     properties:
+      complete:
+        default: false
+        type: boolean
       currentPasswordMessage:
         default: ''
         type: string
@@ -47,23 +50,23 @@ definitions:
     type: object
   ForgotPasswordRequest:
     properties:
-      newPassword:
+      email:
         type: string
     required:
-    - newPassword
+    - email
     type: object
   ForgotPasswordResponse:
     properties:
-      currentPasswordMessage:
+      complete:
+        default: false
+        type: boolean
+      emailMessage:
         default: ''
         type: string
       msg:
         default: ''
         type: string
         x-nullable: true
-      newPasswordMessage:
-        default: ''
-        type: string
     type: object
   IndividualShiftDeleteResponse:
     properties:
@@ -255,6 +258,26 @@ definitions:
         default: ''
         type: string
       usernameMessage:
+        default: ''
+        type: string
+    type: object
+  ResetPasswordRequest:
+    properties:
+      password:
+        type: string
+    required:
+    - password
+    type: object
+  ResetPasswordResponse:
+    properties:
+      complete:
+        default: false
+        type: boolean
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+      newPasswordMsg:
         default: ''
         type: string
     type: object
@@ -587,6 +610,29 @@ paths:
             $ref: '#/definitions/UserShiftsResponse'
       tags:
       - User
+  /api/user/resetPassword/{token}:
+    patch:
+      description: Updates/modifies users password.
+      operationId: resetPassword
+      parameters:
+      - description: The password to reset with.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/ResetPasswordRequest'
+      - in: path
+        name: token
+        required: true
+        type: string
+      responses:
+        default:
+          description: The status message pertaing to the patch, the current password
+            message and whether the reset was completed.
+          schema:
+            $ref: '#/definitions/ResetPasswordResponse'
+      tags:
+      - User
   /api/user/data/updatePicture:
     put:
       consumes:
@@ -685,25 +731,21 @@ paths:
       - UserAuth: []
       tags:
       - User
-  /api/user/forgotPassword/{uuid}:
-    patch:
+  /api/user/forgotPassword:
+    post:
       description: Updates/modifies users password.
       operationId: forgotPassword
       parameters:
-      - description: The new password to update to.
+      - description: The email of the user to send the reset password token to.
         in: body
         name: body
         required: false
         schema:
           $ref: '#/definitions/ForgotPasswordRequest'
-      - in: path
-        name: uuid
-        required: true
-        type: string
       responses:
         default:
-          description: The status message pertaing to the patch, and the new password
-            message.
+          description: The status message pertaing to the patch, the new email message,
+            and whether the request was completed.
           schema:
             $ref: '#/definitions/ForgotPasswordResponse'
       tags:

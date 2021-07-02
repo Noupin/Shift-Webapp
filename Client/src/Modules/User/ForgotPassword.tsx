@@ -1,60 +1,56 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useParams } from 'react-router';
+import { useHistory } from 'react-router';
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { pageTitles } from '../../constants';
-import { useFetch } from "../../Hooks/Fetch";
+import { UserAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-
-
-interface resetPasswordRequestReturn {
-  msg: string
-}
+import { ForgotPasswordOperationRequest, ForgotPasswordRequest } from '../../Swagger';
 
 
 export function ForgotPassword (props: IElevatedStateProps){
   const {setElevatedState} = props;
-  const { uuid } = useParams<{uuid: string | undefined}>()
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const history = useHistory();
 
-  const [fetching, setFetching] = useState(false);
-  const [registerResponse, setRegisterResponse] = useState<resetPasswordRequestReturn>();
-
-  const requestOptions = useRef<RequestInit>({});
-
-  const fetchResetPassword = useFetch(setFetching, setElevatedState, setRegisterResponse, `/api/users/resetPassword`, () => requestOptions.current, registerResponse)
+  const [email, setEmail] = useState("");
+  const [emailing, setEmailing] = useState(false);
 
 
   useEffect(() => {
-    document.title = pageTitles["changePassword"]
+    document.title = pageTitles["forgotPassword"]
   }, [])
 
   useEffect(() => {
-    if(!fetching) return;
+    if(!emailing) return;
 
-    if (password !== confirmPassword){
-      setElevatedState((prev) => ({...prev, msg: "Passwords do not match"}));
-      setFetching(false)
-      return;
+    async function forgotPassword(){
+      const requestBody: ForgotPasswordRequest = {
+        email: email
+      }
+  
+      const requestParams: ForgotPasswordOperationRequest = {
+        body: requestBody
+      }
+
+      const response = await UserAPIInstance.forgotPassword(requestParams)
+      setElevatedState(prev => ({...prev, msg: response.msg!}))
+
+      setEmailing(false)
+
+      if(response.complete){
+        history.push("/")
+      }
     }
 
-    requestOptions.current = {
-      method: 'POST',
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({newPassword: password})
-    };
-
-    fetchResetPassword()
-  }, [fetching]);
+    forgotPassword()
+  }, [emailing]);
 
 
   return (
@@ -63,29 +59,26 @@ export function ForgotPassword (props: IElevatedStateProps){
         <Col xs={3}></Col>
         <Col xs={6}>
           <Row className="justify-content-center">
-            <h2>Reset Password</h2>
+            <h2>Forgot Password</h2>
           </Row>
 
           <br/>
 
-          <form>
             <Row>
-              <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
-                       placeholder="New Password" onChange={(event) => setPassword(event.target.value)}/>
-            </Row>
-            <Row>
-              <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
-                       placeholder="Confirm Password" onChange={(event) => setConfirmPassword(event.target.value)}/>
+              <TextBox className="m-2 p-2 borderRadius-2 w-100" type="email" autoComplete="username"
+                       placeholder="Email" onChange={(event) => setEmail(event.target.value)}/>
             </Row>
 
             <Row>
               <Col xs={2}></Col>
               <Col xs={8}>
-                <Button className="mt-3 m-2 p-2 borderRadius-2 w-100" onClick={() => setFetching(true)}>Update &#10140;</Button>
+                <Button className="mt-3 m-2 p-2 borderRadius-2 w-100"
+                  onClick={() => setEmailing(true)}>
+                  Email Me &#10140;
+                </Button>
               </Col>
               <Col xs={2}></Col>
             </Row>
-          </form>
 
           <br/>
         </Col>

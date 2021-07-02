@@ -16,32 +16,32 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ForgotPasswordRequest
+ * @interface ResetPasswordRequest
  */
-export interface ForgotPasswordRequest {
+export interface ResetPasswordRequest {
     /**
      * 
      * @type {string}
-     * @memberof ForgotPasswordRequest
+     * @memberof ResetPasswordRequest
      */
-    email: string;
+    password: string;
 }
 
-export function ForgotPasswordRequestFromJSON(json: any): ForgotPasswordRequest {
-    return ForgotPasswordRequestFromJSONTyped(json, false);
+export function ResetPasswordRequestFromJSON(json: any): ResetPasswordRequest {
+    return ResetPasswordRequestFromJSONTyped(json, false);
 }
 
-export function ForgotPasswordRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): ForgotPasswordRequest {
+export function ResetPasswordRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResetPasswordRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'email': json['email'],
+        'password': json['password'],
     };
 }
 
-export function ForgotPasswordRequestToJSON(value?: ForgotPasswordRequest | null): any {
+export function ResetPasswordRequestToJSON(value?: ResetPasswordRequest | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -50,7 +50,7 @@ export function ForgotPasswordRequestToJSON(value?: ForgotPasswordRequest | null
     }
     return {
         
-        'email': value.email,
+        'password': value.password,
     };
 }
 

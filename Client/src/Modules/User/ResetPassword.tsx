@@ -3,7 +3,7 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
@@ -11,52 +11,56 @@ import { TextBox } from '../../Components/TextBox/TextBox';
 import { pageTitles } from '../../constants';
 import { UserAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { ChangePasswordOperationRequest, ChangePasswordRequest } from '../../Swagger';
+import { ResetPasswordOperationRequest, ResetPasswordRequest } from '../../Swagger';
 
 
-export function ChangePassword (props: IElevatedStateProps){
+export function ResetPassword (props: IElevatedStateProps){
   const {setElevatedState} = props;
-  const history = useHistory()
 
-  const [currentPassword, setCurrentPassword] = useState("");
+  const history = useHistory()
+  const { token } = useParams<{token: string | undefined}>()
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [fetching, setFetching] = useState(false);
 
+
   useEffect(() => {
-    document.title = pageTitles["changePassword"]
+    document.title = pageTitles["resetPassword"]
   }, [])
 
   useEffect(() => {
     if(!fetching) return;
 
-    async function changePassword(){
+    async function resetPassword(){
       if (password !== confirmPassword){
-        setElevatedState((prev) => ({...prev, msg: "Passwords do not match"}));
+        setElevatedState(prev => ({...prev, msg: "Passwords do not match"}))
         setFetching(false)
+  
         return;
       }
 
-      const requestBody: ChangePasswordRequest = {
-        currentPassword: currentPassword,
-        newPassword: password
+      const requestBody: ResetPasswordRequest = {
+        password: password
       }
-
-      const requestParams: ChangePasswordOperationRequest = {
+  
+      const requestParams: ResetPasswordOperationRequest = {
+        token: token!,
         body: requestBody
       }
 
-      const response = await UserAPIInstance.changePassword(requestParams)
-      setElevatedState((prev) => ({...prev, msg: response.msg!}));
+      const response = await UserAPIInstance.resetPassword(requestParams)
+      setElevatedState(prev => ({...prev, msg: response.msg!}))
+
       setFetching(false)
 
       if (response.complete){
-        history.push("/")
+        history.push("/login")
       }
     }
 
-    changePassword()
+    resetPassword()
   }, [fetching]);
 
 
@@ -66,15 +70,11 @@ export function ChangePassword (props: IElevatedStateProps){
         <Col xs={3}></Col>
         <Col xs={6}>
           <Row className="justify-content-center">
-            <h2>Change Password</h2>
+            <h2>Reset Password</h2>
           </Row>
 
           <br/>
 
-          <Row>
-            <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" autoComplete="current-password"
-                      placeholder="Current Password" onChange={(event) => setCurrentPassword(event.target.value)}/>
-          </Row>
           <Row>
             <TextBox className="m-2 p-2 borderRadius-2 w-100" type="password" autoComplete="new-password"
                       placeholder="New Password" onChange={(event) => setPassword(event.target.value)}/>

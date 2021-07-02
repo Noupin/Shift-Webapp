@@ -13,6 +13,7 @@ export const pageTitles = {
   'advancedTrain': pageTitleTemplate("Advanced Train"),
   'changePassword': pageTitleTemplate("Change Password"),
   'forgotPassword': pageTitleTemplate("Forgot Password"),
+  'resetPassword': pageTitleTemplate("Reset Password"),
   'login': pageTitleTemplate("Login"),
   'register': pageTitleTemplate("Register"),
   'user': (username: string) => pageTitleTemplate(`${username}`),
