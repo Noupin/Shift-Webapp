@@ -2,7 +2,7 @@
 
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
 //First Party Imports
@@ -11,7 +11,7 @@ import { TextBox } from '../../Components/TextBox/TextBox';
 import { pageTitles } from '../../constants';
 import { UserAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { ForgotPasswordOperationRequest, ForgotPasswordRequest } from '../../Swagger';
+import { ForgotPasswordOperationRequest, ForgotPasswordRequest, ForgotPasswordResponse } from '../../Swagger';
 
 
 export function ForgotPassword (props: IElevatedStateProps){
@@ -20,7 +20,15 @@ export function ForgotPassword (props: IElevatedStateProps){
   const history = useHistory();
 
   const [email, setEmail] = useState("");
-  const [emailing, setEmailing] = useState(false);
+
+  const [forgotPasswordErrors, setForgotPasswordErrors] = useState({
+    email: false
+  })
+  const [forgotPasswordErrorMessage, setForgotPasswordErrorMessage] = useState("");
+
+  const [fetching, setFetching] = useState(false);
+  const [forgotPasswordResponse, setForgotPasswordResponse] = useState<ForgotPasswordResponse>();
+  
 
 
   useEffect(() => {
@@ -28,7 +36,10 @@ export function ForgotPassword (props: IElevatedStateProps){
   }, [])
 
   useEffect(() => {
-    if(!emailing) return;
+    if(!fetching) return;
+
+    setForgotPasswordErrors({ email: false })
+    setForgotPasswordErrorMessage("")
 
     async function forgotPassword(){
       const requestBody: ForgotPasswordRequest = {
@@ -40,9 +51,10 @@ export function ForgotPassword (props: IElevatedStateProps){
       }
 
       const response = await UserAPIInstance.forgotPassword(requestParams)
+      setForgotPasswordResponse(response)
       setElevatedState(prev => ({...prev, msg: response.msg!}))
 
-      setEmailing(false)
+      setFetching(false)
 
       if(response.complete){
         history.push("/")
@@ -50,11 +62,31 @@ export function ForgotPassword (props: IElevatedStateProps){
     }
 
     forgotPassword()
-  }, [emailing]);
+  }, [fetching]);
+
+  useEffect(() => {
+    if(!forgotPasswordResponse) return;
+
+    if(forgotPasswordResponse.emailMessage){
+      setForgotPasswordErrors({ email: true })
+      setForgotPasswordErrorMessage(forgotPasswordResponse.emailMessage)
+    }
+  }, [forgotPasswordResponse])
 
 
   return (
     <Container className="d-flex justify-content-center h-100 flex-column">
+      <Alert show={forgotPasswordErrorMessage !== ""} variant="danger">
+        <Row className="flex-grow-1">
+          <Col xs={9}>{forgotPasswordErrorMessage}</Col>
+          <Col xs={3}>
+            <Button className="borderRadius-2 p-2 w-100" onClick={() => {
+              setForgotPasswordErrorMessage("")
+              }}>Close</Button>
+          </Col>
+        </Row>
+      </Alert>
+
       <Row className="mt-auto mb-auto">
         <Col xs={3}></Col>
         <Col xs={6}>
@@ -65,15 +97,16 @@ export function ForgotPassword (props: IElevatedStateProps){
           <br/>
 
             <Row>
-              <TextBox className="m-2 p-2 borderRadius-2 w-100" type="email" autoComplete="username"
-                       placeholder="Email" onChange={(event) => setEmail(event.target.value)}/>
+              <TextBox className={`m-2 p-2 borderRadius-2 w-100 ${forgotPasswordErrors.email ? "alert-danger":""}`}
+                type="email" autoComplete="username" placeholder="Email"
+                onChange={(event) => setEmail(event.target.value)}/>
             </Row>
 
             <Row>
               <Col xs={2}></Col>
               <Col xs={8}>
                 <Button className="mt-3 m-2 p-2 borderRadius-2 w-100"
-                  onClick={() => setEmailing(true)}>
+                  onClick={() => setFetching(true)}>
                   Email Me &#10140;
                 </Button>
               </Col>

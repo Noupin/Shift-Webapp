@@ -36,7 +36,7 @@ export interface ResetPasswordResponse {
      * @type {string}
      * @memberof ResetPasswordResponse
      */
-    newPasswordMsg?: string;
+    newPasswordMessage?: string;
 }
 
 export function ResetPasswordResponseFromJSON(json: any): ResetPasswordResponse {
@@ -51,7 +51,7 @@ export function ResetPasswordResponseFromJSONTyped(json: any, ignoreDiscriminato
         
         'complete': !exists(json, 'complete') ? undefined : json['complete'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
-        'newPasswordMsg': !exists(json, 'newPasswordMsg') ? undefined : json['newPasswordMsg'],
+        'newPasswordMessage': !exists(json, 'newPasswordMessage') ? undefined : json['newPasswordMessage'],
     };
 }
 
@@ -66,7 +66,7 @@ export function ResetPasswordResponseToJSON(value?: ResetPasswordResponse | null
         
         'complete': value.complete,
         'msg': value.msg,
-        'newPasswordMsg': value.newPasswordMsg,
+        'newPasswordMessage': value.newPasswordMessage,
     };
 }
 
