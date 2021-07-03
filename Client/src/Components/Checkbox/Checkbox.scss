@@ -14,7 +14,7 @@ label {
         box-shadow: inset -5px -5px 10px $lightModeBrightShadow,
                     inset 5px 5px 10px $lightModeDimShadow;
         content: "<i>&#x2713;</i>";
-        background-color: #2daaed;
+        background-color: #c3e6cb;
     }
 
 }
@@ -27,7 +27,7 @@ input[type="checkbox"] {
 .checkbox {
     vertical-align: middle;
     text-align: center;
-    width: 100%;
+    width: 40px;
     height: 100%;
     box-sizing: border-box;
     background: $sameAsBackground;

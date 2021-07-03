@@ -175,14 +175,14 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
         <>
           <Row>
             <Col xs={12}>
-              <TextBox className="text-left borderRadius-2 p-2 m-1" placeholder="Username"
+              <TextBox className="text-left borderRadius-2 p-2 m-1 w-100" placeholder="Username"
                 type="text" defaultValue={username}
                 onBlur={(event) => {
                   if(event.target.value !== userGetResponse.user!.username){
                     setUserChanges(prev => ({...prev, username: event.target.value}))
                   }
                 }}/>
-              <div style={{position: "absolute", right: "10%", top: "50%",transform: "translateY(-50%)"}}>
+              <div className="pr-2" style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)"}}>
                 {userGetResponse.user!.verified! ?
                 <Image className="object-fit-contain" imageSrc={Admin} alt="Admin"/> : <></>}
                 {userGetResponse.user!.admin! ?
@@ -192,7 +192,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
           </Row>
           <Row>
             <Col xs={12}>
-              <TextBox className="text-left borderRadius-2 p-2 m-1" placeholder="Email"
+              <TextBox className="text-left borderRadius-2 p-2 m-1 w-100" placeholder="Email"
                 type="text" defaultValue={userGetResponse.user!.email}
                 onBlur={(event) => {
                   if(event.target.value !== userGetResponse.user!.email){
@@ -201,7 +201,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
                 }}/>
             </Col>
           </Row>
-          <Row>
+          <Row className="mt-2">
             <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
               setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
           </Row>

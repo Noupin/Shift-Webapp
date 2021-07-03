@@ -60,12 +60,6 @@ export interface User {
      * @type {string}
      * @memberof User
      */
-    password: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
     username: string;
     /**
      * 
@@ -91,7 +85,6 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'email': json['email'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
-        'password': json['password'],
         'username': json['username'],
         'verified': !exists(json, 'verified') ? undefined : json['verified'],
     };
@@ -112,7 +105,6 @@ export function UserToJSON(value?: User | null): any {
         'email': value.email,
         'id': value.id,
         'mediaFilename': value.mediaFilename,
-        'password': value.password,
         'username': value.username,
         'verified': value.verified,
     };

@@ -26,3 +26,5 @@ export const TRAIN_STATUS_INTERVAL = 1000;
 
 export const CATEGORIES_TO_GET = -1;
 export const CATEGORIES_TO_REMOVE = ["Featured"]
+
+export const FRONT_END_USER_SETTINGS_PROPERTIES = ['usePTM', 'trainingShift', 'defaultTrainView']

@@ -387,18 +387,12 @@ definitions:
       id: {}
       mediaFilename:
         type: string
-      password:
-        type: string
-      passwordSalt:
-        type: string
       username:
         type: string
       verified:
         type: boolean
     required:
     - email
-    - password
-    - passwordSalt
     - username
     type: object
   UserShiftsResponse:

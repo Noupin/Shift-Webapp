@@ -25,8 +25,8 @@ import { UserPage } from "./Modules/User/UserPage";
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import { ResetPassword } from './Modules/User/ResetPassword';
 import { Settings } from './Modules/Settings';
-import './App.scss';
 import { ForgotPassword } from './Modules/User/ForgotPassword';
+import './App.scss';
 
 
 export default function App() {
@@ -42,7 +42,7 @@ export default function App() {
     usePTM: false,
     prebuiltShiftModel: "",
     trainingShift: false,
-    canTrain: false,
+    canTrain: true,
   })
 
   const getElevatedState = function(){ return elevatedState };
