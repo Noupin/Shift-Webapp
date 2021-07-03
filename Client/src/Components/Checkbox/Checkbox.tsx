@@ -6,7 +6,7 @@ import './Checkbox.scss';
 
 
 export interface ICheckbox extends React.DetailedHTMLProps<React.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>{
-  onChange?: () => void,
+  onChange?: () => void
   checked: boolean
 }
 
