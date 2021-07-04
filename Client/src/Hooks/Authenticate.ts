@@ -11,11 +11,11 @@ export function useAuthenticate(setLoading: React.Dispatch<React.SetStateAction<
 
     try{
       AuthenticateAPIInstance.authenticated().then((value) => {
-        if (value.username){
+        if (value.user){
           setElevatedState((prev) => ({
             ...prev,
             authenticated: value.authenticated!,
-            username: value.username!
+            user: value.user!
           }));
         }
         else{

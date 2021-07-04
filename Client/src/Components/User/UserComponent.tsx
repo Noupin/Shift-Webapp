@@ -165,7 +165,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
           <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
             setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
         </Row>
-        {username === elevatedState().username && 
+        {username === elevatedState().user.username && 
         <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>}
       </>
     )

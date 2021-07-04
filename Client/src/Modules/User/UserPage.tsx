@@ -57,7 +57,7 @@ export function UserPage (props: IElevatedStateProps){
           <UserComponent username={username} elevatedState={elevatedState} setElevatedState={setElevatedState}/>
         </Col>
         <Col xs={9} className="p-2">
-          {username === elevatedState().username &&
+          {username === elevatedState().user.username &&
           <Row className="justify-content-end">
             <NavLink to="/settings" className="textColor" style={{fontSize: "1.5em"}}>
               <FontAwesomeIcon icon={faCog}/>

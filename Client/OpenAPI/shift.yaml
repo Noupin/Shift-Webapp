@@ -7,11 +7,8 @@ definitions:
       msg:
         default: ''
         type: string
-        x-nullable: true
-      username:
-        default: null
-        type: string
-        x-nullable: true
+      user:
+        $ref: '#/definitions/User'
     type: object
   CategoriesResponse:
     properties:
@@ -550,7 +547,7 @@ paths:
       parameters: []
       responses:
         default:
-          description: Whether the use is authenticated or not and their username
+          description: Whether the use is authenticated or not and their user object
             if they are authenticated.
           schema:
             $ref: '#/definitions/AuthenticatedResponse'

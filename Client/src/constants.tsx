@@ -1,3 +1,7 @@
+//First Party Imports
+import { User } from "./Swagger";
+
+
 export const videoTypes = ['mp4', 'webm', 'ogg']
 export const imageTypes = ['png', 'jpg', 'jpeg', 'heic']
 
@@ -28,3 +32,5 @@ export const CATEGORIES_TO_GET = -1;
 export const CATEGORIES_TO_REMOVE = ["Featured"]
 
 export const FRONT_END_USER_SETTINGS_PROPERTIES = ['usePTM', 'trainingShift', 'defaultTrainView']
+
+export const DEFAULT_USER: User = {username: "", email: ""}

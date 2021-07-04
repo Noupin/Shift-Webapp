@@ -53,7 +53,7 @@ export function UserElements (props: IElevatedStateProps){
     return (
       <>
       <div className="mx-1 my-1">
-        <NavLink to={`/user/${elevatedState().username}`} activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
+        <NavLink to={`/user/${elevatedState().user.username}`} activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
           Account
         </NavLink>
       </div>

@@ -19,7 +19,7 @@ import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home/Home";
 import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Hooks/Authenticate";
-import { defaultShiftTitle, pageTitles } from "./constants";
+import { defaultShiftTitle, DEFAULT_USER, pageTitles } from "./constants";
 import { ShiftPage } from "./Modules/ShiftPage";
 import { UserPage } from "./Modules/User/UserPage";
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
@@ -34,7 +34,7 @@ export default function App() {
     msg: "",
     error: null,
     authenticated: false,
-    username: "",
+    user: DEFAULT_USER,
     defaultTrainView: "basic",
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
@@ -42,7 +42,6 @@ export default function App() {
     usePTM: false,
     prebuiltShiftModel: "",
     trainingShift: false,
-    canTrain: true,
   })
 
   const getElevatedState = function(){ return elevatedState };
@@ -77,10 +76,10 @@ export default function App() {
   }, [elevatedState.shiftUUID]);
 
   useEffect(() => {
-    if(!elevatedState.username) return;
+    if(!elevatedState.user) return;
 
-    sessionStorage.setItem("username", elevatedState.username);
-  }, [elevatedState.username]);
+    sessionStorage.setItem("username", elevatedState.user.username);
+  }, [elevatedState.user]);
 
   useEffect(() => {
     if(!elevatedState.error) return;
@@ -129,7 +128,7 @@ export default function App() {
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute expression={getElevatedState().canTrain} path="/train">
+                <ProtectedRoute expression={getElevatedState().user.canTrain!} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/inference">

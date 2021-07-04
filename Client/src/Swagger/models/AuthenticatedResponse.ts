@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    User,
+    UserFromJSON,
+    UserFromJSONTyped,
+    UserToJSON,
+} from './';
+
 /**
  * 
  * @export
@@ -30,13 +37,13 @@ export interface AuthenticatedResponse {
      * @type {string}
      * @memberof AuthenticatedResponse
      */
-    msg?: string | null;
+    msg?: string;
     /**
      * 
-     * @type {string}
+     * @type {User}
      * @memberof AuthenticatedResponse
      */
-    username?: string | null;
+    user?: User;
 }
 
 export function AuthenticatedResponseFromJSON(json: any): AuthenticatedResponse {
@@ -51,7 +58,7 @@ export function AuthenticatedResponseFromJSONTyped(json: any, ignoreDiscriminato
         
         'authenticated': !exists(json, 'authenticated') ? undefined : json['authenticated'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
-        'username': !exists(json, 'username') ? undefined : json['username'],
+        'user': !exists(json, 'user') ? undefined : UserFromJSON(json['user']),
     };
 }
 
@@ -66,7 +73,7 @@ export function AuthenticatedResponseToJSON(value?: AuthenticatedResponse | null
         
         'authenticated': value.authenticated,
         'msg': value.msg,
-        'username': value.username,
+        'user': UserToJSON(value.user),
     };
 }
 

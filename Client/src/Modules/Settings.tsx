@@ -17,7 +17,7 @@ export function Settings (props: IElevatedStateProps){
   return (
     <Container>
       <h2>Settings</h2>
-      {elevatedState().canTrain && <>
+      {elevatedState().user.canTrain! && <>
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Use PTM</Col>
         <Col xs={6} className="justify-content-end">
