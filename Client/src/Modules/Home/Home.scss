@@ -7,12 +7,25 @@
     flex-direction: column
 }
 
-.categoryNavbar p{
+.dotParent{
     flex: 1;
+    position: relative;
+}
+
+.categoryNavbar p{
+    font-size: large;
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) 
 }
 
 .categoryNavbar a{
-    padding: 5px;
+    font-size: 0.8em;
+    padding: 5px 0;
     text-decoration: none;
     color: $darkModeColor;
     transition: all .2s ease-in-out;
@@ -22,5 +35,6 @@
     text-decoration: none;
     color: $darkModeColor;
     transform: scale(1.1);
+    transform: translateX(-10%);
 }
 

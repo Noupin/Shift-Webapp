@@ -90,20 +90,20 @@ export function Home (props: IElevatedStateProps){
 
   return (
     <Container className="wideScreen">
-      <div style={{position: "absolute", right: 0, width: "10%", height: "92%"}}
-        className="glassmorphic categoryNavbar p-2">
+      <div style={{position: "absolute", right: 0, width: "12%", height: "92%"}}
+        className="glassmorphic categoryNavbar py-2">
         <a href="#featured" style={{width: "100%"}}>Featured</a>
-        <p></p>
+        <div className="dotParent"><p>&middot;</p></div>
         <a href="#popular" style={{width: "100%"}}>Popular</a>
-        <p></p>
+        <div className="dotParent"><p>&middot;</p></div>
         <a href="#new" style={{width: "100%"}}>New</a>
-        <p></p>
-        {shiftCategories.map((category) => (
+        {shiftCategories.length > 0 && <div className="dotParent"><p>&middot;</p></div>}
+        {shiftCategories.map((category, index) => (
           <>
           <a href={`#${category.category}`}>
             {category.category}
           </a>
-          <p></p>
+          {index+1 !== shiftCategories.length && <div className="dotParent"><p>&middot;</p></div>}
           </>
         ))}
       </div>
