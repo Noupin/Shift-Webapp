@@ -109,7 +109,6 @@ export default function App() {
                 </Row>
               </Alert>
 
-              <div style={{position: 'relative'}}>
               <Switch>
                 <Route path="/register">
                   <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
@@ -148,7 +147,6 @@ export default function App() {
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
               </Switch>
-              </div>
 
             </div>
           </Col>

@@ -29,7 +29,6 @@ export function Home (props: IElevatedStateProps){
     }
 
     const categoryResponse = await CategoryAPIInstance.category(categoryParams)
-    
     return categoryResponse;
   }
 
@@ -90,83 +89,86 @@ export function Home (props: IElevatedStateProps){
 
 
   return (
-    <>
-    <div id="categoryNavbar" className="glassmorphic categoryNavbar">
-      <a href="#featured" style={{width: "100%"}}>Featured</a>
-      <div className="dotParent noTextSelect"><p>&middot;</p></div>
-      <a href="#popular" style={{width: "100%"}}>Popular</a>
-      <div className="dotParent noTextSelect"><p>&middot;</p></div>
-      <a href="#new" style={{width: "100%"}}>New</a>
-      {shiftCategories.length > 0 &&
-      <div className="dotParent noTextSelect"><p>&middot;</p></div>}
-      {shiftCategories.map((category, index) => (
-        <>
-        <a href={`#${category.category}`}>
-          {category.category}
-        </a>
-        {index+1 !== shiftCategories.length &&
-        <div className="dotParent noTextSelect"><p>&middot;</p></div>}
-        </>
-      ))}
+    <div style={{position: "relative"}}>
+      <div className="glassmorphic categoryNavbar h-100">
+        <div className="categoryNavbarSticky">
+          <a href="#featured" style={{width: "100%"}}>Featured</a>
+          <div className="dotParent noTextSelect"><p>&middot;</p></div>
+          <a href="#popular" style={{width: "100%"}}>Popular</a>
+          <div className="dotParent noTextSelect"><p>&middot;</p></div>
+          <a href="#new" style={{width: "100%"}}>New</a>
+          {shiftCategories.length > 0 &&
+          <div className="dotParent noTextSelect"><p>&middot;</p></div>}
+          {shiftCategories.map((category, index) => (
+            <>
+            <a href={`#${category.category}`}>
+              {category.category}
+            </a>
+            {index+1 !== shiftCategories.length &&
+            <div className="dotParent noTextSelect"><p>&middot;</p></div>}
+            </>
+          ))}
+        </div>
+      </div>
+      <Container className="wideScreen">
+
+        <Row className="justify-content-center">
+          <h1>Shift</h1>
+        </Row>
+
+        <Row id="featured">
+          <h3>Featured</h3>
+        </Row>
+        <Row>
+          <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+            {featuredShifts.map((element, index) => (
+              <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+                imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
+            ))}
+          </HorizontalScrollMenu>
+        </Row>
+
+        <Row id="popular">
+          <h3>Popular</h3>
+        </Row>
+        <Row>
+          <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+            {popularShifts.map((element, index) => (
+              <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+                imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
+            ))}
+          </HorizontalScrollMenu>
+        </Row>
+
+        <Row id="new">
+          <h3>New</h3>
+        </Row>
+        <Row>
+          <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+            {newShifts.map((element, index) => (
+              <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+                imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
+            ))}
+          </HorizontalScrollMenu>
+        </Row>
+
+        {shiftCategories.map((category) => (
+          <>
+            <Row id={category.category}>
+              {category.category ? <h3>{category.category}</h3> : <></>}
+            </Row>
+            <Row>
+              {category.shifts!.length > 0 ?
+              <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+                {category.shifts!.map((element, index) => (
+                  <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+                    imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
+                ))}
+              </HorizontalScrollMenu> : <></>}
+            </Row>
+          </>
+        ))}
+      </Container>
     </div>
-    <Container id="homePage" className="wideScreen">
-      <Row className="justify-content-center">
-        <h1>Shift</h1>
-      </Row>
-
-      <Row id="featured">
-        <h3>Featured</h3>
-      </Row>
-      <Row>
-        <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
-          {featuredShifts.map((element, index) => (
-            <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
-              imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
-          ))}
-        </HorizontalScrollMenu>
-      </Row>
-
-      <Row id="popular">
-        <h3>Popular</h3>
-      </Row>
-      <Row>
-        <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
-          {popularShifts.map((element, index) => (
-            <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
-              imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
-          ))}
-        </HorizontalScrollMenu>
-      </Row>
-
-      <Row id="new">
-        <h3>New</h3>
-      </Row>
-      <Row>
-        <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
-          {newShifts.map((element, index) => (
-            <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
-              imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
-          ))}
-        </HorizontalScrollMenu>
-      </Row>
-
-      {shiftCategories.map((category) => (
-        <>
-          <Row id={category.category}>
-            {category.category ? <h3>{category.category}</h3> : <></>}
-          </Row>
-          <Row>
-            {category.shifts!.length > 0 ?
-            <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
-              {category.shifts!.map((element, index) => (
-                <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
-                  imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
-              ))}
-            </HorizontalScrollMenu> : <></>}
-          </Row>
-        </>
-      ))}
-    </Container>
-    </>
   );
 }

@@ -7,12 +7,21 @@
     flex-direction: column;
     position: absolute;
     right: 0;
-    width: 12%;
-    top: 0;
-    bottom: 0;
+    width: 65px;
+    border-radius: $radiusSize*0.4px 0px 0px $radiusSize*0.4px;
 }
 
-.categoryNavbar p{
+.categoryNavbarSticky{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.categoryNavbar .categoryNavbarSticky p{
     font-size: large;
     font-weight: bold;
     margin: 0;
@@ -23,7 +32,7 @@
     transform: translate(-50%, -50%) 
 }
 
-.categoryNavbar a{
+.categoryNavbar .categoryNavbarSticky a{
     font-size: 0.8em;
     padding: 5px 0;
     text-decoration: none;
@@ -31,7 +40,7 @@
     transition: all .2s ease-in-out;
 }
 
-.categoryNavbar a:hover{
+.categoryNavbar .categoryNavbarSticky a:hover{
     text-decoration: none;
     color: $darkModeColor;
     transform: scale(1.1);
