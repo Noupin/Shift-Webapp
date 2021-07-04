@@ -37,7 +37,7 @@ export function Settings (props: IElevatedStateProps){
         <Col xs={6} className="justify-content-end">
           <Dropdown options={['basic', 'advanced']}
             defaultOption={elevatedState().defaultTrainView}
-            onChange={(value) => setElevatedState(prev => ({...prev, defaultTrainView: value as unknown as IFrontEndSettings["defaultTrainView"]}))}/>
+            onOptionChange={(value) => setElevatedState(prev => ({...prev, defaultTrainView: value as unknown as IFrontEndSettings["defaultTrainView"]}))}/>
         </Col>
       </Row></>}
     </Container>
