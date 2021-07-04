@@ -90,7 +90,7 @@ export function Home (props: IElevatedStateProps){
 
   return (
     <Container className="wideScreen">
-      <div style={{position: "absolute", right: 0, width: "12%", height: "92%"}}
+      <div style={{position: "fixed", right: 0, width: "12%", top: "70px", bottom: 0}}
         className="glassmorphic categoryNavbar py-2">
         <a href="#featured" style={{width: "100%"}}>Featured</a>
         <div className="dotParent noTextSelect"><p>&middot;</p></div>
