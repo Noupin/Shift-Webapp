@@ -93,17 +93,17 @@ export function Home (props: IElevatedStateProps){
       <div style={{position: "absolute", right: 0, width: "12%", height: "92%"}}
         className="glassmorphic categoryNavbar py-2">
         <a href="#featured" style={{width: "100%"}}>Featured</a>
-        <div className="dotParent"><p>&middot;</p></div>
+        <div className="dotParent noTextSelect"><p>&middot;</p></div>
         <a href="#popular" style={{width: "100%"}}>Popular</a>
-        <div className="dotParent"><p>&middot;</p></div>
+        <div className="dotParent noTextSelect"><p>&middot;</p></div>
         <a href="#new" style={{width: "100%"}}>New</a>
-        {shiftCategories.length > 0 && <div className="dotParent"><p>&middot;</p></div>}
+        {shiftCategories.length > 0 && <div className="dotParent noTextSelect"><p>&middot;</p></div>}
         {shiftCategories.map((category, index) => (
           <>
           <a href={`#${category.category}`}>
             {category.category}
           </a>
-          {index+1 !== shiftCategories.length && <div className="dotParent"><p>&middot;</p></div>}
+          {index+1 !== shiftCategories.length && <div className="dotParent noTextSelect"><p>&middot;</p></div>}
           </>
         ))}
       </div>
