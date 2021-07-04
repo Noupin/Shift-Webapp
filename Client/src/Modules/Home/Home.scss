@@ -4,12 +4,12 @@
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column
-}
-
-.dotParent{
-    flex: 1;
-    position: relative;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    width: 12%;
+    top: 0;
+    bottom: 0;
 }
 
 .categoryNavbar p{
@@ -38,3 +38,7 @@
     transform: translateX(-10%);
 }
 
+.dotParent{
+    flex: 1;
+    position: relative;
+}

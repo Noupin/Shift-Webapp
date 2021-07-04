@@ -36,17 +36,16 @@ export function UserElements (props: IElevatedStateProps){
   }, [fetching]);
 
   useEffect(() => {
-    if (!authenticating || !logoutResponse) return;
+    async function logout(){
+      if (!authenticating || !logoutResponse) return;
 
-    setElevatedState((prev) => ({...prev, msg: logoutResponse.msg!}))
-    auth()
+      setElevatedState((prev) => ({...prev, msg: logoutResponse.msg!}))
+      await auth()
+      history.push("/")
+    }
+
+    logout()
   }, [authenticating, logoutResponse]);
-
-  useEffect(() => {
-    if (!elevatedState().authenticated) return;
-
-    history.push("/")
-  }, [elevatedState().authenticated]);
 
 
   if(elevatedState().authenticated){

@@ -88,28 +88,28 @@ export function Home (props: IElevatedStateProps){
     getShifts();
   }, [])
 
-  return (
-    <Container className="wideScreen">
-      <div style={{position: "fixed", right: 0, width: "12%", top: "70px", bottom: 0}}
-        className="glassmorphic categoryNavbar py-2">
-        <a href="#featured" style={{width: "100%"}}>Featured</a>
-        <div className="dotParent noTextSelect"><p>&middot;</p></div>
-        <a href="#popular" style={{width: "100%"}}>Popular</a>
-        <div className="dotParent noTextSelect"><p>&middot;</p></div>
-        <a href="#new" style={{width: "100%"}}>New</a>
-        {shiftCategories.length > 0 &&
-        <div className="dotParent noTextSelect"><p>&middot;</p></div>}
-        {shiftCategories.map((category, index) => (
-          <>
-          <a href={`#${category.category}`}>
-            {category.category}
-          </a>
-          {index+1 !== shiftCategories.length &&
-          <div className="dotParent noTextSelect"><p>&middot;</p></div>}
-          </>
-        ))}
-      </div>
 
+  return (
+    <>
+    <div id="categoryNavbar" className="glassmorphic categoryNavbar">
+      <a href="#featured" style={{width: "100%"}}>Featured</a>
+      <div className="dotParent noTextSelect"><p>&middot;</p></div>
+      <a href="#popular" style={{width: "100%"}}>Popular</a>
+      <div className="dotParent noTextSelect"><p>&middot;</p></div>
+      <a href="#new" style={{width: "100%"}}>New</a>
+      {shiftCategories.length > 0 &&
+      <div className="dotParent noTextSelect"><p>&middot;</p></div>}
+      {shiftCategories.map((category, index) => (
+        <>
+        <a href={`#${category.category}`}>
+          {category.category}
+        </a>
+        {index+1 !== shiftCategories.length &&
+        <div className="dotParent noTextSelect"><p>&middot;</p></div>}
+        </>
+      ))}
+    </div>
+    <Container id="homePage" className="wideScreen">
       <Row className="justify-content-center">
         <h1>Shift</h1>
       </Row>
@@ -167,5 +167,6 @@ export function Home (props: IElevatedStateProps){
         </>
       ))}
     </Container>
+    </>
   );
 }

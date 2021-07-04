@@ -93,7 +93,7 @@ export default function App() {
         <Row className="justify-content-center h-100">
           <Col>
             <div className="h-100 d-flex flex-column">
-              <Row className="justify-content-center">
+              <Row id="navbarRow" className="justify-content-center">
                 <NavBar elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
               </Row>
 
@@ -109,6 +109,7 @@ export default function App() {
                 </Row>
               </Alert>
 
+              <div style={{position: 'relative'}}>
               <Switch>
                 <Route path="/register">
                   <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
@@ -147,6 +148,7 @@ export default function App() {
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
               </Switch>
+              </div>
 
             </div>
           </Col>
