@@ -16,7 +16,7 @@ import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load";
 import { Train } from "./Modules/Train/Train";
 import { Inference } from "./Modules/Inference/Inference";
-import { Home } from "./Modules/Home";
+import { Home } from "./Modules/Home/Home";
 import { Button } from "./Components/Button/Button";
 import { useAuthenticate } from "./Hooks/Authenticate";
 import { defaultShiftTitle, pageTitles } from "./constants";

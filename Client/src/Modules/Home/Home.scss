@@ -1,0 +1,26 @@
+@import "../../variables.scss";
+
+.categoryNavbar{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column
+}
+
+.categoryNavbar p{
+    flex: 1;
+}
+
+.categoryNavbar a{
+    padding: 5px;
+    text-decoration: none;
+    color: $darkModeColor;
+    transition: all .2s ease-in-out;
+}
+
+.categoryNavbar a:hover{
+    text-decoration: none;
+    color: $darkModeColor;
+    transform: scale(1.1);
+}
+

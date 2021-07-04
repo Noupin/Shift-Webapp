@@ -5,13 +5,14 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 
 //First Party Imports
-import { CATEGORIES_TO_GET, CATEGORIES_TO_REMOVE, pageTitles } from '../constants';
-import { CategoryAPIInstance } from '../Helpers/Api';
-import { ShiftCard } from '../Components/ShiftCard/ShiftCard';
-import { ShiftCategories } from '../Interfaces/ShiftCategories';
-import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
-import { HorizontalScrollMenu } from '../Components/HorizontalScrollMenu/HorizontalScrollMenu';
-import { CategoriesRequest, CategoriesResponse, CategoryRequest, Shift, ShiftCategoryResponse } from '../Swagger';
+import { CATEGORIES_TO_GET, CATEGORIES_TO_REMOVE, pageTitles } from '../../constants';
+import { CategoryAPIInstance } from '../../Helpers/Api';
+import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
+import { ShiftCategories } from '../../Interfaces/ShiftCategories';
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
+import { HorizontalScrollMenu } from '../../Components/HorizontalScrollMenu/HorizontalScrollMenu';
+import { CategoriesRequest, CategoriesResponse, CategoryRequest, Shift, ShiftCategoryResponse } from '../../Swagger';
+import "./Home.scss"
 
 
 export function Home (props: IElevatedStateProps){
@@ -89,11 +90,29 @@ export function Home (props: IElevatedStateProps){
 
   return (
     <Container className="wideScreen">
+      <div style={{position: "absolute", right: 0, width: "10%", height: "92%"}}
+        className="glassmorphic categoryNavbar p-2">
+        <a href="#featured" style={{width: "100%"}}>Featured</a>
+        <p></p>
+        <a href="#popular" style={{width: "100%"}}>Popular</a>
+        <p></p>
+        <a href="#new" style={{width: "100%"}}>New</a>
+        <p></p>
+        {shiftCategories.map((category) => (
+          <>
+          <a href={`#${category.category}`}>
+            {category.category}
+          </a>
+          <p></p>
+          </>
+        ))}
+      </div>
+
       <Row className="justify-content-center">
         <h1>Shift</h1>
       </Row>
 
-      <Row>
+      <Row id="featured">
         <h3>Featured</h3>
       </Row>
       <Row>
@@ -105,7 +124,7 @@ export function Home (props: IElevatedStateProps){
         </HorizontalScrollMenu>
       </Row>
 
-      <Row>
+      <Row id="popular">
         <h3>Popular</h3>
       </Row>
       <Row>
@@ -117,7 +136,7 @@ export function Home (props: IElevatedStateProps){
         </HorizontalScrollMenu>
       </Row>
 
-      <Row>
+      <Row id="new">
         <h3>New</h3>
       </Row>
       <Row>
@@ -131,7 +150,7 @@ export function Home (props: IElevatedStateProps){
 
       {shiftCategories.map((category) => (
         <>
-          <Row>
+          <Row id={category.category}>
             {category.category ? <h3>{category.category}</h3> : <></>}
           </Row>
           <Row>
