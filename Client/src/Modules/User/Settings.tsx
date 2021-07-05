@@ -5,10 +5,10 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 //First Party Imports
-import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
-import { Checkbox } from '../Components/Checkbox/Checkbox';
-import { Dropdown } from '../Components/Dropdown/Dropdown';
-import { IFrontEndSettings } from '../Interfaces/FrontEndSettings';
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
+import { Checkbox } from '../../Components/Checkbox/Checkbox';
+import { Dropdown } from '../../Components/Dropdown/Dropdown';
+import { IFrontEndSettings } from '../../Interfaces/FrontEndSettings';
 
 export function Settings (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;

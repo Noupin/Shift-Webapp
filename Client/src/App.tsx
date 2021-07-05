@@ -24,7 +24,7 @@ import { ShiftPage } from "./Modules/ShiftPage";
 import { UserPage } from "./Modules/User/UserPage";
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import { ResetPassword } from './Modules/User/ResetPassword';
-import { Settings } from './Modules/Settings';
+import { Settings } from './Modules/User/Settings';
 import { ForgotPassword } from './Modules/User/ForgotPassword';
 import './App.scss';
 
@@ -39,7 +39,7 @@ export default function App() {
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
     trainStatusInterval: 10,
-    usePTM: false,
+    usePTM: true,
     prebuiltShiftModel: "",
     trainingShift: false,
   })
@@ -93,7 +93,7 @@ export default function App() {
         <Row className="justify-content-center h-100">
           <Col>
             <div className="h-100 d-flex flex-column">
-              <Row id="navbarRow" className="justify-content-center">
+              <Row className="justify-content-center">
                 <NavBar elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
               </Row>
 
