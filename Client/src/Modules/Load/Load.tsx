@@ -193,11 +193,12 @@ export function Load (props: IElevatedStateProps){
             <h3>Base Media</h3>
           </Row>
           <Row>
-            <Col className="neumorphic borderRadius-2 p-0">
+            <Col className="neumorphic borderRadius-2">
               <Row className="px-4">
                 <Col xs={11}></Col>
                 <Col xs={1}>
-                  <FileDialog className="justify-content-end" id="baseMediaUpload" onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  <FileDialog className="justify-content-end" id="baseMediaUpload"
+                  onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                     const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                     if(badExtensions.length > 0){
@@ -219,7 +220,9 @@ export function Load (props: IElevatedStateProps){
                      onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
                      mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
               :
-              <FileDialog className="mb-4" id="baseMediaUpload" onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+              <FileDialog id="baseMediaUpload" className="mb-4"
+              style={{width: "100%", height: "auto"}}
+              onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
@@ -243,7 +246,7 @@ export function Load (props: IElevatedStateProps){
             <h3>Mask Media</h3>
           </Row>
           <Row>
-            <Col className="neumorphic borderRadius-2 p-0">
+            <Col className="neumorphic borderRadius-2">
               <Row className="px-4">
                 <Col xs={11}></Col>
                 <Col xs={1}>
@@ -269,7 +272,9 @@ export function Load (props: IElevatedStateProps){
                      onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
                      mediaSrc={maskFiles[0]!} mediaType="video/mp4" droppable={true}/>
               :
-              <FileDialog className="pb-4" id="maskMediaUpload" onFileInput={(event) => {
+              <FileDialog id="maskMediaUpload" className="mb-4"
+              style={{width: "100%", height: "auto"}}
+              onFileInput={(event) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
@@ -325,7 +330,9 @@ export function Load (props: IElevatedStateProps){
                      onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
                      mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
               :
-              <FileDialog className="mb-4" id="baseMediaUpload" onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+              <FileDialog id="baseMediaUpload" className="mb-4"
+              style={{width: "100%", height: "auto"}}
+              onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
                 if(badExtensions.length > 0){
@@ -363,8 +370,9 @@ export function Load (props: IElevatedStateProps){
                 elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}
                 setElevatedState={setElevatedState}/>
               :
-              <FileDialog className="mb-4" id="baseFileUpload" mutipleSelect={true}
-                          onFileInput={(event) => checkFile(event, setElevatedState, setBaseFiles)}>
+              <FileDialog id="baseFileUpload" mutipleSelect={true} className="mb-4"
+              style={{width: "100%", height: "auto"}}
+              onFileInput={(event) => checkFile(event, setElevatedState, setBaseFiles)}>
                 <FontAwesomeIcon icon={faPhotoVideo} style={{fontSize: "8vh"}}/>
               </FileDialog>
               }
@@ -388,8 +396,9 @@ export function Load (props: IElevatedStateProps){
                 elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}
                 setElevatedState={setElevatedState}/>
               :
-              <FileDialog className="mb-4" id="maskFileUpload" mutipleSelect={true}
-                          onFileInput={(event) => checkFile(event, setElevatedState, setMaskFiles)}>
+              <FileDialog id="maskFileUpload" mutipleSelect={true} className="mb-4"
+              style={{width: "100%", height: "auto"}}
+              onFileInput={(event) => checkFile(event, setElevatedState, setMaskFiles)}>
                 <FontAwesomeIcon icon={faPhotoVideo} style={{fontSize: "8vh"}}/>
               </FileDialog>
               }

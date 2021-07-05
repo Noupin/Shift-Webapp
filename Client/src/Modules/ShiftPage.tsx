@@ -150,11 +150,11 @@ export function ShiftPage (props: IElevatedStateProps){
           </Row>
           <Row>
             <Col xs={1}></Col>
-            <Col xs={5}>
+            <Col xs={5} className="pr-2">
               <Media className="neumorphic borderRadius-3 p-2" srcString={baseMediaURL}
                 setElevatedState={setElevatedState}/>
             </Col>
-            <Col xs={5}>
+            <Col xs={5} className="pl-2">
               <Media className="neumorphic borderRadius-3 p-2" srcString={maskMediaURL}
                 setElevatedState={setElevatedState}/>
             </Col>

@@ -63,7 +63,10 @@ export function UserPage (props: IElevatedStateProps){
               <FontAwesomeIcon icon={faCog}/>
             </NavLink>
           </Row>}
-          <Row>
+          <Row className="justify-content-center">
+            <h2>Shifts</h2>
+          </Row>
+          <Row className="pl-3">
             <Masonry breakpointCols={{default: 4,
                                       1400: 3,
                                       1100: 2,
