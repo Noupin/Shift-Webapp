@@ -410,16 +410,11 @@ export function Load (props: IElevatedStateProps){
 
     loadButtonsComponent = (
       <>
-        <Col xs={10}>
+        <Col xs={2}></Col>
+        <Col xs={8}>
           <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
         </Col>
-        <Col xs={1} className="justify-content-center my-auto">
-          <h5 className="m-0">PTM:</h5>
-        </Col>
-        <Col xs={1} className="justify-content-center my-auto">
-          <Checkbox checked={elevatedState().usePTM}
-            onChange={() => setElevatedState((prev) => ({...prev, usePTM: !elevatedState().usePTM}))}/>
-        </Col>
+        <Col xs={2}></Col>
       </>
     )
 

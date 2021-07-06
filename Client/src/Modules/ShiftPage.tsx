@@ -19,6 +19,7 @@ import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftP
 import { ShiftButtonsComponent } from '../Components/Shift/ShiftButtonsComponent';
 import { ShiftUserComponent } from '../Components/Shift/ShiftUserComponent';
 import { ShiftTitleComponent } from '../Components/Shift/ShiftTitleComponent';
+import { Button } from '../Components/Button/Button';
 
 
 export function ShiftPage (props: IElevatedStateProps){
@@ -159,6 +160,25 @@ export function ShiftPage (props: IElevatedStateProps){
                 setElevatedState={setElevatedState}/>
             </Col>
             <Col xs={1}></Col>
+          </Row>
+          <Row className="mt-3 mx-2 px-2">
+            <Col>
+              <Button className="p-2 borderRadius-2 w-100">
+                Share
+              </Button>
+            </Col>
+            <Col>
+              <a href={shiftMediaURL} download>
+                <Button className="p-2 borderRadius-2 w-100">
+                  Download
+                </Button>
+              </a>
+            </Col>
+            <Col>
+              <Button className="p-2 borderRadius-2 w-100">
+                Shift &#10140;
+              </Button>
+            </Col>
           </Row>
         </Col>
         <Col xs={3} className="p-2">
