@@ -13,6 +13,7 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { HorizontalScrollMenu } from '../../Components/HorizontalScrollMenu/HorizontalScrollMenu';
 import { CategoriesRequest, CategoriesResponse, CategoryRequest, Shift, ShiftCategoryResponse } from '../../Swagger';
 import "./Home.scss"
+import { StickySidebar } from '../../Components/StickySidebar/StickySidebar';
 
 
 export function Home (props: IElevatedStateProps){
@@ -22,6 +23,7 @@ export function Home (props: IElevatedStateProps){
   const [popularShifts, setPopularShifts] = useState<Shift[]>([])
   const [newShifts, setNewShifts] = useState<Shift[]>([])
   const [shiftCategories, setShiftCategories] = useState<ShiftCategories[]>([])
+  const defaultCategories = ["Featured", "Popular", "New"]
 
   async function getCategoryShifts(categoryName: string="Featured"): Promise<ShiftCategoryResponse>{
     const categoryParams: CategoryRequest = {
@@ -90,26 +92,7 @@ export function Home (props: IElevatedStateProps){
 
   return (
     <div style={{position: "relative"}}>
-      <div className="glassmorphic categoryNavbar h-100">
-        <div className="categoryNavbarSticky">
-          <a href="#featured" style={{width: "100%"}}>Featured</a>
-          <div className="dotParent noTextSelect"><p>&middot;</p></div>
-          <a href="#popular" style={{width: "100%"}}>Popular</a>
-          <div className="dotParent noTextSelect"><p>&middot;</p></div>
-          <a href="#new" style={{width: "100%"}}>New</a>
-          {shiftCategories.length > 0 &&
-          <div className="dotParent noTextSelect"><p>&middot;</p></div>}
-          {shiftCategories.map((category, index) => (
-            <>
-            <a href={`#${category.category}`}>
-              {category.category}
-            </a>
-            {index+1 !== shiftCategories.length &&
-            <div className="dotParent noTextSelect"><p>&middot;</p></div>}
-            </>
-          ))}
-        </div>
-      </div>
+      <StickySidebar items={[...defaultCategories, ...shiftCategories.map((item) => item.category)]}/>
       <Container className="wideScreen">
 
         <Row className="justify-content-center">

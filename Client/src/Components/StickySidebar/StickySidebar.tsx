@@ -1,0 +1,29 @@
+//Third Party Imports
+import React from 'react';
+
+//First Party Imports
+import './StickySidebar.scss';
+
+interface IStickySidebar extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
+  items: string[]
+}
+
+export const StickySidebar = (props: IStickySidebar) => {
+  const {items, ...stickySidebarProps} = props;
+
+  return(
+    <div {...stickySidebarProps} className="glassmorphic categoryNavbar h-100">
+      <div className="categoryNavbarSticky">
+        {items.map((item, index) => (
+          <>
+            <a href={`#${item}`} style={{width: "100%"}}>
+              {item}
+            </a>
+            {index+1 !== items.length &&
+            <div className="dotParent noTextSelect"><p>&middot;</p></div>}
+          </>
+        ))}
+      </div>
+    </div>
+  );
+}
