@@ -28,19 +28,19 @@ export const ShiftTitleComponent: FC<IShiftTitle> = ({editing, setShiftChanges, 
 
   if (editing){
     shiftTitleComponent = (
-      <>
-        <TextBox className="text-left borderRadius-2 p-2" type="text"
+      <div style={{position: "relative"}}>
+        <TextBox className="text-left borderRadius-2 p-2 w-100" type="text"
           defaultValue={shift!.title} placeholder="Title"
           onBlur={(event) => {
             if(event.target.value !== shift!.title){
               setShiftChanges(prev => ({...prev, title: event.target.value}))
             }
           }}/>
-        {shift!.verified ?
-          <Image style={{height: "0.75em", width: "auto"}} 
-              className="object-fit-contain"
-              imageSrc={Verified} alt="Verified"/> : <></>}
-      </>
+        <div className="pr-2" style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)"}}>
+          {shift!.verified ?
+            <Image className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
+        </div>
+      </div>
     )
   }
 

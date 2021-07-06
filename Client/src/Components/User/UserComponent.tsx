@@ -183,9 +183,9 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
                   }
                 }}/>
               <div className="pr-2" style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)"}}>
-                {userGetResponse.user!.verified! ?
-                <Image className="object-fit-contain" imageSrc={Admin} alt="Admin"/> : <></>}
                 {userGetResponse.user!.admin! ?
+                <Image className="object-fit-contain" imageSrc={Admin} alt="Admin"/> : <></>}
+                {userGetResponse.user!.verified! ?
                 <Image className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
               </div>
             </Col>
