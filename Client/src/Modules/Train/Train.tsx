@@ -33,7 +33,7 @@ export function Train (props: IElevatedStateProps){
 
   const history = useHistory()
 
-  const [updating, setUpdating] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const [stop, setStop] = useState(false);
   const [trainResponse, setTrainResponse] = useState<CombinedTrainResponse>();
   const [, setConverting] = useState(false);
@@ -82,20 +82,26 @@ export function Train (props: IElevatedStateProps){
   useEffect(() => {
     document.title = pageTitles["train"]
 
-    const trainRequestParams: TrainRequest = {
-      shiftUUID: elevatedState().shiftUUID,
-      shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
-      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      trainType: 'basic'
-    };
-    const trainBody: TrainOperationRequest = {
-      body: trainRequestParams
+    async function startTrain(){
+      const trainRequestParams: TrainRequest = {
+        shiftUUID: elevatedState().shiftUUID,
+        shiftTitle: elevatedState().shiftTitle,
+        usePTM: elevatedState().usePTM,
+        prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+        trainType: 'basic'
+      };
+      const trainBody: TrainOperationRequest = {
+        body: trainRequestParams
+      }
+
+      await TrainAPIInstance.train(trainBody).then((value) => {
+        setTrainResponse(value)
+      })
+
+      setUpdating(true)
     }
 
-    TrainAPIInstance.train(trainBody).then((value) => {
-      setTrainResponse(value)
-    })
+    startTrain()
 
     return () => {
       if(!stopTrain || !advancedView){
