@@ -1,6 +1,9 @@
-@import "../..//variables.scss";
+@import "../../variables.scss";
+@import "../../App.scss";
+
 
 .categoryNavbar{
+    @extend .glassmorphic;
     margin: 0;
     padding: 0;
     display: flex;
@@ -10,6 +13,7 @@
     right: 0;
     width: 65px;
     border-radius: $radiusSize*0.4px 0px 0px $radiusSize*0.4px;
+    z-index: 5;
 }
 
 .categoryNavbarSticky{
@@ -30,7 +34,7 @@
     top: 50%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%) 
+    transform: translate(-50%, -50%)
 }
 
 .categoryNavbar .categoryNavbarSticky a{

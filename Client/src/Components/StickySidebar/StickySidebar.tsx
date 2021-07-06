@@ -2,6 +2,7 @@
 import React from 'react';
 
 //First Party Imports
+import '../../App.scss'
 import './StickySidebar.scss';
 
 interface IStickySidebar extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
@@ -9,10 +10,10 @@ interface IStickySidebar extends React.DetailedHTMLProps<React.HTMLAttributes<HT
 }
 
 export const StickySidebar = (props: IStickySidebar) => {
-  const {items, ...stickySidebarProps} = props;
+  const {items} = props;
 
   return(
-    <div {...stickySidebarProps} className="glassmorphic categoryNavbar h-100">
+    <div className="categoryNavbar">
       <div className="categoryNavbarSticky">
         {items.map((item, index) => (
           <>

@@ -119,22 +119,22 @@ label {
 
 //Border Radius
 .borderRadius-1{
-    border-radius: ($radiusSize*0.2) + 0px;
+    border-radius: ($radiusSize*0.2) + 0px !important;
 }
 .borderRadius-2{
-    border-radius: ($radiusSize*0.4) + 0px;
+    border-radius: ($radiusSize*0.4) + 0px !important;
 }
 .borderRadius-3{
-    border-radius: ($radiusSize*0.6) + 0px;
+    border-radius: ($radiusSize*0.6) + 0px !important;
 }
 .borderRadius-4{
-    border-radius: ($radiusSize*0.8) + 0px;
+    border-radius: ($radiusSize*0.8) + 0px !important;
 }
 .borderRadius-5{
-    border-radius: ($radiusSize) + 0px;
+    border-radius: ($radiusSize) + 0px !important;
 }
 .borderRadius-c{
-    border-radius: 50%;
+    border-radius: 50% !important;
 }
 
 

@@ -12,7 +12,6 @@ import { ShiftCategories } from '../../Interfaces/ShiftCategories';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { HorizontalScrollMenu } from '../../Components/HorizontalScrollMenu/HorizontalScrollMenu';
 import { CategoriesRequest, CategoriesResponse, CategoryRequest, Shift, ShiftCategoryResponse } from '../../Swagger';
-import "./Home.scss"
 import { StickySidebar } from '../../Components/StickySidebar/StickySidebar';
 
 
