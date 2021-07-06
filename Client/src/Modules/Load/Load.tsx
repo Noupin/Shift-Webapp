@@ -44,7 +44,7 @@ export function Load (props: IElevatedStateProps){
   const [prevTitleIsFilename, setPrevTitleIsFilename] = useState(false);
   const [title, setTitle] = useState(defaultShiftTitle);
   const [updateTitle, setUpdateTitle] = useState(true);
-  const [titleUpdated, setTitleUpdated] = useState(false);
+  const [titleReset, setTitleReset] = useState(false);
 
   const [trainingDataTypes, setTrainingDataTypes] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
@@ -133,9 +133,9 @@ export function Load (props: IElevatedStateProps){
     if(!baseMedia) return;
 
     if(title === defaultShiftTitle ||
-      (title !== baseMedia.name.split('.')[0] && updateTitle)|| prevTitleIsFilename){
+      (title !== baseMedia.name.split('.')[0] && updateTitle) || prevTitleIsFilename){
       setTitle(baseMedia.name.split('.')[0]);
-      setTitleUpdated(true)
+      setTitleReset(true)
       setUpdateTitle(false)
       setPrevTitleIsFilename(true);
     }
@@ -145,7 +145,7 @@ export function Load (props: IElevatedStateProps){
 
   function onTitleChange(event:React.ChangeEvent<HTMLInputElement>){
     setTitle(event.target.value)
-    setTitleUpdated(false)
+    setTitleReset(false)
     setUpdateTitle(false)
     setPrevTitleIsFilename(false)
   }
@@ -153,16 +153,16 @@ export function Load (props: IElevatedStateProps){
   var titleBar = (
     <Col xs={6}>
       <TextBox className="borderRadius-2 m-2 w-100 p-2" type="text" placeholder="My Shift"
-               onChange={onTitleChange}/>
+               onChange={onTitleChange} value={title}/>
     </Col>
   );
-  if(!titleUpdated && baseMedia && ((title !== defaultShiftTitle)
+  if(!titleReset && baseMedia && ((title !== defaultShiftTitle)
      || (title !== baseMedia!.name.split('.')[0]))){
     titleBar = (
       <>
         <Col xs={5}>
           <TextBox className="borderRadius-2 my-2 w-100 py-2" type="text" placeholder="My Shift"
-                    onChange={onTitleChange} autoFocus/>
+                   onChange={onTitleChange} autoFocus value={title}/>
         </Col>
         <Col xs={1}>
           <Button className="borderRadius-2 my-2 py-2 align-items-center"
@@ -413,10 +413,10 @@ export function Load (props: IElevatedStateProps){
         <Col xs={10}>
           <Button className="p-2 mt-2 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => setFetching(true)}>Load</Button>
         </Col>
-        <Col xs={1} className=" justify-content-center my-auto">
+        <Col xs={1} className="justify-content-center my-auto">
           <h5 className="m-0">PTM:</h5>
         </Col>
-        <Col xs={1} className="p-2">
+        <Col xs={1} className="justify-content-center my-auto">
           <Checkbox checked={elevatedState().usePTM}
             onChange={() => setElevatedState((prev) => ({...prev, usePTM: !elevatedState().usePTM}))}/>
         </Col>
@@ -437,7 +437,7 @@ export function Load (props: IElevatedStateProps){
       {titleComponent}
       {loadMediaComponent}
       {fetching ? <Row className="justify-content-center"><Loader/></Row> : <></>}
-      <Row className="mt-3">
+      <Row className="mt-3 justify-content-center">
         {loadButtonsComponent}
       </Row>
     </Container>
