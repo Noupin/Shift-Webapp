@@ -110,10 +110,10 @@ export default function App() {
               </Alert>
 
               <Switch>
-                <Route path="/register">
+                <Route path="/register/:redirect?">
                   <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <Route path="/login">
+                <Route path="/login/:redirect?">
                   <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/change-password">

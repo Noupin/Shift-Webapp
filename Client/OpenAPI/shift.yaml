@@ -136,6 +136,9 @@ definitions:
         type: string
       shiftUUID:
         type: string
+      training:
+        default: false
+        type: boolean
       usePTM:
         default: false
         type: boolean

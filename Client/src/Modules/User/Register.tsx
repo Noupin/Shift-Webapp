@@ -3,7 +3,7 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Alert } from 'react-bootstrap';
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 //First Party Imports
 import { AuthenticateAPIInstance } from '../../Helpers/Api';
@@ -36,6 +36,7 @@ export function Register (props: IElevatedStateProps){
   const [authenticating, setAuthenticating] = useState(false);
 
   const history = useHistory();
+  const {redirect} = useParams<{redirect: string | undefined}>()
 
 
   const auth = useAuthenticate(setAuthenticating, props.setElevatedState)
@@ -108,7 +109,12 @@ export function Register (props: IElevatedStateProps){
   useEffect(() => {
     if(!elevatedState().authenticated) return;
 
-    history.push("/")
+    if(redirect){
+      history.push(`/${redirect}`)
+    }
+    else{
+      history.push("/")
+    }
   }, [elevatedState().authenticated]);
 
 

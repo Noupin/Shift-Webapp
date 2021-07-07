@@ -23,7 +23,6 @@ import { TextBox } from '../../Components/TextBox/TextBox';
 import { LoadDataResponse, LoadDataRequest } from '../../Swagger';
 import { LoadAPIInstance } from '../../Helpers/Api';
 import { Loader } from '../../Components/Loader/Loader';
-import { Checkbox } from '../../Components/Checkbox/Checkbox';
 
 
 function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<IElevatedPageState>>, setFiles: React.Dispatch<React.SetStateAction<File[]>>){

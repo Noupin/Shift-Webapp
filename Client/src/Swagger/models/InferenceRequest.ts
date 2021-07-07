@@ -36,6 +36,12 @@ export interface InferenceRequest {
      * @type {boolean}
      * @memberof InferenceRequest
      */
+    training?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InferenceRequest
+     */
     usePTM?: boolean;
 }
 
@@ -51,6 +57,7 @@ export function InferenceRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
         
         'prebuiltShiftModel': !exists(json, 'prebuiltShiftModel') ? undefined : json['prebuiltShiftModel'],
         'shiftUUID': json['shiftUUID'],
+        'training': !exists(json, 'training') ? undefined : json['training'],
         'usePTM': !exists(json, 'usePTM') ? undefined : json['usePTM'],
     };
 }
@@ -66,6 +73,7 @@ export function InferenceRequestToJSON(value?: InferenceRequest | null): any {
         
         'prebuiltShiftModel': value.prebuiltShiftModel,
         'shiftUUID': value.shiftUUID,
+        'training': value.training,
         'usePTM': value.usePTM,
     };
 }

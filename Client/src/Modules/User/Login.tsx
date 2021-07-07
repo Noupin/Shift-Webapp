@@ -3,7 +3,7 @@
 //Third Party Imports
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Alert } from 'react-bootstrap';
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 //First Party Imports
 import { AuthenticateAPIInstance } from '../../Helpers/Api';
@@ -34,12 +34,14 @@ export function Login (props: IElevatedStateProps){
   const [authenticating, setAuthenticating] = useState(false);
 
   const history = useHistory();
+  const {redirect} = useParams<{redirect: string | undefined}>()
 
   const auth = useAuthenticate(setAuthenticating, setElevatedState);
 
 
   useEffect(() => {
     document.title = pageTitles["login"]
+    console.log(redirect)
   }, [])
 
   useEffect(() => {
@@ -90,7 +92,12 @@ export function Login (props: IElevatedStateProps){
   useEffect(() => {
     if(!elevatedState().authenticated) return;
 
-    history.push("/")
+    if(redirect){
+      history.push(`/${redirect}`)
+    }
+    else{
+      history.push("/")
+    }
   }, [elevatedState().authenticated]);
 
 
