@@ -146,6 +146,9 @@ export default function App() {
                 <Route exact path="/">
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
+                <Route path="/">
+                  EROR
+                </Route>
               </Switch>
 
             </div>

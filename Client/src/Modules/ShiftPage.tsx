@@ -175,7 +175,10 @@ export function ShiftPage (props: IElevatedStateProps){
               </a>
             </Col>
             <Col>
-              <Button className="p-2 borderRadius-2 w-100">
+              <Button className="p-2 borderRadius-2 w-100" onClick={() => {
+                setElevatedState(prev => ({...prev, prebuiltShiftModel: uuid}))
+                history.push("/load")
+              }}>
                 Shift &#10140;
               </Button>
             </Col>
