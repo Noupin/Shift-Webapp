@@ -179,7 +179,7 @@ export function Register (props: IElevatedStateProps){
       <Row className="mt-auto mb-3">
         <Col xs={4}></Col>
         <Col xs={4}>
-          <Link to="/login" className="w-100">
+          <Link to={`/login${redirect ? `/${redirect}`:""}`} className="w-100">
             <Button className="p-2 mb-2 borderRadius-2 w-100">Already Have An Account?</Button>
           </Link>
         </Col>

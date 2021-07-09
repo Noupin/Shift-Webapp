@@ -70,6 +70,7 @@ export function Inference (props: IElevatedStateProps){
 			const inferenceStatusRequestParams: InferenceRequest = {
 				shiftUUID: elevatedState().shiftUUID,
 				usePTM: elevatedState().usePTM,
+				training: elevatedState().trainingShift,
 				prebuiltShiftModel: elevatedState().prebuiltShiftModel
 			};
 			const inferenceStatusBody: InferenceStatusRequest = {

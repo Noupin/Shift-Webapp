@@ -13,7 +13,7 @@ function ProtectedRoute ({expression, children, ...rest }: IProtectedRoute) {
     <Route {...rest} render={() => {
       return expression
         ? children
-        : <Redirect to='/login' />
+        : <Redirect to={`/login${rest.path}`} />
     }} />
   )
 }
