@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router,
          Switch, Route } from "react-router-dom";
 import { Container, Row, Col, Alert } from "react-bootstrap";
+import CookieConsent from "react-cookie-consent";
 
 //First Party Imports
 import { IElevatedPageState } from "./Interfaces/PageState";
@@ -155,6 +156,14 @@ export default function App() {
           </Col>
         </Row>
       </Container>
+      <CookieConsent location="bottom" buttonText="Okay" cookieName="ShiftAllowCookies"
+        disableStyles={true} style={{zIndex: 999}}
+        containerClasses="alert alert-warning align-baseline position-fixed bottom-0 w-100 m-0"
+        buttonClasses="neuPress neuHover neumorphic borderRadius-2 py-2 px-4 mt-3">
+        <h5>Accept Cookies</h5>
+        By continuing to browse or clicking "Okay", you agree to the storing of cookies
+        on your device for Shift to work correctly.
+      </CookieConsent>
     </Router>
   );
 }
