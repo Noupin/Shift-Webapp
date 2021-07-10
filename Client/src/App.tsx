@@ -28,6 +28,7 @@ import { ResetPassword } from './Modules/User/ResetPassword';
 import { Settings } from './Modules/User/Settings';
 import { ForgotPassword } from './Modules/User/ForgotPassword';
 import './App.scss';
+import { setCurrentUser } from './Helpers/Cookies';
 
 
 export default function App() {
@@ -60,6 +61,7 @@ export default function App() {
 
   useEffect(() => {
     if(!fetching) return;
+
     auth()
   }, [fetching]);
 
@@ -78,7 +80,7 @@ export default function App() {
   useEffect(() => {
     if(!elevatedState.user) return;
 
-    sessionStorage.setItem("username", elevatedState.user.username);
+    setCurrentUser(elevatedState.user)
   }, [elevatedState.user]);
 
   useEffect(() => {

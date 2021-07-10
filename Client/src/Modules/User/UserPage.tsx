@@ -17,6 +17,7 @@ import { pageTitles } from '../../constants';
 import { GetIndivdualUserRequest, UserShiftsRequest, Shift,
   UserShiftsResponse} from '../../Swagger';
 import { UserComponent } from '../../Components/User/UserComponent';
+import { currentUser } from '../../Helpers/Cookies';
 
 
 export function UserPage (props: IElevatedStateProps){
@@ -57,7 +58,7 @@ export function UserPage (props: IElevatedStateProps){
           <UserComponent username={username} elevatedState={elevatedState} setElevatedState={setElevatedState}/>
         </Col>
         <Col xs={9} className="p-2">
-          {username === elevatedState().user.username &&
+          {username === currentUser().username &&
           <Row className="justify-content-end">
             <NavLink to="/settings" className="textColor" style={{fontSize: "1.5em"}}>
               <FontAwesomeIcon icon={faCog}/>

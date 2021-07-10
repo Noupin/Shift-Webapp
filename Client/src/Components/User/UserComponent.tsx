@@ -18,6 +18,7 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { UserButtonComponent } from './UserButtonsComponent';
 import { ProfileMediaComponent } from './ProfileMediaComponent';
 import { useAuthenticate } from '../../Hooks/Authenticate';
+import { currentUser } from '../../Helpers/Cookies';
 
 
 interface IUserComponent{
@@ -165,7 +166,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
           <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
             setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
         </Row>
-        {username === elevatedState().user.username && 
+        {username === currentUser().username && 
         <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>}
       </>
     )

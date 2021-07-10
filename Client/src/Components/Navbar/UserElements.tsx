@@ -12,6 +12,7 @@ import { Button } from '../../Components/Button/Button';
 import { useAuthenticate } from '../../Hooks/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { LogoutResponse } from '../../Swagger';
+import { currentUser } from '../../Helpers/Cookies';
 
 
 export function UserElements (props: IElevatedStateProps){
@@ -52,7 +53,7 @@ export function UserElements (props: IElevatedStateProps){
     return (
       <>
       <div className="mx-1 my-1">
-        <NavLink to={`/user/${elevatedState().user.username}`} activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
+        <NavLink to={`/user/${currentUser().username}`} activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
           Account
         </NavLink>
       </div>
