@@ -44,7 +44,7 @@ export default function App() {
     trainingShift: false,
   })
 
-  const getElevatedState = function(){ return elevatedState };
+  const getElevatedState = () => { return elevatedState };
 
   const [showMsg, setShowMsg] = useState(false);
 
