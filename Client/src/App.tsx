@@ -47,10 +47,9 @@ export default function App() {
   const getElevatedState = () => { return elevatedState };
 
   const [showMsg, setShowMsg] = useState(false);
-
   const [fetching, setFetching] = useState(true)
-  
-    
+
+
   const auth = useAuthenticate(setFetching, setElevatedState)
 
   useEffect(() => {
@@ -87,9 +86,6 @@ export default function App() {
     console.error(elevatedState.error);
   }, [elevatedState.error]);
 
-  useEffect(() => {
-    console.log(elevatedState)
-  }, [elevatedState])
 
   return (
     <Router>
