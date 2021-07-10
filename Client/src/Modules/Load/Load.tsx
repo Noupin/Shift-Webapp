@@ -8,11 +8,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
-import { defaultShiftTitle, pageTitles } from "../../constants";
+import { defaultShiftTitle, pageTitles, videoTypes } from "../../constants";
 import { fillArray } from "../../Helpers/Arrays";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { LoadDataResponse, LoadDataRequest } from '../../Swagger';
-import { LoadAPIInstance } from '../../Helpers/Api';
+import { LoadDataResponse, LoadDataRequest, GetIndivdualShiftRequest } from '../../Swagger';
+import { LoadAPIInstance, ShiftAPIInstance } from '../../Helpers/Api';
 import { Loader } from '../../Components/Loader/Loader';
 import { LoadMediaComponent } from '../../Components/Load/LoadMediaComponent';
 import { LoadTitleComponent } from '../../Components/Load/LoadTitleComponent';
@@ -39,6 +39,21 @@ export function Load (props: IElevatedStateProps){
   useEffect(() => {
     document.title = pageTitles["load"]
     setElevatedState((prev) => ({...prev, prebuiltShiftModel: "", shiftTitle: defaultShiftTitle}))
+
+    async function setMediaFromPrebuilt(){
+      const requestParams: GetIndivdualShiftRequest = {
+        uuid: elevatedState().prebuiltShiftModel
+      }
+      const shiftResponse = await ShiftAPIInstance.getIndivdualShift(requestParams)
+      const apiPrefix = videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'
+      const baseMediaResponse = await fetch(`${apiPrefix}${shiftResponse.shift!.baseMediaFilename!}`)
+      const baseMediaBlob = await baseMediaResponse.blob()
+      setBaseMedia(new File([baseMediaBlob], shiftResponse.shift!.baseMediaFilename!))
+    }
+
+    if(elevatedState().prebuiltShiftModel){
+      setMediaFromPrebuilt()
+    }
   }, []);
 
   //Load Request

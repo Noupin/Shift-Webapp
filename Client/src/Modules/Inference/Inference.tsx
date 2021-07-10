@@ -13,7 +13,8 @@ import { Button } from '../../Components/Button/Button';
 import { InferenceAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { CombinedInferenceResponse } from '../../Interfaces/CombinedInference';
-import { InferenceOperationRequest, InferenceRequest, InferenceStatusRequest } from '../../Swagger';
+import { InferenceOperationRequest, InferenceRequest,
+				 InferenceStatusRequest } from '../../Swagger';
 import { pageTitles, videoTypes } from "../../constants";
 import { Loader } from "../../Components/Loader/Loader";
 
@@ -32,7 +33,7 @@ export function Inference (props: IElevatedStateProps){
 
 
 	useEffect(() => {
-    document.title = pageTitles["infernce"]
+    document.title = pageTitles["inference"]
   }, [])
 
 	useEffect(() => {

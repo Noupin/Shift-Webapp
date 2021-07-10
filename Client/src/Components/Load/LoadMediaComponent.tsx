@@ -39,42 +39,45 @@ function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.D
 
 export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setElevatedState,
   baseMedia, setBaseMedia, baseFiles, setBaseFiles, maskFiles, setMaskFiles}): ReactElement => {
+
   let loadMediaComponent = (
     <>
-      <Row className="mt-4">
+      <Row>
         <Col className="mr-2">
           <Row className="justify-content-center p-1">
-            <h3>Base Media</h3>
+            <h3>Base Face</h3>
           </Row>
           <Row>
-            <Col className="neumorphic borderRadius-2">
-              <Row className="px-4">
-                <Col xs={11}></Col>
-                <Col xs={1}>
-                  <FileDialog className="justify-content-end" id="baseMediaUpload"
-                  onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+            <Col className="neumorphic borderRadius-2 p-0">
+              <Row className="m-0">
+                <Col xs={9}></Col>
+                <Col xs={3}>
+                  <div style={{display: "flex"}} className="justify-content-end">
+                    <FileDialog id="baseMediaUpload"
+                    onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
-                    if(badExtensions.length > 0){
-                      setElevatedState((prev) => ({...prev,
-                        msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
-                    }
-                    if(filteredFiles.length === 0){
-                      setBaseMedia(undefined)
-                    }
-                    else{
-                      setBaseMedia(filteredFiles[0])
-                    }
-                  }}>&#x21c6;</FileDialog>
+                      if(badExtensions.length > 0){
+                        setElevatedState((prev) => ({...prev,
+                          msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                      }
+                      if(filteredFiles.length === 0){
+                        setBaseMedia(undefined)
+                      }
+                      else{
+                        setBaseMedia(filteredFiles[0])
+                      }
+                    }}>&#x21c6;</FileDialog>
+                  </div>
                 </Col>
               </Row>
               {baseMedia ? 
-              <Media setElevatedState={setElevatedState} className="borderRadius-2 mb-3
+              <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
                      object-fit-contain" key={!baseMedia ? "": baseMedia.name}
                      onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
                      mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
               :
-              <FileDialog id="baseMediaUpload" className="mb-4"
+              <FileDialog id="baseMediaUpload" className="mb-4 loadFileDialogText"
               style={{width: "100%", height: "auto"}}
               onFileInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
@@ -97,31 +100,33 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
         </Col>
         <Col className="ml-2">
           <Row className="justify-content-center p-1">
-            <h3>Mask Media</h3>
+            <h3>Mask Face</h3>
           </Row>
           <Row>
-            <Col className="neumorphic borderRadius-2">
-              <Row className="px-4">
-                <Col xs={11}></Col>
-                <Col xs={1}>
-                  <FileDialog className="justify-content-end" id="maskMediaUpload" onFileInput={(event) => {
-                    const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+            <Col className="neumorphic borderRadius-2 p-0">
+              <Row className="m-0">
+                <Col xs={9}></Col>
+                <Col xs={3}>
+                  <div style={{display: "flex"}} className="justify-content-end">
+                    <FileDialog id="maskMediaUpload" onFileInput={(event) => {
+                      const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
-                    if(badExtensions.length > 0){
-                      setElevatedState((prev) => ({...prev,
-                        msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
-                    }
-                    if(filteredFiles.length === 0){
-                      setMaskFiles([])
-                    }
-                    else{
-                      setMaskFiles([filteredFiles[0]])
-                    }
-                  }}>&#x21c6;</FileDialog>
+                      if(badExtensions.length > 0){
+                        setElevatedState((prev) => ({...prev,
+                          msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                      }
+                      if(filteredFiles.length === 0){
+                        setMaskFiles([])
+                      }
+                      else{
+                        setMaskFiles([filteredFiles[0]])
+                      }
+                    }}>&#x21c6;</FileDialog>
+                  </div>
                 </Col>
               </Row>
               {maskFiles.length > 0 ?
-              <Media setElevatedState={setElevatedState} className="borderRadius-2 mb-3
+              <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
                      object-fit-contain"
                      key={!maskFiles[0] ? "": maskFiles[0].name}
                      onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
@@ -164,22 +169,24 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
           <Col xs={2}></Col>
           <Col xs={8} className="neumorphic borderRadius-2">
             <Row className="px-4">
-              <Col xs={11}></Col>
-              <Col xs={1}>
-                <FileDialog className="justify-content-end" id="baseMediaUpload" onFileInput={(event) => {
-                  const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
+              <Col xs={9}></Col>
+              <Col xs={3}>
+                <div style={{display: "flex"}} className="justify-content-end">
+                  <FileDialog className="justify-content-end" id="baseMediaUpload" onFileInput={(event) => {
+                    const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
-                  if(badExtensions.length > 0){
-                    setElevatedState((prev) => ({...prev,
-                      msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
-                  }
-                  if(filteredFiles.length === 0){
-                    setBaseMedia(undefined)
-                  }
-                  else{
-                    setBaseMedia(filteredFiles[0])
-                  }
-                }}>&#x21c6;</FileDialog>
+                    if(badExtensions.length > 0){
+                      setElevatedState((prev) => ({...prev,
+                        msg: `The file type ${badExtensions[0]} is not allowed to be selected`}))
+                    }
+                    if(filteredFiles.length === 0){
+                      setBaseMedia(undefined)
+                    }
+                    else{
+                      setBaseMedia(filteredFiles[0])
+                    }
+                  }}>&#x21c6;</FileDialog>
+                </div>
               </Col>
             </Row>
             {baseMedia ? 
@@ -214,12 +221,14 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
             <h4>Extra Base Faces</h4>
             <div className="neumorphic borderRadius-2">
               <Row className="px-4">
-                <Col xs={11}></Col>
-                <Col xs={1} >
-                  <FileDialog className="justify-content-end" id="baseFileUpload" mutipleSelect={true}
-                              onFileInput={(event) => checkFile(event, setElevatedState, setBaseFiles)}>
-                    &#43;
-                  </FileDialog>
+                <Col xs={9}></Col>
+                <Col xs={3}>
+                  <div style={{display: "flex"}} className="justify-content-end">
+                    <FileDialog className="justify-content-end" id="baseFileUpload" mutipleSelect={true}
+                      onFileInput={(event) => checkFile(event, setElevatedState, setBaseFiles)}>
+                      &#43;
+                    </FileDialog>
+                  </div>
                 </Col>
               </Row>
               {baseFiles.length > 0 ?
@@ -240,12 +249,14 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
             <h4>Mask Face</h4>
             <div className="neumorphic borderRadius-2">
               <Row className="px-4">
-                <Col xs={11}></Col>
-                <Col xs={1} >
-                  <FileDialog className="justify-content-end" id="maskFileUpload" mutipleSelect={true}
-                              onFileInput={(event) => checkFile(event, setElevatedState, setMaskFiles)}>
-                    &#43;
-                  </FileDialog>
+                <Col xs={9}></Col>
+                <Col xs={3}>
+                  <div style={{display: "flex"}} className="justify-content-end">
+                    <FileDialog className="justify-content-end" id="maskFileUpload" mutipleSelect={true}
+                      onFileInput={(event) => checkFile(event, setElevatedState, setMaskFiles)}>
+                      &#43;
+                    </FileDialog>
+                  </div>
                 </Col>
               </Row>
               {maskFiles.length > 0 ?

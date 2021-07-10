@@ -11,7 +11,7 @@ export const defaultShiftTitle = ""
 export const pageTitleTemplate = (title: string) => `${title} - Shift`;
 
 export const pageTitles = {
-  'infernce': pageTitleTemplate("Inference"),
+  'inference': pageTitleTemplate("Inference"),
   'load': pageTitleTemplate("Load"),
   'train': pageTitleTemplate("Train"),
   'advancedTrain': pageTitleTemplate("Advanced Train"),
