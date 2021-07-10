@@ -28,7 +28,7 @@ import { ResetPassword } from './Modules/User/ResetPassword';
 import { Settings } from './Modules/User/Settings';
 import { ForgotPassword } from './Modules/User/ForgotPassword';
 import './App.scss';
-import { setCurrentUser } from './Helpers/Cookies';
+import { setCurrentUser } from './Helpers/User';
 
 
 export default function App() {

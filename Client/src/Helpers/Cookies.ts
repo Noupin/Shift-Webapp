@@ -1,5 +1,3 @@
-import { User } from "../Swagger";
-
 export function getCookie(name: string){
   const fullName = `${name}=`;
   const cDecoded = decodeURIComponent(document.cookie); //to be careful
@@ -27,19 +25,4 @@ export function setCookie(name: string, value: string, expDays?: number){
 
 export function deleteCookie(name: string){
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-}
-
-export function currentUser(): User{
-  const encodedUser = getCookie("user")
-  const decodedUser = atob(encodedUser)
-  const user: User = JSON.parse(decodedUser)
-
-  return user
-}
-
-export function setCurrentUser(value: any, expDays?: number){
-  const jsonStrValue = JSON.stringify(value);
-  const encodedValue = btoa(jsonStrValue)
-
-  setCookie("user", encodedValue, expDays)
 }

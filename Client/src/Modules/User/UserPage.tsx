@@ -17,7 +17,7 @@ import { pageTitles } from '../../constants';
 import { GetIndivdualUserRequest, UserShiftsRequest, Shift,
   UserShiftsResponse} from '../../Swagger';
 import { UserComponent } from '../../Components/User/UserComponent';
-import { currentUser } from '../../Helpers/Cookies';
+import { currentUser } from '../../Helpers/User';
 
 
 export function UserPage (props: IElevatedStateProps){

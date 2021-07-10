@@ -18,7 +18,7 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { UserButtonComponent } from './UserButtonsComponent';
 import { ProfileMediaComponent } from './ProfileMediaComponent';
 import { useAuthenticate } from '../../Hooks/Authenticate';
-import { currentUser } from '../../Helpers/Cookies';
+import { currentUser } from '../../Helpers/User';
 
 
 interface IUserComponent{

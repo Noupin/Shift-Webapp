@@ -12,7 +12,7 @@ import { Button } from '../../Components/Button/Button';
 import { useAuthenticate } from '../../Hooks/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { LogoutResponse } from '../../Swagger';
-import { currentUser } from '../../Helpers/Cookies';
+import { currentUser } from '../../Helpers/User';
 
 
 export function UserElements (props: IElevatedStateProps){
