@@ -118,22 +118,19 @@ export function Inference (props: IElevatedStateProps){
 			</Row>
 			{updating ? <Row className="justify-content-center"><Loader/></Row> : <></>}
 			<Row className="my-2">
-				<Col xs={1}></Col>
-				<Col xs={2} className="pr-4">
+				{elevatedState().trainingShift && <Col className="px-2">
 					<Link to="/train" className="w-100">
             <Button className="borderRadius-2 p-2 w-100" disabled={inference}>&#x2190; Train More</Button>
           </Link>
-				</Col>
-				<Col xs={2} className="pl-4">
+				</Col>}
+				<Col className="px-2">
 					<Link to="/load" className="w-100">
             <Button className="borderRadius-2 p-2 w-100" disabled={inference} onClick={() => setInference(true)}>Shift Again &#x21ba;</Button>
           </Link>
 				</Col>
-				<Col xs={1}></Col>
-				<Col xs={5}>
+				<Col className="px-2">
 					<Button className="borderRadius-2 p-2 w-100" disabled={inference}>Share</Button>
 				</Col>
-				<Col xs={1}></Col>
 			</Row>
 		</Container>
 	);
