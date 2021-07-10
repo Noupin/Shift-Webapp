@@ -24,8 +24,8 @@ export const Dropdown = (props: IDropdown) => {
         <p {...dropdownProps} className={cssClasses}>
           {defaultOption}
         </p>
-        <FontAwesomeIcon style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", fontSize: "1.5em"}}
-          className="pr-1" icon={open ? faChevronUp : faChevronDown}/>
+        <FontAwesomeIcon style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", fontSize: "1.25em"}}
+          className="mr-3" icon={open ? faChevronUp : faChevronDown}/>
       </div>
       <div className="neumorphic borderRadius-2">
       {open && options.map(option => (

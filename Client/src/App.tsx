@@ -87,6 +87,10 @@ export default function App() {
     console.error(elevatedState.error);
   }, [elevatedState.error]);
 
+  useEffect(() => {
+    console.log(elevatedState)
+  }, [elevatedState])
+
   return (
     <Router>
       <Container fluid className="flex h-100">
