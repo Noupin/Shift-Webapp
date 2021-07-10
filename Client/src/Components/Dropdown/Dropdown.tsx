@@ -19,7 +19,8 @@ export const Dropdown = (props: IDropdown) => {
   const [open, setOpen] = useState(false)
 
   return(
-    <div onClick={() => setOpen(prev => !prev)}>
+    <div className="noTextSelect" tabIndex={0}
+      onClick={() => setOpen(prev => !prev)} onBlur={() => setOpen(false)}>
       <div style={{position: "relative"}}>
         <p {...dropdownProps} className={cssClasses}>
           {defaultOption}
@@ -27,14 +28,15 @@ export const Dropdown = (props: IDropdown) => {
         <FontAwesomeIcon style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", fontSize: "1.25em"}}
           className="mr-3" icon={open ? faChevronUp : faChevronDown}/>
       </div>
-      <div className="neumorphic borderRadius-2">
-      {open && options.map(option => (
-        <p className="dropdownOption my-1 p-2 borderRadius-2"
-          onClick={() => onOptionChange(option)}>
-          {option}
-        </p>
-      ))}
-      </div>
+      {open &&
+      <div className="neumorphic borderRadius-2 mt-3">
+        {options.map(option => (
+          <p className="dropdownOption my-1 p-2 borderRadius-2"
+            onClick={() => onOptionChange(option)}>
+            {option}
+          </p>
+        ))}
+      </div>}
     </div>
   );
 }
