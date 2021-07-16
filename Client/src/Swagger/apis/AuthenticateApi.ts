@@ -15,9 +15,6 @@
 
 import * as runtime from '../runtime';
 import {
-    AuthenticatedResponse,
-    AuthenticatedResponseFromJSON,
-    AuthenticatedResponseToJSON,
     LoginRequest,
     LoginRequestFromJSON,
     LoginRequestToJSON,
@@ -27,6 +24,9 @@ import {
     LogoutResponse,
     LogoutResponseFromJSON,
     LogoutResponseToJSON,
+    RefreshResponse,
+    RefreshResponseFromJSON,
+    RefreshResponseToJSON,
     RegisterRequest,
     RegisterRequestFromJSON,
     RegisterRequestToJSON,
@@ -49,32 +49,6 @@ export interface RegisterOperationRequest {
 export class AuthenticateApi extends runtime.BaseAPI {
 
     /**
-     * Whether the user is logged in currently or not.
-     */
-    async authenticatedRaw(): Promise<runtime.ApiResponse<AuthenticatedResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/authenticate/`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AuthenticatedResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Whether the user is logged in currently or not.
-     */
-    async authenticated(): Promise<AuthenticatedResponse> {
-        const response = await this.authenticatedRaw();
-        return await response.value();
-    }
-
-    /**
      * The login for the user.
      */
     async loginRaw(requestParameters: LoginOperationRequest): Promise<runtime.ApiResponse<LoginResponse>> {
@@ -83,6 +57,10 @@ export class AuthenticateApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
 
         const response = await this.request({
             path: `/api/authenticate/login`,
@@ -112,7 +90,7 @@ export class AuthenticateApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["session"] = this.configuration.apiKey("session"); // UserAuth authentication
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
         }
 
         const response = await this.request({
@@ -134,6 +112,32 @@ export class AuthenticateApi extends runtime.BaseAPI {
     }
 
     /**
+     * Refreshes the users access token.
+     */
+    async refreshRaw(): Promise<runtime.ApiResponse<RefreshResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/authenticate/refresh`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RefreshResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Refreshes the users access token.
+     */
+    async refresh(): Promise<RefreshResponse> {
+        const response = await this.refreshRaw();
+        return await response.value();
+    }
+
+    /**
      * The regitration for the user.
      */
     async registerRaw(requestParameters: RegisterOperationRequest): Promise<runtime.ApiResponse<RegisterResponse>> {
@@ -142,6 +146,10 @@ export class AuthenticateApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
 
         const response = await this.request({
             path: `/api/authenticate/register`,

@@ -10,14 +10,13 @@ import { faCog } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from 'react-router-dom';
 
 //First Party Imports
-import { UserAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 import { pageTitles } from '../../constants';
 import { GetIndivdualUserRequest, UserShiftsRequest, Shift,
   UserShiftsResponse} from '../../Swagger';
 import { UserComponent } from '../../Components/User/UserComponent';
-import { currentUser } from '../../Helpers/User';
+import { useFetch } from '../../Hooks/Fetch';
 
 
 export function UserPage (props: IElevatedStateProps){
@@ -27,6 +26,10 @@ export function UserPage (props: IElevatedStateProps){
 
   const [userShiftsResponse, setUserShiftsResponse] = useState<UserShiftsResponse>();
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
+  const [owner, setOwner] = useState(false)
+  const fetchUserShifts = useFetch(elevatedState().APIInstaces.User,
+                                   elevatedState().APIInstaces.User.userShifts,
+                                   setElevatedState, setUserShiftsResponse)
 
 
   useEffect(() => {
@@ -39,9 +42,7 @@ export function UserPage (props: IElevatedStateProps){
       username: username
     }
 
-    UserAPIInstance.userShifts(urlParams).then((value) => {
-      setUserShiftsResponse(value!)
-    })
+    fetchUserShifts(urlParams)
   }, [username]);
 
   useEffect(() => {
@@ -55,10 +56,11 @@ export function UserPage (props: IElevatedStateProps){
     <Container key={username}>
       <Row>
         <Col xs={3}>
-          <UserComponent username={username} elevatedState={elevatedState} setElevatedState={setElevatedState}/>
+          <UserComponent username={username} elevatedState={elevatedState}
+            setElevatedState={setElevatedState} setOwner={setOwner}/>
         </Col>
-        <Col xs={9} className="p-2">
-          {username === currentUser().username &&
+        <Col xs={9} className="p-2" key={elevatedState().accessToken}>
+          {owner && elevatedState().authenticated &&
           <Row className="justify-content-end">
             <NavLink to="/settings" className="textColor" style={{fontSize: "1.5em"}}>
               <FontAwesomeIcon icon={faCog}/>

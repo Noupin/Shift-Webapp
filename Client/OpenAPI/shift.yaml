@@ -1,15 +1,4 @@
 definitions:
-  AuthenticatedResponse:
-    properties:
-      authenticated:
-        default: false
-        type: boolean
-      msg:
-        default: ''
-        type: string
-      user:
-        $ref: '#/definitions/User'
-    type: object
   CategoriesResponse:
     properties:
       categories:
@@ -189,9 +178,6 @@ definitions:
     properties:
       password:
         type: string
-      remember:
-        default: true
-        type: boolean
       usernameOrEmail:
         type: string
     required:
@@ -200,6 +186,9 @@ definitions:
     type: object
   LoginResponse:
     properties:
+      accessToken:
+        default: ''
+        type: string
       msg:
         default: ''
         type: string
@@ -232,6 +221,16 @@ definitions:
           $ref: '#/definitions/Shift'
         type: array
     type: object
+  RefreshResponse:
+    properties:
+      accessToken:
+        default: ''
+        type: string
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+    type: object
   RegisterRequest:
     properties:
       email:
@@ -247,6 +246,9 @@ definitions:
     type: object
   RegisterResponse:
     properties:
+      accessToken:
+        default: ''
+        type: string
       emailMessage:
         default: ''
         type: string
@@ -440,7 +442,7 @@ paths:
           schema:
             $ref: '#/definitions/LoadDataResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - Load
   /api/train:
@@ -466,7 +468,7 @@ paths:
           schema:
             $ref: '#/definitions/TrainResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - Train
   /api/trainStatus:
@@ -494,7 +496,7 @@ paths:
           schema:
             $ref: '#/definitions/TrainStatusResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - Train
   /api/stopTraining:
@@ -518,44 +520,9 @@ paths:
           schema:
             $ref: '#/definitions/StopTrainResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - Train
-  /api/authenticate/register:
-    post:
-      description: The regitration for the user.
-      operationId: register
-      parameters:
-      - description: The name the user has picked for their account, the password
-          associated with the username of the user logging in, and the email to be
-          registered with the new account.
-        in: body
-        name: body
-        required: false
-        schema:
-          $ref: '#/definitions/RegisterRequest'
-      responses:
-        default:
-          description: The status of the register attempt, a specific message for
-            the username, a specific message for the email, and a specific message
-            for the password.
-          schema:
-            $ref: '#/definitions/RegisterResponse'
-      tags:
-      - Authenticate
-  /api/authenticate/:
-    get:
-      description: Whether the user is logged in currently or not.
-      operationId: authenticated
-      parameters: []
-      responses:
-        default:
-          description: Whether the use is authenticated or not and their user object
-            if they are authenticated.
-          schema:
-            $ref: '#/definitions/AuthenticatedResponse'
-      tags:
-      - Authenticate
   /api/authenticate/login:
     post:
       description: The login for the user.
@@ -571,10 +538,13 @@ paths:
           $ref: '#/definitions/LoginRequest'
       responses:
         default:
-          description: The status of the login attempt, a specific message for the
-            username and a specific message for the password.
+          description: The status of the login attempt, an access token to use for
+            protected routes, a specific message for the username and a specific message
+            for the password.
           schema:
             $ref: '#/definitions/LoginResponse'
+      security:
+      - Bearer: []
       tags:
       - Authenticate
   /api/authenticate/logout:
@@ -588,7 +558,47 @@ paths:
           schema:
             $ref: '#/definitions/LogoutResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
+      tags:
+      - Authenticate
+  /api/authenticate/refresh:
+    get:
+      description: Refreshes the users access token.
+      operationId: refresh
+      parameters: []
+      responses:
+        default:
+          description: The status of the refresh attempt, an access token to use for
+            protected routes.
+          schema:
+            $ref: '#/definitions/RefreshResponse'
+      security:
+      - Refresh: []
+      - CSRF_Refresh: []
+      tags:
+      - Authenticate
+  /api/authenticate/register:
+    post:
+      description: The regitration for the user.
+      operationId: register
+      parameters:
+      - description: The name the user has picked for their account, the password
+          associated with the username of the user logging in, and the email to be
+          registered with the new account.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/RegisterRequest'
+      responses:
+        default:
+          description: The status of the register attempt, an access token to use
+            for access to protected routes, a specific message for the username, a
+            specific message for the email, and a specific message for the password.
+          schema:
+            $ref: '#/definitions/RegisterResponse'
+      security:
+      - Bearer: []
       tags:
       - Authenticate
   /api/user/{username}/shifts:
@@ -628,6 +638,8 @@ paths:
             message and whether the reset was completed.
           schema:
             $ref: '#/definitions/ResetPasswordResponse'
+      security:
+      - Bearer: []
       tags:
       - User
   /api/user/data/updatePicture:
@@ -647,7 +659,7 @@ paths:
           schema:
             $ref: '#/definitions/UpdatePictureResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - User
   /api/user/{username}:
@@ -665,7 +677,7 @@ paths:
           schema:
             $ref: '#/definitions/IndividualUserDeleteResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - User
     get:
@@ -681,6 +693,8 @@ paths:
           description: The requested user.
           schema:
             $ref: '#/definitions/IndividualUserGetResponse'
+      security:
+      - Bearer: []
       tags:
       - User
     patch:
@@ -703,7 +717,7 @@ paths:
           schema:
             $ref: '#/definitions/IndividualUserPatchResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - User
   /api/user/changePassword:
@@ -725,7 +739,7 @@ paths:
           schema:
             $ref: '#/definitions/ChangePasswordResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - User
   /api/user/forgotPassword:
@@ -745,6 +759,8 @@ paths:
             and whether the request was completed.
           schema:
             $ref: '#/definitions/ForgotPasswordResponse'
+      security:
+      - Bearer: []
       tags:
       - User
   /api/inference:
@@ -769,7 +785,7 @@ paths:
           schema:
             $ref: '#/definitions/InferenceResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - Inference
   /api/inferenceStatus:
@@ -795,7 +811,7 @@ paths:
           schema:
             $ref: '#/definitions/InferenceStatusResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - Inference
   /api/content/image/{filename}:
@@ -834,11 +850,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -853,11 +869,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -938,7 +954,7 @@ paths:
           schema:
             $ref: '#/definitions/IndividualShiftDeleteResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - Shift
     get:
@@ -954,6 +970,8 @@ paths:
           description: The requested shift.
           schema:
             $ref: '#/definitions/IndividualShiftGetResponse'
+      security:
+      - Bearer: []
       tags:
       - Shift
     patch:
@@ -976,12 +994,23 @@ paths:
           schema:
             $ref: '#/definitions/IndividualShiftPatchResponse'
       security:
-      - UserAuth: []
+      - Bearer: []
       tags:
       - Shift
+schemes:
+- http
+- https
 securityDefinitions:
-  UserAuth:
+  Bearer:
     in: header
-    name: session
+    name: Authorization
+    type: apiKey
+  CSRF_Refresh:
+    in: cookie
+    name: refresh_token_cookie
+    type: apiKey
+  Refresh:
+    in: cookie
+    name: csrf_refresh_token
     type: apiKey
 swagger: '2.0'

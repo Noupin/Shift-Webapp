@@ -6,14 +6,13 @@ import { Container, Row, Col, Alert } from 'react-bootstrap';
 import { Link, useHistory, useParams } from "react-router-dom";
 
 //First Party Imports
-import { AuthenticateAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
-import { useAuthenticate } from '../../Hooks/Authenticate';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { LoginResponse, LoginRequest, LoginOperationRequest } from '../../Swagger';
 import { pageTitles } from '../../constants';
+import { useFetch } from '../../Hooks/Fetch';
 
 
 export function Login (props: IElevatedStateProps){
@@ -30,13 +29,13 @@ export function Login (props: IElevatedStateProps){
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
 
   const [fetching, setFetching] = useState(false);
-  const [loginResponse, setLoginResponse] = useState<LoginResponse>();
-  const [authenticating, setAuthenticating] = useState(false);
+  const [loginResponse, setLoginResponse] = useState<LoginResponse>(); 
+  const fetchLogin = useFetch(elevatedState().APIInstaces.Authenticate,
+                              elevatedState().APIInstaces.Authenticate.login,
+                              setElevatedState, setLoginResponse, setFetching)
 
   const history = useHistory();
-  const {redirect} = useParams<{redirect: string | undefined}>()
-
-  const auth = useAuthenticate(setAuthenticating, setElevatedState);
+  const { redirect } = useParams<{redirect: string | undefined}>()
 
 
   useEffect(() => {
@@ -52,28 +51,23 @@ export function Login (props: IElevatedStateProps){
     })
     setLoginErrorMessage("")
 
-    async function login(){
-      const loginRequestParams: LoginRequest = {
-        usernameOrEmail: usernameOrEmail,
-        password: password,
-        remember: rememberMe
-      }
-      const loginBody: LoginOperationRequest = {
-        body: loginRequestParams
-      }
-  
-      await AuthenticateAPIInstance.login(loginBody).then((value) => {
-        setLoginResponse(value)
-      })
-      setFetching(false)
-      setAuthenticating(true)
+    const loginRequestParams: LoginRequest = {
+      usernameOrEmail: usernameOrEmail,
+      password: password,
     }
-
-    login()
+    const loginBody: LoginOperationRequest = {
+      body: loginRequestParams
+    }
+  
+    fetchLogin(loginBody)
   }, [fetching]);
 
   useEffect(() => {
-    if(!authenticating || !loginResponse) return;
+    if(!loginResponse) return;
+
+    if(loginResponse.accessToken){
+      setElevatedState(prev => ({...prev, accessToken: loginResponse.accessToken!}))
+    }
 
     if(loginResponse.usernameMessage){
       setLoginErrors(prev => ({...prev, username: true}))
@@ -85,11 +79,10 @@ export function Login (props: IElevatedStateProps){
       setLoginErrorMessage(loginResponse.passwordMessage)
     }
 
-    auth()
-  }, [authenticating, loginResponse]);
+  }, [loginResponse]);
 
   useEffect(() => {
-    if(!elevatedState().authenticated) return;
+    if(!elevatedState().accessToken) return;
 
     if(redirect){
       history.push(`/${redirect}`)
@@ -97,7 +90,7 @@ export function Login (props: IElevatedStateProps){
     else{
       history.push("/")
     }
-  }, [elevatedState().authenticated]);
+  }, [elevatedState().accessToken]);
 
 
 
@@ -139,7 +132,7 @@ export function Login (props: IElevatedStateProps){
               <Col xs={2}></Col>
               <Col xs={8}>
                 <Button type="submit" className="p-2 mt-4 mb-2 borderRadius-2 w-100"
-                        disabled={fetching || authenticating} onClick={() => setFetching(true)}>
+                        disabled={fetching} onClick={() => setFetching(true)}>
                   Login &#10140;
                 </Button>
               </Col>

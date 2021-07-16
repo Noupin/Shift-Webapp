@@ -1,4 +1,3 @@
-export * from './AuthenticatedResponse';
 export * from './CategoriesResponse';
 export * from './ChangePasswordRequest';
 export * from './ChangePasswordResponse';
@@ -21,6 +20,7 @@ export * from './LoginResponse';
 export * from './LogoutResponse';
 export * from './NewShiftsResponse';
 export * from './PopularShiftsResponse';
+export * from './RefreshResponse';
 export * from './RegisterRequest';
 export * from './RegisterResponse';
 export * from './ResetPasswordRequest';

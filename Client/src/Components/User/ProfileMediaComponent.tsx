@@ -35,7 +35,7 @@ export const ProfileMediaComponent: FC<IUserButtons> = ({setElevatedState, profi
         <div id="hoverFileDialogButton" style={{maxHeight: "90%", maxWidth: "90%"}}
           className="justify-content-center p-2">
           <FileDialog className="justify-content-center align-items-center glassmorphic
-          borderRadius-2 neumorphic neuHover" id="userProfileMedia" style={{display: "flex"}}
+          borderRadius-2 neumorphic neuHover w-100 h-100" id="userProfileMedia" style={{display: "flex"}}
           onFileInput={(event) => {
             const [filteredFiles, badExtensions] = validateFileList(event.target.files!, imageTypes)
 

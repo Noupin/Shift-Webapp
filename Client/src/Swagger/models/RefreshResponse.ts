@@ -16,40 +16,28 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface LoginResponse
+ * @interface RefreshResponse
  */
-export interface LoginResponse {
+export interface RefreshResponse {
     /**
      * 
      * @type {string}
-     * @memberof LoginResponse
+     * @memberof RefreshResponse
      */
     accessToken?: string;
     /**
      * 
      * @type {string}
-     * @memberof LoginResponse
+     * @memberof RefreshResponse
      */
     msg?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginResponse
-     */
-    passwordMessage?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginResponse
-     */
-    usernameMessage?: string;
 }
 
-export function LoginResponseFromJSON(json: any): LoginResponse {
-    return LoginResponseFromJSONTyped(json, false);
+export function RefreshResponseFromJSON(json: any): RefreshResponse {
+    return RefreshResponseFromJSONTyped(json, false);
 }
 
-export function LoginResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): LoginResponse {
+export function RefreshResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): RefreshResponse {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -57,12 +45,10 @@ export function LoginResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'accessToken': !exists(json, 'accessToken') ? undefined : json['accessToken'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
-        'passwordMessage': !exists(json, 'passwordMessage') ? undefined : json['passwordMessage'],
-        'usernameMessage': !exists(json, 'usernameMessage') ? undefined : json['usernameMessage'],
     };
 }
 
-export function LoginResponseToJSON(value?: LoginResponse | null): any {
+export function RefreshResponseToJSON(value?: RefreshResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -73,8 +59,6 @@ export function LoginResponseToJSON(value?: LoginResponse | null): any {
         
         'accessToken': value.accessToken,
         'msg': value.msg,
-        'passwordMessage': value.passwordMessage,
-        'usernameMessage': value.usernameMessage,
     };
 }
 

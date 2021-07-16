@@ -6,7 +6,6 @@ import { Container, Col, Row } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router';
 
 //First Party Imports
-import { ShiftAPIInstance } from '../Helpers/Api';
 import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { IndividualShiftGetResponse } from '../Swagger/models/IndividualShiftGetResponse';
 import { Media } from '../Components/Media/Media';
@@ -14,16 +13,17 @@ import { Image } from '../Components/Image/Image';
 import LeftCurvedArrow from "../Assets/LeftCurvedArrow.svg"
 import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
 import { pageTitles, videoTypes } from '../constants';
-import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftPatchRequest,
+import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftDeleteResponse, IndividualShiftPatchRequest,
   IndividualShiftPatchResponse, PatchIndivdualShiftRequest } from '../Swagger';
 import { ShiftButtonsComponent } from '../Components/Shift/ShiftButtonsComponent';
 import { ShiftUserComponent } from '../Components/Shift/ShiftUserComponent';
 import { ShiftTitleComponent } from '../Components/Shift/ShiftTitleComponent';
 import { Button } from '../Components/Button/Button';
+import { useFetch } from '../Hooks/Fetch';
 
 
 export function ShiftPage (props: IElevatedStateProps){
-  const {setElevatedState} = props;
+  const {elevatedState, setElevatedState} = props;
   const history = useHistory();
 
   let { uuid } = useParams<GetIndivdualShiftRequest>();
@@ -34,27 +34,34 @@ export function ShiftPage (props: IElevatedStateProps){
 
   const [shiftGetResponse, setShiftGetResponse] = useState<IndividualShiftGetResponse>();
   const [shiftPatchResponse, setShiftPatchResponse] = useState<IndividualShiftPatchResponse>();
+  const [shiftDeleteResponse, setShiftDeleteResponse] = useState<IndividualShiftDeleteResponse>();
   const [shiftMediaURL, setShiftMediaURL] = useState("");
   const [baseMediaURL, setBaseMediaURL] = useState("");
   const [maskMediaURL, setMaskMediaURL] = useState("");
   
+  const fetchGetIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
+                                           elevatedState().APIInstaces.Shift.getIndivdualShift,
+                                           setElevatedState, setShiftGetResponse)
+  const fetchPatchIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
+                                             elevatedState().APIInstaces.Shift.patchIndivdualShift,
+                                             setElevatedState, setShiftPatchResponse, setSaving)
+  const fetchDeleteIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
+                                              elevatedState().APIInstaces.Shift.deleteIndivdualShift,
+                                              setElevatedState, setShiftDeleteResponse)
   
   useEffect(() => {
     document.title = pageTitles[""]
   }, [])
 
   useEffect(() => {
-    if(editing) return;
+    if(editing || saving) return;
 
     const urlParams: GetIndivdualShiftRequest = {
       uuid: uuid
     }
 
-    ShiftAPIInstance.getIndivdualShift(urlParams).then((value) => {
-      setShiftGetResponse(value!)
-    })
-
-  }, [uuid, shiftPatchResponse, editing]);
+    fetchGetIndividualShift(urlParams)
+  }, [uuid, shiftPatchResponse, editing, elevatedState().APIInstaces.apiKey]);
 
   useEffect(() => {
     if (!shiftGetResponse) return;
@@ -67,27 +74,18 @@ export function ShiftPage (props: IElevatedStateProps){
   }, [shiftGetResponse])
 
   useEffect(() => {
-    if(!saving) return;
+    if(!saving || Object.keys(shiftChanges).length === 0) return;
 
-    async function patchUser(){
-      if(Object.keys(shiftChanges).length === 0) return
-
-      const requestBody: IndividualShiftPatchRequest = {
-        data: shiftChanges
-      }
-
-      const urlParams: PatchIndivdualShiftRequest = {
-        uuid: uuid,
-        body: requestBody
-      }
-
-      await ShiftAPIInstance.patchIndivdualShift(urlParams).then((value) => {
-        setShiftPatchResponse(value!)
-      })
+    const requestBody: IndividualShiftPatchRequest = {
+      data: shiftChanges
     }
 
-    patchUser()
-    setSaving(false)
+    const urlParams: PatchIndivdualShiftRequest = {
+      uuid: uuid,
+      body: requestBody
+    }
+
+    fetchPatchIndividualShift(urlParams)
   }, [saving])
 
   useEffect(() => {
@@ -96,15 +94,19 @@ export function ShiftPage (props: IElevatedStateProps){
     setElevatedState((prev) => ({...prev, msg: shiftPatchResponse.msg!}))
   }, [shiftPatchResponse])
 
+  useEffect(() => {
+    if (!shiftDeleteResponse) return;
+
+    setElevatedState((prev) => ({...prev, msg: shiftDeleteResponse.msg!}))
+  }, [shiftDeleteResponse])
+
 
   function deleteShift(){
     const urlParams: DeleteIndivdualShiftRequest = {
       uuid: uuid
     }
 
-    ShiftAPIInstance.deleteIndivdualShift(urlParams).then((value) => {
-      setElevatedState((prev) => ({...prev, msg: value!.msg!}))
-    })
+    fetchDeleteIndividualShift(urlParams)
     history.push("/")
   }
 

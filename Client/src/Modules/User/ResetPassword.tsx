@@ -9,12 +9,13 @@ import { useParams, useHistory } from 'react-router';
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { pageTitles } from '../../constants';
-import { UserAPIInstance } from '../../Helpers/Api';
+import { useFetch } from '../../Hooks/Fetch';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { ResetPasswordOperationRequest, ResetPasswordRequest, ResetPasswordResponse } from '../../Swagger';
 
 
 export function ResetPassword (props: IElevatedStateProps){
+  const {elevatedState, setElevatedState} = props
   const history = useHistory()
   const { token } = useParams<{token: string | undefined}>()
 
@@ -29,6 +30,10 @@ export function ResetPassword (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [resetPasswordResponse, setResetPasswordResponse] = useState<ResetPasswordResponse>();
+  const fetchResetUserPassword = useFetch(elevatedState().APIInstaces.User,
+                                          elevatedState().APIInstaces.User.resetPassword,
+                                          setElevatedState, setResetPasswordResponse,
+                                          setFetching)
 
 
   useEffect(() => {
@@ -44,35 +49,24 @@ export function ResetPassword (props: IElevatedStateProps){
     })
     setResetPasswordErrorMessage("")
 
-    async function resetPassword(){
-      if (password !== confirmPassword){
-        setResetPasswordErrors(prev => ({...prev, confirmPassword: true}))
-        setResetPasswordErrorMessage("Passwords do not match");
-        setFetching(false)
-  
-        return;
-      }
-
-      const requestBody: ResetPasswordRequest = {
-        password: password
-      }
-  
-      const requestParams: ResetPasswordOperationRequest = {
-        token: token!,
-        body: requestBody
-      }
-
-      const response = await UserAPIInstance.resetPassword(requestParams)
-      setResetPasswordResponse(response)
-
+    if (password !== confirmPassword){
+      setResetPasswordErrors(prev => ({...prev, confirmPassword: true}))
+      setResetPasswordErrorMessage("Passwords do not match");
       setFetching(false)
 
-      if (response.complete){
-        history.push("/login")
-      }
+      return;
     }
 
-    resetPassword()
+    const requestBody: ResetPasswordRequest = {
+      password: password
+    }
+
+    const requestParams: ResetPasswordOperationRequest = {
+      token: token!,
+      body: requestBody
+    }
+
+    fetchResetUserPassword(requestParams)
   }, [fetching]);
 
   useEffect(() => {
@@ -81,6 +75,10 @@ export function ResetPassword (props: IElevatedStateProps){
     if(resetPasswordResponse.newPasswordMessage){
       setResetPasswordErrors(prev => ({...prev, password: true}))
       setResetPasswordErrorMessage(resetPasswordResponse.newPasswordMessage)
+    }
+
+    if (resetPasswordResponse.complete){
+      history.push("/login")
     }
   }, [resetPasswordResponse])
 

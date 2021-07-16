@@ -10,13 +10,13 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useInterval } from "../../Hooks/Interval";
 import { Media } from '../../Components/Media/Media';
 import { Button } from '../../Components/Button/Button';
-import { InferenceAPIInstance } from '../../Helpers/Api';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { CombinedInferenceResponse } from '../../Interfaces/CombinedInference';
 import { InferenceOperationRequest, InferenceRequest,
 				 InferenceStatusRequest } from '../../Swagger';
 import { pageTitles, videoTypes } from "../../constants";
 import { Loader } from "../../Components/Loader/Loader";
+import { useFetch } from '../../Hooks/Fetch';
 
 
 export function Inference (props: IElevatedStateProps){
@@ -30,6 +30,13 @@ export function Inference (props: IElevatedStateProps){
 	const [updating, setUpdating] = useState(false);
   const [inferenceResponse, setInferenceResponse] = useState<CombinedInferenceResponse>();
 	const [updateProgress, setUpdateProgress] = useState(false);
+
+	const fetchInference = useFetch(elevatedState().APIInstaces.Inference,
+																	elevatedState().APIInstaces.Inference.inference,
+																	setElevatedState, setInferenceResponse, setInference)
+	const fetchInferenceStatus = useFetch(elevatedState().APIInstaces.Inference,
+																				elevatedState().APIInstaces.Inference.inferenceStatus,
+																				setElevatedState, setInferenceResponse, setUpdateProgress)
 
 
 	useEffect(() => {
@@ -49,12 +56,9 @@ export function Inference (props: IElevatedStateProps){
       body: inferenceRequestParams
     }
 
-    InferenceAPIInstance.inference(inferenceBody).then((value) => {
-      setInferenceResponse(value)
-    })
+    fetchInference(inferenceBody)
 
 		setUpdating(true);
-		setInference(false)
 	}, [inference]);
 
 	useEffect(() => {
@@ -67,8 +71,6 @@ export function Inference (props: IElevatedStateProps){
 		if(updateProgress) return;
 
 		if(updating || !stopInference){
-			setUpdateProgress(true)
-
 			const inferenceStatusRequestParams: InferenceRequest = {
 				shiftUUID: elevatedState().shiftUUID,
 				usePTM: elevatedState().usePTM,
@@ -79,10 +81,7 @@ export function Inference (props: IElevatedStateProps){
 				body: inferenceStatusRequestParams
 			}
 	
-			await InferenceAPIInstance.inferenceStatus(inferenceStatusBody).then((value) => {
-				setInferenceResponse(value)
-			})
-			setUpdateProgress(false)
+			await fetchInferenceStatus(inferenceStatusBody)
 
 			if(inferenceResponse == null){
 				return;

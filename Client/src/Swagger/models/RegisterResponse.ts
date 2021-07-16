@@ -24,6 +24,12 @@ export interface RegisterResponse {
      * @type {string}
      * @memberof RegisterResponse
      */
+    accessToken?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterResponse
+     */
     emailMessage?: string;
     /**
      * 
@@ -55,6 +61,7 @@ export function RegisterResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
+        'accessToken': !exists(json, 'accessToken') ? undefined : json['accessToken'],
         'emailMessage': !exists(json, 'emailMessage') ? undefined : json['emailMessage'],
         'msg': !exists(json, 'msg') ? undefined : json['msg'],
         'passwordMessage': !exists(json, 'passwordMessage') ? undefined : json['passwordMessage'],
@@ -71,6 +78,7 @@ export function RegisterResponseToJSON(value?: RegisterResponse | null): any {
     }
     return {
         
+        'accessToken': value.accessToken,
         'emailMessage': value.emailMessage,
         'msg': value.msg,
         'passwordMessage': value.passwordMessage,

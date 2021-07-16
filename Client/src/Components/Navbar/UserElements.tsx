@@ -6,47 +6,38 @@ import { NavLink, useHistory } from 'react-router-dom';
 
 
 //First Party Imports
-import './Navbar.scss'
-import { AuthenticateAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
-import { useAuthenticate } from '../../Hooks/Authenticate';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { LogoutResponse } from '../../Swagger';
 import { currentUser } from '../../Helpers/User';
+import { useFetch } from '../../Hooks/Fetch';
+import './Navbar.scss'
 
 
 export function UserElements (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
 
-  const [authenticating, setAuthenticating] = useState(false);
-
   const [fetching, setFetching] = useState(false);
   const [logoutResponse, setLogoutResponse] = useState<LogoutResponse>();
+  const fetchLogout = useFetch(elevatedState().APIInstaces.Authenticate,
+                               elevatedState().APIInstaces.Authenticate.logout,
+                               setElevatedState, setLogoutResponse, setFetching)
 
   const history = useHistory();
 
-  const auth = useAuthenticate(setAuthenticating, setElevatedState)
 
   useEffect(() => {
     if(!fetching) return;
 
-    AuthenticateAPIInstance.logout().then((value) => {
-      setLogoutResponse(value)
-    })
-    setAuthenticating(true)
+    fetchLogout()
   }, [fetching]);
 
   useEffect(() => {
-    async function logout(){
-      if (!authenticating || !logoutResponse) return;
+    if (!logoutResponse) return;
 
-      setElevatedState((prev) => ({...prev, msg: logoutResponse.msg!}))
-      await auth()
-      history.push("/")
-    }
-
-    logout()
-  }, [authenticating, logoutResponse]);
+    setElevatedState((prev) => ({...prev, msg: logoutResponse.msg!, accessToken: ""}))
+    history.push("/")
+  }, [logoutResponse]);
 
 
   if(elevatedState().authenticated){
@@ -58,7 +49,7 @@ export function UserElements (props: IElevatedStateProps){
         </NavLink>
       </div>
       <div className="mx-1 my-1">
-        <Button className="neumorphic borderRadius-2 py-2 px-3 w-100 nav-link" onClick={() => setFetching(true)} disabled={fetching || authenticating}>
+        <Button className="neumorphic borderRadius-2 py-2 px-3 w-100 nav-link" onClick={() => setFetching(true)} disabled={fetching}>
           Logout
         </Button>
       </div>

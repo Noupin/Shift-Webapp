@@ -9,12 +9,13 @@ import { useHistory } from 'react-router';
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { pageTitles } from '../../constants';
-import { UserAPIInstance } from '../../Helpers/Api';
+import { useFetch } from '../../Hooks/Fetch';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { ChangePasswordOperationRequest, ChangePasswordRequest, ChangePasswordResponse } from '../../Swagger';
 
 
 export function ChangePassword (props: IElevatedStateProps){
+  const {elevatedState, setElevatedState} = props
   const history = useHistory()
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -30,6 +31,10 @@ export function ChangePassword (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [changePasswordResponse, setChangePasswordResponse] = useState<ChangePasswordResponse>();
+  const fetchChangeUserPassword = useFetch(elevatedState().APIInstaces.User,
+                                           elevatedState().APIInstaces.User.changePassword,
+                                           setElevatedState, setChangePasswordResponse,
+                                           setFetching)
 
   useEffect(() => {
     document.title = pageTitles["changePassword"]
@@ -45,33 +50,23 @@ export function ChangePassword (props: IElevatedStateProps){
     })
     setChangePasswordErrorMessage("")
 
-    async function changePassword(){
-      if (password !== confirmPassword){
-        setChangePasswordErrors(prev => ({...prev, confirmPassword: true}))
-        setChangePasswordErrorMessage("Passwords do not match");
-        setFetching(false)
-        return;
-      }
-
-      const requestBody: ChangePasswordRequest = {
-        currentPassword: currentPassword,
-        newPassword: password
-      }
-
-      const requestParams: ChangePasswordOperationRequest = {
-        body: requestBody
-      }
-
-      const response = await UserAPIInstance.changePassword(requestParams)
-      setChangePasswordResponse(response)
+    if (password !== confirmPassword){
+      setChangePasswordErrors(prev => ({...prev, confirmPassword: true}))
+      setChangePasswordErrorMessage("Passwords do not match");
       setFetching(false)
-
-      if (response.complete){
-        history.push("/")
-      }
+      return;
     }
 
-    changePassword()
+    const requestBody: ChangePasswordRequest = {
+      currentPassword: currentPassword,
+      newPassword: password
+    }
+
+    const requestParams: ChangePasswordOperationRequest = {
+      body: requestBody
+    }
+
+    fetchChangeUserPassword(requestParams)
   }, [fetching]);
 
   useEffect(() => {
@@ -85,6 +80,10 @@ export function ChangePassword (props: IElevatedStateProps){
     if(changePasswordResponse.newPasswordMessage){
       setChangePasswordErrors(prev => ({...prev, password: true}))
       setChangePasswordErrorMessage(changePasswordResponse.newPasswordMessage)
+    }
+
+    if (changePasswordResponse!.complete){
+      history.push("/")
     }
   }, [changePasswordResponse])
 

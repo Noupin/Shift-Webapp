@@ -9,13 +9,13 @@ import { useHistory } from 'react-router';
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { pageTitles } from '../../constants';
-import { UserAPIInstance } from '../../Helpers/Api';
+import { useFetch } from '../../Hooks/Fetch';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { ForgotPasswordOperationRequest, ForgotPasswordRequest, ForgotPasswordResponse } from '../../Swagger';
 
 
 export function ForgotPassword (props: IElevatedStateProps){
-  const {setElevatedState} = props;
+  const {elevatedState, setElevatedState} = props;
 
   const history = useHistory();
 
@@ -28,6 +28,10 @@ export function ForgotPassword (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [forgotPasswordResponse, setForgotPasswordResponse] = useState<ForgotPasswordResponse>();
+  const fetchForgotUserPassword = useFetch(elevatedState().APIInstaces.User,
+                                           elevatedState().APIInstaces.User.forgotPassword,
+                                           setElevatedState, setForgotPasswordResponse,
+                                           setFetching)
   
 
 
@@ -41,35 +45,29 @@ export function ForgotPassword (props: IElevatedStateProps){
     setForgotPasswordErrors({ email: false })
     setForgotPasswordErrorMessage("")
 
-    async function forgotPassword(){
-      const requestBody: ForgotPasswordRequest = {
-        email: email
-      }
-  
-      const requestParams: ForgotPasswordOperationRequest = {
-        body: requestBody
-      }
-
-      const response = await UserAPIInstance.forgotPassword(requestParams)
-      setForgotPasswordResponse(response)
-      setElevatedState(prev => ({...prev, msg: response.msg!}))
-
-      setFetching(false)
-
-      if(response.complete){
-        history.push("/")
-      }
+    const requestBody: ForgotPasswordRequest = {
+      email: email
     }
 
-    forgotPassword()
+    const requestParams: ForgotPasswordOperationRequest = {
+      body: requestBody
+    }
+
+    fetchForgotUserPassword(requestParams)
   }, [fetching]);
 
   useEffect(() => {
     if(!forgotPasswordResponse) return;
 
+    setElevatedState(prev => ({...prev, msg: forgotPasswordResponse.msg!}))
+
     if(forgotPasswordResponse.emailMessage){
       setForgotPasswordErrors({ email: true })
       setForgotPasswordErrorMessage(forgotPasswordResponse.emailMessage)
+    }
+
+    if(forgotPasswordResponse.complete){
+      history.push("/")
     }
   }, [forgotPasswordResponse])
 

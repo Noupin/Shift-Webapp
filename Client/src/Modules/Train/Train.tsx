@@ -8,7 +8,6 @@ import { useHistory } from "react-router-dom";
 //First Party Imports
 import { Media } from '../../Components/Media/Media';
 import { useConvertImage } from "../../Hooks/Images";
-import { TrainAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
 import { CombinedTrainResponse } from '../../Interfaces/CombinedTrain';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -16,11 +15,11 @@ import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusReque
 import { Loader } from '../../Components/Loader/Loader';
 import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 import { useInterval } from '../../Hooks/Interval';
+import { useFetch } from '../../Hooks/Fetch';
 
 
 export function Train (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
-  let leavingPage = false
 
   useEffect(() => {
     setElevatedState((prev) => ({...prev, shiftUUID: sessionStorage["shiftUUID"]}))
@@ -37,28 +36,21 @@ export function Train (props: IElevatedStateProps){
   const [stop, setStop] = useState(false);
   const [trainResponse, setTrainResponse] = useState<CombinedTrainResponse>();
   const [, setConverting] = useState(false);
+  const fetchTrain = useFetch(elevatedState().APIInstaces.Train,
+                              elevatedState().APIInstaces.Train.train,
+                              setElevatedState, setTrainResponse, setUpdating)
+  const fetchTrainStatus = useFetch(elevatedState().APIInstaces.Train,
+                                    elevatedState().APIInstaces.Train.trainStatus,
+                                    setElevatedState, setTrainResponse, setUpdating)
+  const fetchStopTrainStatus = useFetch(elevatedState().APIInstaces.Train,
+                                        elevatedState().APIInstaces.Train.stopTrain,
+                                        setElevatedState, setTrainResponse, setStopping)
 
   const convertImage = useConvertImage(setConverting, setElevatedState,
     setImage, () => trainResponse!.exhibit!.length > 0 ? trainResponse!.exhibit![0] : "");
 
 
-  async function trainStatus(){
-    const trainStatusRequestParams: TrainRequest = {
-      shiftUUID: elevatedState().shiftUUID,
-      shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
-      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
-      trainType: 'basic'
-    };
-    const trainStatusBody: TrainStatusRequest = {
-      body: trainStatusRequestParams
-    }
-
-    const trainStatusResponse = await TrainAPIInstance.trainStatus(trainStatusBody)
-    setTrainResponse(trainStatusResponse)
-  }
-
-  async function stopTraining(){
+  function stopTraining(){
     const stopTrainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
@@ -70,11 +62,7 @@ export function Train (props: IElevatedStateProps){
       body: stopTrainRequestParams
     }
 
-    await TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
-      if (!leavingPage){
-        setTrainResponse(value)
-      }
-    })
+    fetchStopTrainStatus(stopTrainBody)
   }
 
 
@@ -94,18 +82,13 @@ export function Train (props: IElevatedStateProps){
         body: trainRequestParams
       }
 
-      await TrainAPIInstance.train(trainBody).then((value) => {
-        setTrainResponse(value)
-      })
-
-      setUpdating(true)
+      fetchTrain(trainBody)
     }
 
     startTrain()
 
     return () => {
       if(!stopTrain || !advancedView){
-        leavingPage = true
         stopTraining()
       }
     }
@@ -113,14 +96,20 @@ export function Train (props: IElevatedStateProps){
 
   //Get the updated shift image
   useEffect(() => {
-    async function update(){
-      if(!updating) return;
+    if(!updating) return;
 
-      await trainStatus()
-      setUpdating(false)
+    const trainStatusRequestParams: TrainRequest = {
+      shiftUUID: elevatedState().shiftUUID,
+      shiftTitle: elevatedState().shiftTitle,
+      usePTM: elevatedState().usePTM,
+      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      trainType: 'basic'
+    };
+    const trainStatusBody: TrainStatusRequest = {
+      body: trainStatusRequestParams
     }
 
-    update()
+    fetchTrainStatus(trainStatusBody)
   }, [updating]);
 
   //Stop training the AI on the backend

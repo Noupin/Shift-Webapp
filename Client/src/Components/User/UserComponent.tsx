@@ -6,7 +6,6 @@ import { Col, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
 //First Party Imports
-import { UserAPIInstance } from '../../Helpers/Api';
 import { Image } from '../../Components/Image/Image';
 import Verified from "../../Assets/verified_checkmark.svg";
 import Admin from "../../Assets/admin.svg";
@@ -17,18 +16,20 @@ import { GetIndivdualUserRequest, IndividualUserPatchRequest, IndividualUserPatc
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { UserButtonComponent } from './UserButtonsComponent';
 import { ProfileMediaComponent } from './ProfileMediaComponent';
-import { useAuthenticate } from '../../Hooks/Authenticate';
-import { currentUser } from '../../Helpers/User';
+import { useFetch } from '../../Hooks/Fetch';
+import { useRefresh } from '../../Hooks/Refresh';
 
 
 interface IUserComponent{
   elevatedState: IElevatedStateProps["elevatedState"]
   setElevatedState: IElevatedStateProps["setElevatedState"]
+  setOwner: React.Dispatch<React.SetStateAction<boolean>>
   username: string
 }
 
 
-export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedState, username}): ReactElement => {
+export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedState,
+  setOwner, username}): ReactElement => {
   const history = useHistory()
 
   const [editing, setEditing] = useState(false)
@@ -43,46 +44,53 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
   const [profilePictureURL, setProfilePictureURL] = useState("");
   const [profilePicture, setProfilePicture] = useState<File>();
 
-  const [, setFetching] = useState(false)
-  const auth = useAuthenticate(setFetching, setElevatedState)
+  const fetchGetUser = useFetch(elevatedState().APIInstaces.User,
+                                elevatedState().APIInstaces.User.getIndivdualUser,
+                                setElevatedState, setUserGetResponse)
+  const fetchDeleteUser = useFetch(elevatedState().APIInstaces.User,
+                                   elevatedState().APIInstaces.User.deleteIndivdualUser,
+                                   setElevatedState, setUserDeleteResponse)
+  const fetchPatchUser = useFetch(elevatedState().APIInstaces.User,
+                                  elevatedState().APIInstaces.User.patchIndivdualUser,
+                                  setElevatedState, setUserPatchResponse)
+  const fetchUpdateUserPicture = useFetch(elevatedState().APIInstaces.User,
+                                          elevatedState().APIInstaces.User.updatePicture,
+                                          setElevatedState, setUpdatePictureResponse)
+  const fetchRefresh = useRefresh(setElevatedState)
 
 
+  //Get user
   useEffect(() => {
-    if(editing) return
+    if(editing || saving) return
 
     const urlParams: GetIndivdualUserRequest = {
       username: username
     }
+    fetchGetUser(urlParams)
+  }, [username, editing, elevatedState().APIInstaces.apiKey]);
 
-    UserAPIInstance.getIndivdualUser(urlParams).then((value) => {
-      setUserGetResponse(value!)
-    })
-  }, [username, userPatchResponse, editing, updatePictureResponse]);
-
+  //Delete user and refresh access token
   useEffect(() => {
     if (!deleting) return;
 
-    async function deleteUser(){
-      const urlParams: DeleteIndivdualUserRequest = {
-        username: username
-      }
-  
-      UserAPIInstance.deleteIndivdualUser(urlParams).then((value) => {
-        setUserDeleteResponse(value!)
-      })
-
-      auth()
+    const urlParams: DeleteIndivdualUserRequest = {
+      username: username
     }
 
-    deleteUser()
+    fetchDeleteUser(urlParams)
+    fetchRefresh()
+    history.push("/")
   }, [deleting])
 
+  //User get response
   useEffect(() => {
     if(!userGetResponse || !userGetResponse.user) return;
 
+    setOwner(userGetResponse.owner)
     setProfilePictureURL(`/api/content/image/${userGetResponse!.user.mediaFilename}`);
   }, [userGetResponse]);
 
+  //Patch and Profile Picture update
   useEffect(() => {
     if(!saving) return;
 
@@ -97,30 +105,26 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
         username: username,
         body: requestBody
       }
-  
-      await UserAPIInstance.patchIndivdualUser(urlParams).then((value) => {
-        setUserPatchResponse(value!)
-      })
+      fetchPatchUser(urlParams)
+      fetchRefresh()
     }
 
-    async function changeProfilePicture(){
+    async function updateProfilePicture(){
       if(!profilePicture) return;
 
       const requestParams: UpdatePictureRequest = {
         requestFile: profilePicture
       }
-
-      await UserAPIInstance.updatePicture(requestParams).then((value) => {
-        setUpdatePictureResponse(value)
-      })
+      fetchUpdateUserPicture(requestParams)
     }
 
     patchUser()
-    changeProfilePicture()
+    updateProfilePicture()    
     setSaving(false)
-    setProfilePicture(undefined)
+    setProfilePicture(undefined) //Try to remove
   }, [saving])
 
+  //Patched user repsonse adn url forwarding
   useEffect(() => {
     if (!userPatchResponse) return;
 
@@ -131,12 +135,14 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
     }
   }, [userPatchResponse])
 
+  //Deleted user response
   useEffect(() => {
     if (!userDeleteResponse) return;
 
     setElevatedState((prev) => ({...prev, msg: userDeleteResponse.msg!}))
   }, [userDeleteResponse])
 
+  //Updated Profile Picture Response
   useEffect(() => {
     if (!updatePictureResponse) return;
 
@@ -166,7 +172,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
           <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
             setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
         </Row>
-        {username === currentUser().username && 
+        {userGetResponse && userGetResponse.owner && elevatedState().authenticated && 
         <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>}
       </>
     )

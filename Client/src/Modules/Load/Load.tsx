@@ -11,11 +11,11 @@ import { Button } from '../../Components/Button/Button';
 import { defaultShiftTitle, pageTitles, videoTypes } from "../../constants";
 import { fillArray } from "../../Helpers/Arrays";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { LoadDataResponse, LoadDataRequest, GetIndivdualShiftRequest } from '../../Swagger';
-import { LoadAPIInstance, ShiftAPIInstance } from '../../Helpers/Api';
+import { LoadDataResponse, LoadDataRequest, GetIndivdualShiftRequest, IndividualShiftGetResponse } from '../../Swagger';
 import { Loader } from '../../Components/Loader/Loader';
 import { LoadMediaComponent } from '../../Components/Load/LoadMediaComponent';
 import { LoadTitleComponent } from '../../Components/Load/LoadTitleComponent';
+import { useFetch } from '../../Hooks/Fetch';
 
 
 export function Load (props: IElevatedStateProps){
@@ -32,6 +32,13 @@ export function Load (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [loadResponse, setLoadResponse] = useState<LoadDataResponse>();
+  const fetchLoad = useFetch(elevatedState().APIInstaces.Load,
+                             elevatedState().APIInstaces.Load.loadData,
+                             setElevatedState, setLoadResponse)
+  const [shiftResponse, setShiftResponse] = useState<IndividualShiftGetResponse>();
+  const fetchShift = useFetch(elevatedState().APIInstaces.Shift,
+                              elevatedState().APIInstaces.Shift.getIndivdualShift,
+                              setElevatedState, setShiftResponse)
 
   const prevShiftUUID = sessionStorage["shiftUUID"];
 
@@ -44,7 +51,9 @@ export function Load (props: IElevatedStateProps){
       const requestParams: GetIndivdualShiftRequest = {
         uuid: elevatedState().prebuiltShiftModel
       }
-      const shiftResponse = await ShiftAPIInstance.getIndivdualShift(requestParams)
+      fetchShift(requestParams)
+      if(!shiftResponse) return;
+
       const apiPrefix = videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'
       const baseMediaResponse = await fetch(`${apiPrefix}${shiftResponse.shift!.baseMediaFilename!}`)
       const baseMediaBlob = await baseMediaResponse.blob()
@@ -80,13 +89,9 @@ export function Load (props: IElevatedStateProps){
       trainingDataTypes: trainingDataTypes,
       requestFiles: renamedFiles
     }
-
-    setElevatedState((prev) => ({...prev, shiftTitle: title}))
   
-    LoadAPIInstance.loadData(loadDataParams).then((value) => {
-      setLoadResponse(value)
-    })
-    setFetching(false)
+    fetchLoad(loadDataParams)
+    setElevatedState((prev) => ({...prev, shiftTitle: title}))
   }, [fetching]);
 
   //Update values from response

@@ -1,41 +1,70 @@
+//Third Party Imports
+import { useHistory } from "react-router";
+
+//First Party Imports
+import { AuthenticateAPIFactory } from "../Helpers/Api";
 import { IElevatedPageState } from "../Interfaces/PageState";
 
 
-export function useFetch<T>(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                            setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
-                            setData: React.Dispatch<React.SetStateAction<T>>,
-                            url: string, requestOptions: () => RequestInit,
-                            defaultResponse: T): (responseType?: string) => Promise<void>{
+export function useFetch<T, U, V>(thisArg: U,
+  swaggerFunction: ((requestParameters: T) => Promise<V>) | (() => Promise<V>),
+  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
+  setData: React.Dispatch<React.SetStateAction<V | undefined>> | ((requestParmaters: V, ...args: any[]) => void),
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>): (requestParams?: T, ...args: any[]) => Promise<void>{
 
-  async function call(responseType='json'){
-    setLoading(true);
+  const history = useHistory()
+  
+  async function fetchCall(requestParams?: T, ...args: any[]){
+    if(setLoading) setLoading(true);
+
+    async function request(){
+      const response = await swaggerFunction.call(thisArg, requestParams!)
+      if(!args) setData(response);
+      else setData(response, ...args);
+    }
+
+    async function requestAgain(){
+      try{
+        console.log("Requesting again after refreshing")
+        await request()
+      }
+      catch{
+        setElevatedState((prev) => ({...prev,
+          error: Error("Your login has expired please login again"),
+          accessToken: ""
+        }));
+        history.push(`/login`)
+      }
+    }
+
+    async function authenticate(){
+      try{
+        console.log("Sending refresh token")
+        const response = await AuthenticateAPIFactory("").refresh()
+        setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
+        await requestAgain()
+      }
+      catch{
+        setElevatedState(prev => ({...prev, accessToken: ""}))
+        history.push(`/login`)
+      }
+    }
 
     try{
-      var response = await fetch(url, requestOptions());
-      var convertedResponse = null;
-
-      if(responseType === 'json'){
-        convertedResponse = await response.json();
-      }
-      else if(responseType === 'blob'){
-        convertedResponse = await response.blob();
-      }
-      else{
-        convertedResponse = response;
-      }
-
-      if(convertedResponse == null){
-        throw Error("Fetch Response is Null");
-      }
-
-      setData(convertedResponse!);
-      setLoading(false);
+      await request()
     }
     catch (error){
-      setLoading(false);
-      setElevatedState((prev) => ({...prev, error}));
+      if(error.response && error.response.status === 401){
+        await authenticate()
+      }
+      else{
+        setElevatedState((prev) => ({...prev, error: error, accessToken: ""}));
+        //history.push(`/error`)
+      }
     }
+
+    if(setLoading) setLoading(false);
   }
 
-  return call
+  return fetchCall
 }

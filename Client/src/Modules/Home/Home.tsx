@@ -6,17 +6,18 @@ import { Container, Row } from 'react-bootstrap';
 
 //First Party Imports
 import { CATEGORIES_TO_GET, CATEGORIES_TO_REMOVE, pageTitles } from '../../constants';
-import { CategoryAPIInstance } from '../../Helpers/Api';
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 import { ShiftCategories } from '../../Interfaces/ShiftCategories';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { HorizontalScrollMenu } from '../../Components/HorizontalScrollMenu/HorizontalScrollMenu';
-import { CategoriesRequest, CategoriesResponse, CategoryRequest, Shift, ShiftCategoryResponse } from '../../Swagger';
+import { CategoriesRequest, CategoriesResponse, CategoryRequest, NewShiftsResponse, PopularShiftsResponse, Shift, ShiftCategoryResponse } from '../../Swagger';
 import { StickySidebar } from '../../Components/StickySidebar/StickySidebar';
+import { useFetch } from '../../Hooks/Fetch';
 
 
 export function Home (props: IElevatedStateProps){
-  const {setElevatedState} = props;
+  const {elevatedState, setElevatedState} = props;
+  let [categoryNames, setCategoryNames] =  useState<CategoriesResponse["categories"]>([])
 
   const [featuredShifts, setFeaturedShifts] = useState<Shift[]>([])
   const [popularShifts, setPopularShifts] = useState<Shift[]>([])
@@ -24,14 +25,39 @@ export function Home (props: IElevatedStateProps){
   const [shiftCategories, setShiftCategories] = useState<ShiftCategories[]>([])
   const defaultCategories = ["Featured", "Popular", "New"]
 
-  async function getCategoryShifts(categoryName: string="Featured"): Promise<ShiftCategoryResponse>{
-    const categoryParams: CategoryRequest = {
-      categoryName: categoryName
-    }
-
-    const categoryResponse = await CategoryAPIInstance.category(categoryParams)
-    return categoryResponse;
-  }
+  const fetchNewCategory = useFetch(elevatedState().APIInstaces.Category,
+                                    elevatedState().APIInstaces.Category._new,
+                                    setElevatedState,
+                                    (newResponse: NewShiftsResponse) => 
+                                      setNewShifts(newResponse.shifts!))
+  const fetchPopularCategory = useFetch(elevatedState().APIInstaces.Category,
+                                        elevatedState().APIInstaces.Category.popular,
+                                        setElevatedState,
+                                        (popularResponse: PopularShiftsResponse) => 
+                                          setPopularShifts(popularResponse.shifts!))
+  const fetchFeaturedCategory = useFetch(elevatedState().APIInstaces.Category,
+                                         elevatedState().APIInstaces.Category.category,
+                                         setElevatedState,
+                                         (featuredResponse: ShiftCategoryResponse) => 
+                                           setFeaturedShifts(featuredResponse.shifts!))
+  const fetchCategory = useFetch(elevatedState().APIInstaces.Category,
+                                 elevatedState().APIInstaces.Category.category,
+                                 setElevatedState,
+                                 (categoryResponse: ShiftCategoryResponse, category: string) =>{
+                                   let categoryShifts: ShiftCategories = {
+                                     category: category,
+                                     shifts: categoryResponse.shifts!
+                                   }
+                                   setShiftCategories((prev) => [...prev, categoryShifts])
+                                 })
+  const fetchCategories = useFetch(elevatedState().APIInstaces.Category,
+                                   elevatedState().APIInstaces.Category.categories,
+                                   setElevatedState,
+                                   (categoriesResponse: CategoriesResponse, ) => {
+                                     setCategoryNames(categoriesResponse.categories.filter(
+                                       (category: string) => CATEGORIES_TO_REMOVE.indexOf(category) === -1
+                                     ))
+                                   })
 
 
   useEffect(() => {
@@ -39,54 +65,34 @@ export function Home (props: IElevatedStateProps){
   }, [])
 
   useEffect(() => {
-    CategoryAPIInstance.popular().then((value) => setPopularShifts(value.shifts!))
-  }, [])
+    fetchNewCategory()
+    fetchPopularCategory()
+    fetchFeaturedCategory({categoryName: "featured"})
 
-  useEffect(() => {
-    CategoryAPIInstance._new().then((value) => setNewShifts(value.shifts!))
-  }, [])
-
-  useEffect(() => {
-    async function featuredShifts(){
-      const featuredResponse = await getCategoryShifts();
-      setFeaturedShifts(featuredResponse.shifts!)
+    async function getCategoryNames(){
+      const categoriesParams: CategoriesRequest = {
+        maximum: CATEGORIES_TO_GET
+      }
+      await fetchCategories(categoriesParams)
     }
     
-    featuredShifts();
+    getCategoryNames()
   }, [])
 
   useEffect(() => {
-    async function getCategories(maximum=CATEGORIES_TO_GET): Promise<CategoriesResponse["categories"]>{
-      let categoryNames: CategoriesResponse["categories"] = [];
-
-      const categoriesParams: CategoriesRequest = {
-        maximum: maximum
-      }
-
-      const categoriesResponse = await CategoryAPIInstance.categories(categoriesParams);
-      categoryNames = categoriesResponse.categories.filter(
-        (category: string) => CATEGORIES_TO_REMOVE.indexOf(category) === -1
-      )
-
-      return categoryNames
-    }
+    if(categoryNames.length === 0) return;
 
     async function getShifts(){
-      const categoryNames = await getCategories()
-
       categoryNames.forEach(async (category) => {
-        const categoryResponse = await getCategoryShifts(category);
-        let categoryShifts: ShiftCategories = {
-          category: category,
-          shifts: categoryResponse.shifts!
+        const categoryParams: CategoryRequest = {
+          categoryName: category
         }
-
-        setShiftCategories((prev) => [...prev, categoryShifts])
+        await fetchCategory(categoryParams, category)
       })
     }
     
     getShifts();
-  }, [])
+  }, [categoryNames])
 
 
   return (
@@ -104,7 +110,7 @@ export function Home (props: IElevatedStateProps){
         <Row>
           <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
             {featuredShifts.map((element, index) => (
-              <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+              <ShiftCard key={`featured${index}`} shift={element} setElevatedState={setElevatedState}
                 imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
             ))}
           </HorizontalScrollMenu>
@@ -116,7 +122,7 @@ export function Home (props: IElevatedStateProps){
         <Row>
           <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
             {popularShifts.map((element, index) => (
-              <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+              <ShiftCard key={`popular${index}`} shift={element} setElevatedState={setElevatedState}
                 imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
             ))}
           </HorizontalScrollMenu>
@@ -128,7 +134,7 @@ export function Home (props: IElevatedStateProps){
         <Row>
           <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
             {newShifts.map((element, index) => (
-              <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+              <ShiftCard key={`new${index}`} shift={element} setElevatedState={setElevatedState}
                 imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
             ))}
           </HorizontalScrollMenu>
@@ -143,7 +149,7 @@ export function Home (props: IElevatedStateProps){
               {category.shifts!.length > 0 ?
               <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
                 {category.shifts!.map((element, index) => (
-                  <ShiftCard key={index} shift={element} setElevatedState={setElevatedState}
+                  <ShiftCard key={`${category.category}${index}`} shift={element} setElevatedState={setElevatedState}
                     imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
                 ))}
               </HorizontalScrollMenu> : <></>}

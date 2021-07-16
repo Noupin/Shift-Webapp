@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router,
          Switch, Route } from "react-router-dom";
 import { Container, Row, Col, Alert } from "react-bootstrap";
-import CookieConsent from "react-cookie-consent";
 
 //First Party Imports
 import { IElevatedPageState } from "./Interfaces/PageState";
@@ -19,16 +18,18 @@ import { Train } from "./Modules/Train/Train";
 import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home/Home";
 import { Button } from "./Components/Button/Button";
-import { useAuthenticate } from "./Hooks/Authenticate";
-import { defaultShiftTitle, DEFAULT_USER, pageTitles } from "./constants";
+import { defaultShiftTitle, pageTitles } from "./constants";
 import { ShiftPage } from "./Modules/ShiftPage";
 import { UserPage } from "./Modules/User/UserPage";
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import { ResetPassword } from './Modules/User/ResetPassword';
 import { Settings } from './Modules/User/Settings';
 import { ForgotPassword } from './Modules/User/ForgotPassword';
+import { currentUser, setCurrentUser } from './Helpers/User';
+import { isTokenExpired } from './Helpers/Token';
+import { ApiInstances } from './Helpers/Api';
+import { useRefresh } from './Hooks/Refresh';
 import './App.scss';
-import { setCurrentUser } from './Helpers/User';
 
 
 export default function App() {
@@ -36,7 +37,6 @@ export default function App() {
     msg: "",
     error: null,
     authenticated: false,
-    user: DEFAULT_USER,
     defaultTrainView: "basic",
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
@@ -44,26 +44,20 @@ export default function App() {
     usePTM: true,
     prebuiltShiftModel: "",
     trainingShift: false,
+    accessToken: "",
+    APIInstaces: new ApiInstances("")
   })
 
   const getElevatedState = () => { return elevatedState };
 
   const [showMsg, setShowMsg] = useState(false);
-  const [fetching, setFetching] = useState(true)
+  const fetchRefresh = useRefresh(setElevatedState)
 
-
-  const auth = useAuthenticate(setFetching, setElevatedState)
 
   useEffect(() => {
     document.title = pageTitles[""]
-    setElevatedState({...elevatedState, shiftUUID: sessionStorage.getItem("shiftUUID")!})
+    setElevatedState(prev => ({...prev, shiftUUID: sessionStorage.getItem("shiftUUID")!}))
   }, [])
-
-  useEffect(() => {
-    if(!fetching) return;
-
-    auth()
-  }, [fetching]);
 
   useEffect(() => {
     if(!elevatedState.msg) return;
@@ -78,16 +72,31 @@ export default function App() {
   }, [elevatedState.shiftUUID]);
 
   useEffect(() => {
-    if(!elevatedState.user) return;
-
-    setCurrentUser(elevatedState.user)
-  }, [elevatedState.user]);
-
-  useEffect(() => {
     if(!elevatedState.error) return;
 
     console.error(elevatedState.error);
   }, [elevatedState.error]);
+
+  useEffect(() => {
+    if(!elevatedState.accessToken || elevatedState.accessToken.split('.').length < 3){
+      setElevatedState(prev => ({...prev, authenticated: false}))
+      return;
+    }
+    
+
+    const JWTBody = JSON.parse(atob(elevatedState.accessToken.split('.')[1]))
+    if(JWTBody.user) setCurrentUser(JWTBody.user);
+
+    setElevatedState(prev => ({...prev,
+                               authenticated: isTokenExpired(prev.accessToken),
+                               APIInstaces: new ApiInstances(prev.accessToken)}))
+  }, [elevatedState.accessToken])
+
+  useEffect(() => {
+    if(elevatedState.authenticated) return;
+
+    fetchRefresh()
+  }, [elevatedState.authenticated])
 
 
   return (
@@ -131,7 +140,7 @@ export default function App() {
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute expression={getElevatedState().user.canTrain!} path="/train">
+                <ProtectedRoute expression={currentUser().canTrain!} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <ProtectedRoute expression={getElevatedState().authenticated} path="/inference">
@@ -158,14 +167,6 @@ export default function App() {
           </Col>
         </Row>
       </Container>
-      <CookieConsent location="bottom" buttonText="Okay" cookieName="ShiftAllowCookies"
-        disableStyles={true} style={{zIndex: 999}}
-        containerClasses="alert alert-warning align-baseline position-fixed bottom-0 w-100 m-0"
-        buttonClasses="neuPress neuHover neumorphic borderRadius-2 py-2 px-4 mt-3">
-        <h5>Accept Cookies</h5>
-        By continuing to browse or clicking "Okay", you agree to the storing of cookies
-        on your device for Shift to work correctly.
-      </CookieConsent>
     </Router>
   );
 }

@@ -9,6 +9,7 @@ import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { Dropdown } from '../../Components/Dropdown/Dropdown';
 import { IFrontEndSettings } from '../../Interfaces/FrontEndSettings';
+import { currentUser } from '../../Helpers/User';
 
 export function Settings (props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
@@ -17,7 +18,7 @@ export function Settings (props: IElevatedStateProps){
   return (
     <Container>
       <h2>Settings</h2>
-      {elevatedState().user.canTrain! && <>
+      {currentUser().canTrain! && <>
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Use PTM</Col>
         <Col xs={6} className="justify-content-end">

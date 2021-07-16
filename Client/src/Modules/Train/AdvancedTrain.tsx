@@ -14,7 +14,7 @@ import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
-import { TrainAPIInstance } from '../../Helpers/Api';
+import { TrainAPIFactory } from '../../Helpers/Api';
 import { Loader } from '../../Components/Loader/Loader';
 import { useInterval } from '../../Hooks/Interval';
 
@@ -67,7 +67,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
     setUpdating(true)
 
-    await TrainAPIInstance.trainStatus(trainStatusBody).then((value) => {
+    await TrainAPIFactory(elevatedState().accessToken).trainStatus(trainStatusBody).then((value) => {
       setTrainResponse(value)
     })
 
@@ -86,7 +86,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
       body: stopTrainRequestParams
     }
 
-    await TrainAPIInstance.stopTrain(stopTrainBody).then((value) => {
+    await TrainAPIFactory(elevatedState().accessToken).stopTrain(stopTrainBody).then((value) => {
       if(!leavingPage){
         setTrainResponse(value)
       }
@@ -109,7 +109,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
       body: trainRequestParams
     }
     
-    TrainAPIInstance.train(trainBody).then((value) => {
+    TrainAPIFactory(elevatedState().accessToken).train(trainBody).then((value) => {
       setTrainResponse(value)
     })
 

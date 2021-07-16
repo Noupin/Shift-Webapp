@@ -6,17 +6,16 @@ import { Container, Row, Col, Alert } from 'react-bootstrap';
 import { Link, useHistory, useParams } from "react-router-dom";
 
 //First Party Imports
-import { AuthenticateAPIInstance } from '../../Helpers/Api';
 import { Button } from '../../Components/Button/Button';
-import { useAuthenticate } from '../../Hooks/Authenticate';
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { RegisterOperationRequest, RegisterRequest, RegisterResponse } from '../../Swagger';
 import { pageTitles } from '../../constants';
+import { useFetch } from '../../Hooks/Fetch';
 
 
 export function Register (props: IElevatedStateProps){
-  const {elevatedState} = props;
+  const {elevatedState, setElevatedState} = props;
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -33,13 +32,12 @@ export function Register (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [registerResponse, setRegisterResponse] = useState<RegisterResponse>();
-  const [authenticating, setAuthenticating] = useState(false);
+  const fetchRegister = useFetch(elevatedState().APIInstaces.Authenticate,
+                                 elevatedState().APIInstaces.Authenticate.register,
+                                 setElevatedState, setRegisterResponse, setFetching)
 
   const history = useHistory();
   const {redirect} = useParams<{redirect: string | undefined}>()
-
-
-  const auth = useAuthenticate(setAuthenticating, props.setElevatedState)
 
 
   useEffect(() => {
@@ -49,44 +47,40 @@ export function Register (props: IElevatedStateProps){
   useEffect(() => {
     if(!fetching) return;
 
-    async function register(){
-      setResigterErrors({
-        username: false,
-        email: false,
-        password: false,
-        confirmPassword: false
-      })
-      setResgisterErrorMessage("")
+    setResigterErrors({
+      username: false,
+      email: false,
+      password: false,
+      confirmPassword: false
+    })
+    setResgisterErrorMessage("")
 
-      if (password !== confirmPassword){
-        setResigterErrors(prev => ({...prev, confirmPassword: true}))
-        setResgisterErrorMessage("Make sure your passwords match.")
-        setFetching(false)
-  
-        return;
-      }
-  
-      const registerReqeustParams: RegisterRequest = {
-        username: username,
-        password: password,
-        email: email
-      }
-      const registerBody: RegisterOperationRequest = {
-        body: registerReqeustParams
-      }
-  
-      await AuthenticateAPIInstance.register(registerBody).then((value) => {
-        setRegisterResponse(value)
-      })
+    if (password !== confirmPassword){
+      setResigterErrors(prev => ({...prev, confirmPassword: true}))
+      setResgisterErrorMessage("Make sure your passwords match.")
       setFetching(false)
-      setAuthenticating(true)
+
+      return;
     }
 
-    register()
+    const registerReqeustParams: RegisterRequest = {
+      username: username,
+      password: password,
+      email: email
+    }
+    const registerBody: RegisterOperationRequest = {
+      body: registerReqeustParams
+    }
+
+    fetchRegister(registerBody)
   }, [fetching]);
 
   useEffect(() => {
-    if(!authenticating || !registerResponse) return;
+    if(!registerResponse) return;
+
+    if(registerResponse.accessToken){
+      setElevatedState(prev => ({...prev, accessToken: registerResponse.accessToken!}))
+    }
 
     if(registerResponse.usernameMessage){
       setResigterErrors(prev => ({...prev, username: true}))
@@ -102,9 +96,7 @@ export function Register (props: IElevatedStateProps){
       setResigterErrors(prev => ({...prev, password: true}))
       setResgisterErrorMessage(registerResponse.passwordMessage)
     }
-
-    auth()
-  }, [authenticating, registerResponse]);
+  }, [registerResponse]);
 
   useEffect(() => {
     if(!elevatedState().authenticated) return;
@@ -166,7 +158,7 @@ export function Register (props: IElevatedStateProps){
           <Row className="align-items-center">
             <Col xs={2}></Col>
             <Col xs={8}>
-              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" disabled={fetching || authenticating} onClick={() => {setFetching(true)}}>Register &#10140;</Button>
+              <Button className="p-2 mt-4 mb-2 borderRadius-2 w-100" disabled={fetching} onClick={() => {setFetching(true)}}>Register &#10140;</Button>
             </Col>
             <Col xs={2}></Col>
           </Row>

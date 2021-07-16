@@ -27,12 +27,6 @@ export interface LoginRequest {
     password: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof LoginRequest
-     */
-    remember?: boolean;
-    /**
-     * 
      * @type {string}
      * @memberof LoginRequest
      */
@@ -50,7 +44,6 @@ export function LoginRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'password': json['password'],
-        'remember': !exists(json, 'remember') ? undefined : json['remember'],
         'usernameOrEmail': json['usernameOrEmail'],
     };
 }
@@ -65,7 +58,6 @@ export function LoginRequestToJSON(value?: LoginRequest | null): any {
     return {
         
         'password': value.password,
-        'remember': value.remember,
         'usernameOrEmail': value.usernameOrEmail,
     };
 }

@@ -8,7 +8,6 @@ apis/TrainApi.ts
 apis/UserApi.ts
 apis/index.ts
 index.ts
-models/AuthenticatedResponse.ts
 models/CategoriesResponse.ts
 models/ChangePasswordRequest.ts
 models/ChangePasswordResponse.ts
@@ -31,6 +30,7 @@ models/LoginResponse.ts
 models/LogoutResponse.ts
 models/NewShiftsResponse.ts
 models/PopularShiftsResponse.ts
+models/RefreshResponse.ts
 models/RegisterRequest.ts
 models/RegisterResponse.ts
 models/ResetPasswordRequest.ts

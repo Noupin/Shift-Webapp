@@ -17,11 +17,13 @@ export const StickySidebar = (props: IStickySidebar) => {
       <div className="categoryNavbarSticky">
         {items.map((item, index) => (
           <>
-            <a href={`#${item}`} style={{width: "100%"}}>
+            <a href={`#${item}`} style={{width: "100%"}} key={item}>
               {item}
             </a>
             {index+1 !== items.length &&
-            <div className="dotParent noTextSelect"><p>&middot;</p></div>}
+            <div className="dotParent noTextSelect" key={`middotContainer${index+1}`}>
+              <p key={`middotChild${index+1}`}>&middot;</p>
+            </div>}
           </>
         ))}
       </div>
