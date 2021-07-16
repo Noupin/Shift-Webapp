@@ -80,6 +80,7 @@ export default function App() {
   useEffect(() => {
     if(!elevatedState.accessToken || elevatedState.accessToken.split('.').length < 3){
       setElevatedState(prev => ({...prev, authenticated: false}))
+      elevatedState.APIInstaces.apiKey = ""
       return;
     }
     
@@ -87,9 +88,9 @@ export default function App() {
     const JWTBody = JSON.parse(atob(elevatedState.accessToken.split('.')[1]))
     if(JWTBody.user) setCurrentUser(JWTBody.user);
 
+    elevatedState.APIInstaces.apiKey = elevatedState.accessToken
     setElevatedState(prev => ({...prev,
-                               authenticated: isTokenExpired(prev.accessToken),
-                               APIInstaces: new ApiInstances(prev.accessToken)}))
+                               authenticated: isTokenExpired(prev.accessToken)}))
   }, [elevatedState.accessToken])
 
   useEffect(() => {

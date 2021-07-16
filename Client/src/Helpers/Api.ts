@@ -35,10 +35,28 @@ export const AuthenticateAPIFactory = (apiKey?: string) => {
 }
 
 export class ApiInstances{
-  apiKey: string
+  private key: string
 
-  constructor(apiKey: string){
-    this.apiKey = `Bearer ${apiKey}`
+  constructor(apiKey?: string){
+    if(!apiKey){
+      this.key = ""
+    }
+    else{
+      this.key = `Bearer ${apiKey}`
+    }
+  }
+
+  get apiKey(){
+    return this.key
+  }
+
+  set apiKey(apiKey: string){
+    if(!apiKey){
+      this.key = ""
+    }
+    else{
+      this.key = `Bearer ${apiKey}`
+    }
   }
 
   get CDN(){

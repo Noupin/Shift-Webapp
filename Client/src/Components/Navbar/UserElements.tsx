@@ -35,7 +35,7 @@ export function UserElements (props: IElevatedStateProps){
   useEffect(() => {
     if (!logoutResponse) return;
 
-    setElevatedState((prev) => ({...prev, msg: logoutResponse.msg!, accessToken: ""}))
+    setElevatedState((prev) => ({...prev, msg: logoutResponse.msg!, accessToken: "", authenticated: false}))
     history.push("/")
   }, [logoutResponse]);
 
