@@ -96,7 +96,7 @@ export function Home (props: IElevatedStateProps){
 
 
   return (
-    <div style={{position: "relative"}}>
+    <div style={{position: "relative"}} className="h-100 mt-2">
       <StickySidebar items={[...defaultCategories, ...shiftCategories.map((item) => item.category)]}/>
       <Container className="wideScreen">
 

@@ -6,8 +6,8 @@ import Masonry from 'react-masonry-css';
 //Frist Party Imports
 import { Button } from '../Button/Button';
 import { Media } from '../Media/Media';
-import { Image } from '../Image/Image';
-import Close from "../../Assets/close-round.svg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import './MediaList.scss';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
@@ -62,8 +62,7 @@ export function MediaList(props: IMediaList){
             {element}
             <Button className="glassmorphic borderRadius-2 justify-content-center align-items-center"
                     onClick={() => removeElement(mediaArray!, setMediaArray!, index)}>
-              <Image style={{maxHeight: "100%", maxWidth: "100%"}} className="object-fit-contain"
-                imageSrc={Close} alt="X"/>
+              <FontAwesomeIcon style={{minHeight: "100%", minWidth: "100%"}} icon={faTimes}/>
             </Button>
           </div>
         ))}

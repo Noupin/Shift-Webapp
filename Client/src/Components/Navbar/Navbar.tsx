@@ -17,8 +17,9 @@ export function NavBar (props: IElevatedStateProps){
 
 
   return (
-    <div className="neumorphic borderRadius-2 mx-2 my-2 w-100">
-      <Navbar sticky="top" expand="lg" variant={elevatedState().frontEndSettings.darkMode ? "dark" : "light"}>
+    <div className="neumorphic borderRadius-2 p-2 w-100 m-3">
+      <Navbar sticky="top" expand="lg" className="p-0"
+        variant={elevatedState().frontEndSettings.darkMode ? "dark" : "light"}>
         <Navbar.Brand>
           <NavLink to="/" className="pl-2 borderRadius-2">
             <img style={imageStyle} src={Logo} alt="Shift"/>
