@@ -37,7 +37,7 @@ export default function App() {
     msg: "",
     error: null,
     authenticated: false,
-    defaultTrainView: "basic",
+    trainView: "basic",
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
     trainStatusInterval: 10,
@@ -47,7 +47,7 @@ export default function App() {
     accessToken: "",
     APIInstaces: new ApiInstances(""),
     darkMode: false,
-    theme: 'neumorphic',
+    uiStyle: 'neumorphic',
   })
 
   const getElevatedState = () => { return elevatedState };

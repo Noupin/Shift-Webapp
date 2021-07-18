@@ -1,7 +1,11 @@
+//First Party Imports
+import { trainViewType, uiStyleType } from '../Types/FrontEndTypes'
+
+
 export interface IFrontEndSettings{
     usePTM: boolean
     trainingShift: boolean
-    defaultTrainView: 'basic' | 'advanced'
+    trainView: trainViewType
     darkMode: boolean
-    theme: "neumorphic" | "flat"
+    uiStyle: uiStyleType
 }

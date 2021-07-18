@@ -8,7 +8,7 @@ import "./Dropdown.scss";
 
 
 export interface IDropdown extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>{
-  options: string[]
+  options: string[] | readonly string[]
   defaultOption: string
   onOptionChange: (value: string) => void
 }
@@ -30,7 +30,7 @@ export const Dropdown = (props: IDropdown) => {
       </div>
       {open &&
       <div className="neumorphic borderRadius-2 mt-3">
-        {options.map(option => (
+        {options.map((option: string) => (
           <p className="dropdownOption my-1 p-2 borderRadius-2" key={option}
             onClick={() => onOptionChange(option)}>
             {option}
