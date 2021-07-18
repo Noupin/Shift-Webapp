@@ -1,4 +1,5 @@
 //First Party Imports
+import { IFrontEndSettings } from "./Interfaces/FrontEndSettings";
 import { User } from "./Swagger";
 
 
@@ -34,3 +35,11 @@ export const CATEGORIES_TO_REMOVE = ["Featured"]
 export const FRONT_END_USER_SETTINGS_PROPERTIES = ['usePTM', 'trainingShift', 'defaultTrainView']
 
 export const DEFAULT_USER: User = {username: "", email: ""}
+
+export const DEFUALT_FRONT_END_SETTINGS: IFrontEndSettings = {
+  usePTM: true, 
+  trainingShift: false, 
+  trainView: 'basic', 
+  darkMode: false, 
+  uiStyle: 'neumorphic'
+}

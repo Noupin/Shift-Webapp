@@ -29,6 +29,7 @@ import { currentUser, setCurrentUser, isAuthenticated, setAuthenticated } from '
 import { isTokenExpired } from './Helpers/Token';
 import { ApiInstances } from './Helpers/Api';
 import { useRefresh } from './Hooks/Refresh';
+import { getFrontEndSettings, setFrontEndSettings } from './Helpers/FrontEndSettings';
 import './App.scss';
 
 
@@ -43,13 +44,7 @@ export default function App() {
     prebuiltShiftModel: "",
     accessToken: "",
     APIInstaces: new ApiInstances(""),
-    frontEndSettings: {
-      usePTM: true,
-      trainingShift: false,
-      trainView: "basic",
-      darkMode: false,
-      uiStyle: 'neumorphic',
-    },
+    frontEndSettings: getFrontEndSettings(),
   })
 
   const getElevatedState = () => { return elevatedState };
@@ -105,6 +100,12 @@ export default function App() {
 
     fetchRefresh()
   }, [elevatedState.authenticated])
+
+  useEffect(() => {
+    if(!elevatedState.frontEndSettings) return;
+
+    setFrontEndSettings(elevatedState.frontEndSettings)
+  }, [elevatedState.frontEndSettings])
 
 
   return (
