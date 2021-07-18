@@ -22,39 +22,59 @@ export function Settings (props: IElevatedStateProps){
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Dark Mode</Col>
         <Col xs={6} className="justify-content-end">
-          <Checkbox checked={elevatedState().darkMode}
-            onChange={() => setElevatedState(prev => ({...prev, darkMode: !prev.darkMode}))}/>
+          <Checkbox checked={elevatedState().frontEndSettings.darkMode}
+            onChange={() => setElevatedState(prev => (
+              {...prev, frontEndSettings: {...prev.frontEndSettings,
+                                           darkMode: !prev.frontEndSettings.darkMode}
+              })
+            )}/>
         </Col>
       </Row>
       <Row className="my-1">
         <Col xs={6} className="text-align-left">UI Style</Col>
         <Col xs={6} className="justify-content-end">
         <Dropdown options={uiStyleTypeArray}
-            defaultOption={elevatedState().uiStyle}
-            onOptionChange={(value) => setElevatedState(prev => ({...prev, uiStyle: value as unknown as IFrontEndSettings["uiStyle"]}))}/>
+            defaultOption={elevatedState().frontEndSettings.uiStyle}
+            onOptionChange={(value) => setElevatedState(prev => (
+              {...prev, frontEndSettings: {...prev.frontEndSettings,
+                                           uiStyle: value as unknown as IFrontEndSettings["uiStyle"]}
+              })
+            )}/>
         </Col>
       </Row>
       {currentUser().canTrain! && <>
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Use PTM</Col>
         <Col xs={6} className="justify-content-end">
-          <Checkbox checked={elevatedState().usePTM}
-            onChange={() => setElevatedState(prev => ({...prev, usePTM: !prev.usePTM}))}/>
+          <Checkbox checked={elevatedState().frontEndSettings.usePTM}
+            onChange={() => setElevatedState(prev => (
+              {...prev, frontEndSettings: {...prev.frontEndSettings,
+                                           usePTM: !prev.frontEndSettings.usePTM}
+              })
+            )}/>
         </Col>
       </Row>
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Training Shift</Col>
         <Col xs={6} className="justify-content-end">
-          <Checkbox checked={elevatedState().trainingShift}
-              onChange={() => setElevatedState(prev => ({...prev, trainingShift: !prev.trainingShift}))}/>
+          <Checkbox checked={elevatedState().frontEndSettings.trainingShift}
+              onChange={() => setElevatedState(prev => (
+                {...prev, frontEndSettings: {...prev.frontEndSettings,
+                                             trainingShift: !prev.frontEndSettings.trainingShift}
+                })
+              )}/>
         </Col>
       </Row>
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Training Type</Col>
         <Col xs={6} className="justify-content-end">
           <Dropdown options={trainViewTypeArray}
-            defaultOption={elevatedState().trainView}
-            onOptionChange={(value) => setElevatedState(prev => ({...prev, trainView: value as unknown as IFrontEndSettings["trainView"]}))}/>
+            defaultOption={elevatedState().frontEndSettings.trainView}
+            onOptionChange={(value) => setElevatedState(prev => (
+              {...prev, frontEndSettings: {...prev.frontEndSettings,
+                                           trainView: value as unknown as IFrontEndSettings["trainView"]}
+              })
+            )}/>
         </Col>
       </Row></>}
     </Container>

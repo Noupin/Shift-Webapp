@@ -69,7 +69,7 @@ export const LoadTitleComponent: FC<ILoadMediaComponent> = ({elevatedState, titl
     );
   }
 
-  if(elevatedState().trainingShift){
+  if(elevatedState().frontEndSettings.trainingShift){
     titleComponent = (
       <Row className="mb-2">
         <Col xs={3}></Col>

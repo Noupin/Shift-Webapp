@@ -2,7 +2,7 @@
 import { ApiInstances } from '../Helpers/Api';
 import { IFrontEndSettings } from './FrontEndSettings'
 
-export interface IElevatedPageState extends IFrontEndSettings {
+export interface IElevatedPageState {
     msg: string
     error: Error | null
     authenticated: boolean
@@ -12,4 +12,5 @@ export interface IElevatedPageState extends IFrontEndSettings {
     prebuiltShiftModel: string
     accessToken: string
     APIInstaces: ApiInstances
+    frontEndSettings: IFrontEndSettings
 }

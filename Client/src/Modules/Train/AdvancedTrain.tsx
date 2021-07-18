@@ -57,7 +57,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
     const trainStatusRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
+      usePTM: elevatedState().frontEndSettings.usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
       trainType: 'advanced'
     };
@@ -78,7 +78,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
     const stopTrainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
+      usePTM: elevatedState().frontEndSettings.usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
       trainType: 'advanced'
     };
@@ -101,7 +101,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
     const trainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
+      usePTM: elevatedState().frontEndSettings.usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
       trainType: 'advanced'
     };

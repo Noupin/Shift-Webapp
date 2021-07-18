@@ -48,8 +48,8 @@ export function Inference (props: IElevatedStateProps){
 
 		const inferenceRequestParams: InferenceRequest = {
       shiftUUID: elevatedState().shiftUUID,
-			usePTM: elevatedState().usePTM,
-			training: elevatedState().trainingShift,
+			usePTM: elevatedState().frontEndSettings.usePTM,
+			training: elevatedState().frontEndSettings.trainingShift,
 			prebuiltShiftModel: elevatedState().prebuiltShiftModel
     };
     const inferenceBody: InferenceOperationRequest = {
@@ -73,8 +73,8 @@ export function Inference (props: IElevatedStateProps){
 		if(updating || !stopInference){
 			const inferenceStatusRequestParams: InferenceRequest = {
 				shiftUUID: elevatedState().shiftUUID,
-				usePTM: elevatedState().usePTM,
-				training: elevatedState().trainingShift,
+				usePTM: elevatedState().frontEndSettings.usePTM,
+				training: elevatedState().frontEndSettings.trainingShift,
 				prebuiltShiftModel: elevatedState().prebuiltShiftModel
 			};
 			const inferenceStatusBody: InferenceStatusRequest = {
@@ -117,7 +117,7 @@ export function Inference (props: IElevatedStateProps){
 			</Row>
 			{updating ? <Row className="justify-content-center"><Loader/></Row> : <></>}
 			<Row className="my-2">
-				{elevatedState().trainingShift && <Col className="px-2">
+				{elevatedState().frontEndSettings.trainingShift && <Col className="px-2">
 					<Link to="/train" className="w-100">
             <Button className="borderRadius-2 p-2 w-100" disabled={inference}>&#x2190; Train More</Button>
           </Link>

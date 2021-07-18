@@ -161,7 +161,7 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
   ///////////////////////////////////////
   // If the user is training the Shift //
   ///////////////////////////////////////
-  if(elevatedState().trainingShift){
+  if(elevatedState().frontEndSettings.trainingShift){
     loadMediaComponent = (
       <>
         <h4>Base Face</h4>

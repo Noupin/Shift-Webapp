@@ -106,8 +106,8 @@ export function Load (props: IElevatedStateProps){
   useEffect(() => {
     if(!elevatedState().shiftUUID || elevatedState().shiftUUID === prevShiftUUID) return;
 
-    if(elevatedState().trainingShift){
-      history.push(`/${elevatedState().trainView === "basic" ? "train" : "advancedTrain"}`);
+    if(elevatedState().frontEndSettings.trainingShift){
+      history.push(`/${elevatedState().frontEndSettings.trainView === "basic" ? "train" : "advancedTrain"}`);
     }
     else{
       setElevatedState((prev) => ({...prev, prebuiltShiftModel: "PTM"}))

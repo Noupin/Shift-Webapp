@@ -37,17 +37,19 @@ export default function App() {
     msg: "",
     error: null,
     authenticated: false,
-    trainView: "basic",
     shiftUUID: "",
     shiftTitle: defaultShiftTitle,
     trainStatusInterval: 10,
-    usePTM: true,
     prebuiltShiftModel: "",
-    trainingShift: false,
     accessToken: "",
     APIInstaces: new ApiInstances(""),
-    darkMode: false,
-    uiStyle: 'neumorphic',
+    frontEndSettings: {
+      usePTM: true,
+      trainingShift: false,
+      trainView: "basic",
+      darkMode: false,
+      uiStyle: 'neumorphic',
+    },
   })
 
   const getElevatedState = () => { return elevatedState };

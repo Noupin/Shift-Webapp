@@ -27,7 +27,6 @@ export function Train (props: IElevatedStateProps){
 
   const [stopTrain, setStopTrain] = useState(false);
   const [stopping, setStopping] = useState(false);
-  const [advancedView, setAdvancedView] = useState(false);
   const [image, setImage] = useState<File>();
 
   const history = useHistory()
@@ -54,7 +53,7 @@ export function Train (props: IElevatedStateProps){
     const stopTrainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
+      usePTM: elevatedState().frontEndSettings.usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
       trainType: 'basic'
     };
@@ -74,7 +73,7 @@ export function Train (props: IElevatedStateProps){
       const trainRequestParams: TrainRequest = {
         shiftUUID: elevatedState().shiftUUID,
         shiftTitle: elevatedState().shiftTitle,
-        usePTM: elevatedState().usePTM,
+        usePTM: elevatedState().frontEndSettings.usePTM,
         prebuiltShiftModel: elevatedState().prebuiltShiftModel,
         trainType: 'basic'
       };
@@ -88,7 +87,7 @@ export function Train (props: IElevatedStateProps){
     startTrain()
 
     return () => {
-      if(!stopTrain || !advancedView){
+      if(!stopTrain){
         stopTraining()
       }
     }
@@ -101,7 +100,7 @@ export function Train (props: IElevatedStateProps){
     const trainStatusRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().usePTM,
+      usePTM: elevatedState().frontEndSettings.usePTM,
       prebuiltShiftModel: elevatedState().prebuiltShiftModel,
       trainType: 'basic'
     };
@@ -150,12 +149,8 @@ export function Train (props: IElevatedStateProps){
       history.push("/inference")
     }
 
-    if(advancedView){
-      history.push("/advancedTrain")
-    }
-
     return;
-  }, [stopTrain, advancedView])
+  }, [stopTrain])
 
 
   return (
@@ -170,8 +165,8 @@ export function Train (props: IElevatedStateProps){
       <Row className="my-2">
         <Col xs={1}></Col>
         <Col xs={4} className="pr-4">
-          <Button className="p-2 borderRadius-2 w-100" disabled={advancedView || stop}
-            onClick={() => setAdvancedView(true)}>Advanced View</Button>
+          <Button className="p-2 borderRadius-2 w-100" disabled={stop}
+            onClick={() => console.log("Switch Front End State")}>Advanced View</Button>
         </Col>
         <Col xs={4} className="pl-4">
           <Button className="p-2 borderRadius-2 w-100" disabled={stop}
