@@ -2,12 +2,12 @@
 
 //Third Party Imports
 import React, { FC, ReactElement} from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 
 //First Party Imports
 import { IndividualShiftGetResponse, IndividualShiftPatchRequest } from '../../Swagger';
 import { TextBox } from '../TextBox/TextBox';
-import { Image } from '../Image/Image';
-import Verified from "../../Assets/verified_checkmark.svg";
 
 
 interface IShiftTitle extends IndividualShiftGetResponse{
@@ -20,9 +20,7 @@ export const ShiftTitleComponent: FC<IShiftTitle> = ({editing, setShiftChanges, 
   let shiftTitleComponent = (
     <h1 className="text-left">
       {shift!.title} {shift!.verified ?
-      <Image style={{height: "0.75em", width: "auto"}} 
-          className="object-fit-contain"
-          imageSrc={Verified} alt="Verified"/> : <></>}
+      <FontAwesomeIcon icon={faCheckCircle}/> : <></>}
     </h1>
   )
 
@@ -38,7 +36,7 @@ export const ShiftTitleComponent: FC<IShiftTitle> = ({editing, setShiftChanges, 
           }}/>
         <div className="pr-2" style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)"}}>
           {shift!.verified ?
-            <Image className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
+            <FontAwesomeIcon icon={faCheckCircle}/> : <></>}
         </div>
       </div>
     )

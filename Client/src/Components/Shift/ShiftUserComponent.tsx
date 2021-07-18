@@ -4,14 +4,14 @@
 import React, { FC, ReactElement} from 'react';
 import { Row } from 'react-bootstrap';
 import { useHistory } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 
 //First Party Imports
 import { Media } from '../../Components/Media/Media';
-import { Image } from '../../Components/Image/Image';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { IndividualShiftGetResponse } from '../../Swagger';
-import Verified from "../../Assets/verified_checkmark.svg";
-import Admin from "../../Assets/admin.svg";
 
 
 interface IShiftUser extends IndividualShiftGetResponse{
@@ -27,12 +27,9 @@ export const ShiftUserComponent: FC<IShiftUser> = ({shift, setElevatedState}): R
       style={{cursor: "pointer"}}>
       <Row>
         <h4>
-          {shift!.author.username} {shift!.author.verified! ?
-          <Image style={{height: "0.75em", width: "auto"}} 
-              className="object-fit-contain"
-              imageSrc={Admin} alt="Admin"/> : <></>} {shift!.author.admin! ?
-          <Image style={{height: "0.75em", width: "auto"}} 
-              className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
+          {shift!.author.username}
+          {shift!.author.verified! ? <FontAwesomeIcon icon={faShieldAlt}/> : <></>}
+          {shift!.author.admin! ? <FontAwesomeIcon icon={faCheckCircle}/> : <></>}
         </h4>
       </Row>
       <Row>

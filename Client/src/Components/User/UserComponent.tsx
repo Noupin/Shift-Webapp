@@ -4,11 +4,11 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 
 //First Party Imports
-import { Image } from '../../Components/Image/Image';
-import Verified from "../../Assets/verified_checkmark.svg";
-import Admin from "../../Assets/admin.svg";
 import { TextBox } from '../../Components/TextBox/TextBox';
 import { GetIndivdualUserRequest, IndividualUserPatchRequest, IndividualUserPatchResponse,
   PatchIndivdualUserRequest, UpdatePictureResponse, IndividualUserGetResponse,
@@ -157,12 +157,9 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
       <>
         <Row>
           <h2>
-            {username} {userGetResponse.user!.verified! ?
-            <Image style={{height: "0.65em", width: "auto"}} 
-                className="object-fit-contain"
-                imageSrc={Admin} alt="Admin"/> : <></>} {userGetResponse.user!.admin! ?
-            <Image style={{height: "0.65em", width: "auto"}} 
-                className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
+            {username}
+            {userGetResponse.user!.admin! ? <FontAwesomeIcon icon={faShieldAlt}/> : <></>}
+            {userGetResponse.user!.verified! ? <FontAwesomeIcon icon={faCheckCircle}/> : <></>}
           </h2>
         </Row>
         <Row>
@@ -190,10 +187,8 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
                   }
                 }}/>
               <div className="pr-2" style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)"}}>
-                {userGetResponse.user!.admin! ?
-                <Image className="object-fit-contain" imageSrc={Admin} alt="Admin"/> : <></>}
-                {userGetResponse.user!.verified! ?
-                <Image className="object-fit-contain" imageSrc={Verified} alt="Verified"/> : <></>}
+                {userGetResponse.user!.admin! ? <FontAwesomeIcon icon={faShieldAlt}/> : <></>}
+                {userGetResponse.user!.verified! ? <FontAwesomeIcon icon={faCheckCircle}/> : <></>}
               </div>
             </Col>
           </Row>

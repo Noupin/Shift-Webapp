@@ -118,7 +118,7 @@ export function ShiftPage (props: IElevatedStateProps){
     <Container>
       <Row>
         <Col xs={9} className="p-2">
-          <Row>
+          <Row className="mb-3">
             <Col xs={1}></Col>
             <Col xs={5}>
               {shiftGetResponse ? 
