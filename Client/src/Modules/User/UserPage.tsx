@@ -63,7 +63,7 @@ export function UserPage (props: IElevatedStateProps){
           {owner && elevatedState().authenticated &&
           <Row className="justify-content-end">
             <NavLink to="/settings" className="textColor" style={{fontSize: "1.5em"}}>
-              <FontAwesomeIcon icon={faCog}/>
+              <FontAwesomeIcon className="spinAnimation" icon={faCog}/>
             </NavLink>
           </Row>}
           <Row className="justify-content-center">

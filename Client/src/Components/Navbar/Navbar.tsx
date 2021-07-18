@@ -17,7 +17,7 @@ export function NavBar (props: IElevatedStateProps){
 
 
   return (
-    <div className="neumorphic borderRadius-2 p-2 w-100 m-3">
+    <div className="neumorphic borderRadius-2 p-2 w-100 m-2">
       <Navbar sticky="top" expand="lg" className="p-0"
         variant={elevatedState().frontEndSettings.darkMode ? "dark" : "light"}>
         <Navbar.Brand>
