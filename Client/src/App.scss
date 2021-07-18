@@ -45,8 +45,8 @@ a:hover{
     }
 }
 
-.col{
-    background-color: $sameAsBackground;
+.expandingColumn{
+    background-color: var(--bg-color);
 }
 
 label {

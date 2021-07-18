@@ -112,7 +112,7 @@ export default function App() {
     <Router>
       <Container fluid className="flex h-100 textColor w-100 p-0" dark-mode={elevatedState.frontEndSettings.darkMode.toString()}>
         <Row className="justify-content-center h-100 m-0 w-100">
-          <Col className="p-0 w-100">
+          <Col className="p-0 w-100 expandingColumn">
             <div className="h-100 d-flex flex-column w-100">
               <Row className="justify-content-center w-100 m-0">
                 <NavBar elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
