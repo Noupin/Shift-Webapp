@@ -41,13 +41,13 @@
     font-size: 0.8em;
     padding: 5px 0;
     text-decoration: none;
-    color: $darkModeColor;
+    color: var(--text-color);
     transition: all .2s ease-in-out;
 }
 
 .categoryNavbar .categoryNavbarSticky a:hover{
     text-decoration: none;
-    color: $darkModeColor;
+    color: var(--text-color);
     transform: scale(1.1);
     transform: translateX(-10%);
 }

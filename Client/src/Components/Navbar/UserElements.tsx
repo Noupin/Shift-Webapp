@@ -44,12 +44,14 @@ export function UserElements (props: IElevatedStateProps){
     return (
       <>
       <div className="mx-1 my-1">
-        <NavLink to={`/user/${currentUser().username}`} activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
+        <NavLink to={`/user/${currentUser().username}`} activeClassName="navSelected"
+          className="nav-link borderRadius-2 px-3">
           Account
         </NavLink>
       </div>
       <div className="mx-1 my-1">
-        <Button className="neumorphic borderRadius-2 py-2 px-3 w-100 nav-link" onClick={() => setFetching(true)} disabled={fetching}>
+        <Button className="neumorphic borderRadius-2 py-2 px-3 w-100 nav-link"
+          onClick={() => setFetching(true)} disabled={fetching}>
           Logout
         </Button>
       </div>
@@ -60,12 +62,14 @@ export function UserElements (props: IElevatedStateProps){
     return (
       <>
       <div className="mx-1 my-1">
-        <NavLink to="/login" activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
+        <NavLink to="/login" activeClassName="navSelected"
+          className="nav-link borderRadius-2 px-3">
           Login
         </NavLink>
       </div>
       <div className="mx-1 my-1">
-        <NavLink to="/register" activeClassName="navSelected" className="nav-link borderRadius-2 px-3">
+        <NavLink to="/register" activeClassName="navSelected"
+          className="nav-link borderRadius-2 px-3">
           Register
         </NavLink>
       </div>

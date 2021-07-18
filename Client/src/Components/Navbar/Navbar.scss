@@ -1,8 +1,8 @@
 @import "../../variables.scss";
+@import "../../App.scss";
 
 
 .navLink{
-    color: black;
     text-decoration: none;
 }
 
@@ -12,8 +12,8 @@
 
 .navSelected {
     background: $sameAsBackground;
-    box-shadow: inset 5px 5px 10px $lightModeDimShadow, 
-                inset -5px -5px 10px $lightModeBrightShadow;
+    box-shadow: inset 5px 5px 10px var(--dimShadow), 
+                inset -5px -5px 10px var(--brightShadow);
 }
 
 button.navbar-toggler{

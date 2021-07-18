@@ -110,7 +110,7 @@ export default function App() {
 
   return (
     <Router>
-      <Container fluid className="flex h-100">
+      <Container fluid className="flex h-100 textColor" dark-mode={elevatedState.frontEndSettings.darkMode.toString()}>
         <Row className="justify-content-center h-100">
           <Col>
             <div className="h-100 d-flex flex-column">

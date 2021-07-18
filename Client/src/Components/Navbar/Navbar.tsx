@@ -18,7 +18,7 @@ export function NavBar (props: IElevatedStateProps){
 
   return (
     <div className="neumorphic borderRadius-2 mx-2 my-2 w-100">
-      <Navbar sticky="top" expand="lg">
+      <Navbar sticky="top" expand="lg" variant={elevatedState().frontEndSettings.darkMode ? "dark" : "light"}>
         <Navbar.Brand>
           <NavLink to="/" className="pl-2 borderRadius-2">
             <img style={imageStyle} src={Logo} alt="Shift"/>
@@ -30,7 +30,8 @@ export function NavBar (props: IElevatedStateProps){
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <div className="mx-2">
-              <NavLink to="/load" activeClassName="navSelected" className="nav-link borderRadius-2 px-4">
+              <NavLink to="/load" activeClassName="navSelected"
+                className="nav-link borderRadius-2 px-4">
                 Load
               </NavLink>
             </div>
