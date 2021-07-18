@@ -1,70 +1,108 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 //Third Party Imports
+import { useEffect, useRef } from "react";
 import { useHistory } from "react-router";
 
 //First Party Imports
 import { AuthenticateAPIFactory } from "../Helpers/Api";
-import { IElevatedPageState } from "../Interfaces/PageState";
+import { isTokenExpired } from "../Helpers/Token";
+import { IElevatedStateProps } from "../Interfaces/ElevatedStateProps";
 
 
 export function useFetch<T, U, V>(thisArg: U,
   swaggerFunction: ((requestParameters: T) => Promise<V>) | (() => Promise<V>),
-  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
+  elevatedState: IElevatedStateProps["elevatedState"], setElevatedState: IElevatedStateProps["setElevatedState"],
   setData: React.Dispatch<React.SetStateAction<V | undefined>> | ((requestParmaters: V, ...args: any[]) => void),
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>): (requestParams?: T, ...args: any[]) => Promise<void>{
 
   const history = useHistory()
-  
+
+  const reqAgain = useRef(false)
+  const reqParams = useRef<T>()
+  const argParams = useRef<any[]>()
+
+
+  async function request(){
+    const response = await swaggerFunction.call(thisArg, reqParams.current!)
+    if(!argParams.current) setData(response);
+    else setData(response, ...argParams.current);
+  }
+
+
+  async function requestAgain(){
+    try{
+      console.log("Again")
+      await request()
+    }
+    catch{
+      console.log("Request Again Error")
+      setElevatedState((prev) => ({...prev,
+        error: Error("Your login has expired please login again"),
+        accessToken: ""
+      }));
+      //history.push(`/login`)
+    }
+    if(setLoading) setLoading(false)
+  }
+
+
+  async function authenticate(){
+    try{
+      console.log("Refreshing")
+      const response = await AuthenticateAPIFactory("").refresh()
+      reqAgain.current = true
+      setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
+    }
+    catch(error){
+      console.log("Auth Error")
+      setElevatedState(prev => ({...prev, accessToken: "", error: error}))
+      //history.push(`/login`)
+    }
+  }
+
+
   async function fetchCall(requestParams?: T, ...args: any[]){
     if(setLoading) setLoading(true);
 
-    async function request(){
-      const response = await swaggerFunction.call(thisArg, requestParams!)
-      if(!args) setData(response);
-      else setData(response, ...args);
-    }
-
-    async function requestAgain(){
-      try{
-        console.log("Requesting again after refreshing")
-        await request()
-      }
-      catch{
-        setElevatedState((prev) => ({...prev,
-          error: Error("Your login has expired please login again"),
-          accessToken: ""
-        }));
-        history.push(`/login`)
-      }
-    }
-
-    async function authenticate(){
-      try{
-        console.log("Sending refresh token")
-        const response = await AuthenticateAPIFactory("").refresh()
-        setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
-        await requestAgain()
-      }
-      catch{
-        setElevatedState(prev => ({...prev, accessToken: ""}))
-        history.push(`/login`)
-      }
-    }
+    reqParams.current = requestParams
+    argParams.current = args
 
     try{
       await request()
     }
     catch (error){
-      if(error.response && error.response.status === 401){
+      if(error.status && error.status === 401){
         await authenticate()
       }
       else{
+        console.log("Non 401 Request Error")
         setElevatedState((prev) => ({...prev, error: error, accessToken: ""}));
         //history.push(`/error`)
       }
     }
 
-    if(setLoading) setLoading(false);
+    if(setLoading && !reqAgain.current){
+      setLoading(false);
+      reqAgain.current = false
+    }
   }
+
+
+  useEffect(() => {
+    if(!reqAgain.current) return;
+
+    async function req(){
+      if(elevatedState().APIInstaces.apiKey){
+        console.log(isTokenExpired(elevatedState().APIInstaces.apiKey))
+      }
+      await requestAgain()
+      reqAgain.current = false
+      if(setLoading) setLoading(false)
+    }
+
+    req()
+  }, [elevatedState().APIInstaces.apiKey])
+
 
   return fetchCall
 }

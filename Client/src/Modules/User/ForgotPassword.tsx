@@ -30,7 +30,7 @@ export function ForgotPassword (props: IElevatedStateProps){
   const [forgotPasswordResponse, setForgotPasswordResponse] = useState<ForgotPasswordResponse>();
   const fetchForgotUserPassword = useFetch(elevatedState().APIInstaces.User,
                                            elevatedState().APIInstaces.User.forgotPassword,
-                                           setElevatedState, setForgotPasswordResponse,
+                                           elevatedState, setElevatedState, setForgotPasswordResponse,
                                            setFetching)
   
 

@@ -2,12 +2,12 @@
 import React, { ReactElement } from 'react';
 
 //First Party Imports
-import { IElevatedPageState } from '../../Interfaces/PageState';
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import "./HorizontalMasonry.scss"
 
 
 interface IHorizontalMasonry extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
-  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
+  setElevatedState: IElevatedStateProps["setElevatedState"]
   children?: ReactElement[] | null
 }
 

@@ -38,13 +38,13 @@ export function Train (props: IElevatedStateProps){
   const [, setConverting] = useState(false);
   const fetchTrain = useFetch(elevatedState().APIInstaces.Train,
                               elevatedState().APIInstaces.Train.train,
-                              setElevatedState, setTrainResponse, setUpdating)
+                              elevatedState, setElevatedState, setTrainResponse, setUpdating)
   const fetchTrainStatus = useFetch(elevatedState().APIInstaces.Train,
                                     elevatedState().APIInstaces.Train.trainStatus,
-                                    setElevatedState, setTrainResponse, setUpdating)
+                                    elevatedState, setElevatedState, setTrainResponse, setUpdating)
   const fetchStopTrainStatus = useFetch(elevatedState().APIInstaces.Train,
                                         elevatedState().APIInstaces.Train.stopTrain,
-                                        setElevatedState, setTrainResponse, setStopping)
+                                        elevatedState, setElevatedState, setTrainResponse, setStopping)
 
   const convertImage = useConvertImage(setConverting, setElevatedState,
     setImage, () => trainResponse!.exhibit!.length > 0 ? trainResponse!.exhibit![0] : "");

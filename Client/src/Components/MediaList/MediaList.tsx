@@ -4,16 +4,16 @@ import React, { useState, useEffect } from 'react';
 import Masonry from 'react-masonry-css';
 
 //Frist Party Imports
-import { IElevatedPageState } from '../../Interfaces/PageState';
 import { Button } from '../Button/Button';
 import { Media } from '../Media/Media';
 import { Image } from '../Image/Image';
 import Close from "../../Assets/close-round.svg";
 import './MediaList.scss';
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface IMediaList extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>{
-  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
+  setElevatedState: IElevatedStateProps["setElevatedState"]
   elementsPerRow: number
   mediaArray: File[] | null
   setMediaArray: React.Dispatch<React.SetStateAction<File[]>> | null

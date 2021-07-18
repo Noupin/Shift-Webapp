@@ -33,10 +33,10 @@ export function Inference (props: IElevatedStateProps){
 
 	const fetchInference = useFetch(elevatedState().APIInstaces.Inference,
 																	elevatedState().APIInstaces.Inference.inference,
-																	setElevatedState, setInferenceResponse, setInference)
+																	elevatedState, setElevatedState, setInferenceResponse, setInference)
 	const fetchInferenceStatus = useFetch(elevatedState().APIInstaces.Inference,
 																				elevatedState().APIInstaces.Inference.inferenceStatus,
-																				setElevatedState, setInferenceResponse, setUpdateProgress)
+																				elevatedState, setElevatedState, setInferenceResponse, setUpdateProgress)
 
 
 	useEffect(() => {

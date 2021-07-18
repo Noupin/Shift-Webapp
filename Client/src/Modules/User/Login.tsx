@@ -32,7 +32,7 @@ export function Login (props: IElevatedStateProps){
   const [loginResponse, setLoginResponse] = useState<LoginResponse>(); 
   const fetchLogin = useFetch(elevatedState().APIInstaces.Authenticate,
                               elevatedState().APIInstaces.Authenticate.login,
-                              setElevatedState, setLoginResponse, setFetching)
+                              elevatedState, setElevatedState, setLoginResponse, setFetching)
 
   const history = useHistory();
   const { redirect } = useParams<{redirect: string | undefined}>()

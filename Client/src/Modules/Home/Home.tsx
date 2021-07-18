@@ -27,22 +27,22 @@ export function Home (props: IElevatedStateProps){
 
   const fetchNewCategory = useFetch(elevatedState().APIInstaces.Category,
                                     elevatedState().APIInstaces.Category._new,
-                                    setElevatedState,
+                                    elevatedState, setElevatedState,
                                     (newResponse: NewShiftsResponse) => 
                                       setNewShifts(newResponse.shifts!))
   const fetchPopularCategory = useFetch(elevatedState().APIInstaces.Category,
                                         elevatedState().APIInstaces.Category.popular,
-                                        setElevatedState,
+                                        elevatedState, setElevatedState,
                                         (popularResponse: PopularShiftsResponse) => 
                                           setPopularShifts(popularResponse.shifts!))
   const fetchFeaturedCategory = useFetch(elevatedState().APIInstaces.Category,
                                          elevatedState().APIInstaces.Category.category,
-                                         setElevatedState,
+                                         elevatedState, setElevatedState,
                                          (featuredResponse: ShiftCategoryResponse) => 
                                            setFeaturedShifts(featuredResponse.shifts!))
   const fetchCategory = useFetch(elevatedState().APIInstaces.Category,
                                  elevatedState().APIInstaces.Category.category,
-                                 setElevatedState,
+                                 elevatedState, setElevatedState,
                                  (categoryResponse: ShiftCategoryResponse, category: string) =>{
                                    let categoryShifts: ShiftCategories = {
                                      category: category,
@@ -52,7 +52,7 @@ export function Home (props: IElevatedStateProps){
                                  })
   const fetchCategories = useFetch(elevatedState().APIInstaces.Category,
                                    elevatedState().APIInstaces.Category.categories,
-                                   setElevatedState,
+                                   elevatedState, setElevatedState,
                                    (categoriesResponse: CategoriesResponse, ) => {
                                      setCategoryNames(categoriesResponse.categories.filter(
                                        (category: string) => CATEGORIES_TO_REMOVE.indexOf(category) === -1

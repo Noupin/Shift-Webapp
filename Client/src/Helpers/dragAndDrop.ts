@@ -2,7 +2,7 @@
 import React from 'react';
 
 //First Party Imports
-import { IElevatedPageState } from '../Interfaces/PageState';
+import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { fileListToList, validateFileList } from './Files';
 
 export function allowDrop(event: React.DragEvent){
@@ -10,7 +10,7 @@ export function allowDrop(event: React.DragEvent){
 }
 
 export function dropFiles(event: React.DragEvent,
-                          setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
+                          setElevatedState: IElevatedStateProps["setElevatedState"],
                           allowedExtenstion?: string[]){
   let droppedFiles: File[] = []
   let badExtensions: string[] = []

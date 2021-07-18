@@ -45,7 +45,9 @@ export default function App() {
     prebuiltShiftModel: "",
     trainingShift: false,
     accessToken: "",
-    APIInstaces: new ApiInstances("")
+    APIInstaces: new ApiInstances(""),
+    darkMode: false,
+    theme: 'neumorphic',
   })
 
   const getElevatedState = () => { return elevatedState };

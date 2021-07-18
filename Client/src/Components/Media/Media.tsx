@@ -6,11 +6,11 @@ import { Image } from '../Image/Image';
 import { Video } from '../Video/Video';
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { validMediaFileExtesnions, videoTypes } from '../../constants';
-import { IElevatedPageState } from '../../Interfaces/PageState';
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import './Media.scss';
 
 interface IMediaImage extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>{
-  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
+  setElevatedState: IElevatedStateProps["setElevatedState"]
   mediaSrc?: File
   srcString?: string
   mediaType?: string
@@ -18,7 +18,7 @@ interface IMediaImage extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HT
 }
 
 interface IMediaVideo extends React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>{
-  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
+  setElevatedState: IElevatedStateProps["setElevatedState"]
   mediaSrc?: File
   srcString?: string
   mediaType?: string

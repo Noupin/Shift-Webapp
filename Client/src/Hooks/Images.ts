@@ -1,7 +1,7 @@
-import { IElevatedPageState } from "../Interfaces/PageState";
+import { IElevatedStateProps } from "../Interfaces/ElevatedStateProps";
 
 export function useConvertImage(setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                                setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
+                                setElevatedState: IElevatedStateProps["setElevatedState"],
                                 setData: React.Dispatch<React.SetStateAction<File>> | React.Dispatch<React.SetStateAction<File | undefined>>,
                                 imageString: () => string){
 

@@ -33,7 +33,7 @@ export function ChangePassword (props: IElevatedStateProps){
   const [changePasswordResponse, setChangePasswordResponse] = useState<ChangePasswordResponse>();
   const fetchChangeUserPassword = useFetch(elevatedState().APIInstaces.User,
                                            elevatedState().APIInstaces.User.changePassword,
-                                           setElevatedState, setChangePasswordResponse,
+                                           elevatedState, setElevatedState, setChangePasswordResponse,
                                            setFetching)
 
   useEffect(() => {

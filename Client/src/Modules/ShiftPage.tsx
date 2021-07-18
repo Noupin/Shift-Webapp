@@ -41,13 +41,13 @@ export function ShiftPage (props: IElevatedStateProps){
   
   const fetchGetIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
                                            elevatedState().APIInstaces.Shift.getIndivdualShift,
-                                           setElevatedState, setShiftGetResponse)
+                                           elevatedState, setElevatedState, setShiftGetResponse)
   const fetchPatchIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
                                              elevatedState().APIInstaces.Shift.patchIndivdualShift,
-                                             setElevatedState, setShiftPatchResponse, setSaving)
+                                             elevatedState, setElevatedState, setShiftPatchResponse, setSaving)
   const fetchDeleteIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
                                               elevatedState().APIInstaces.Shift.deleteIndivdualShift,
-                                              setElevatedState, setShiftDeleteResponse)
+                                              elevatedState, setElevatedState, setShiftDeleteResponse)
   
   useEffect(() => {
     document.title = pageTitles[""]
@@ -102,6 +102,9 @@ export function ShiftPage (props: IElevatedStateProps){
 
 
   function deleteShift(){
+    const confirmation = window.confirm("Are you sure you would like to delete your shift?")
+    if(!confirmation) return;
+
     const urlParams: DeleteIndivdualShiftRequest = {
       uuid: uuid
     }

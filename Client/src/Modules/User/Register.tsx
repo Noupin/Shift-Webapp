@@ -34,7 +34,7 @@ export function Register (props: IElevatedStateProps){
   const [registerResponse, setRegisterResponse] = useState<RegisterResponse>();
   const fetchRegister = useFetch(elevatedState().APIInstaces.Authenticate,
                                  elevatedState().APIInstaces.Authenticate.register,
-                                 setElevatedState, setRegisterResponse, setFetching)
+                                 elevatedState, setElevatedState, setRegisterResponse, setFetching)
 
   const history = useHistory();
   const {redirect} = useParams<{redirect: string | undefined}>()

@@ -4,15 +4,15 @@ import { useHistory } from 'react-router';
 
 //First Party Imports
 import { Media } from '../Media/Media'
-import { IElevatedPageState } from '../../Interfaces/PageState';
 import { Button } from '../Button/Button';
 import { videoTypes } from '../../constants';
 import "./ShiftCard.scss"
 import { Shift } from '../../Swagger';
+import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 
 
 interface IShiftCard extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
-  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
+  setElevatedState: IElevatedStateProps["setElevatedState"]
   shift: Shift
   imageCssClassNames?: string
 }

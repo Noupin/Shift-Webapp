@@ -20,9 +20,7 @@ import { useFetch } from '../../Hooks/Fetch';
 import { useRefresh } from '../../Hooks/Refresh';
 
 
-interface IUserComponent{
-  elevatedState: IElevatedStateProps["elevatedState"]
-  setElevatedState: IElevatedStateProps["setElevatedState"]
+interface IUserComponent extends IElevatedStateProps{
   setOwner: React.Dispatch<React.SetStateAction<boolean>>
   username: string
 }
@@ -46,16 +44,16 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
 
   const fetchGetUser = useFetch(elevatedState().APIInstaces.User,
                                 elevatedState().APIInstaces.User.getIndivdualUser,
-                                setElevatedState, setUserGetResponse)
+                                elevatedState, setElevatedState, setUserGetResponse)
   const fetchDeleteUser = useFetch(elevatedState().APIInstaces.User,
                                    elevatedState().APIInstaces.User.deleteIndivdualUser,
-                                   setElevatedState, setUserDeleteResponse)
+                                   elevatedState, setElevatedState, setUserDeleteResponse)
   const fetchPatchUser = useFetch(elevatedState().APIInstaces.User,
                                   elevatedState().APIInstaces.User.patchIndivdualUser,
-                                  setElevatedState, setUserPatchResponse)
+                                  elevatedState, setElevatedState, setUserPatchResponse)
   const fetchUpdateUserPicture = useFetch(elevatedState().APIInstaces.User,
                                           elevatedState().APIInstaces.User.updatePicture,
-                                          setElevatedState, setUpdatePictureResponse)
+                                          elevatedState, setElevatedState, setUpdatePictureResponse)
   const fetchRefresh = useRefresh(setElevatedState)
 
 
@@ -67,11 +65,13 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
       username: username
     }
     fetchGetUser(urlParams)
-  }, [username, editing, elevatedState().APIInstaces.apiKey]);
+  }, [username, editing]);
 
   //Delete user and refresh access token
   useEffect(() => {
     if (!deleting) return;
+    const confirmation = window.confirm("Are you sure you would like to delete your account?")
+    if(!confirmation) return;
 
     const urlParams: DeleteIndivdualUserRequest = {
       username: username

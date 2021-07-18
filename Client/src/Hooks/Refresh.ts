@@ -1,16 +1,15 @@
 //First Party Imports
 import { AuthenticateAPIFactory } from "../Helpers/Api";
-import { IElevatedPageState } from "../Interfaces/PageState";
+import { IElevatedStateProps } from "../Interfaces/ElevatedStateProps";
 
 
-export function useRefresh(setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>,
+export function useRefresh(setElevatedState: IElevatedStateProps["setElevatedState"],
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>): () => Promise<void>{
   
   async function fetchRefresh(){
     if(setLoading) setLoading(true);
 
     try{
-      console.log("Sending refresh token")
       const response = await AuthenticateAPIFactory("").refresh()
 
       setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
