@@ -27,3 +27,13 @@ export function setCurrentUser(value: any){
 
   localStorage.setItem("user", encodedValue)
 }
+
+export function isAuthenticated(): boolean{
+  const authString = localStorage.getItem("authenticated")!
+  return authString === 'true';
+}
+
+export function setAuthenticated(auth: boolean){
+  const authString = `${auth}`
+  localStorage.setItem("authenticated", authString)
+}

@@ -25,7 +25,7 @@ import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import { ResetPassword } from './Modules/User/ResetPassword';
 import { Settings } from './Modules/User/Settings';
 import { ForgotPassword } from './Modules/User/ForgotPassword';
-import { currentUser, setCurrentUser } from './Helpers/User';
+import { currentUser, setCurrentUser, isAuthenticated, setAuthenticated } from './Helpers/User';
 import { isTokenExpired } from './Helpers/Token';
 import { ApiInstances } from './Helpers/Api';
 import { useRefresh } from './Hooks/Refresh';
@@ -83,6 +83,7 @@ export default function App() {
     if(!elevatedState.accessToken || elevatedState.accessToken.split('.').length < 3){
       setElevatedState(prev => ({...prev, authenticated: false}))
       elevatedState.APIInstaces.apiKey = ""
+      setAuthenticated(false)
       return;
     }
     
@@ -91,8 +92,10 @@ export default function App() {
     if(JWTBody.user) setCurrentUser(JWTBody.user);
 
     elevatedState.APIInstaces.apiKey = elevatedState.accessToken
+    var authenticated = isTokenExpired(elevatedState.accessToken)
+    setAuthenticated(authenticated)
     setElevatedState(prev => ({...prev,
-                               authenticated: isTokenExpired(prev.accessToken)}))
+                               authenticated: authenticated}))
   }, [elevatedState.accessToken])
 
   useEffect(() => {
@@ -131,7 +134,8 @@ export default function App() {
                 <Route path="/login/:redirect?">
                   <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <ProtectedRoute expression={getElevatedState().authenticated} path="/change-password">
+                <ProtectedRoute key={getElevatedState().authenticated.toString()}
+                  expression={isAuthenticated()} path="/change-password">
                   <ChangePassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <Route path="/forgot-password">
@@ -140,13 +144,15 @@ export default function App() {
                 <Route path="/reset-password/:token">
                   <ResetPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <ProtectedRoute expression={getElevatedState().authenticated} path="/load">
+                <ProtectedRoute key={getElevatedState().authenticated.toString()}
+                  expression={isAuthenticated()} path="/load">
                   <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <ProtectedRoute expression={currentUser().canTrain!} path="/train">
                   <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute expression={getElevatedState().authenticated} path="/inference">
+                <ProtectedRoute key={getElevatedState().authenticated.toString()}
+                  expression={isAuthenticated()} path="/inference">
                   <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <Route path="/shift/:uuid">
