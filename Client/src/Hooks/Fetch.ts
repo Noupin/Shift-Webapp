@@ -5,7 +5,6 @@ import { useHistory } from "react-router";
 
 //First Party Imports
 import { AuthenticateAPIFactory } from "../Helpers/Api";
-import { isTokenExpired } from "../Helpers/Token";
 import { IElevatedStateProps } from "../Interfaces/ElevatedStateProps";
 
 
@@ -31,16 +30,14 @@ export function useFetch<T, U, V>(thisArg: U,
 
   async function requestAgain(){
     try{
-      console.log("Again")
       await request()
     }
     catch{
-      console.log("Request Again Error")
       setElevatedState((prev) => ({...prev,
         error: Error("Your login has expired please login again"),
         accessToken: ""
       }));
-      //history.push(`/login`)
+      history.push(`/login`)
     }
     if(setLoading) setLoading(false)
   }
@@ -48,15 +45,13 @@ export function useFetch<T, U, V>(thisArg: U,
 
   async function authenticate(){
     try{
-      console.log("Refreshing")
       const response = await AuthenticateAPIFactory("").refresh()
       reqAgain.current = true
       setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
     }
     catch(error){
-      console.log("Auth Error")
       setElevatedState(prev => ({...prev, accessToken: "", error: error}))
-      //history.push(`/login`)
+      history.push(`/login`)
     }
   }
 
@@ -75,9 +70,8 @@ export function useFetch<T, U, V>(thisArg: U,
         await authenticate()
       }
       else{
-        console.log("Non 401 Request Error")
         setElevatedState((prev) => ({...prev, error: error, accessToken: ""}));
-        //history.push(`/error`)
+        history.push(`/error`)
       }
     }
 
@@ -92,9 +86,6 @@ export function useFetch<T, U, V>(thisArg: U,
     if(!reqAgain.current) return;
 
     async function req(){
-      if(elevatedState().APIInstaces.apiKey){
-        console.log(isTokenExpired(elevatedState().APIInstaces.apiKey))
-      }
       await requestAgain()
       reqAgain.current = false
       if(setLoading) setLoading(false)

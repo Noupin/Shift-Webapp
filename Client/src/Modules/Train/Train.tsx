@@ -42,15 +42,15 @@ export function Train (props: IElevatedStateProps){
   const fetchTrainStatus = useFetch(elevatedState().APIInstaces.Train,
                                     elevatedState().APIInstaces.Train.trainStatus,
                                     elevatedState, setElevatedState, setTrainResponse, setUpdating)
-  const fetchStopTrainStatus = useFetch(elevatedState().APIInstaces.Train,
-                                        elevatedState().APIInstaces.Train.stopTrain,
-                                        elevatedState, setElevatedState, setTrainResponse, setStopping)
+  const fetchStopTrain = useFetch(elevatedState().APIInstaces.Train,
+                                  elevatedState().APIInstaces.Train.stopTrain,
+                                  elevatedState, setElevatedState, setTrainResponse)
 
   const convertImage = useConvertImage(setConverting, setElevatedState,
     setImage, () => trainResponse!.exhibit!.length > 0 ? trainResponse!.exhibit![0] : "");
 
 
-  function stopTraining(){
+  async function stopTraining(){
     const stopTrainRequestParams: TrainRequest = {
       shiftUUID: elevatedState().shiftUUID,
       shiftTitle: elevatedState().shiftTitle,
@@ -62,7 +62,7 @@ export function Train (props: IElevatedStateProps){
       body: stopTrainRequestParams
     }
 
-    fetchStopTrainStatus(stopTrainBody)
+    await fetchStopTrain(stopTrainBody)
   }
 
 
@@ -132,7 +132,6 @@ export function Train (props: IElevatedStateProps){
   //Update the image displayed to the user and stop the training interval
   useEffect(() => {
     if(!trainResponse) return;
-    console.log(trainResponse!.msg!)
 
     setElevatedState((prev) => ({...prev, msg: trainResponse!.msg!}));
 

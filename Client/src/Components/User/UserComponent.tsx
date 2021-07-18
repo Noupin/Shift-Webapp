@@ -59,7 +59,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
 
   //Get user
   useEffect(() => {
-    if(editing || saving) return
+    if(editing || saving) return;
 
     const urlParams: GetIndivdualUserRequest = {
       username: username
