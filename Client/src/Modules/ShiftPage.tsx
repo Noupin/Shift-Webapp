@@ -126,7 +126,7 @@ export function ShiftPage (props: IElevatedStateProps){
                   editing={editing} setShiftChanges={setShiftChanges}/>
                 : <></>}
             </Col>
-            <Col xs={4}>
+            <Col xs={4} className="m-auto">
               {shiftGetResponse && shiftGetResponse.owner ? 
                 <ShiftButtonsComponent editing={editing} setEditing={setEditing}
                   setSaving={setSaving} deleteShift={deleteShift}/>

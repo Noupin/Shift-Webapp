@@ -42,9 +42,9 @@ export function ShiftCard(props: IShiftCard){
     <Button {...cardProps} className={cssClasses} style={buttonStyle}
       onClick={(event: Event) => goToShift(event, shift.uuid)}>
       <div className="h-100" style={{position: "relative"}}>
-        <p className={`lighterGlassmorphic w-auto position-absolute
+        <p className={`lighterGlassmorphic position-absolute
           m-0 ${mediaBorderRaduis} px-2`}
-          style={{bottom: 0, left: 0, textAlign: "center", fontSize: 26}}>
+          style={{bottom: 0, left: 0, textAlign: "center", fontSize: 26, maxWidth: "100%"}}>
           {shift.title}
         </p>
         <Media srcString={`${apiPrefix}${shift.mediaFilename}`}
