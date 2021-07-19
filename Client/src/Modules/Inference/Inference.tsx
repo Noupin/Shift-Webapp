@@ -4,6 +4,8 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShare } from '@fortawesome/free-solid-svg-icons'
 
 
 //First Party Imports
@@ -17,12 +19,13 @@ import { InferenceOperationRequest, InferenceRequest,
 import { pageTitles } from "../../constants";
 import { Loader } from "../../Components/Loader/Loader";
 import { useFetch } from '../../Hooks/Fetch';
+import { urlToFile } from "../../Helpers/Files";
 
 
 export function Inference (props: IElevatedStateProps){
 	const {elevatedState, setElevatedState} = props;
 
-	const [inferenceMedia, setInferenceMedia] = useState("");
+	const [inferenceMedia, setInferenceMedia] = useState<File>();
 	const [baseMediaString, setBaseMediaString] = useState("")
 
 	const [inference, setInference] = useState(true);
@@ -88,7 +91,8 @@ export function Inference (props: IElevatedStateProps){
 			}
 
 			if(inferenceResponse.mediaFilename!){
-				setInferenceMedia(`/api/inference/content/${inferenceResponse.mediaFilename!}`)
+				setInferenceMedia(await urlToFile(`/api/inference/content/${inferenceResponse.mediaFilename!}`,
+													inferenceResponse.mediaFilename!))
 				setBaseMediaString(`/api/inference/content/${inferenceResponse.baseMediaFilename!}`)
 			}
 
@@ -105,9 +109,9 @@ export function Inference (props: IElevatedStateProps){
 
 
 	return (
-		<Container className="d-flex justify-content-center h-100 flex-column" key={`${inferenceMedia}${baseMediaString}`}>
+		<Container className="d-flex justify-content-center h-100 flex-column" key={`${inferenceMedia?.name}${baseMediaString}`}>
 			<Row className="mb-2">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={inferenceMedia} mediaType="media"/>
+				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" mediaSrc={inferenceMedia} mediaType="media"/>
 			</Row>
 			<Row className="justify-content-center">
 				<h1>&#x2191;</h1>
@@ -117,19 +121,27 @@ export function Inference (props: IElevatedStateProps){
 			</Row>
 			{updating ? <Row className="justify-content-center"><Loader/></Row> : <></>}
 			<Row className="my-2">
-				{elevatedState().frontEndSettings.trainingShift && <Col className="px-2">
+				{elevatedState().frontEndSettings.trainingShift &&
+				<Col className="px-2">
 					<Link to="/train" className="w-100">
-            <Button className="borderRadius-2 p-2 w-100" disabled={inference}>&#x2190; Train More</Button>
+            <Button className="borderRadius-2 p-2 w-100" disabled={inference}>
+							&#x2190; Train More
+						</Button>
           </Link>
 				</Col>}
 				<Col className="px-2">
-					<Link to="/load" className="w-100">
-            <Button className="borderRadius-2 p-2 w-100" disabled={inference} onClick={() => setInference(true)}>Shift Again &#x21ba;</Button>
-          </Link>
+					<a href={inferenceMedia ? URL.createObjectURL(inferenceMedia) : ""} download>
+						<Button className="borderRadius-2 p-2 w-100" disabled={inference}>
+							Download
+						</Button>
+					</a>
 				</Col>
+				{elevatedState().frontEndSettings.trainingShift &&
 				<Col className="px-2">
-					<Button className="borderRadius-2 p-2 w-100" disabled={inference}>Share</Button>
-				</Col>
+					<Button className="borderRadius-2 p-2 w-100" disabled={inference}>
+						Share <FontAwesomeIcon icon={faShare}/>
+					</Button>
+				</Col>}
 			</Row>
 		</Container>
 	);
