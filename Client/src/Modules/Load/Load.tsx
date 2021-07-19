@@ -45,25 +45,30 @@ export function Load (props: IElevatedStateProps){
   
   useEffect(() => {
     document.title = pageTitles["load"]
-    setElevatedState((prev) => ({...prev, prebuiltShiftModel: "", shiftTitle: defaultShiftTitle}))
+    setElevatedState((prev) => ({...prev, shiftTitle: defaultShiftTitle}))
+  }, []);
 
+  useEffect(() => {
     async function setMediaFromPrebuilt(){
       const requestParams: GetIndivdualShiftRequest = {
         uuid: elevatedState().prebuiltShiftModel
       }
       fetchShift(requestParams)
+      console.log(shiftResponse)
+
       if(!shiftResponse) return;
 
       const apiPrefix = videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'
       const baseMediaResponse = await fetch(`${apiPrefix}${shiftResponse.shift!.baseMediaFilename!}`)
       const baseMediaBlob = await baseMediaResponse.blob()
       setBaseMedia(new File([baseMediaBlob], shiftResponse.shift!.baseMediaFilename!))
+      setElevatedState((prev) => ({...prev, prebuiltShiftModel: ""}))
     }
 
     if(elevatedState().prebuiltShiftModel){
       setMediaFromPrebuilt()
     }
-  }, []);
+  }, [shiftResponse]);
 
   //Load Request
   useEffect(() => {

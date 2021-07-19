@@ -788,13 +788,13 @@ paths:
       - Bearer: []
       tags:
       - Inference
-  /api/inference/content/{uuid}:
+  /api/inference/content/{filename}:
     get:
       description: The CDN to get non trained Shifted images.
       operationId: inferenceCDN
       parameters:
       - in: path
-        name: uuid
+        name: filename
         required: true
         type: string
       responses:

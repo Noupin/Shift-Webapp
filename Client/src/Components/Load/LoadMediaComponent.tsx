@@ -191,7 +191,7 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
             </Row>
             {baseMedia ? 
               <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
-                     object-fit-contain" key={!baseMedia ? "": baseMedia.name}
+                     object-fit-contain w-100" key={!baseMedia ? "": baseMedia.name}
                      onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
                      mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
               :
