@@ -30,6 +30,10 @@ export interface InferenceOperationRequest {
     body?: InferenceRequest;
 }
 
+export interface InferenceCDNRequest {
+    uuid: string;
+}
+
 export interface InferenceStatusRequest {
     body?: InferenceRequest;
 }
@@ -69,6 +73,36 @@ export class InferenceApi extends runtime.BaseAPI {
      */
     async inference(requestParameters: InferenceOperationRequest): Promise<InferenceResponse> {
         const response = await this.inferenceRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * The CDN to get non trained Shifted images.
+     */
+    async inferenceCDNRaw(requestParameters: InferenceCDNRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
+            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling inferenceCDN.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/inference/content/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * The CDN to get non trained Shifted images.
+     */
+    async inferenceCDN(requestParameters: InferenceCDNRequest): Promise<object> {
+        const response = await this.inferenceCDNRaw(requestParameters);
         return await response.value();
     }
 

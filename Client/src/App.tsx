@@ -118,7 +118,7 @@ export default function App() {
                 <NavBar elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
               </Row>
 
-              <Alert show={showMsg} variant="primary">
+              <Alert show={showMsg} variant="primary" className="w-100">
                 <Row className="flex-grow-1">
                   <Col xs={9}>{elevatedState.msg}</Col>
                   <Col xs={3}>

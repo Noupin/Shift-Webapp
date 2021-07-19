@@ -788,6 +788,21 @@ paths:
       - Bearer: []
       tags:
       - Inference
+  /api/inference/content/{uuid}:
+    get:
+      description: The CDN to get non trained Shifted images.
+      operationId: inferenceCDN
+      parameters:
+      - in: path
+        name: uuid
+        required: true
+        type: string
+      responses:
+        default:
+          description: ''
+          schema: {}
+      tags:
+      - Inference
   /api/inferenceStatus:
     post:
       description: The status of the current shift model while inferencing on the

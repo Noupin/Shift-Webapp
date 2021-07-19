@@ -49,6 +49,32 @@ export function ShiftPage (props: IElevatedStateProps){
                                               elevatedState().APIInstaces.Shift.deleteIndivdualShift,
                                               elevatedState, setElevatedState, setShiftDeleteResponse)
   
+  function shareClick(event: Event){
+    console.log(typeof event)
+    if(!shiftGetResponse){
+      setElevatedState(prev => ({...prev, msg: "There was no data to share please reload your page."}))
+      return;
+    }
+    if(navigator.share){
+      navigator.share({
+        title: `Shift: ${shiftGetResponse.shift!.title} by ${shiftGetResponse.shift!.author.username}`,
+        text: `Look at the shift ${shiftGetResponse.shift!.author.username} made. Make your own at https://shift.feryv.com`,
+        url: `${window.location.href}`
+      }).then(() => {
+        setElevatedState(prev => ({...prev, msg: "Thanks you for sharing!"}))
+      }).catch(error => {
+        setElevatedState(prev => ({...prev, error: error}))
+      })
+    }
+    else{
+      navigator.clipboard.writeText(window.location.href).then(function() {
+        setElevatedState(prev => ({...prev, msg: "The link has been copied to your clipboard. Pressing Ctrl and V at the same time will paste it!"}))
+      }, function() {
+        setElevatedState(prev => ({...prev, error: Error("We couldnt copy the link to your clipboard or find a share menu. Please copy the URL to share.")}))
+      });
+    }
+  }
+
   useEffect(() => {
     document.title = pageTitles[""]
   }, [])
@@ -168,7 +194,7 @@ export function ShiftPage (props: IElevatedStateProps){
           </Row>
           <Row className="mt-3 mx-2 px-2">
             <Col>
-              <Button className="p-2 borderRadius-2 w-100">
+              <Button className="p-2 borderRadius-2 w-100" onClick={shareClick}>
                 Share
               </Button>
             </Col>
