@@ -15,7 +15,7 @@ import { GetIndivdualUserRequest, IndividualUserPatchRequest, IndividualUserPatc
   UpdatePictureRequest, DeleteIndivdualUserRequest, IndividualShiftDeleteResponse} from '../../Swagger';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { UserButtonComponent } from './UserButtonsComponent';
-import { ProfileMediaComponent } from './ProfileMediaComponent';
+import { ProfileMediaComponent } from './UserMediaComponent';
 import { useFetch } from '../../Hooks/Fetch';
 import { useRefresh } from '../../Hooks/Refresh';
 

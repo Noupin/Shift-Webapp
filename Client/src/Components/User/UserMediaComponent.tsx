@@ -12,7 +12,7 @@ import { imageTypes } from '../../constants';
 import './UserComponent.scss';
 
 
-interface IUserButtons{
+interface IUserMedia{
   setElevatedState: IElevatedStateProps["setElevatedState"]
   profilePictureURL: string
   editing: boolean
@@ -21,7 +21,7 @@ interface IUserButtons{
 }
 
 
-export const ProfileMediaComponent: FC<IUserButtons> = ({setElevatedState, profilePictureURL, editing, setProfilePicture, setProfilePictureURL}): ReactElement => {
+export const ProfileMediaComponent: FC<IUserMedia> = ({setElevatedState, profilePictureURL, editing, setProfilePicture, setProfilePictureURL}): ReactElement => {
   let profileMediaComponent = (
     <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL}
       setElevatedState={setElevatedState}/>
