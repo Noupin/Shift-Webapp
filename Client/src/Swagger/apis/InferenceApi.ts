@@ -31,7 +31,7 @@ export interface InferenceOperationRequest {
 }
 
 export interface InferenceCDNRequest {
-    uuid: string;
+    filename: string;
 }
 
 export interface InferenceStatusRequest {
@@ -80,8 +80,8 @@ export class InferenceApi extends runtime.BaseAPI {
      * The CDN to get non trained Shifted images.
      */
     async inferenceCDNRaw(requestParameters: InferenceCDNRequest): Promise<runtime.ApiResponse<object>> {
-        if (requestParameters.uuid === null || requestParameters.uuid === undefined) {
-            throw new runtime.RequiredError('uuid','Required parameter requestParameters.uuid was null or undefined when calling inferenceCDN.');
+        if (requestParameters.filename === null || requestParameters.filename === undefined) {
+            throw new runtime.RequiredError('filename','Required parameter requestParameters.filename was null or undefined when calling inferenceCDN.');
         }
 
         const queryParameters: any = {};
@@ -89,7 +89,7 @@ export class InferenceApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/inference/content/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            path: `/api/inference/content/{filename}`.replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
