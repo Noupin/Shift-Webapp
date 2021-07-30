@@ -34,11 +34,11 @@ export function Inference (props: IElevatedStateProps){
   const [inferenceResponse, setInferenceResponse] = useState<CombinedInferenceResponse>();
 	const [updateProgress, setUpdateProgress] = useState(false);
 
-	const fetchInference = useFetch(elevatedState().APIInstaces.Inference,
-																	elevatedState().APIInstaces.Inference.inference,
+	const fetchInference = useFetch(elevatedState().APIInstances.Inference,
+																	elevatedState().APIInstances.Inference.inference,
 																	elevatedState, setElevatedState, setInferenceResponse, setInference)
-	const fetchInferenceStatus = useFetch(elevatedState().APIInstaces.Inference,
-																				elevatedState().APIInstaces.Inference.inferenceStatus,
+	const fetchInferenceStatus = useFetch(elevatedState().APIInstances.Inference,
+																				elevatedState().APIInstances.Inference.inferenceStatus,
 																				elevatedState, setElevatedState, setInferenceResponse, setUpdateProgress)
 
 

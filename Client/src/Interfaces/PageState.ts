@@ -11,6 +11,6 @@ export interface IElevatedPageState {
     trainStatusInterval: number
     prebuiltShiftModel: string
     accessToken: string
-    APIInstaces: ApiInstances
+    APIInstances: ApiInstances
     frontEndSettings: IFrontEndSettings
 }

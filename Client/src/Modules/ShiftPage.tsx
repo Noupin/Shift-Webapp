@@ -39,14 +39,14 @@ export function ShiftPage (props: IElevatedStateProps){
   const [baseMediaURL, setBaseMediaURL] = useState("");
   const [maskMediaURL, setMaskMediaURL] = useState("");
   
-  const fetchGetIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
-                                           elevatedState().APIInstaces.Shift.getIndivdualShift,
+  const fetchGetIndividualShift = useFetch(elevatedState().APIInstances.Shift,
+                                           elevatedState().APIInstances.Shift.getIndivdualShift,
                                            elevatedState, setElevatedState, setShiftGetResponse)
-  const fetchPatchIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
-                                             elevatedState().APIInstaces.Shift.patchIndivdualShift,
+  const fetchPatchIndividualShift = useFetch(elevatedState().APIInstances.Shift,
+                                             elevatedState().APIInstances.Shift.patchIndivdualShift,
                                              elevatedState, setElevatedState, setShiftPatchResponse, setSaving)
-  const fetchDeleteIndividualShift = useFetch(elevatedState().APIInstaces.Shift,
-                                              elevatedState().APIInstaces.Shift.deleteIndivdualShift,
+  const fetchDeleteIndividualShift = useFetch(elevatedState().APIInstances.Shift,
+                                              elevatedState().APIInstances.Shift.deleteIndivdualShift,
                                               elevatedState, setElevatedState, setShiftDeleteResponse)
   
   function shareClick(event: Event){
@@ -87,7 +87,7 @@ export function ShiftPage (props: IElevatedStateProps){
     }
 
     fetchGetIndividualShift(urlParams)
-  }, [uuid, shiftPatchResponse, editing, elevatedState().APIInstaces.apiKey]);
+  }, [uuid, shiftPatchResponse, editing, elevatedState().APIInstances.apiKey]);
 
   useEffect(() => {
     if (!shiftGetResponse) return;

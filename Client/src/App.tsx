@@ -43,7 +43,7 @@ export default function App() {
     trainStatusInterval: 10,
     prebuiltShiftModel: "",
     accessToken: "",
-    APIInstaces: new ApiInstances(""),
+    APIInstances: new ApiInstances(""),
     frontEndSettings: getFrontEndSettings(),
   })
 
@@ -79,7 +79,7 @@ export default function App() {
   useEffect(() => {
     if(!elevatedState.accessToken || elevatedState.accessToken.split('.').length < 3){
       setElevatedState(prev => ({...prev, authenticated: false}))
-      elevatedState.APIInstaces.apiKey = ""
+      elevatedState.APIInstances.apiKey = ""
       setAuthenticated(false)
       return;
     }
@@ -88,7 +88,7 @@ export default function App() {
     const JWTBody = JSON.parse(atob(elevatedState.accessToken.split('.')[1]))
     if(JWTBody.user) setCurrentUser(JWTBody.user);
 
-    elevatedState.APIInstaces.apiKey = elevatedState.accessToken
+    elevatedState.APIInstances.apiKey = elevatedState.accessToken
     var authenticated = isTokenExpired(elevatedState.accessToken)
     setAuthenticated(authenticated)
     setElevatedState(prev => ({...prev,

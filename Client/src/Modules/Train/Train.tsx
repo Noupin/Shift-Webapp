@@ -35,14 +35,14 @@ export function Train (props: IElevatedStateProps){
   const [stop, setStop] = useState(false);
   const [trainResponse, setTrainResponse] = useState<CombinedTrainResponse>();
   const [, setConverting] = useState(false);
-  const fetchTrain = useFetch(elevatedState().APIInstaces.Train,
-                              elevatedState().APIInstaces.Train.train,
+  const fetchTrain = useFetch(elevatedState().APIInstances.Train,
+                              elevatedState().APIInstances.Train.train,
                               elevatedState, setElevatedState, setTrainResponse, setUpdating)
-  const fetchTrainStatus = useFetch(elevatedState().APIInstaces.Train,
-                                    elevatedState().APIInstaces.Train.trainStatus,
+  const fetchTrainStatus = useFetch(elevatedState().APIInstances.Train,
+                                    elevatedState().APIInstances.Train.trainStatus,
                                     elevatedState, setElevatedState, setTrainResponse, setUpdating)
-  const fetchStopTrain = useFetch(elevatedState().APIInstaces.Train,
-                                  elevatedState().APIInstaces.Train.stopTrain,
+  const fetchStopTrain = useFetch(elevatedState().APIInstances.Train,
+                                  elevatedState().APIInstances.Train.stopTrain,
                                   elevatedState, setElevatedState, setTrainResponse)
 
   const convertImage = useConvertImage(setConverting, setElevatedState,

@@ -33,12 +33,12 @@ export function Load (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [loadResponse, setLoadResponse] = useState<LoadDataResponse>();
-  const fetchLoad = useFetch(elevatedState().APIInstaces.Load,
-                             elevatedState().APIInstaces.Load.loadData,
+  const fetchLoad = useFetch(elevatedState().APIInstances.Load,
+                             elevatedState().APIInstances.Load.loadData,
                              elevatedState, setElevatedState, setLoadResponse)
   const [shiftResponse, setShiftResponse] = useState<IndividualShiftGetResponse>();
-  const fetchShift = useFetch(elevatedState().APIInstaces.Shift,
-                              elevatedState().APIInstaces.Shift.getIndivdualShift,
+  const fetchShift = useFetch(elevatedState().APIInstances.Shift,
+                              elevatedState().APIInstances.Shift.getIndivdualShift,
                               elevatedState, setElevatedState, setShiftResponse)
 
   const prevShiftUUID = sessionStorage["shiftUUID"];

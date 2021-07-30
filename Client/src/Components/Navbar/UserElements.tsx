@@ -19,8 +19,8 @@ export function UserElements (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [logoutResponse, setLogoutResponse] = useState<LogoutResponse>();
-  const fetchLogout = useFetch(elevatedState().APIInstaces.Authenticate,
-                               elevatedState().APIInstaces.Authenticate.logout,
+  const fetchLogout = useFetch(elevatedState().APIInstances.Authenticate,
+                               elevatedState().APIInstances.Authenticate.logout,
                                elevatedState, setElevatedState, setLogoutResponse, setFetching)
 
   const history = useHistory();

@@ -27,8 +27,8 @@ export function UserPage (props: IElevatedStateProps){
   const [userShiftsResponse, setUserShiftsResponse] = useState<UserShiftsResponse>();
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
   const [owner, setOwner] = useState(false)
-  const fetchUserShifts = useFetch(elevatedState().APIInstaces.User,
-                                   elevatedState().APIInstaces.User.userShifts,
+  const fetchUserShifts = useFetch(elevatedState().APIInstances.User,
+                                   elevatedState().APIInstances.User.userShifts,
                                    elevatedState, setElevatedState, setUserShiftsResponse)
 
 

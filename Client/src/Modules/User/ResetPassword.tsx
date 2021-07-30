@@ -30,8 +30,8 @@ export function ResetPassword (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [resetPasswordResponse, setResetPasswordResponse] = useState<ResetPasswordResponse>();
-  const fetchResetUserPassword = useFetch(elevatedState().APIInstaces.User,
-                                          elevatedState().APIInstaces.User.resetPassword,
+  const fetchResetUserPassword = useFetch(elevatedState().APIInstances.User,
+                                          elevatedState().APIInstances.User.resetPassword,
                                           elevatedState, setElevatedState, setResetPasswordResponse,
                                           setFetching)
 
