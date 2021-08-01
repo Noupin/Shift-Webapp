@@ -86,6 +86,7 @@ export function Load (props: IElevatedStateProps){
     }
 
     let renamedFiles: Blob[] = files.map((file: File) => {
+      console.log(file)
       return new File([file], `${uuidv4()}.${file.name.split('.').pop()!.toLowerCase()}`, {type: file.type})
     })
 
@@ -114,7 +115,6 @@ export function Load (props: IElevatedStateProps){
       history.push(`/${elevatedState().frontEndSettings.trainView === "basic" ? "train" : "advancedTrain"}`);
     }
     else{
-      setElevatedState((prev) => ({...prev, prebuiltShiftModel: "PTM"}))
       history.push(`/inference`)
     }
   }, [elevatedState().shiftUUID]);
