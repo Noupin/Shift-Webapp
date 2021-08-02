@@ -40,8 +40,8 @@ export interface LoginOperationRequest {
 }
 
 export interface RefreshRequest {
-    csrfRefreshToken?: object;
-    refreshTokenCookie?: object;
+    csrfRefreshToken?: string;
+    refreshTokenCookie?: string;
 }
 
 export interface RegisterOperationRequest {

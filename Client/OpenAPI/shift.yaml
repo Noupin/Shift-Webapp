@@ -569,11 +569,11 @@ paths:
       - in: header
         name: csrf_refresh_token
         required: false
-        type: object
+        type: string
       - in: header
         name: refresh_token_cookie
         required: false
-        type: object
+        type: string
       responses:
         default:
           description: The status of the refresh attempt, an access token to use for
