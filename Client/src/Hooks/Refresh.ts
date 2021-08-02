@@ -10,7 +10,7 @@ export function useRefresh(setElevatedState: IElevatedStateProps["setElevatedSta
     if(setLoading) setLoading(true);
 
     try{
-      const response = await AuthenticateAPIFactory("").refresh()
+      const response = await AuthenticateAPIFactory("").refresh({})
 
       setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
     }

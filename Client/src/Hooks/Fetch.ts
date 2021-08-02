@@ -45,7 +45,7 @@ export function useFetch<T, U, V>(thisArg: U,
 
   async function authenticate(){
     try{
-      const response = await AuthenticateAPIFactory("").refresh()
+      const response = await AuthenticateAPIFactory("").refresh({})
       reqAgain.current = true
       setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
     }

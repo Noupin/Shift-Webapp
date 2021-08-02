@@ -39,6 +39,11 @@ export interface LoginOperationRequest {
     body?: LoginRequest;
 }
 
+export interface RefreshRequest {
+    csrfRefreshToken?: object;
+    refreshTokenCookie?: object;
+}
+
 export interface RegisterOperationRequest {
     body?: RegisterRequest;
 }
@@ -114,10 +119,18 @@ export class AuthenticateApi extends runtime.BaseAPI {
     /**
      * Refreshes the users access token.
      */
-    async refreshRaw(): Promise<runtime.ApiResponse<RefreshResponse>> {
+    async refreshRaw(requestParameters: RefreshRequest): Promise<runtime.ApiResponse<RefreshResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters.csrfRefreshToken !== undefined && requestParameters.csrfRefreshToken !== null) {
+            headerParameters['csrf_refresh_token'] = String(requestParameters.csrfRefreshToken);
+        }
+
+        if (requestParameters.refreshTokenCookie !== undefined && requestParameters.refreshTokenCookie !== null) {
+            headerParameters['refresh_token_cookie'] = String(requestParameters.refreshTokenCookie);
+        }
 
         const response = await this.request({
             path: `/api/authenticate/refresh`,
@@ -132,8 +145,8 @@ export class AuthenticateApi extends runtime.BaseAPI {
     /**
      * Refreshes the users access token.
      */
-    async refresh(): Promise<RefreshResponse> {
-        const response = await this.refreshRaw();
+    async refresh(requestParameters: RefreshRequest): Promise<RefreshResponse> {
+        const response = await this.refreshRaw(requestParameters);
         return await response.value();
     }
 
