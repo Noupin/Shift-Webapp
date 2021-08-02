@@ -55,7 +55,6 @@ export function Load (props: IElevatedStateProps){
         uuid: elevatedState().prebuiltShiftModel
       }
       fetchShift(requestParams)
-      console.log(shiftResponse)
 
       if(!shiftResponse || !shiftResponse.shift || !shiftResponse.shift!.baseMediaFilename) return;
 
