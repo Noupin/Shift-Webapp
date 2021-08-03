@@ -566,14 +566,18 @@ paths:
       description: Refreshes the users access token.
       operationId: refresh
       parameters:
-      - in: header
+      - default: null
+        in: header
         name: csrf_refresh_token
-        required: true
+        required: false
         type: string
-      - in: header
+        x-nullable: true
+      - default: null
+        in: header
         name: refresh_token_cookie
-        required: true
+        required: false
         type: string
+        x-nullable: true
       responses:
         default:
           description: The status of the refresh attempt, an access token to use for
@@ -873,11 +877,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -892,11 +896,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:

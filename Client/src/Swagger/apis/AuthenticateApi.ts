@@ -40,8 +40,8 @@ export interface LoginOperationRequest {
 }
 
 export interface RefreshRequest {
-    csrfRefreshToken?: string;
-    refreshTokenCookie?: string;
+    refreshTokenCookie?: string | null;
+    csrfRefreshToken?: string | null;
 }
 
 export interface RegisterOperationRequest {
@@ -124,12 +124,12 @@ export class AuthenticateApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (requestParameters.csrfRefreshToken !== undefined && requestParameters.csrfRefreshToken !== null) {
-            headerParameters['csrf_refresh_token'] = String(requestParameters.csrfRefreshToken);
-        }
-
         if (requestParameters.refreshTokenCookie !== undefined && requestParameters.refreshTokenCookie !== null) {
             headerParameters['refresh_token_cookie'] = String(requestParameters.refreshTokenCookie);
+        }
+
+        if (requestParameters.csrfRefreshToken !== undefined && requestParameters.csrfRefreshToken !== null) {
+            headerParameters['csrf_refresh_token'] = String(requestParameters.csrfRefreshToken);
         }
 
         const response = await this.request({
