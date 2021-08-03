@@ -568,11 +568,11 @@ paths:
       parameters:
       - in: header
         name: csrf_refresh_token
-        required: false
+        required: true
         type: string
       - in: header
         name: refresh_token_cookie
-        required: false
+        required: true
         type: string
       responses:
         default:
