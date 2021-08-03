@@ -568,13 +568,13 @@ paths:
       parameters:
       - default: null
         in: header
-        name: csrf_refresh_token
+        name: Feryvcsrftoken
         required: false
         type: string
         x-nullable: true
       - default: null
         in: header
-        name: refresh_token_cookie
+        name: Feryvrefreshtoken
         required: false
         type: string
         x-nullable: true
@@ -585,8 +585,9 @@ paths:
           schema:
             $ref: '#/definitions/RefreshResponse'
       security:
-      - Refresh: []
+      - Refresh_Token_Cookie: []
       - CSRF_Refresh: []
+      - Bearer: []
       tags:
       - Authenticate
   /api/authenticate/register:
@@ -877,11 +878,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -896,11 +897,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -1034,10 +1035,10 @@ securityDefinitions:
     type: apiKey
   CSRF_Refresh:
     in: cookie
-    name: refresh_token_cookie
+    name: Feryvcsrftoken
     type: apiKey
-  Refresh:
+  Refresh_Token_Cookie:
     in: cookie
-    name: csrf_refresh_token
+    name: Feryvrefreshtoken
     type: apiKey
 swagger: '2.0'

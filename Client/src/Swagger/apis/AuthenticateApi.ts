@@ -40,8 +40,8 @@ export interface LoginOperationRequest {
 }
 
 export interface RefreshRequest {
-    refreshTokenCookie?: string | null;
-    csrfRefreshToken?: string | null;
+    feryvcsrftoken?: string | null;
+    feryvrefreshtoken?: string | null;
 }
 
 export interface RegisterOperationRequest {
@@ -124,12 +124,16 @@ export class AuthenticateApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (requestParameters.refreshTokenCookie !== undefined && requestParameters.refreshTokenCookie !== null) {
-            headerParameters['refresh_token_cookie'] = String(requestParameters.refreshTokenCookie);
+        if (requestParameters.feryvcsrftoken !== undefined && requestParameters.feryvcsrftoken !== null) {
+            headerParameters['Feryvcsrftoken'] = String(requestParameters.feryvcsrftoken);
         }
 
-        if (requestParameters.csrfRefreshToken !== undefined && requestParameters.csrfRefreshToken !== null) {
-            headerParameters['csrf_refresh_token'] = String(requestParameters.csrfRefreshToken);
+        if (requestParameters.feryvrefreshtoken !== undefined && requestParameters.feryvrefreshtoken !== null) {
+            headerParameters['Feryvrefreshtoken'] = String(requestParameters.feryvrefreshtoken);
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
         }
 
         const response = await this.request({
