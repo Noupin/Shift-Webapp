@@ -176,11 +176,6 @@ button{
     background-color: var(--glassmorphic-bg-color);
 }
 
-.lighterGlassmorphic{
-    z-index: 2;
-    backdrop-filter: blur(60px);
-}
-
 //Animation
 .spinAnimation{
     transition: transform .5s ease-in-out;
