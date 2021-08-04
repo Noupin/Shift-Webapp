@@ -51,12 +51,11 @@ export function ShiftPage (props: IElevatedStateProps){
                                               elevatedState, setElevatedState, setShiftDeleteResponse)
   
   function shareClick(event: Event){
-    console.log(typeof event)
     if(!shiftGetResponse){
       setElevatedState(prev => ({...prev, msg: "There was no data to share please reload your page."}))
       return;
     }
-    if(navigator.share){
+    try{
       navigator.share({
         title: `Shift: ${shiftGetResponse.shift!.title} by ${shiftGetResponse.shift!.author.username}`,
         text: `Look at the shift ${shiftGetResponse.shift!.author.username} made. Make your own at https://shift.feryv.com`,
@@ -67,13 +66,19 @@ export function ShiftPage (props: IElevatedStateProps){
         setElevatedState(prev => ({...prev, error: error}))
       })
     }
-    else{
-      navigator.clipboard.writeText(window.location.href).then(function() {
-        setElevatedState(prev => ({...prev, msg: "The link has been copied to your clipboard. Pressing Ctrl and V at the same time will paste it!"}))
-      }, function() {
-        setElevatedState(prev => ({...prev, error: Error("We couldnt copy the link to your clipboard or find a share menu. Please copy the URL to share.")}))
-      });
+    catch(err){
+      try{
+        navigator.clipboard.writeText(window.location.href).then(function() {
+          setElevatedState(prev => ({...prev, msg: "The link has been copied to your clipboard. Pressing Ctrl and V at the same time will paste it!"}))
+        }, function() {
+          setElevatedState(prev => ({...prev, error: Error("We couldnt copy the link to your clipboard or find a share menu. Please copy the URL to share.")}))
+        });
+      }
+      catch{
+        setElevatedState(prev => ({...prev, msg: "Sorry we couldn't share or copy the link for you please try copying the link yourself then you will be able to send it however you want."}))
+      }
     }
+    
   }
 
   useEffect(() => {
