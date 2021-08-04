@@ -144,19 +144,11 @@ export function Login (props: IElevatedStateProps){
           <br/>
 
           <Row className="align-items-center">
-            <Col xs={1}></Col>
-            <Col xs={3} className="pr-1 text-right">
-              Remember Me
-            </Col>
-            <Col xs={1} className="p-2">
-              <Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)}/>
-            </Col>
-            <Col xs={2}></Col>
-            <Col xs={1}></Col>
-            <Col xs={3}>
+            <Col xs={3}></Col>
+            <Col xs={6}>
               <Link to="/forgot-password">Forgot Password?</Link>
             </Col>
-            <Col xs={1}></Col>
+            <Col xs={3}></Col>
           </Row>
 
           <br/>
