@@ -15,3 +15,18 @@ button:focus {
     box-shadow: inset 5px 5px 10px var(--dimShadow), 
                 inset -5px -5px 10px var(--brightShadow);
 }
+
+.shiftCardTitle{
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.shiftCardTitle:hover{
+    overflow: visible;
+    white-space: normal;
+    width: auto;
+    max-width: fit-content;
+}

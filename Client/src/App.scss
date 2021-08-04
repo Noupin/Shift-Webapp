@@ -173,6 +173,7 @@ button{
 .glassmorphic{
     z-index: 2;
     backdrop-filter: blur(10px);
+    background-color: var(--glassmorphic-bg-color);
 }
 
 .lighterGlassmorphic{

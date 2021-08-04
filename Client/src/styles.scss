@@ -6,6 +6,7 @@
     --dimShadow: rgba(0, 0, 0, 0.05);
     --highContrastBrightShadow: rgba(255, 255, 255, 0.7);
     --lowContrastBrightShadow: rgba(0, 0, 0, 0.15);
+    --glassmorphic-bg-color: rgba(255, 255, 255, 0.25)
 }
 
 [dark-mode="true"] {
@@ -16,4 +17,5 @@
     --dimShadow: rgba(0, 0, 0, 0.4);
     --highContrastBrightShadow: rgba(255, 255, 255, 0.15);
     --lowContrastBrightShadow: rgba(0, 0, 0, 0.7);
+    --glassmorphic-bg-color: rgba(0, 0, 0, 0.25)
 }
