@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    ConfirmEmailResponse,
+    ConfirmEmailResponseFromJSON,
+    ConfirmEmailResponseToJSON,
     LoginRequest,
     LoginRequestFromJSON,
     LoginRequestToJSON,
@@ -33,15 +36,22 @@ import {
     RegisterResponse,
     RegisterResponseFromJSON,
     RegisterResponseToJSON,
+    ResendConfirmEmailResponse,
+    ResendConfirmEmailResponseFromJSON,
+    ResendConfirmEmailResponseToJSON,
 } from '../models';
+
+export interface ConfirmEmailRequest {
+    token: string;
+}
 
 export interface LoginOperationRequest {
     body?: LoginRequest;
 }
 
 export interface RefreshRequest {
-    feryvcsrftoken?: string | null;
     feryvrefreshtoken?: string | null;
+    feryvcsrftoken?: string | null;
 }
 
 export interface RegisterOperationRequest {
@@ -52,6 +62,40 @@ export interface RegisterOperationRequest {
  * 
  */
 export class AuthenticateApi extends runtime.BaseAPI {
+
+    /**
+     * Confirms the users email.
+     */
+    async confirmEmailRaw(requestParameters: ConfirmEmailRequest): Promise<runtime.ApiResponse<ConfirmEmailResponse>> {
+        if (requestParameters.token === null || requestParameters.token === undefined) {
+            throw new runtime.RequiredError('token','Required parameter requestParameters.token was null or undefined when calling confirmEmail.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/authenticate/confirm-email/{token}`.replace(`{${"token"}}`, encodeURIComponent(String(requestParameters.token))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConfirmEmailResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Confirms the users email.
+     */
+    async confirmEmail(requestParameters: ConfirmEmailRequest): Promise<ConfirmEmailResponse> {
+        const response = await this.confirmEmailRaw(requestParameters);
+        return await response.value();
+    }
 
     /**
      * The login for the user.
@@ -124,12 +168,12 @@ export class AuthenticateApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (requestParameters.feryvcsrftoken !== undefined && requestParameters.feryvcsrftoken !== null) {
-            headerParameters['Feryvcsrftoken'] = String(requestParameters.feryvcsrftoken);
-        }
-
         if (requestParameters.feryvrefreshtoken !== undefined && requestParameters.feryvrefreshtoken !== null) {
             headerParameters['Feryvrefreshtoken'] = String(requestParameters.feryvrefreshtoken);
+        }
+
+        if (requestParameters.feryvcsrftoken !== undefined && requestParameters.feryvcsrftoken !== null) {
+            headerParameters['Feryvcsrftoken'] = String(requestParameters.feryvcsrftoken);
         }
 
         if (this.configuration && this.configuration.apiKey) {
@@ -184,6 +228,36 @@ export class AuthenticateApi extends runtime.BaseAPI {
      */
     async register(requestParameters: RegisterOperationRequest): Promise<RegisterResponse> {
         const response = await this.registerRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Resends the email to confirm the user.
+     */
+    async resendConfirmEmailRaw(): Promise<runtime.ApiResponse<ResendConfirmEmailResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/authenticate/resend-confirm-email`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResendConfirmEmailResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Resends the email to confirm the user.
+     */
+    async resendConfirmEmail(): Promise<ResendConfirmEmailResponse> {
+        const response = await this.resendConfirmEmailRaw();
         return await response.value();
     }
 

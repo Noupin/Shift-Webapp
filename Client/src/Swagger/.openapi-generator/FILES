@@ -11,6 +11,7 @@ index.ts
 models/CategoriesResponse.ts
 models/ChangePasswordRequest.ts
 models/ChangePasswordResponse.ts
+models/ConfirmEmailResponse.ts
 models/ForgotPasswordRequest.ts
 models/ForgotPasswordResponse.ts
 models/IndividualShiftDeleteResponse.ts
@@ -33,6 +34,7 @@ models/PopularShiftsResponse.ts
 models/RefreshResponse.ts
 models/RegisterRequest.ts
 models/RegisterResponse.ts
+models/ResendConfirmEmailResponse.ts
 models/ResetPasswordRequest.ts
 models/ResetPasswordResponse.ts
 models/Shift.ts

@@ -34,6 +34,16 @@ definitions:
         default: ''
         type: string
     type: object
+  ConfirmEmailResponse:
+    properties:
+      confirmed:
+        default: false
+        type: boolean
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+    type: object
   ForgotPasswordRequest:
     properties:
       email:
@@ -263,6 +273,13 @@ definitions:
         default: ''
         type: string
     type: object
+  ResendConfirmEmailResponse:
+    properties:
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+    type: object
   ResetPasswordRequest:
     properties:
       password:
@@ -381,6 +398,8 @@ definitions:
       admin:
         type: boolean
       canTrain:
+        type: boolean
+      confirmed:
         type: boolean
       dateCreated:
         type: string
@@ -610,6 +629,39 @@ paths:
             specific message for the email, and a specific message for the password.
           schema:
             $ref: '#/definitions/RegisterResponse'
+      security:
+      - Bearer: []
+      tags:
+      - Authenticate
+  /api/authenticate/confirm-email/{token}:
+    get:
+      description: Confirms the users email.
+      operationId: confirmEmail
+      parameters:
+      - in: path
+        name: token
+        required: true
+        type: string
+      responses:
+        default:
+          description: The status of the user confirming their email.
+          schema:
+            $ref: '#/definitions/ConfirmEmailResponse'
+      security:
+      - Bearer: []
+      tags:
+      - Authenticate
+  /api/authenticate/resend-confirm-email:
+    get:
+      description: Resends the email to confirm the user.
+      operationId: resendConfirmEmail
+      parameters: []
+      responses:
+        default:
+          description: Whether the resending of the confirmation email went according
+            to plan.
+          schema:
+            $ref: '#/definitions/ResendConfirmEmailResponse'
       security:
       - Bearer: []
       tags:
@@ -878,11 +930,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -897,11 +949,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:

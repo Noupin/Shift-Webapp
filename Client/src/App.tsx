@@ -30,6 +30,7 @@ import { isTokenExpired } from './Helpers/Token';
 import { ApiInstances } from './Helpers/Api';
 import { useRefresh } from './Hooks/Refresh';
 import { getFrontEndSettings, setFrontEndSettings } from './Helpers/FrontEndSettings';
+import { ConfirmEmail } from './Modules/User/ConfirmEmail';
 import './App.scss';
 
 
@@ -166,6 +167,9 @@ export default function App() {
                 </Route>
                 <Route path="/settings">
                   <Settings elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                </Route>
+                <Route path="/confirm-email/:token">
+                  <ConfirmEmail elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route exact path="/">
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>

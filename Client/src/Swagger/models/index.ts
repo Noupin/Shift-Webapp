@@ -1,6 +1,7 @@
 export * from './CategoriesResponse';
 export * from './ChangePasswordRequest';
 export * from './ChangePasswordResponse';
+export * from './ConfirmEmailResponse';
 export * from './ForgotPasswordRequest';
 export * from './ForgotPasswordResponse';
 export * from './IndividualShiftDeleteResponse';
@@ -23,6 +24,7 @@ export * from './PopularShiftsResponse';
 export * from './RefreshResponse';
 export * from './RegisterRequest';
 export * from './RegisterResponse';
+export * from './ResendConfirmEmailResponse';
 export * from './ResetPasswordRequest';
 export * from './ResetPasswordResponse';
 export * from './Shift';

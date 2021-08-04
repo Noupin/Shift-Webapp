@@ -23,6 +23,8 @@ export const pageTitles = {
   'user': (username: string) => pageTitleTemplate(`${username}`),
   'shift': (username: string, title: string) => pageTitleTemplate(`${username}: ${title}`),
   'home': pageTitleTemplate("Home"),
+  'confirmEmail': pageTitleTemplate('Confirm Email'),
+  'resendConfirmEmail': pageTitleTemplate('Resend Confirmation Email'),
   '': "Shift"
 }
 
