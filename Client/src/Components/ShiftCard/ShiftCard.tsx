@@ -9,6 +9,7 @@ import { videoTypes } from '../../constants';
 import "./ShiftCard.scss"
 import { Shift } from '../../Swagger';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
+import { getCDNPrefix } from '../../Helpers/Api';
 
 
 interface IShiftCard extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
@@ -22,7 +23,6 @@ export function ShiftCard(props: IShiftCard){
   const {shift, setElevatedState, imageCssClassNames, ...cardProps} = props;
   const cssClasses = cardProps.className?.toString() + " borderRadius-2 p-0 forceTextWrap p-2";
   const buttonStyle: React.CSSProperties = { border: 'none'};
-  const apiPrefix = videoTypes.indexOf(shift.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'
   
   const history = useHistory();
 
@@ -46,7 +46,7 @@ export function ShiftCard(props: IShiftCard){
           style={{bottom: 0, left: 0, textAlign: "center", fontSize: 26, maxWidth: "100%"}}>
           {shift.title}
         </p>
-        <Media srcString={`${apiPrefix}${shift.mediaFilename}`}
+        <Media srcString={`${getCDNPrefix(shift.mediaFilename!)}${shift.mediaFilename}`}
           className={imageCssClass}
           setElevatedState={setElevatedState}/>
       </div>

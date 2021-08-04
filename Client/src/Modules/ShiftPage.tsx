@@ -20,6 +20,7 @@ import { ShiftUserComponent } from '../Components/Shift/ShiftUserComponent';
 import { ShiftTitleComponent } from '../Components/Shift/ShiftTitleComponent';
 import { Button } from '../Components/Button/Button';
 import { useFetch } from '../Hooks/Fetch';
+import { getCDNPrefix } from '../Helpers/Api';
 
 
 export function ShiftPage (props: IElevatedStateProps){
@@ -94,9 +95,9 @@ export function ShiftPage (props: IElevatedStateProps){
 
     document.title = pageTitles["shift"](shiftGetResponse.shift!.author.username, shiftGetResponse.shift!.title)
 
-    setShiftMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.mediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.mediaFilename!}`)
-    setBaseMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.baseMediaFilename!}`)
-    setMaskMediaURL(`${videoTypes.indexOf(shiftGetResponse.shift!.maskMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'}${shiftGetResponse.shift!.maskMediaFilename!}`)
+    setShiftMediaURL(`${getCDNPrefix(shiftGetResponse.shift!.mediaFilename!)}${shiftGetResponse.shift!.mediaFilename!}`)
+    setBaseMediaURL(`${getCDNPrefix(shiftGetResponse.shift!.baseMediaFilename!)}${shiftGetResponse.shift!.baseMediaFilename!}`)
+    setMaskMediaURL(`${getCDNPrefix(shiftGetResponse.shift!.maskMediaFilename!)}${shiftGetResponse.shift!.maskMediaFilename!}`)
   }, [shiftGetResponse])
 
   useEffect(() => {

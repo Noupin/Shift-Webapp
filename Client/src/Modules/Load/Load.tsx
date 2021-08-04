@@ -17,6 +17,7 @@ import { LoadMediaComponent } from '../../Components/Load/LoadMediaComponent';
 import { LoadTitleComponent } from '../../Components/Load/LoadTitleComponent';
 import { useFetch } from '../../Hooks/Fetch';
 import { urlToFile } from '../../Helpers/Files';
+import { getCDNPrefix } from '../../Helpers/Api';
 
 
 export function Load (props: IElevatedStateProps){
@@ -58,8 +59,7 @@ export function Load (props: IElevatedStateProps){
 
       if(!shiftResponse || !shiftResponse.shift || !shiftResponse.shift!.baseMediaFilename) return;
 
-      const apiPrefix = videoTypes.indexOf(shiftResponse.shift!.baseMediaFilename!.split('.').pop()!) !== -1 ? '/api/content/video/' : '/api/content/image/'
-      setBaseMedia(await urlToFile(`${apiPrefix}${shiftResponse.shift!.baseMediaFilename!}`, shiftResponse.shift!.baseMediaFilename!))
+      setBaseMedia(await urlToFile(`${getCDNPrefix(shiftResponse.shift!.baseMediaFilename!)}${shiftResponse.shift!.baseMediaFilename!}`, shiftResponse.shift!.baseMediaFilename!))
       setElevatedState((prev) => ({...prev, prebuiltShiftModel: ""}))
     }
 

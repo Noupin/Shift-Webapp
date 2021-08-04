@@ -1,11 +1,12 @@
 //First Party Imports
+import { API_BASE_URL, videoTypes } from "../constants";
 import { CDNApi, CategoryApi, InferenceApi, 
   LoadApi, TrainApi, UserApi, AuthenticateApi,
   ShiftApi, Configuration, ConfigurationParameters } from "../Swagger";
 
 
 function APIFactory<T>(API: new (config: Configuration) => T, configParams: ConfigurationParameters): T {
-  const config = new Configuration({credentials: 'same-origin', ...configParams})
+  const config = new Configuration({credentials: 'same-origin', basePath: API_BASE_URL, ...configParams})
   return new API(config)
 }
 
@@ -89,5 +90,15 @@ export class ApiInstances{
 
   get Authenticate(){
     return AuthenticateAPIFactory(this.apiKey)
+  }
+}
+
+
+export function getCDNPrefix(filename: string){
+  if(videoTypes.indexOf(filename!.split('.').pop()!) !== -1){
+    return `${API_BASE_URL}/api/content/video/`
+  }
+  else{
+    return `${API_BASE_URL}/api/content/image/`
   }
 }
