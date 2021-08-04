@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
-import { defaultShiftTitle, pageTitles, videoTypes } from "../../constants";
+import { defaultShiftTitle, pageTitles } from "../../constants";
 import { fillArray } from "../../Helpers/Arrays";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { LoadDataResponse, LoadDataRequest, GetIndivdualShiftRequest, IndividualShiftGetResponse } from '../../Swagger';

@@ -172,11 +172,15 @@ export function ShiftPage (props: IElevatedStateProps){
           <Row>
             <Col xs={2}></Col>
             <Col xs={4}>
-              <Image style={{height: "5em", width: "auto", filter: "invert(100%)"}} className="m-1"
+              <Image style={elevatedState().frontEndSettings.darkMode ? 
+              {height: "5em", width: "auto", filter: "invert(100%)"} :
+              {height: "5em", width: "auto"}} className="m-1"
                 imageSrc={LeftCurvedArrow} alt="LeftArrow"/>
             </Col>
             <Col xs={4}>
-              <Image style={{height: "5em", width: "auto", filter: "invert(100%)"}} className="m-1"
+              <Image style={elevatedState().frontEndSettings.darkMode ? 
+              {height: "5em", width: "auto", filter: "invert(100%)"} :
+              {height: "5em", width: "auto"}} className="m-1"
                 imageSrc={RightCurvedArrow} alt="RightArrow"/>
             </Col>
             <Col xs={2}></Col>
