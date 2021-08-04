@@ -12,7 +12,7 @@ import { Media } from '../Components/Media/Media';
 import { Image } from '../Components/Image/Image';
 import LeftCurvedArrow from "../Assets/LeftCurvedArrow.svg"
 import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
-import { pageTitles, videoTypes } from '../constants';
+import { pageTitles } from '../constants';
 import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftDeleteResponse, IndividualShiftPatchRequest,
   IndividualShiftPatchResponse, PatchIndivdualShiftRequest } from '../Swagger';
 import { ShiftButtonsComponent } from '../Components/Shift/ShiftButtonsComponent';

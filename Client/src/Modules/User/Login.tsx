@@ -8,7 +8,6 @@ import { Link, useHistory, useParams } from "react-router-dom";
 //First Party Imports
 import { Button } from '../../Components/Button/Button';
 import { TextBox } from '../../Components/TextBox/TextBox';
-import { Checkbox } from '../../Components/Checkbox/Checkbox';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { LoginResponse, LoginRequest, LoginOperationRequest } from '../../Swagger';
 import { pageTitles } from '../../constants';
@@ -20,7 +19,6 @@ export function Login (props: IElevatedStateProps){
 
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
 
   const [loginErrors, setLoginErrors] = useState({
     username: false,

@@ -5,7 +5,6 @@ import { useHistory } from 'react-router';
 //First Party Imports
 import { Media } from '../Media/Media'
 import { Button } from '../Button/Button';
-import { videoTypes } from '../../constants';
 import "./ShiftCard.scss"
 import { Shift } from '../../Swagger';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
