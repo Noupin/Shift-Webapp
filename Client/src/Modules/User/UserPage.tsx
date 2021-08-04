@@ -55,7 +55,7 @@ export function UserPage (props: IElevatedStateProps){
   return (
     <Container key={username}>
       <Row>
-        <Col xs={3}>
+        <Col xs={3} key={elevatedState().authenticated.toString()}>
           <UserComponent username={username} elevatedState={elevatedState}
             setElevatedState={setElevatedState} setOwner={setOwner}/>
         </Col>
