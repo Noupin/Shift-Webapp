@@ -90,7 +90,12 @@ export default function App() {
     
 
     const JWTBody = JSON.parse(atob(elevatedState.accessToken.split('.')[1]))
-    if(JWTBody.user) setCurrentUser(JWTBody.user);
+    if(JWTBody.user){
+      setCurrentUser(JWTBody.user);
+      if(!JWTBody.user.confirmed){
+        setElevatedState(prev => ({...prev, msg: "Please confirm your account."}))
+      }
+    }
 
     elevatedState.APIInstances.apiKey = elevatedState.accessToken
     var authenticated = isTokenExpired(elevatedState.accessToken)
