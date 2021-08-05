@@ -20,7 +20,6 @@ export function ConfirmEmail(props: IElevatedStateProps){
   const { token } = useParams<{token: string | undefined}>()
 
 
-
   const [fetching, setFetching] = useState(true);
   const [confirmEmailResponse, setConfirmEmailResponse] = useState<ConfirmEmailResponse>();
   const fetchConfirmEmail = useFetch(elevatedState().APIInstances.Authenticate,
