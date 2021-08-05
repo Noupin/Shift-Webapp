@@ -21,8 +21,8 @@ export function ConfirmEmailChange(props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(true);
   const [confirmChangeEmailResponse, setConfirmChangeEmailResponse] = useState<ConfirmEmailChangeResponse>();
-  const fetchConfirmEmailChangeEmail = useFetch(elevatedState().APIInstances.User,
-                                                elevatedState().APIInstances.User.confirmEmailChange,
+  const fetchConfirmEmailChangeEmail = useFetch(elevatedState.APIInstances.User,
+                                                elevatedState.APIInstances.User.confirmEmailChange,
                                                 elevatedState, setElevatedState, setConfirmChangeEmailResponse,
                                                 setFetching)
 

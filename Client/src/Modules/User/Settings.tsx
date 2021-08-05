@@ -22,7 +22,7 @@ export function Settings (props: IElevatedStateProps){
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Dark Mode</Col>
         <Col xs={6} className="justify-content-end">
-          <Checkbox checked={elevatedState().frontEndSettings.darkMode}
+          <Checkbox checked={elevatedState.frontEndSettings.darkMode}
             onChange={() => setElevatedState(prev => (
               {...prev, frontEndSettings: {...prev.frontEndSettings,
                                            darkMode: !prev.frontEndSettings.darkMode}
@@ -34,7 +34,7 @@ export function Settings (props: IElevatedStateProps){
         <Col xs={6} className="text-align-left">UI Style</Col>
         <Col xs={6} className="justify-content-end">
         <Dropdown options={uiStyleTypeArray}
-            defaultOption={elevatedState().frontEndSettings.uiStyle}
+            defaultOption={elevatedState.frontEndSettings.uiStyle}
             onOptionChange={(value) => setElevatedState(prev => (
               {...prev, frontEndSettings: {...prev.frontEndSettings,
                                            uiStyle: value as unknown as IFrontEndSettings["uiStyle"]}
@@ -46,7 +46,7 @@ export function Settings (props: IElevatedStateProps){
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Use PTM</Col>
         <Col xs={6} className="justify-content-end">
-          <Checkbox checked={elevatedState().frontEndSettings.usePTM}
+          <Checkbox checked={elevatedState.frontEndSettings.usePTM}
             onChange={() => setElevatedState(prev => (
               {...prev, frontEndSettings: {...prev.frontEndSettings,
                                            usePTM: !prev.frontEndSettings.usePTM}
@@ -57,7 +57,7 @@ export function Settings (props: IElevatedStateProps){
       <Row className="my-1">
         <Col xs={6} className="text-align-left">Training Shift</Col>
         <Col xs={6} className="justify-content-end">
-          <Checkbox checked={elevatedState().frontEndSettings.trainingShift}
+          <Checkbox checked={elevatedState.frontEndSettings.trainingShift}
               onChange={() => setElevatedState(prev => (
                 {...prev, frontEndSettings: {...prev.frontEndSettings,
                                              trainingShift: !prev.frontEndSettings.trainingShift}
@@ -69,7 +69,7 @@ export function Settings (props: IElevatedStateProps){
         <Col xs={6} className="text-align-left">Training Type</Col>
         <Col xs={6} className="justify-content-end">
           <Dropdown options={trainViewTypeArray}
-            defaultOption={elevatedState().frontEndSettings.trainView}
+            defaultOption={elevatedState.frontEndSettings.trainView}
             onOptionChange={(value) => setElevatedState(prev => (
               {...prev, frontEndSettings: {...prev.frontEndSettings,
                                            trainView: value as unknown as IFrontEndSettings["trainView"]}

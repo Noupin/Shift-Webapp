@@ -92,7 +92,7 @@ export function useFetch<T, U, V>(thisArg: U,
     }
 
     req()
-  }, [elevatedState().APIInstances.apiKey])
+  }, [elevatedState.APIInstances.apiKey])
 
 
   return fetchCall

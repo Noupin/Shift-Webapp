@@ -28,8 +28,8 @@ export function Login (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [loginResponse, setLoginResponse] = useState<LoginResponse>(); 
-  const fetchLogin = useFetch(elevatedState().APIInstances.Authenticate,
-                              elevatedState().APIInstances.Authenticate.login,
+  const fetchLogin = useFetch(elevatedState.APIInstances.Authenticate,
+                              elevatedState.APIInstances.Authenticate.login,
                               elevatedState, setElevatedState, setLoginResponse, setFetching)
 
   const history = useHistory();
@@ -80,7 +80,7 @@ export function Login (props: IElevatedStateProps){
   }, [loginResponse]);
 
   useEffect(() => {
-    if(!elevatedState().accessToken) return;
+    if(!elevatedState.accessToken) return;
 
     if(redirect){
       history.push(`/${redirect}`)
@@ -88,7 +88,7 @@ export function Login (props: IElevatedStateProps){
     else{
       history.push("/")
     }
-  }, [elevatedState().accessToken]);
+  }, [elevatedState.accessToken]);
 
 
 

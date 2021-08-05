@@ -19,7 +19,7 @@ export function NavBar (props: IElevatedStateProps){
   return (
     <div className="neumorphic borderRadius-2 p-2 w-100 m-2">
       <Navbar sticky="top" expand="lg" className="p-0"
-        variant={elevatedState().frontEndSettings.darkMode ? "dark" : "light"}>
+        variant={elevatedState.frontEndSettings.darkMode ? "dark" : "light"}>
         <Navbar.Brand>
           <NavLink to="/" className="pl-2 borderRadius-2">
             <img style={imageStyle} src={Logo} alt="Shift"/>
@@ -37,8 +37,8 @@ export function NavBar (props: IElevatedStateProps){
               </NavLink>
             </div>
           </Nav>
-          <Nav className="justify-content-end" key={`${elevatedState().authenticated}`}>
-            <UserElements elevatedState={elevatedState} setElevatedState={setElevatedState} key={`${elevatedState().authenticated}`}/>
+          <Nav className="justify-content-end" key={`${elevatedState.authenticated}`}>
+            <UserElements elevatedState={elevatedState} setElevatedState={setElevatedState} key={`${elevatedState.authenticated}`}/>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

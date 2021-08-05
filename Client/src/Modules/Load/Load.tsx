@@ -34,12 +34,12 @@ export function Load (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [loadResponse, setLoadResponse] = useState<LoadDataResponse>();
-  const fetchLoad = useFetch(elevatedState().APIInstances.Load,
-                             elevatedState().APIInstances.Load.loadData,
+  const fetchLoad = useFetch(elevatedState.APIInstances.Load,
+                             elevatedState.APIInstances.Load.loadData,
                              elevatedState, setElevatedState, setLoadResponse)
   const [shiftResponse, setShiftResponse] = useState<IndividualShiftGetResponse>();
-  const fetchShift = useFetch(elevatedState().APIInstances.Shift,
-                              elevatedState().APIInstances.Shift.getIndivdualShift,
+  const fetchShift = useFetch(elevatedState.APIInstances.Shift,
+                              elevatedState.APIInstances.Shift.getIndivdualShift,
                               elevatedState, setElevatedState, setShiftResponse)
 
   const prevShiftUUID = sessionStorage["shiftUUID"];
@@ -53,7 +53,7 @@ export function Load (props: IElevatedStateProps){
   useEffect(() => {
     async function setMediaFromPrebuilt(){
       const requestParams: GetIndivdualShiftRequest = {
-        uuid: elevatedState().prebuiltShiftModel
+        uuid: elevatedState.prebuiltShiftModel
       }
       fetchShift(requestParams)
 
@@ -63,7 +63,7 @@ export function Load (props: IElevatedStateProps){
       setElevatedState((prev) => ({...prev, prebuiltShiftModel: ""}))
     }
 
-    if(elevatedState().prebuiltShiftModel){
+    if(elevatedState.prebuiltShiftModel){
       setMediaFromPrebuilt()
     }
   }, [shiftResponse]);
@@ -108,15 +108,15 @@ export function Load (props: IElevatedStateProps){
 
   //Change the page from button clicks
   useEffect(() => {
-    if(!elevatedState().shiftUUID || elevatedState().shiftUUID === prevShiftUUID) return;
+    if(!elevatedState.shiftUUID || elevatedState.shiftUUID === prevShiftUUID) return;
 
-    if(elevatedState().frontEndSettings.trainingShift){
-      history.push(`/${elevatedState().frontEndSettings.trainView === "basic" ? "train" : "advancedTrain"}`);
+    if(elevatedState.frontEndSettings.trainingShift){
+      history.push(`/${elevatedState.frontEndSettings.trainView === "basic" ? "train" : "advancedTrain"}`);
     }
     else{
       history.push(`/inference`)
     }
-  }, [elevatedState().shiftUUID]);
+  }, [elevatedState.shiftUUID]);
 
   //Update files to send
   useEffect(() => {

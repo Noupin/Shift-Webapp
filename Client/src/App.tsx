@@ -51,8 +51,6 @@ export default function App() {
     frontEndSettings: getFrontEndSettings(),
   })
 
-  const getElevatedState = () => { return elevatedState };
-
   const [showMsg, setShowMsg] = useState(false);
   const fetchRefresh = useRefresh(setElevatedState)
 
@@ -124,7 +122,7 @@ export default function App() {
           <Col className="p-0 w-100 expandingColumn">
             <div className="h-100 d-flex flex-column w-100">
               <Row className="justify-content-center w-100 m-0">
-                <NavBar elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                <NavBar elevatedState={elevatedState} setElevatedState={setElevatedState}/>
               </Row>
 
               <Alert show={showMsg} variant="primary" className="w-100">
@@ -141,55 +139,55 @@ export default function App() {
 
               <Switch>
                 <Route path="/register/:redirect?">
-                  <Register elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <Register elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/login/:redirect?">
-                  <Login elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <Login elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <ProtectedRoute key={getElevatedState().authenticated.toString()}
+                <ProtectedRoute key={elevatedState.authenticated.toString()}
                   expression={isAuthenticated()} path="/change-password">
-                  <ChangePassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <ChangePassword elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <Route path="/forgot-password">
-                  <ForgotPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <ForgotPassword elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/reset-password/:token">
-                  <ResetPassword elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <ResetPassword elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <ProtectedRoute key={getElevatedState().authenticated.toString()}
+                <ProtectedRoute key={elevatedState.authenticated.toString()}
                   expression={isAuthenticated()} path="/load">
-                  <Load elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <Load elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <ProtectedRoute expression={currentUser().canTrain!} path="/train">
-                  <Train elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <Train elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute key={getElevatedState().authenticated.toString()}
+                <ProtectedRoute key={elevatedState.authenticated.toString()}
                   expression={isAuthenticated()} path="/inference">
-                  <Inference elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <Inference elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <Route path="/shift/:uuid">
-                  <ShiftPage elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <ShiftPage elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/user/:username">
-                  <UserPage elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <UserPage elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/settings">
-                  <Settings elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <Settings elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/confirm-email/:token">
-                  <ConfirmEmail elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <ConfirmEmail elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/resend-confirmation-email">
-                  <ResendConfirmEmail elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <ResendConfirmEmail elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/verify-email-change/:token">
-                  <VerifyEmailChange elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <VerifyEmailChange elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/confirm-email-change/:token">
-                  <ConfirmEmailChange elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <ConfirmEmailChange elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route exact path="/">
-                  <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                  <Home elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route path="/">
                   EROR

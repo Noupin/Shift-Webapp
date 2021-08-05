@@ -2,6 +2,6 @@
 import { IElevatedPageState } from "./PageState";
 
 export interface IElevatedStateProps {
-  elevatedState: () => IElevatedPageState
+  elevatedState: IElevatedPageState
   setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
 }

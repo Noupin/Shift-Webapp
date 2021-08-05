@@ -25,23 +25,23 @@ export function Home (props: IElevatedStateProps){
   const [shiftCategories, setShiftCategories] = useState<ShiftCategories[]>([])
   const defaultCategories = ["Featured", "Popular", "New"]
 
-  const fetchNewCategory = useFetch(elevatedState().APIInstances.Category,
-                                    elevatedState().APIInstances.Category._new,
+  const fetchNewCategory = useFetch(elevatedState.APIInstances.Category,
+                                    elevatedState.APIInstances.Category._new,
                                     elevatedState, setElevatedState,
                                     (newResponse: NewShiftsResponse) => 
                                       setNewShifts(newResponse.shifts!))
-  const fetchPopularCategory = useFetch(elevatedState().APIInstances.Category,
-                                        elevatedState().APIInstances.Category.popular,
+  const fetchPopularCategory = useFetch(elevatedState.APIInstances.Category,
+                                        elevatedState.APIInstances.Category.popular,
                                         elevatedState, setElevatedState,
                                         (popularResponse: PopularShiftsResponse) => 
                                           setPopularShifts(popularResponse.shifts!))
-  const fetchFeaturedCategory = useFetch(elevatedState().APIInstances.Category,
-                                         elevatedState().APIInstances.Category.category,
+  const fetchFeaturedCategory = useFetch(elevatedState.APIInstances.Category,
+                                         elevatedState.APIInstances.Category.category,
                                          elevatedState, setElevatedState,
                                          (featuredResponse: ShiftCategoryResponse) => 
                                            setFeaturedShifts(featuredResponse.shifts!))
-  const fetchCategory = useFetch(elevatedState().APIInstances.Category,
-                                 elevatedState().APIInstances.Category.category,
+  const fetchCategory = useFetch(elevatedState.APIInstances.Category,
+                                 elevatedState.APIInstances.Category.category,
                                  elevatedState, setElevatedState,
                                  (categoryResponse: ShiftCategoryResponse, category: string) =>{
                                    let categoryShifts: ShiftCategories = {
@@ -50,8 +50,8 @@ export function Home (props: IElevatedStateProps){
                                    }
                                    setShiftCategories((prev) => [...prev, categoryShifts])
                                  })
-  const fetchCategories = useFetch(elevatedState().APIInstances.Category,
-                                   elevatedState().APIInstances.Category.categories,
+  const fetchCategories = useFetch(elevatedState.APIInstances.Category,
+                                   elevatedState.APIInstances.Category.categories,
                                    elevatedState, setElevatedState,
                                    (categoriesResponse: CategoriesResponse, ) => {
                                      setCategoryNames(categoriesResponse.categories.filter(

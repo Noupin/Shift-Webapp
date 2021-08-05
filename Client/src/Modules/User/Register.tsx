@@ -32,8 +32,8 @@ export function Register (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [registerResponse, setRegisterResponse] = useState<RegisterResponse>();
-  const fetchRegister = useFetch(elevatedState().APIInstances.Authenticate,
-                                 elevatedState().APIInstances.Authenticate.register,
+  const fetchRegister = useFetch(elevatedState.APIInstances.Authenticate,
+                                 elevatedState.APIInstances.Authenticate.register,
                                  elevatedState, setElevatedState, setRegisterResponse, setFetching)
 
   const history = useHistory();
@@ -99,7 +99,7 @@ export function Register (props: IElevatedStateProps){
   }, [registerResponse]);
 
   useEffect(() => {
-    if(!elevatedState().authenticated) return;
+    if(!elevatedState.authenticated) return;
 
     if(redirect){
       history.push(`/${redirect}`)
@@ -107,7 +107,7 @@ export function Register (props: IElevatedStateProps){
     else{
       history.push("/")
     }
-  }, [elevatedState().authenticated]);
+  }, [elevatedState.authenticated]);
 
 
   return (

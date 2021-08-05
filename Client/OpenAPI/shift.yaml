@@ -610,13 +610,13 @@ paths:
       parameters:
       - default: null
         in: header
-        name: Feryvcsrftoken
+        name: Feryvrefreshtoken
         required: false
         type: string
         x-nullable: true
       - default: null
         in: header
-        name: Feryvrefreshtoken
+        name: Feryvcsrftoken
         required: false
         type: string
         x-nullable: true

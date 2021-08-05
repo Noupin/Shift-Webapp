@@ -34,11 +34,11 @@ export function Inference (props: IElevatedStateProps){
   const [inferenceResponse, setInferenceResponse] = useState<CombinedInferenceResponse>();
 	const [updateProgress, setUpdateProgress] = useState(false);
 
-	const fetchInference = useFetch(elevatedState().APIInstances.Inference,
-																	elevatedState().APIInstances.Inference.inference,
+	const fetchInference = useFetch(elevatedState.APIInstances.Inference,
+																	elevatedState.APIInstances.Inference.inference,
 																	elevatedState, setElevatedState, setInferenceResponse, setInference)
-	const fetchInferenceStatus = useFetch(elevatedState().APIInstances.Inference,
-																				elevatedState().APIInstances.Inference.inferenceStatus,
+	const fetchInferenceStatus = useFetch(elevatedState.APIInstances.Inference,
+																				elevatedState.APIInstances.Inference.inferenceStatus,
 																				elevatedState, setElevatedState, setInferenceResponse, setUpdateProgress)
 
 
@@ -50,10 +50,10 @@ export function Inference (props: IElevatedStateProps){
 		if(!inference) return;
 
 		const inferenceRequestParams: InferenceRequest = {
-      shiftUUID: elevatedState().shiftUUID,
-			usePTM: elevatedState().frontEndSettings.usePTM,
-			training: elevatedState().frontEndSettings.trainingShift,
-			prebuiltShiftModel: elevatedState().prebuiltShiftModel
+      shiftUUID: elevatedState.shiftUUID,
+			usePTM: elevatedState.frontEndSettings.usePTM,
+			training: elevatedState.frontEndSettings.trainingShift,
+			prebuiltShiftModel: elevatedState.prebuiltShiftModel
     };
     const inferenceBody: InferenceOperationRequest = {
       body: inferenceRequestParams
@@ -75,10 +75,10 @@ export function Inference (props: IElevatedStateProps){
 
 		if(updating || !stopInference){
 			const inferenceStatusRequestParams: InferenceRequest = {
-				shiftUUID: elevatedState().shiftUUID,
-				usePTM: elevatedState().frontEndSettings.usePTM,
-				training: elevatedState().frontEndSettings.trainingShift,
-				prebuiltShiftModel: elevatedState().prebuiltShiftModel
+				shiftUUID: elevatedState.shiftUUID,
+				usePTM: elevatedState.frontEndSettings.usePTM,
+				training: elevatedState.frontEndSettings.trainingShift,
+				prebuiltShiftModel: elevatedState.prebuiltShiftModel
 			};
 			const inferenceStatusBody: InferenceStatusRequest = {
 				body: inferenceStatusRequestParams
@@ -121,7 +121,7 @@ export function Inference (props: IElevatedStateProps){
 			</Row>
 			{updating ? <Row className="justify-content-center"><Loader/></Row> : <></>}
 			<Row className="my-2">
-				{elevatedState().frontEndSettings.trainingShift &&
+				{elevatedState.frontEndSettings.trainingShift &&
 				<Col className="px-2">
 					<Link to="/train" className="w-100">
             <Button className="borderRadius-2 p-2 w-100" disabled={inference}>
@@ -136,7 +136,7 @@ export function Inference (props: IElevatedStateProps){
 						</Button>
 					</a>
 				</Col>
-				{elevatedState().frontEndSettings.trainingShift &&
+				{elevatedState.frontEndSettings.trainingShift &&
 				<Col className="px-2">
 					<Button className="borderRadius-2 p-2 w-100" disabled={inference}>
 						Share <FontAwesomeIcon icon={faShare}/>

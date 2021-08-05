@@ -55,10 +55,10 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
   async function trainStatus(){
     const trainStatusRequestParams: TrainRequest = {
-      shiftUUID: elevatedState().shiftUUID,
-      shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().frontEndSettings.usePTM,
-      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      shiftUUID: elevatedState.shiftUUID,
+      shiftTitle: elevatedState.shiftTitle,
+      usePTM: elevatedState.frontEndSettings.usePTM,
+      prebuiltShiftModel: elevatedState.prebuiltShiftModel,
       trainType: 'advanced'
     };
     const trainStatusBody: TrainStatusRequest = {
@@ -67,7 +67,7 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
     setUpdating(true)
 
-    await TrainAPIFactory(elevatedState().accessToken).trainStatus(trainStatusBody).then((value) => {
+    await TrainAPIFactory(elevatedState.accessToken).trainStatus(trainStatusBody).then((value) => {
       setTrainResponse(value)
     })
 
@@ -76,17 +76,17 @@ export function AdvancedTrain (props: IElevatedStateProps){
 
   async function stopTraining(){
     const stopTrainRequestParams: TrainRequest = {
-      shiftUUID: elevatedState().shiftUUID,
-      shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().frontEndSettings.usePTM,
-      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      shiftUUID: elevatedState.shiftUUID,
+      shiftTitle: elevatedState.shiftTitle,
+      usePTM: elevatedState.frontEndSettings.usePTM,
+      prebuiltShiftModel: elevatedState.prebuiltShiftModel,
       trainType: 'advanced'
     };
     const stopTrainBody: StopTrainRequest = {
       body: stopTrainRequestParams
     }
 
-    await TrainAPIFactory(elevatedState().accessToken).stopTrain(stopTrainBody).then((value) => {
+    await TrainAPIFactory(elevatedState.accessToken).stopTrain(stopTrainBody).then((value) => {
       if(!leavingPage){
         setTrainResponse(value)
       }
@@ -99,17 +99,17 @@ export function AdvancedTrain (props: IElevatedStateProps){
     document.title = pageTitles["advancedTrain"]
 
     const trainRequestParams: TrainRequest = {
-      shiftUUID: elevatedState().shiftUUID,
-      shiftTitle: elevatedState().shiftTitle,
-      usePTM: elevatedState().frontEndSettings.usePTM,
-      prebuiltShiftModel: elevatedState().prebuiltShiftModel,
+      shiftUUID: elevatedState.shiftUUID,
+      shiftTitle: elevatedState.shiftTitle,
+      usePTM: elevatedState.frontEndSettings.usePTM,
+      prebuiltShiftModel: elevatedState.prebuiltShiftModel,
       trainType: 'advanced'
     };
     const trainBody: TrainOperationRequest = {
       body: trainRequestParams
     }
     
-    TrainAPIFactory(elevatedState().accessToken).train(trainBody).then((value) => {
+    TrainAPIFactory(elevatedState.accessToken).train(trainBody).then((value) => {
       setTrainResponse(value)
     })
 

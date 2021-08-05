@@ -19,8 +19,8 @@ export function VerifyEmailChange(props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(true);
   const [verifyChangeEmailResponse, setVerifyChangeEmailResponse] = useState<VerifyEmailChangeResponse>();
-  const fetchVerifyEmailChange = useFetch(elevatedState().APIInstances.User,
-                                           elevatedState().APIInstances.User.verifyEmailChange,
+  const fetchVerifyEmailChange = useFetch(elevatedState.APIInstances.User,
+                                           elevatedState.APIInstances.User.verifyEmailChange,
                                            elevatedState, setElevatedState, setVerifyChangeEmailResponse,
                                            setFetching)
 

@@ -40,14 +40,14 @@ export function ShiftPage (props: IElevatedStateProps){
   const [baseMediaURL, setBaseMediaURL] = useState("");
   const [maskMediaURL, setMaskMediaURL] = useState("");
   
-  const fetchGetIndividualShift = useFetch(elevatedState().APIInstances.Shift,
-                                           elevatedState().APIInstances.Shift.getIndivdualShift,
+  const fetchGetIndividualShift = useFetch(elevatedState.APIInstances.Shift,
+                                           elevatedState.APIInstances.Shift.getIndivdualShift,
                                            elevatedState, setElevatedState, setShiftGetResponse)
-  const fetchPatchIndividualShift = useFetch(elevatedState().APIInstances.Shift,
-                                             elevatedState().APIInstances.Shift.patchIndivdualShift,
+  const fetchPatchIndividualShift = useFetch(elevatedState.APIInstances.Shift,
+                                             elevatedState.APIInstances.Shift.patchIndivdualShift,
                                              elevatedState, setElevatedState, setShiftPatchResponse, setSaving)
-  const fetchDeleteIndividualShift = useFetch(elevatedState().APIInstances.Shift,
-                                              elevatedState().APIInstances.Shift.deleteIndivdualShift,
+  const fetchDeleteIndividualShift = useFetch(elevatedState.APIInstances.Shift,
+                                              elevatedState.APIInstances.Shift.deleteIndivdualShift,
                                               elevatedState, setElevatedState, setShiftDeleteResponse)
   
   function shareClick(event: Event){
@@ -93,7 +93,7 @@ export function ShiftPage (props: IElevatedStateProps){
     }
 
     fetchGetIndividualShift(urlParams)
-  }, [uuid, shiftPatchResponse, editing, elevatedState().APIInstances.apiKey]);
+  }, [uuid, shiftPatchResponse, editing, elevatedState.APIInstances.apiKey]);
 
   useEffect(() => {
     if (!shiftGetResponse) return;
@@ -177,13 +177,13 @@ export function ShiftPage (props: IElevatedStateProps){
           <Row>
             <Col xs={2}></Col>
             <Col xs={4}>
-              <Image style={elevatedState().frontEndSettings.darkMode ? 
+              <Image style={elevatedState.frontEndSettings.darkMode ? 
               {height: "5em", width: "auto", filter: "invert(100%)"} :
               {height: "5em", width: "auto"}} className="m-1"
                 imageSrc={LeftCurvedArrow} alt="LeftArrow"/>
             </Col>
             <Col xs={4}>
-              <Image style={elevatedState().frontEndSettings.darkMode ? 
+              <Image style={elevatedState.frontEndSettings.darkMode ? 
               {height: "5em", width: "auto", filter: "invert(100%)"} :
               {height: "5em", width: "auto"}} className="m-1"
                 imageSrc={RightCurvedArrow} alt="RightArrow"/>

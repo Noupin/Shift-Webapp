@@ -31,8 +31,8 @@ export function ChangePassword (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [changePasswordResponse, setChangePasswordResponse] = useState<ChangePasswordResponse>();
-  const fetchChangeUserPassword = useFetch(elevatedState().APIInstances.User,
-                                           elevatedState().APIInstances.User.changePassword,
+  const fetchChangeUserPassword = useFetch(elevatedState.APIInstances.User,
+                                           elevatedState.APIInstances.User.changePassword,
                                            elevatedState, setElevatedState, setChangePasswordResponse,
                                            setFetching)
 

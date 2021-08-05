@@ -27,8 +27,8 @@ export function UserPage (props: IElevatedStateProps){
   const [userShiftsResponse, setUserShiftsResponse] = useState<UserShiftsResponse>();
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
   const [owner, setOwner] = useState(false)
-  const fetchUserShifts = useFetch(elevatedState().APIInstances.User,
-                                   elevatedState().APIInstances.User.userShifts,
+  const fetchUserShifts = useFetch(elevatedState.APIInstances.User,
+                                   elevatedState.APIInstances.User.userShifts,
                                    elevatedState, setElevatedState, setUserShiftsResponse)
 
 
@@ -55,12 +55,12 @@ export function UserPage (props: IElevatedStateProps){
   return (
     <Container key={username}>
       <Row>
-        <Col xs={3} key={elevatedState().authenticated.toString()}>
+        <Col xs={3} key={elevatedState.authenticated.toString()}>
           <UserComponent username={username} elevatedState={elevatedState}
             setElevatedState={setElevatedState} setOwner={setOwner}/>
         </Col>
-        <Col xs={9} className="p-2" key={elevatedState().accessToken}>
-          {owner && elevatedState().authenticated &&
+        <Col xs={9} className="p-2" key={elevatedState.accessToken}>
+          {owner && elevatedState.authenticated &&
           <Row className="justify-content-end">
             <NavLink to="/settings" className="textColor" style={{fontSize: "1.5em"}}>
               <FontAwesomeIcon className="spinAnimation" icon={faCog}/>

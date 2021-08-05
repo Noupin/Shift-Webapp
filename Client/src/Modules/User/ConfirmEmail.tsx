@@ -22,8 +22,8 @@ export function ConfirmEmail(props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(true);
   const [confirmEmailResponse, setConfirmEmailResponse] = useState<ConfirmEmailResponse>();
-  const fetchConfirmEmail = useFetch(elevatedState().APIInstances.Authenticate,
-                                     elevatedState().APIInstances.Authenticate.confirmEmail,
+  const fetchConfirmEmail = useFetch(elevatedState.APIInstances.Authenticate,
+                                     elevatedState.APIInstances.Authenticate.confirmEmail,
                                      elevatedState, setElevatedState, setConfirmEmailResponse,
                                      setFetching)
   

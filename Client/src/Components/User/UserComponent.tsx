@@ -42,17 +42,17 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
   const [profilePictureURL, setProfilePictureURL] = useState("");
   const [profilePicture, setProfilePicture] = useState<File>();
 
-  const fetchGetUser = useFetch(elevatedState().APIInstances.User,
-                                elevatedState().APIInstances.User.getIndivdualUser,
+  const fetchGetUser = useFetch(elevatedState.APIInstances.User,
+                                elevatedState.APIInstances.User.getIndivdualUser,
                                 elevatedState, setElevatedState, setUserGetResponse)
-  const fetchDeleteUser = useFetch(elevatedState().APIInstances.User,
-                                   elevatedState().APIInstances.User.deleteIndivdualUser,
+  const fetchDeleteUser = useFetch(elevatedState.APIInstances.User,
+                                   elevatedState.APIInstances.User.deleteIndivdualUser,
                                    elevatedState, setElevatedState, setUserDeleteResponse)
-  const fetchPatchUser = useFetch(elevatedState().APIInstances.User,
-                                  elevatedState().APIInstances.User.patchIndivdualUser,
+  const fetchPatchUser = useFetch(elevatedState.APIInstances.User,
+                                  elevatedState.APIInstances.User.patchIndivdualUser,
                                   elevatedState, setElevatedState, setUserPatchResponse)
-  const fetchUpdateUserPicture = useFetch(elevatedState().APIInstances.User,
-                                          elevatedState().APIInstances.User.updatePicture,
+  const fetchUpdateUserPicture = useFetch(elevatedState.APIInstances.User,
+                                          elevatedState.APIInstances.User.updatePicture,
                                           elevatedState, setElevatedState, setUpdatePictureResponse)
   const fetchRefresh = useRefresh(setElevatedState)
 
@@ -169,7 +169,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
           <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
             setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
         </Row>
-        {userGetResponse && userGetResponse.owner && elevatedState().authenticated && 
+        {userGetResponse && userGetResponse.owner && elevatedState.authenticated && 
         <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>}
       </>
     )
