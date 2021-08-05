@@ -9,7 +9,7 @@ import { Media } from "../Media/Media";
 import { FileDialog } from "../FileDialog/FileDialog";
 import { validateFileList } from "../../Helpers/Files";
 import { validMediaFileExtesnions } from "../../constants";
-import { IElevatedPageState } from "../../Interfaces/PageState";
+import { IElevatedState } from "../../Interfaces/ElevatedState";
 import { MediaList } from "../../Components/MediaList/MediaList";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { IElevatedStateProps } from "../../Interfaces/ElevatedStateProps";
@@ -25,7 +25,7 @@ interface ILoadMediaComponent extends IElevatedStateProps{
 }
 
 
-function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<IElevatedPageState>>, setFiles: React.Dispatch<React.SetStateAction<File[]>>){
+function checkFile(event: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<IElevatedState>>, setFiles: React.Dispatch<React.SetStateAction<File[]>>){
   const [filteredFiles, badExtensions] = validateFileList(event.target.files!, validMediaFileExtesnions)
 
   if(badExtensions.length > 0){

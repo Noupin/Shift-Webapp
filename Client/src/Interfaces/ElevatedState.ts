@@ -2,7 +2,7 @@
 import { ApiInstances } from '../Helpers/Api';
 import { IFrontEndSettings } from './FrontEndSettings'
 
-export interface IElevatedPageState {
+export interface IElevatedState {
     msg: string
     error: Error | null
     authenticated: boolean

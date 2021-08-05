@@ -8,7 +8,7 @@ import { BrowserRouter as Router,
 import { Container, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
-import { IElevatedPageState } from "./Interfaces/PageState";
+import { IElevatedState } from "./Interfaces/ElevatedState";
 import { Register } from "./Modules/User/Register";
 import { Login } from "./Modules/User/Login";
 import { ChangePassword } from "./Modules/User/ChangePassword";
@@ -38,7 +38,7 @@ import './App.scss';
 
 
 export default function App() {
-  const [elevatedState, setElevatedState] = useState<IElevatedPageState>({
+  const [elevatedState, setElevatedState] = useState<IElevatedState>({
     msg: "",
     error: null,
     authenticated: false,

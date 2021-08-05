@@ -1,7 +1,7 @@
 //First Party Imports
-import { IElevatedPageState } from "./PageState";
+import { IElevatedState } from "./ElevatedState";
 
 export interface IElevatedStateProps {
-  elevatedState: IElevatedPageState
-  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedPageState>>
+  elevatedState: IElevatedState
+  setElevatedState: React.Dispatch<React.SetStateAction<IElevatedState>>
 }
