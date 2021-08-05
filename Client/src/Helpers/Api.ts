@@ -2,13 +2,14 @@
 import { API_BASE_URL, videoTypes } from "../constants";
 import { CDNApi, CategoryApi, InferenceApi, 
   LoadApi, TrainApi, UserApi, AuthenticateApi,
-  ShiftApi, Configuration, ConfigurationParameters } from "../Swagger";
+  ShiftApi, Configuration, ConfigurationParameters, SubscriptionApi } from "../Swagger";
 
 
 function APIFactory<T>(API: new (config: Configuration) => T, configParams: ConfigurationParameters): T {
   const config = new Configuration({credentials: 'same-origin', basePath: API_BASE_URL, ...configParams})
   return new API(config)
 }
+
 
 const CDNAPIFactory = (apiKey: string) => {
   return APIFactory(CDNApi, {apiKey: apiKey})
@@ -34,6 +35,10 @@ const InferenceAPIFactory = (apiKey: string) => {
 export const AuthenticateAPIFactory = (apiKey?: string) => {
   return APIFactory(AuthenticateApi, {apiKey: apiKey})
 }
+const SubscriptionAPIFactory = (apiKey?: string) => {
+  return APIFactory(SubscriptionApi, {apiKey: apiKey})
+}
+
 
 export class ApiInstances{
   private key: string
@@ -90,6 +95,10 @@ export class ApiInstances{
 
   get Authenticate(){
     return AuthenticateAPIFactory(this.apiKey)
+  }
+
+  get Subscription(){
+    return SubscriptionAPIFactory(this.apiKey)
   }
 }
 

@@ -8,36 +8,28 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { pageTitles } from '../../constants';
 import { useFetch } from '../../Hooks/Fetch';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { ResendConfirmEmailResponse } from '../../Swagger';
+import { StripeCreateCheckoutSessionResponse } from '../../Swagger';
 
 
 export function SubscriptionPage(props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
 
-
-  const [fetching, setFetching] = useState(true);
-  const [resendConfirmEmailResponse, setResendConfirmEmailResponse] = useState<ResendConfirmEmailResponse>();
-  const fetchResendConfirmEmail = useFetch(elevatedState.APIInstances,
-                                           elevatedState.APIInstances.Authenticate.resendConfirmEmail,
-                                           elevatedState, setElevatedState, setResendConfirmEmailResponse,
-                                           setFetching)
+  const [stripeCreateCheckoutResponse, setStripeCreateCheckoutResponse] = useState<StripeCreateCheckoutSessionResponse>();
+  const fetchCreateCheckout = useFetch(elevatedState.APIInstances.Subscription,
+                                       elevatedState.APIInstances.Subscription.createCheckoutSession,
+                                       elevatedState, setElevatedState, setStripeCreateCheckoutResponse)
 
 
   useEffect(() => {
-    document.title = pageTitles["resendConfirmEmail"]
+    document.title = pageTitles["subscription"]
+    fetchCreateCheckout()
   }, [])
 
   useEffect(() => {
-    if(!fetching) return;
+    if(!stripeCreateCheckoutResponse) return;
 
-    fetchResendConfirmEmail()
-  }, [fetching]);
-
-  useEffect(() => {
-    if(!resendConfirmEmailResponse) return;
-
-    setElevatedState(prev => ({...prev, msg: resendConfirmEmailResponse.msg!}))
-  }, [resendConfirmEmailResponse])
+    setElevatedState(prev => ({...prev, msg: stripeCreateCheckoutResponse.msg!}))
+  }, [stripeCreateCheckoutResponse])
 
 
   return (
@@ -46,7 +38,7 @@ export function SubscriptionPage(props: IElevatedStateProps){
         <Col xs={3}></Col>
         <Col xs={6}>
           <Row className="justify-content-center">
-            <h2>{resendConfirmEmailResponse ? "There is a surpise in your email for you!" : "Resending Confirmation Email..."}</h2>
+            <h2>{stripeCreateCheckoutResponse ? "Redirecting to checkout..." : "Setting up checkout..."}</h2>
           </Row>
         </Col>
         <Col xs={3}></Col>
