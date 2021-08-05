@@ -353,6 +353,19 @@ definitions:
         type: string
         x-nullable: true
     type: object
+  StripeCreateCheckoutSessionResponse:
+    properties:
+      sessionId:
+        default: ''
+        type: string
+    type: object
+  StripePublishableKeyResponse:
+    properties:
+      publicKey:
+        type: string
+    required:
+    - publicKey
+    type: object
   TrainRequest:
     properties:
       prebuiltShiftModel:
@@ -418,6 +431,7 @@ definitions:
       id: {}
       mediaFilename:
         type: string
+      subscriptions: {}
       username:
         type: string
       verified:
@@ -610,13 +624,13 @@ paths:
       parameters:
       - default: null
         in: header
-        name: Feryvcsrftoken
+        name: Feryvrefreshtoken
         required: false
         type: string
         x-nullable: true
       - default: null
         in: header
-        name: Feryvrefreshtoken
+        name: Feryvcsrftoken
         required: false
         type: string
         x-nullable: true
@@ -998,11 +1012,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -1017,11 +1031,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       responses:
@@ -1148,6 +1162,32 @@ paths:
       - Bearer: []
       tags:
       - Shift
+  /api/subscription/stripe-publishable-key:
+    get:
+      description: Sends the publishable stripe key.
+      operationId: getStripePublishableKey
+      parameters: []
+      responses:
+        default:
+          description: The pubishable key.
+          schema:
+            $ref: '#/definitions/StripePublishableKeyResponse'
+      tags:
+      - Subscription
+  /api/subscription/create-checkout-session:
+    get:
+      description: Sends the publishable stripe key.
+      operationId: createCheckoutSession
+      parameters: []
+      responses:
+        default:
+          description: The stripe session id.
+          schema:
+            $ref: '#/definitions/StripeCreateCheckoutSessionResponse'
+      security:
+      - Bearer: []
+      tags:
+      - Subscription
 schemes:
 - http
 - https

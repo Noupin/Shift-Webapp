@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 
 //First Party Imports
-import { CATEGORIES_TO_GET, CATEGORIES_TO_REMOVE, pageTitles } from '../../constants';
+import { CATEGORIES_TO_REMOVE, pageTitles } from '../../constants';
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 import { ShiftCategories } from '../../Interfaces/ShiftCategories';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';

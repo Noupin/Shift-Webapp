@@ -4,6 +4,7 @@ apis/CategoryApi.ts
 apis/InferenceApi.ts
 apis/LoadApi.ts
 apis/ShiftApi.ts
+apis/SubscriptionApi.ts
 apis/TrainApi.ts
 apis/UserApi.ts
 apis/index.ts
@@ -41,6 +42,8 @@ models/ResetPasswordResponse.ts
 models/Shift.ts
 models/ShiftCategoryResponse.ts
 models/StopTrainResponse.ts
+models/StripeCreateCheckoutSessionResponse.ts
+models/StripePublishableKeyResponse.ts
 models/TrainRequest.ts
 models/TrainResponse.ts
 models/TrainStatusResponse.ts

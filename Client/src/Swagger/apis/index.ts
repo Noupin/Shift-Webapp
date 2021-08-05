@@ -4,5 +4,6 @@ export * from './CategoryApi';
 export * from './InferenceApi';
 export * from './LoadApi';
 export * from './ShiftApi';
+export * from './SubscriptionApi';
 export * from './TrainApi';
 export * from './UserApi';

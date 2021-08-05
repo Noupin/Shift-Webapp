@@ -31,6 +31,8 @@ export * from './ResetPasswordResponse';
 export * from './Shift';
 export * from './ShiftCategoryResponse';
 export * from './StopTrainResponse';
+export * from './StripeCreateCheckoutSessionResponse';
+export * from './StripePublishableKeyResponse';
 export * from './TrainRequest';
 export * from './TrainResponse';
 export * from './TrainStatusResponse';

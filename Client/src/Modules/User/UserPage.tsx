@@ -33,6 +33,15 @@ export function UserPage (props: IElevatedStateProps){
                                    elevatedState, setElevatedState, setUserShiftsResponse)
 
 
+  function handleScroll(e: any){
+    console.log('scrollelele')
+    const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    if (bottom) {
+      console.log("At the bottom")
+    }
+  }
+
+
   useEffect(() => {
     document.title = pageTitles["user"](username)
   }, [])
@@ -71,7 +80,7 @@ export function UserPage (props: IElevatedStateProps){
           <Row className="justify-content-center">
             <h2>Shifts</h2>
           </Row>
-          <Row className="pl-3">
+          <Row className="pl-3" onScroll={handleScroll} style={{overflowY: 'scroll'}}>
             <Masonry breakpointCols={{default: 4,
                                       1400: 3,
                                       1100: 2,

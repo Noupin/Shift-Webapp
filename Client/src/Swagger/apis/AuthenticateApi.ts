@@ -50,8 +50,8 @@ export interface LoginOperationRequest {
 }
 
 export interface RefreshRequest {
-    feryvcsrftoken?: string | null;
     feryvrefreshtoken?: string | null;
+    feryvcsrftoken?: string | null;
 }
 
 export interface RegisterOperationRequest {
@@ -168,12 +168,12 @@ export class AuthenticateApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (requestParameters.feryvcsrftoken !== undefined && requestParameters.feryvcsrftoken !== null) {
-            headerParameters['Feryvcsrftoken'] = String(requestParameters.feryvcsrftoken);
-        }
-
         if (requestParameters.feryvrefreshtoken !== undefined && requestParameters.feryvrefreshtoken !== null) {
             headerParameters['Feryvrefreshtoken'] = String(requestParameters.feryvrefreshtoken);
+        }
+
+        if (requestParameters.feryvcsrftoken !== undefined && requestParameters.feryvcsrftoken !== null) {
+            headerParameters['Feryvcsrftoken'] = String(requestParameters.feryvcsrftoken);
         }
 
         if (this.configuration && this.configuration.apiKey) {

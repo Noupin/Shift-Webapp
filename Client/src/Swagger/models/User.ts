@@ -63,6 +63,12 @@ export interface User {
     mediaFilename?: string;
     /**
      * 
+     * @type {object}
+     * @memberof User
+     */
+    subscriptions?: object;
+    /**
+     * 
      * @type {string}
      * @memberof User
      */
@@ -92,6 +98,7 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'email': json['email'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
+        'subscriptions': !exists(json, 'subscriptions') ? undefined : json['subscriptions'],
         'username': json['username'],
         'verified': !exists(json, 'verified') ? undefined : json['verified'],
     };
@@ -113,6 +120,7 @@ export function UserToJSON(value?: User | null): any {
         'email': value.email,
         'id': value.id,
         'mediaFilename': value.mediaFilename,
+        'subscriptions': value.subscriptions,
         'username': value.username,
         'verified': value.verified,
     };
