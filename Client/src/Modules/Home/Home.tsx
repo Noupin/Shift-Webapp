@@ -10,7 +10,8 @@ import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 import { ShiftCategories } from '../../Interfaces/ShiftCategories';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { HorizontalScrollMenu } from '../../Components/HorizontalScrollMenu/HorizontalScrollMenu';
-import { CategoriesRequest, CategoriesResponse, CategoryRequest, NewShiftsResponse, PopularShiftsResponse, Shift, ShiftCategoryResponse } from '../../Swagger';
+import { CategoriesRequest, CategoriesResponse, CategoryRequest, NewShiftsResponse,
+  PopularShiftsResponse, Shift, ShiftCategoryResponse } from '../../Swagger';
 import { StickySidebar } from '../../Components/StickySidebar/StickySidebar';
 import { useFetch } from '../../Hooks/Fetch';
 
@@ -67,11 +68,16 @@ export function Home (props: IElevatedStateProps){
   useEffect(() => {
     fetchNewCategory()
     fetchPopularCategory()
-    fetchFeaturedCategory({categoryName: "featured"})
+  
+    const featuredParms: CategoryRequest = {
+      page: 1,
+      categoryName: 'featured'
+    }
+    fetchFeaturedCategory(featuredParms)
 
     async function getCategoryNames(){
       const categoriesParams: CategoriesRequest = {
-        maximum: CATEGORIES_TO_GET
+        page: 1
       }
       await fetchCategories(categoriesParams)
     }
@@ -85,7 +91,8 @@ export function Home (props: IElevatedStateProps){
     async function getShifts(){
       categoryNames.forEach(async (category) => {
         const categoryParams: CategoryRequest = {
-          categoryName: category
+          categoryName: category,
+          page: 1
         }
         await fetchCategory(categoryParams, category)
       })

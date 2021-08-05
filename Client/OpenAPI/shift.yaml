@@ -610,13 +610,13 @@ paths:
       parameters:
       - default: null
         in: header
-        name: Feryvrefreshtoken
+        name: Feryvcsrftoken
         required: false
         type: string
         x-nullable: true
       - default: null
         in: header
-        name: Feryvcsrftoken
+        name: Feryvrefreshtoken
         required: false
         type: string
         x-nullable: true
@@ -694,6 +694,10 @@ paths:
       description: The shifts associated with the queried user.
       operationId: userShifts
       parameters:
+      - in: query
+        name: page
+        required: true
+        type: integer
       - in: path
         name: username
         required: true
@@ -994,11 +998,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -1013,11 +1017,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -1038,14 +1042,13 @@ paths:
             $ref: '#/definitions/NewShiftsResponse'
       tags:
       - Category
-  /api/shift/category/categories/{maximum}:
+  /api/shift/category/categories:
     get:
       description: The shifts for the queried category to display on the home page.
       operationId: Categories
       parameters:
-      - format: int32
-        in: path
-        name: maximum
+      - in: query
+        name: page
         required: true
         type: integer
       responses:
@@ -1072,6 +1075,10 @@ paths:
       description: The shifts for the queried category to display on the home page.
       operationId: Category
       parameters:
+      - in: query
+        name: page
+        required: true
+        type: integer
       - in: path
         name: categoryName
         required: true

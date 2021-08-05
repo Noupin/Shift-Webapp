@@ -94,6 +94,7 @@ export interface UpdatePictureRequest {
 }
 
 export interface UserShiftsRequest {
+    page: number;
     username: string;
 }
 
@@ -407,11 +408,19 @@ export class UserApi extends runtime.BaseAPI {
      * The shifts associated with the queried user.
      */
     async userShiftsRaw(requestParameters: UserShiftsRequest): Promise<runtime.ApiResponse<UserShiftsResponse>> {
+        if (requestParameters.page === null || requestParameters.page === undefined) {
+            throw new runtime.RequiredError('page','Required parameter requestParameters.page was null or undefined when calling userShifts.');
+        }
+
         if (requestParameters.username === null || requestParameters.username === undefined) {
             throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling userShifts.');
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

@@ -30,10 +30,11 @@ import {
 } from '../models';
 
 export interface CategoriesRequest {
-    maximum: number;
+    page: number;
 }
 
 export interface CategoryRequest {
+    page: number;
     categoryName: string;
 }
 
@@ -72,16 +73,20 @@ export class CategoryApi extends runtime.BaseAPI {
      * The shifts for the queried category to display on the home page.
      */
     async categoriesRaw(requestParameters: CategoriesRequest): Promise<runtime.ApiResponse<CategoriesResponse>> {
-        if (requestParameters.maximum === null || requestParameters.maximum === undefined) {
-            throw new runtime.RequiredError('maximum','Required parameter requestParameters.maximum was null or undefined when calling categories.');
+        if (requestParameters.page === null || requestParameters.page === undefined) {
+            throw new runtime.RequiredError('page','Required parameter requestParameters.page was null or undefined when calling categories.');
         }
 
         const queryParameters: any = {};
 
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/category/categories/{maximum}`.replace(`{${"maximum"}}`, encodeURIComponent(String(requestParameters.maximum))),
+            path: `/api/shift/category/categories`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -102,11 +107,19 @@ export class CategoryApi extends runtime.BaseAPI {
      * The shifts for the queried category to display on the home page.
      */
     async categoryRaw(requestParameters: CategoryRequest): Promise<runtime.ApiResponse<ShiftCategoryResponse>> {
+        if (requestParameters.page === null || requestParameters.page === undefined) {
+            throw new runtime.RequiredError('page','Required parameter requestParameters.page was null or undefined when calling category.');
+        }
+
         if (requestParameters.categoryName === null || requestParameters.categoryName === undefined) {
             throw new runtime.RequiredError('categoryName','Required parameter requestParameters.categoryName was null or undefined when calling category.');
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

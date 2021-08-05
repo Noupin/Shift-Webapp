@@ -27,6 +27,7 @@ export function UserPage (props: IElevatedStateProps){
   const [userShiftsResponse, setUserShiftsResponse] = useState<UserShiftsResponse>();
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
   const [owner, setOwner] = useState(false)
+  const [pageNumber, setPageNumber] = useState(1)
   const fetchUserShifts = useFetch(elevatedState.APIInstances.User,
                                    elevatedState.APIInstances.User.userShifts,
                                    elevatedState, setElevatedState, setUserShiftsResponse)
@@ -39,11 +40,12 @@ export function UserPage (props: IElevatedStateProps){
 
   useEffect(() => {
     const urlParams: UserShiftsRequest = {
-      username: username
+      username: username,
+      page: pageNumber
     }
 
     fetchUserShifts(urlParams)
-  }, [username]);
+  }, [username, pageNumber]);
 
   useEffect(() => {
     if(!userShiftsResponse || !userShiftsResponse.shifts) return;
