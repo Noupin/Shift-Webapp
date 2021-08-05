@@ -21,6 +21,9 @@ import {
     ChangePasswordResponse,
     ChangePasswordResponseFromJSON,
     ChangePasswordResponseToJSON,
+    ConfirmEmailChangeResponse,
+    ConfirmEmailChangeResponseFromJSON,
+    ConfirmEmailChangeResponseToJSON,
     ForgotPasswordRequest,
     ForgotPasswordRequestFromJSON,
     ForgotPasswordRequestToJSON,
@@ -51,10 +54,17 @@ import {
     UserShiftsResponse,
     UserShiftsResponseFromJSON,
     UserShiftsResponseToJSON,
+    VerifyEmailChangeResponse,
+    VerifyEmailChangeResponseFromJSON,
+    VerifyEmailChangeResponseToJSON,
 } from '../models';
 
 export interface ChangePasswordOperationRequest {
     body?: ChangePasswordRequest;
+}
+
+export interface ConfirmEmailChangeRequest {
+    token: string;
 }
 
 export interface DeleteIndivdualUserRequest {
@@ -85,6 +95,10 @@ export interface UpdatePictureRequest {
 
 export interface UserShiftsRequest {
     username: string;
+}
+
+export interface VerifyEmailChangeRequest {
+    token: string;
 }
 
 /**
@@ -122,6 +136,40 @@ export class UserApi extends runtime.BaseAPI {
      */
     async changePassword(requestParameters: ChangePasswordOperationRequest): Promise<ChangePasswordResponse> {
         const response = await this.changePasswordRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Confirms the change to the new users email.
+     */
+    async confirmEmailChangeRaw(requestParameters: ConfirmEmailChangeRequest): Promise<runtime.ApiResponse<ConfirmEmailChangeResponse>> {
+        if (requestParameters.token === null || requestParameters.token === undefined) {
+            throw new runtime.RequiredError('token','Required parameter requestParameters.token was null or undefined when calling confirmEmailChange.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/user/confirmEmailChange/{token}`.replace(`{${"token"}}`, encodeURIComponent(String(requestParameters.token))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConfirmEmailChangeResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Confirms the change to the new users email.
+     */
+    async confirmEmailChange(requestParameters: ConfirmEmailChangeRequest): Promise<ConfirmEmailChangeResponse> {
+        const response = await this.confirmEmailChangeRaw(requestParameters);
         return await response.value();
     }
 
@@ -382,6 +430,40 @@ export class UserApi extends runtime.BaseAPI {
      */
     async userShifts(requestParameters: UserShiftsRequest): Promise<UserShiftsResponse> {
         const response = await this.userShiftsRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Verifies the server to send a confirmation email to the next email address.
+     */
+    async verifyEmailChangeRaw(requestParameters: VerifyEmailChangeRequest): Promise<runtime.ApiResponse<VerifyEmailChangeResponse>> {
+        if (requestParameters.token === null || requestParameters.token === undefined) {
+            throw new runtime.RequiredError('token','Required parameter requestParameters.token was null or undefined when calling verifyEmailChange.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/user/verifyEmailChange/{token}`.replace(`{${"token"}}`, encodeURIComponent(String(requestParameters.token))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => VerifyEmailChangeResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Verifies the server to send a confirmation email to the next email address.
+     */
+    async verifyEmailChange(requestParameters: VerifyEmailChangeRequest): Promise<VerifyEmailChangeResponse> {
+        const response = await this.verifyEmailChangeRaw(requestParameters);
         return await response.value();
     }
 

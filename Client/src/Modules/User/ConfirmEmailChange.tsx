@@ -6,48 +6,46 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router';
 
 //First Party Imports
-import { Button } from '../../Components/Button/Button';
 import { pageTitles } from '../../constants';
 import { useFetch } from '../../Hooks/Fetch';
+import { Button } from '../../Components/Button/Button';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { ConfirmEmailRequest, ConfirmEmailResponse } from '../../Swagger';
+import { ConfirmEmailChangeRequest, ConfirmEmailChangeResponse } from '../../Swagger';
 
 
-export function ConfirmEmail(props: IElevatedStateProps){
+export function ConfirmEmailChange(props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
 
   const history = useHistory();
   const { token } = useParams<{token: string | undefined}>()
 
-
   const [fetching, setFetching] = useState(true);
-  const [confirmEmailResponse, setConfirmEmailResponse] = useState<ConfirmEmailResponse>();
-  const fetchConfirmEmail = useFetch(elevatedState().APIInstances.Authenticate,
-                                     elevatedState().APIInstances.Authenticate.confirmEmail,
-                                     elevatedState, setElevatedState, setConfirmEmailResponse,
-                                     setFetching)
-  
+  const [confirmChangeEmailResponse, setConfirmChangeEmailResponse] = useState<ConfirmEmailChangeResponse>();
+  const fetchConfirmEmailChangeEmail = useFetch(elevatedState().APIInstances.User,
+                                                elevatedState().APIInstances.User.confirmEmailChange,
+                                                elevatedState, setElevatedState, setConfirmChangeEmailResponse,
+                                                setFetching)
 
 
   useEffect(() => {
-    document.title = pageTitles["confirmEmail"]
+    document.title = pageTitles["confirmEmailChange"]
   }, [])
 
   useEffect(() => {
     if(!fetching) return;
 
-    const requestParams: ConfirmEmailRequest  = {
+    const requestParams: ConfirmEmailChangeRequest  = {
       token: token!
     }
 
-    fetchConfirmEmail(requestParams)
+    fetchConfirmEmailChangeEmail(requestParams)
   }, [fetching]);
 
   useEffect(() => {
-    if(!confirmEmailResponse) return;
+    if(!confirmChangeEmailResponse) return;
 
-    setElevatedState(prev => ({...prev, msg: confirmEmailResponse.msg!}))
-  }, [confirmEmailResponse])
+    setElevatedState(prev => ({...prev, msg: confirmChangeEmailResponse.msg!}))
+  }, [confirmChangeEmailResponse])
 
 
   return (
@@ -56,14 +54,14 @@ export function ConfirmEmail(props: IElevatedStateProps){
         <Col xs={3}></Col>
         <Col xs={6}>
           <Row className="justify-content-center">
-            {confirmEmailResponse ?
-            <h2>{confirmEmailResponse.confirmed ?
-              "Email Confirmed!" :
-              "Confirming Email"}</h2> :
-            <h2>Sorry the link was either changed or it took to much time to confirm your email.</h2>}
+            {confirmChangeEmailResponse ?
+            <h2>{confirmChangeEmailResponse.confirmed ?
+            `Your email has been changed` :
+            `Sending confirmation email...`}</h2> :
+            <h2>Sorry the link was either changed or it took to much time to confirm your new email.</h2>}
           </Row>
 
-          {confirmEmailResponse?.confirmed &&
+          {confirmChangeEmailResponse?.confirmed &&
           <>
             <br/>
             <Row>
@@ -80,7 +78,7 @@ export function ConfirmEmail(props: IElevatedStateProps){
         </Col>
         <Col xs={3}></Col>
       </Row>
-
     </Container>
+    
   );
 }

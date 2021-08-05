@@ -11,6 +11,7 @@ index.ts
 models/CategoriesResponse.ts
 models/ChangePasswordRequest.ts
 models/ChangePasswordResponse.ts
+models/ConfirmEmailChangeResponse.ts
 models/ConfirmEmailResponse.ts
 models/ForgotPasswordRequest.ts
 models/ForgotPasswordResponse.ts
@@ -46,5 +47,6 @@ models/TrainStatusResponse.ts
 models/UpdatePictureResponse.ts
 models/User.ts
 models/UserShiftsResponse.ts
+models/VerifyEmailChangeResponse.ts
 models/index.ts
 runtime.ts

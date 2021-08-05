@@ -51,7 +51,6 @@ export function ResendConfirmEmail(props: IElevatedStateProps){
         </Col>
         <Col xs={3}></Col>
       </Row>
-
     </Container>
   );
 }

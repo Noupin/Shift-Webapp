@@ -34,6 +34,16 @@ definitions:
         default: ''
         type: string
     type: object
+  ConfirmEmailChangeResponse:
+    properties:
+      confirmed:
+        default: false
+        type: boolean
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+    type: object
   ConfirmEmailResponse:
     properties:
       confirmed:
@@ -423,6 +433,19 @@ definitions:
           $ref: '#/definitions/Shift'
         type: array
     type: object
+  VerifyEmailChangeResponse:
+    properties:
+      confirmed:
+        default: false
+        type: boolean
+      msg:
+        default: ''
+        type: string
+        x-nullable: true
+      nextEmail:
+        default: ''
+        type: string
+    type: object
 host: \
 info:
   description: Shift Server API documentation
@@ -490,6 +513,30 @@ paths:
       - Bearer: []
       tags:
       - Train
+  /api/stopTraining:
+    post:
+      description: Stop the training with the UUID of the shift model being trained.
+      operationId: stopTrain
+      parameters:
+      - description: The uuid of the shift model being inferenced with, the title
+          of the shift that is being trained, whether or not the the PTM is being
+          used, the uuid of the prebuilt shift model if one is being used, the amount
+          of epochs inbetween the training status updates, and the type of trainign
+          to send four pictures or one picture for front end.
+        in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/TrainRequest'
+      responses:
+        default:
+          description: Whether the stop train signal was accepted.
+          schema:
+            $ref: '#/definitions/StopTrainResponse'
+      security:
+      - Bearer: []
+      tags:
+      - Train
   /api/trainStatus:
     post:
       description: The status of of the current training task if called while training
@@ -514,30 +561,6 @@ paths:
             has stopped, and encoded images to view on the front end.
           schema:
             $ref: '#/definitions/TrainStatusResponse'
-      security:
-      - Bearer: []
-      tags:
-      - Train
-  /api/stopTraining:
-    post:
-      description: Stop the training with the UUID of the shift model being trained.
-      operationId: stopTrain
-      parameters:
-      - description: The uuid of the shift model being inferenced with, the title
-          of the shift that is being trained, whether or not the the PTM is being
-          used, the uuid of the prebuilt shift model if one is being used, the amount
-          of epochs inbetween the training status updates, and the type of trainign
-          to send four pictures or one picture for front end.
-        in: body
-        name: body
-        required: false
-        schema:
-          $ref: '#/definitions/TrainRequest'
-      responses:
-        default:
-          description: Whether the stop train signal was accepted.
-          schema:
-            $ref: '#/definitions/StopTrainResponse'
       security:
       - Bearer: []
       tags:
@@ -587,13 +610,13 @@ paths:
       parameters:
       - default: null
         in: header
-        name: Feryvrefreshtoken
+        name: Feryvcsrftoken
         required: false
         type: string
         x-nullable: true
       - default: null
         in: header
-        name: Feryvcsrftoken
+        name: Feryvrefreshtoken
         required: false
         type: string
         x-nullable: true
@@ -824,6 +847,47 @@ paths:
             and whether the request was completed.
           schema:
             $ref: '#/definitions/ForgotPasswordResponse'
+      security:
+      - Bearer: []
+      tags:
+      - User
+  /api/user/verifyEmailChange/{token}:
+    get:
+      description: 'Verifies the server to send a confirmation email to the next email
+
+        address.'
+      operationId: verifyEmailChange
+      parameters:
+      - in: path
+        name: token
+        required: true
+        type: string
+      responses:
+        default:
+          description: 'Whether the verifying of the email change
+
+            went according to plan and the next email to confirm.'
+          schema:
+            $ref: '#/definitions/VerifyEmailChangeResponse'
+      security:
+      - Bearer: []
+      tags:
+      - User
+  /api/user/confirmEmailChange/{token}:
+    get:
+      description: Confirms the change to the new users email.
+      operationId: confirmEmailChange
+      parameters:
+      - in: path
+        name: token
+        required: true
+        type: string
+      responses:
+        default:
+          description: Whether the confirming of the email change went according to
+            plan.
+          schema:
+            $ref: '#/definitions/ConfirmEmailChangeResponse'
       security:
       - Bearer: []
       tags:

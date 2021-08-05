@@ -32,6 +32,8 @@ import { useRefresh } from './Hooks/Refresh';
 import { getFrontEndSettings, setFrontEndSettings } from './Helpers/FrontEndSettings';
 import { ConfirmEmail } from './Modules/User/ConfirmEmail';
 import { ResendConfirmEmail } from './Modules/User/ResendConfirmEmail';
+import { VerifyEmailChange } from './Modules/User/VerifyEmailChange';
+import { ConfirmEmailChange } from './Modules/User/ConfirmEmailChange';
 import './App.scss';
 
 
@@ -174,6 +176,12 @@ export default function App() {
                 </Route>
                 <Route path="/resend-confirmation-email">
                   <ResendConfirmEmail elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                </Route>
+                <Route path="/verify-email-change/:token">
+                  <VerifyEmailChange elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
+                </Route>
+                <Route path="/confirm-email-change/:token">
+                  <ConfirmEmailChange elevatedState={getElevatedState} setElevatedState={setElevatedState}/>
                 </Route>
                 <Route exact path="/">
                   <Home elevatedState={getElevatedState} setElevatedState={setElevatedState}/>

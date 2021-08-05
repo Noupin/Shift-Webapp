@@ -1,6 +1,7 @@
 export * from './CategoriesResponse';
 export * from './ChangePasswordRequest';
 export * from './ChangePasswordResponse';
+export * from './ConfirmEmailChangeResponse';
 export * from './ConfirmEmailResponse';
 export * from './ForgotPasswordRequest';
 export * from './ForgotPasswordResponse';
@@ -36,3 +37,4 @@ export * from './TrainStatusResponse';
 export * from './UpdatePictureResponse';
 export * from './User';
 export * from './UserShiftsResponse';
+export * from './VerifyEmailChangeResponse';

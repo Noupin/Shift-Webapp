@@ -25,6 +25,8 @@ export const pageTitles = {
   'home': pageTitleTemplate("Home"),
   'confirmEmail': pageTitleTemplate('Confirm Email'),
   'resendConfirmEmail': pageTitleTemplate('Resend Confirmation Email'),
+  'verifyEmailChange': pageTitleTemplate('Verify Email Change'),
+  'confirmEmailChange': pageTitleTemplate('Confirm Email Change'),
   '': "Shift"
 }
 
