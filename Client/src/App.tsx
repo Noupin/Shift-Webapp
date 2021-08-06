@@ -3,6 +3,7 @@
 //Third Party Imports
 import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { loadStripe } from '@stripe/stripe-js';
 import { BrowserRouter as Router,
          Switch, Route } from "react-router-dom";
 import { Container, Row, Col, Alert } from "react-bootstrap";
@@ -29,11 +30,13 @@ import { currentUser, setCurrentUser, isAuthenticated, setAuthenticated } from '
 import { isTokenExpired } from './Helpers/Token';
 import { ApiInstances } from './Helpers/Api';
 import { useRefresh } from './Hooks/Refresh';
+import { useFetch } from './Hooks/Fetch';
 import { getFrontEndSettings, setFrontEndSettings } from './Helpers/FrontEndSettings';
 import { ConfirmEmail } from './Modules/User/ConfirmEmail';
 import { ResendConfirmEmail } from './Modules/User/ResendConfirmEmail';
 import { VerifyEmailChange } from './Modules/User/VerifyEmailChange';
 import { ConfirmEmailChange } from './Modules/User/ConfirmEmailChange';
+import { StripePublishableKeyResponse } from './Swagger';
 import './App.scss';
 
 
@@ -49,15 +52,22 @@ export default function App() {
     accessToken: "",
     APIInstances: new ApiInstances(""),
     frontEndSettings: getFrontEndSettings(),
+    subscriptionManager: loadStripe(''),
   })
 
   const [showMsg, setShowMsg] = useState(false);
   const fetchRefresh = useRefresh(setElevatedState)
 
+  const [publishableKey, setPublishableKey] = useState<StripePublishableKeyResponse>();
+  const fetchPublishableKey = useFetch(elevatedState.APIInstances.Subscription,
+                                       elevatedState.APIInstances.Subscription.getStripePublishableKey,
+                                       elevatedState, setElevatedState, setPublishableKey)
+
 
   useEffect(() => {
     document.title = pageTitles[""]
     setElevatedState(prev => ({...prev, shiftUUID: sessionStorage.getItem("shiftUUID")!}))
+    fetchPublishableKey()
   }, [])
 
   useEffect(() => {
@@ -113,6 +123,12 @@ export default function App() {
 
     setFrontEndSettings(elevatedState.frontEndSettings)
   }, [elevatedState.frontEndSettings])
+
+  useEffect(() => {
+    if(!publishableKey) return;
+
+    setElevatedState(prev => ({...prev, subscriptionManager: loadStripe(publishableKey.publicKey)}))
+  }, [publishableKey])
 
 
   return (

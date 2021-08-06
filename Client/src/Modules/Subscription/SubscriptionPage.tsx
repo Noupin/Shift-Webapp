@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 //Third Party Imports
+import { useStripe } from '@stripe/react-stripe-js';
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -13,6 +14,7 @@ import { StripeCreateCheckoutSessionResponse } from '../../Swagger';
 
 export function SubscriptionPage(props: IElevatedStateProps){
   const {elevatedState, setElevatedState} = props;
+  const stripe = useStripe();
 
   const [stripeCreateCheckoutResponse, setStripeCreateCheckoutResponse] = useState<StripeCreateCheckoutSessionResponse>();
   const fetchCreateCheckout = useFetch(elevatedState.APIInstances.Subscription,
@@ -28,7 +30,7 @@ export function SubscriptionPage(props: IElevatedStateProps){
   useEffect(() => {
     if(!stripeCreateCheckoutResponse) return;
 
-    setElevatedState(prev => ({...prev, msg: stripeCreateCheckoutResponse.msg!}))
+    stripe!.redirectToCheckout({sessionId: stripeCreateCheckoutResponse.sessionId!})
   }, [stripeCreateCheckoutResponse])
 
 
