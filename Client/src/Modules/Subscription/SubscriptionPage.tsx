@@ -28,9 +28,16 @@ export function SubscriptionPage(props: IElevatedStateProps){
   }, [])
 
   useEffect(() => {
-    if(!stripeCreateCheckoutResponse) return;
+    async function openStripeCheckout(){
+      if(!stripeCreateCheckoutResponse) return;
 
-    stripe!.redirectToCheckout({sessionId: stripeCreateCheckoutResponse.sessionId!})
+      const stripeResponse = await stripe!.redirectToCheckout({sessionId: stripeCreateCheckoutResponse.sessionId!}).catch(err => {
+        console.log(err)
+      })
+      console.log(stripeResponse)
+    }
+
+    openStripeCheckout()
   }, [stripeCreateCheckoutResponse])
 
 

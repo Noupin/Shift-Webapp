@@ -3,7 +3,8 @@
 //Third Party Imports
 import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe, Stripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import { BrowserRouter as Router,
          Switch, Route } from "react-router-dom";
 import { Container, Row, Col, Alert } from "react-bootstrap";
@@ -38,6 +39,7 @@ import { VerifyEmailChange } from './Modules/User/VerifyEmailChange';
 import { ConfirmEmailChange } from './Modules/User/ConfirmEmailChange';
 import { StripePublishableKeyResponse } from './Swagger';
 import './App.scss';
+import { SubscriptionPage } from './Modules/Subscription/SubscriptionPage';
 
 
 export default function App() {
@@ -52,12 +54,12 @@ export default function App() {
     accessToken: "",
     APIInstances: new ApiInstances(""),
     frontEndSettings: getFrontEndSettings(),
-    subscriptionManager: loadStripe(''),
   })
 
   const [showMsg, setShowMsg] = useState(false);
   const fetchRefresh = useRefresh(setElevatedState)
 
+  const [stripe, setStripe] = useState<Promise<Stripe | null>>()
   const [publishableKey, setPublishableKey] = useState<StripePublishableKeyResponse>();
   const fetchPublishableKey = useFetch(elevatedState.APIInstances.Subscription,
                                        elevatedState.APIInstances.Subscription.getStripePublishableKey,
@@ -126,8 +128,9 @@ export default function App() {
 
   useEffect(() => {
     if(!publishableKey) return;
+    console.log(publishableKey)
 
-    setElevatedState(prev => ({...prev, subscriptionManager: loadStripe(publishableKey.publicKey)}))
+    setStripe(loadStripe(publishableKey.publicKey))
   }, [publishableKey])
 
 
@@ -202,6 +205,12 @@ export default function App() {
                 <Route path="/confirm-email-change/:token">
                   <ConfirmEmailChange elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
+                {stripe &&
+                <Route path="/subscription">
+                  <Elements stripe={stripe}>
+                    <SubscriptionPage elevatedState={elevatedState} setElevatedState={setElevatedState}/>
+                  </Elements>
+                </Route>}
                 <Route exact path="/">
                   <Home elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>

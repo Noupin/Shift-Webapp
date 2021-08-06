@@ -1,6 +1,3 @@
-//Third Party Imports
-import { Stripe } from '@stripe/stripe-js';
-
 //First Party Imports
 import { ApiInstances } from '../Helpers/Api';
 import { IFrontEndSettings } from './FrontEndSettings'
@@ -16,5 +13,4 @@ export interface IElevatedState {
     accessToken: string
     APIInstances: ApiInstances
     frontEndSettings: IFrontEndSettings
-    subscriptionManager: Promise<Stripe | null>
 }

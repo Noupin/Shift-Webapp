@@ -624,13 +624,13 @@ paths:
       parameters:
       - default: null
         in: header
-        name: Feryvrefreshtoken
+        name: Feryvcsrftoken
         required: false
         type: string
         x-nullable: true
       - default: null
         in: header
-        name: Feryvcsrftoken
+        name: Feryvrefreshtoken
         required: false
         type: string
         x-nullable: true
@@ -1012,11 +1012,11 @@ paths:
       operationId: getImageDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
@@ -1031,11 +1031,11 @@ paths:
       operationId: getVideoDownload
       parameters:
       - in: path
-        name: download
+        name: filename
         required: true
         type: string
       - in: path
-        name: filename
+        name: download
         required: true
         type: string
       responses:
