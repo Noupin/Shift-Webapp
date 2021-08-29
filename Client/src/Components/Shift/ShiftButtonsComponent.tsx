@@ -5,7 +5,7 @@ import React, { FC, ReactElement} from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 //First Party Imports
-import { Button } from '../../Components/Button/Button';
+import { Button } from '@noupin/feryv-components';
 
 
 interface IShiftButtons{

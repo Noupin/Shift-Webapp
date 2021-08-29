@@ -40,16 +40,16 @@ export interface Shift {
     baseMediaFilename?: string;
     /**
      * 
-     * @type {string}
+     * @type {Array<object>}
      * @memberof Shift
      */
-    dateCreated?: string;
+    categories?: Array<object>;
     /**
      * 
-     * @type {object}
+     * @type {Date}
      * @memberof Shift
      */
-    id?: object;
+    dateCreated?: Date;
     /**
      * 
      * @type {string}
@@ -68,6 +68,12 @@ export interface Shift {
      * @memberof Shift
      */
     _private?: boolean;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof Shift
+     */
+    shiftCategories?: Array<object>;
     /**
      * 
      * @type {string}
@@ -106,11 +112,12 @@ export function ShiftFromJSONTyped(json: any, ignoreDiscriminator: boolean): Shi
         
         'author': UserFromJSON(json['author']),
         'baseMediaFilename': !exists(json, 'baseMediaFilename') ? undefined : json['baseMediaFilename'],
-        'dateCreated': !exists(json, 'dateCreated') ? undefined : json['dateCreated'],
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'categories': !exists(json, 'categories') ? undefined : json['categories'],
+        'dateCreated': !exists(json, 'dateCreated') ? undefined : (new Date(json['dateCreated'])),
         'maskMediaFilename': !exists(json, 'maskMediaFilename') ? undefined : json['maskMediaFilename'],
         'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
         '_private': !exists(json, 'private') ? undefined : json['private'],
+        'shiftCategories': !exists(json, 'shiftCategories') ? undefined : json['shiftCategories'],
         'title': json['title'],
         'uuid': json['uuid'],
         'verified': !exists(json, 'verified') ? undefined : json['verified'],
@@ -129,11 +136,12 @@ export function ShiftToJSON(value?: Shift | null): any {
         
         'author': UserToJSON(value.author),
         'baseMediaFilename': value.baseMediaFilename,
-        'dateCreated': value.dateCreated,
-        'id': value.id,
+        'categories': value.categories,
+        'dateCreated': value.dateCreated === undefined ? undefined : (value.dateCreated.toISOString()),
         'maskMediaFilename': value.maskMediaFilename,
         'mediaFilename': value.mediaFilename,
         'private': value._private,
+        'shiftCategories': value.shiftCategories,
         'title': value.title,
         'uuid': value.uuid,
         'verified': value.verified,

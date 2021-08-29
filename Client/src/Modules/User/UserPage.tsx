@@ -3,11 +3,10 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useParams } from 'react-router';
 import Masonry from 'react-masonry-css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCog } from '@fortawesome/free-solid-svg-icons'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
 //First Party Imports
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -28,9 +27,13 @@ export function UserPage (props: IElevatedStateProps){
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
   const [owner, setOwner] = useState(false)
   const [pageNumber, setPageNumber] = useState(1)
-  const fetchUserShifts = useFetch(elevatedState.APIInstances.User,
-                                   elevatedState.APIInstances.User.userShifts,
-                                   elevatedState, setElevatedState, setUserShiftsResponse)
+
+  const fetchUserShifts = useFetch()({
+    thisArg: elevatedState.APIInstances.User,
+    swaggerFunction: elevatedState.APIInstances.User.userShifts,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setUserShiftsResponse
+  })
 
 
   function handleScroll(e: any){

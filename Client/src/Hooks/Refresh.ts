@@ -1,25 +1,31 @@
 //First Party Imports
-import { AuthenticateAPIFactory } from "../Helpers/Api";
+import { API_CONFIG } from "../constants";
 import { IElevatedStateProps } from "../Interfaces/ElevatedStateProps";
+import { refreshHookFactory, RefreshResponse } from '@noupin/feryv-oauth-hooks';
 
 
-export function useRefresh(setElevatedState: IElevatedStateProps["setElevatedState"],
-  setLoading?: React.Dispatch<React.SetStateAction<boolean>>): () => Promise<void>{
-  
-  async function fetchRefresh(){
-    if(setLoading) setLoading(true);
+export interface IRefreshRefs{
+  setter?: IElevatedStateProps["setElevatedState"]
+}
 
-    try{
-      const response = await AuthenticateAPIFactory("").refresh({})
+const refs: IRefreshRefs = {}
 
-      setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
-    }
-    catch{
-      setElevatedState(prev => ({...prev, accessToken: "", authenticated: false}))
-    }
+export function makeRefresh(initialRefs: IRefreshRefs){
+  if(initialRefs.setter){
+    refs.setter = initialRefs.setter!
+  }
+  const setElevatedState = refs.setter!
 
-    if(setLoading) setLoading(false);
+
+  function successCallback(response: RefreshResponse){
+    setElevatedState(prev => ({...prev, accessToken: response.accessToken!}))
+  }
+  function errorCallback(error: Error){
+    setElevatedState(prev => ({...prev, accessToken: "", authenticated: false}))
   }
 
-  return fetchRefresh
+  return refreshHookFactory({onSuccess: successCallback, onError: errorCallback}, API_CONFIG)
 }
+
+
+export const useRefresh = () => makeRefresh(refs)

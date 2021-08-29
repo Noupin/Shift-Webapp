@@ -64,7 +64,7 @@ export class ShiftApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            path: `/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -98,7 +98,7 @@ export class ShiftApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            path: `/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -134,7 +134,7 @@ export class ShiftApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
+            path: `/shift/{uuid}`.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters.uuid))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

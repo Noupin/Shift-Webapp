@@ -52,7 +52,7 @@ export class CategoryApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/category/new`,
+            path: `/shift/category/new`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -86,7 +86,7 @@ export class CategoryApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/category/categories`,
+            path: `/shift/category/categories`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -124,7 +124,7 @@ export class CategoryApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/category/{categoryName}`.replace(`{${"categoryName"}}`, encodeURIComponent(String(requestParameters.categoryName))),
+            path: `/shift/category/{categoryName}`.replace(`{${"categoryName"}}`, encodeURIComponent(String(requestParameters.categoryName))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -150,7 +150,7 @@ export class CategoryApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/shift/category/popular`,
+            path: `/shift/category/popular`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

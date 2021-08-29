@@ -5,19 +5,17 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShare } from '@fortawesome/free-solid-svg-icons'
+import { faShare } from '@fortawesome/free-solid-svg-icons';
 
 
 //First Party Imports
+import { Media, Button, Loader } from "@noupin/feryv-components";
 import { useInterval } from "../../Hooks/Interval";
-import { Media } from '../../Components/Media/Media';
-import { Button } from '../../Components/Button/Button';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { CombinedInferenceResponse } from '../../Interfaces/CombinedInference';
 import { InferenceOperationRequest, InferenceRequest,
 				 InferenceStatusRequest } from '../../Swagger';
 import { pageTitles } from "../../constants";
-import { Loader } from "../../Components/Loader/Loader";
 import { useFetch } from '../../Hooks/Fetch';
 import { urlToFile } from "../../Helpers/Files";
 
@@ -34,12 +32,20 @@ export function Inference (props: IElevatedStateProps){
   const [inferenceResponse, setInferenceResponse] = useState<CombinedInferenceResponse>();
 	const [updateProgress, setUpdateProgress] = useState(false);
 
-	const fetchInference = useFetch(elevatedState.APIInstances.Inference,
-																	elevatedState.APIInstances.Inference.inference,
-																	elevatedState, setElevatedState, setInferenceResponse, setInference)
-	const fetchInferenceStatus = useFetch(elevatedState.APIInstances.Inference,
-																				elevatedState.APIInstances.Inference.inferenceStatus,
-																				elevatedState, setElevatedState, setInferenceResponse, setUpdateProgress)
+	const fetchInference = useFetch()({
+    thisArg: elevatedState.APIInstances.Inference,
+    swaggerFunction: elevatedState.APIInstances.Inference.inference,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setInferenceResponse,
+		setLoading: setInference
+  })
+	const fetchInferenceStatus = useFetch()({
+    thisArg: elevatedState.APIInstances.Inference,
+    swaggerFunction: elevatedState.APIInstances.Inference.inferenceStatus,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setInferenceResponse,
+		setLoading: setUpdateProgress
+  })
 
 
 	useEffect(() => {
@@ -111,13 +117,17 @@ export function Inference (props: IElevatedStateProps){
 	return (
 		<Container className="d-flex justify-content-center h-100 flex-column" key={`${inferenceMedia?.name}${baseMediaString}`}>
 			<Row className="mb-2">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" mediaSrc={inferenceMedia} mediaType="media"/>
+				<Media className="neumorphic borderRadius-3 p-2 my-2 w-100"
+				errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}
+				mediaSrc={inferenceMedia} mediaType="media"/>
 			</Row>
 			<Row className="justify-content-center">
 				<h1>&#x2191;</h1>
 			</Row>
 			<Row className="my-3">
-				<Media setElevatedState={setElevatedState} className="neumorphic borderRadius-3 p-2 my-2 w-100" srcString={baseMediaString} mediaType="media"/>
+				<Media className="neumorphic borderRadius-3 p-2 my-2 w-100"
+				errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}
+				srcString={baseMediaString} mediaType="media"/>
 			</Row>
 			{updating ? <Row className="justify-content-center"><Loader/></Row> : <></>}
 			<Row className="my-2">

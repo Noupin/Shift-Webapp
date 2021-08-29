@@ -5,14 +5,13 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 
 //First Party Imports
+import { StickySidebar, HorizontalScrollMenu } from "@noupin/feryv-components";
 import { CATEGORIES_TO_REMOVE, pageTitles } from '../../constants';
 import { ShiftCard } from '../../Components/ShiftCard/ShiftCard';
 import { ShiftCategories } from '../../Interfaces/ShiftCategories';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { HorizontalScrollMenu } from '../../Components/HorizontalScrollMenu/HorizontalScrollMenu';
 import { CategoriesRequest, CategoriesResponse, CategoryRequest, NewShiftsResponse,
   PopularShiftsResponse, Shift, ShiftCategoryResponse } from '../../Swagger';
-import { StickySidebar } from '../../Components/StickySidebar/StickySidebar';
 import { useFetch } from '../../Hooks/Fetch';
 
 
@@ -26,42 +25,50 @@ export function Home (props: IElevatedStateProps){
   const [shiftCategories, setShiftCategories] = useState<ShiftCategories[]>([])
   const defaultCategories = ["Featured", "Popular", "New"]
 
-  const fetchNewCategory = useFetch(elevatedState.APIInstances.Category,
-                                    elevatedState.APIInstances.Category._new,
-                                    elevatedState, setElevatedState,
-                                    (newResponse: NewShiftsResponse) => 
-                                      setNewShifts(newResponse.shifts!))
-  const fetchPopularCategory = useFetch(elevatedState.APIInstances.Category,
-                                        elevatedState.APIInstances.Category.popular,
-                                        elevatedState, setElevatedState,
-                                        (popularResponse: PopularShiftsResponse) => 
-                                          setPopularShifts(popularResponse.shifts!))
-  const fetchFeaturedCategory = useFetch(elevatedState.APIInstances.Category,
-                                         elevatedState.APIInstances.Category.category,
-                                         elevatedState, setElevatedState,
-                                         (featuredResponse: ShiftCategoryResponse) => 
-                                           setFeaturedShifts(featuredResponse.shifts!))
-  const fetchCategory = useFetch(elevatedState.APIInstances.Category,
-                                 elevatedState.APIInstances.Category.category,
-                                 elevatedState, setElevatedState,
-                                 (categoryResponse: ShiftCategoryResponse, category: string) =>{
-                                   let categoryShifts: ShiftCategories = {
-                                     category: category,
-                                     shifts: categoryResponse.shifts!
-                                   }
-                                   setShiftCategories((prev) => [...prev, categoryShifts])
-                                 })
-  const fetchCategories = useFetch(elevatedState.APIInstances.Category,
-                                   elevatedState.APIInstances.Category.categories,
-                                   elevatedState, setElevatedState,
-                                   (categoriesResponse: CategoriesResponse, ) => {
-                                     setCategoryNames(categoriesResponse.categories.filter(
-                                       (category: string) => CATEGORIES_TO_REMOVE.indexOf(category) === -1
-                                     ))
-                                   })
+  const fetchNewCategory = useFetch()({
+    thisArg: elevatedState.APIInstances.Category,
+    swaggerFunction: elevatedState.APIInstances.Category._new,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: (newResponse: NewShiftsResponse) => setNewShifts(newResponse.shifts!)
+  })
+  const fetchPopularCategory = useFetch()({
+    thisArg: elevatedState.APIInstances.Category,
+    swaggerFunction: elevatedState.APIInstances.Category.popular,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: (popularResponse: PopularShiftsResponse) => setPopularShifts(popularResponse.shifts!)
+  })
+  const fetchFeaturedCategory = useFetch()({
+    thisArg: elevatedState.APIInstances.Category,
+    swaggerFunction: elevatedState.APIInstances.Category.category,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: (featuredResponse: ShiftCategoryResponse) => setFeaturedShifts(featuredResponse.shifts!)
+  })
+  const fetchCategory = useFetch()({
+    thisArg: elevatedState.APIInstances.Category,
+    swaggerFunction: elevatedState.APIInstances.Category.category,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: (categoryResponse: ShiftCategoryResponse, category: string) =>{
+      let categoryShifts: ShiftCategories = {
+        category: category,
+        shifts: categoryResponse.shifts!
+      }
+      setShiftCategories((prev) => [...prev, categoryShifts])
+    }
+  })
+  const fetchCategories = useFetch()({
+    thisArg: elevatedState.APIInstances.Category,
+    swaggerFunction: elevatedState.APIInstances.Category.categories,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: (categoriesResponse: CategoriesResponse) => {
+      setCategoryNames(categoriesResponse.categories.filter(
+        (category: string) => CATEGORIES_TO_REMOVE.indexOf(category) === -1
+      ))
+    }
+  })
 
 
   useEffect(() => {
+    if(!elevatedState.APIInstances.apiKey) return;
     document.title = pageTitles["home"]
   }, [])
 
@@ -115,7 +122,7 @@ export function Home (props: IElevatedStateProps){
           <h3>Featured</h3>
         </Row>
         <Row>
-          <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+          <HorizontalScrollMenu style={{height: 250}}>
             {featuredShifts.map((element, index) => (
               <ShiftCard key={`featured${index}`} shift={element} setElevatedState={setElevatedState}
                 imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
@@ -127,7 +134,7 @@ export function Home (props: IElevatedStateProps){
           <h3>Popular</h3>
         </Row>
         <Row>
-          <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+          <HorizontalScrollMenu style={{height: 250}}>
             {popularShifts.map((element, index) => (
               <ShiftCard key={`popular${index}`} shift={element} setElevatedState={setElevatedState}
                 imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
@@ -139,7 +146,7 @@ export function Home (props: IElevatedStateProps){
           <h3>New</h3>
         </Row>
         <Row>
-          <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+          <HorizontalScrollMenu style={{height: 250}}>
             {newShifts.map((element, index) => (
               <ShiftCard key={`new${index}`} shift={element} setElevatedState={setElevatedState}
                 imageCssClassNames="widthResponsiveMedia object-fit-contain"/>
@@ -154,7 +161,7 @@ export function Home (props: IElevatedStateProps){
             </Row>
             <Row>
               {category.shifts!.length > 0 ?
-              <HorizontalScrollMenu setElevatedState={setElevatedState} style={{height: 250}}>
+              <HorizontalScrollMenu style={{height: 250}}>
                 {category.shifts!.map((element, index) => (
                   <ShiftCard key={`${category.category}${index}`} shift={element} setElevatedState={setElevatedState}
                     imageCssClassNames="widthResponsiveMedia object-fit-contain"/>

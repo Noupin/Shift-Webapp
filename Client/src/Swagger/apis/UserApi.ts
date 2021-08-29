@@ -15,21 +15,6 @@
 
 import * as runtime from '../runtime';
 import {
-    ChangePasswordRequest,
-    ChangePasswordRequestFromJSON,
-    ChangePasswordRequestToJSON,
-    ChangePasswordResponse,
-    ChangePasswordResponseFromJSON,
-    ChangePasswordResponseToJSON,
-    ConfirmEmailChangeResponse,
-    ConfirmEmailChangeResponseFromJSON,
-    ConfirmEmailChangeResponseToJSON,
-    ForgotPasswordRequest,
-    ForgotPasswordRequestFromJSON,
-    ForgotPasswordRequestToJSON,
-    ForgotPasswordResponse,
-    ForgotPasswordResponseFromJSON,
-    ForgotPasswordResponseToJSON,
     IndividualUserDeleteResponse,
     IndividualUserDeleteResponseFromJSON,
     IndividualUserDeleteResponseToJSON,
@@ -42,37 +27,13 @@ import {
     IndividualUserPatchResponse,
     IndividualUserPatchResponseFromJSON,
     IndividualUserPatchResponseToJSON,
-    ResetPasswordRequest,
-    ResetPasswordRequestFromJSON,
-    ResetPasswordRequestToJSON,
-    ResetPasswordResponse,
-    ResetPasswordResponseFromJSON,
-    ResetPasswordResponseToJSON,
-    UpdatePictureResponse,
-    UpdatePictureResponseFromJSON,
-    UpdatePictureResponseToJSON,
     UserShiftsResponse,
     UserShiftsResponseFromJSON,
     UserShiftsResponseToJSON,
-    VerifyEmailChangeResponse,
-    VerifyEmailChangeResponseFromJSON,
-    VerifyEmailChangeResponseToJSON,
 } from '../models';
-
-export interface ChangePasswordOperationRequest {
-    body?: ChangePasswordRequest;
-}
-
-export interface ConfirmEmailChangeRequest {
-    token: string;
-}
 
 export interface DeleteIndivdualUserRequest {
     username: string;
-}
-
-export interface ForgotPasswordOperationRequest {
-    body?: ForgotPasswordRequest;
 }
 
 export interface GetIndivdualUserRequest {
@@ -84,95 +45,15 @@ export interface PatchIndivdualUserRequest {
     body?: IndividualUserPatchRequest;
 }
 
-export interface ResetPasswordOperationRequest {
-    token: string;
-    body?: ResetPasswordRequest;
-}
-
-export interface UpdatePictureRequest {
-    requestFile: Blob;
-}
-
 export interface UserShiftsRequest {
     page: number;
     username: string;
-}
-
-export interface VerifyEmailChangeRequest {
-    token: string;
 }
 
 /**
  * 
  */
 export class UserApi extends runtime.BaseAPI {
-
-    /**
-     * Updates/modifies users password.
-     */
-    async changePasswordRaw(requestParameters: ChangePasswordOperationRequest): Promise<runtime.ApiResponse<ChangePasswordResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const response = await this.request({
-            path: `/api/user/changePassword`,
-            method: 'PATCH',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ChangePasswordRequestToJSON(requestParameters.body),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ChangePasswordResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates/modifies users password.
-     */
-    async changePassword(requestParameters: ChangePasswordOperationRequest): Promise<ChangePasswordResponse> {
-        const response = await this.changePasswordRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Confirms the change to the new users email.
-     */
-    async confirmEmailChangeRaw(requestParameters: ConfirmEmailChangeRequest): Promise<runtime.ApiResponse<ConfirmEmailChangeResponse>> {
-        if (requestParameters.token === null || requestParameters.token === undefined) {
-            throw new runtime.RequiredError('token','Required parameter requestParameters.token was null or undefined when calling confirmEmailChange.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const response = await this.request({
-            path: `/api/user/confirmEmailChange/{token}`.replace(`{${"token"}}`, encodeURIComponent(String(requestParameters.token))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ConfirmEmailChangeResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Confirms the change to the new users email.
-     */
-    async confirmEmailChange(requestParameters: ConfirmEmailChangeRequest): Promise<ConfirmEmailChangeResponse> {
-        const response = await this.confirmEmailChangeRaw(requestParameters);
-        return await response.value();
-    }
 
     /**
      * Deletes the queried user.
@@ -191,7 +72,7 @@ export class UserApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            path: `/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -205,39 +86,6 @@ export class UserApi extends runtime.BaseAPI {
      */
     async deleteIndivdualUser(requestParameters: DeleteIndivdualUserRequest): Promise<IndividualUserDeleteResponse> {
         const response = await this.deleteIndivdualUserRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Updates/modifies users password.
-     */
-    async forgotPasswordRaw(requestParameters: ForgotPasswordOperationRequest): Promise<runtime.ApiResponse<ForgotPasswordResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const response = await this.request({
-            path: `/api/user/forgotPassword`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ForgotPasswordRequestToJSON(requestParameters.body),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ForgotPasswordResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates/modifies users password.
-     */
-    async forgotPassword(requestParameters: ForgotPasswordOperationRequest): Promise<ForgotPasswordResponse> {
-        const response = await this.forgotPasswordRaw(requestParameters);
         return await response.value();
     }
 
@@ -258,7 +106,7 @@ export class UserApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            path: `/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -294,7 +142,7 @@ export class UserApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            path: `/user/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -309,98 +157,6 @@ export class UserApi extends runtime.BaseAPI {
      */
     async patchIndivdualUser(requestParameters: PatchIndivdualUserRequest): Promise<IndividualUserPatchResponse> {
         const response = await this.patchIndivdualUserRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Updates/modifies users password.
-     */
-    async resetPasswordRaw(requestParameters: ResetPasswordOperationRequest): Promise<runtime.ApiResponse<ResetPasswordResponse>> {
-        if (requestParameters.token === null || requestParameters.token === undefined) {
-            throw new runtime.RequiredError('token','Required parameter requestParameters.token was null or undefined when calling resetPassword.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const response = await this.request({
-            path: `/api/user/resetPassword/{token}`.replace(`{${"token"}}`, encodeURIComponent(String(requestParameters.token))),
-            method: 'PATCH',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ResetPasswordRequestToJSON(requestParameters.body),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResetPasswordResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Updates/modifies users password.
-     */
-    async resetPassword(requestParameters: ResetPasswordOperationRequest): Promise<ResetPasswordResponse> {
-        const response = await this.resetPasswordRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Changes the users profile picture to the uploaded picture.
-     */
-    async updatePictureRaw(requestParameters: UpdatePictureRequest): Promise<runtime.ApiResponse<UpdatePictureResponse>> {
-        if (requestParameters.requestFile === null || requestParameters.requestFile === undefined) {
-            throw new runtime.RequiredError('requestFile','Required parameter requestParameters.requestFile was null or undefined when calling updatePicture.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const consumes: runtime.Consume[] = [
-            { contentType: 'multipart/form-data' },
-        ];
-        // @ts-ignore: canConsumeForm may be unused
-        const canConsumeForm = runtime.canConsumeForm(consumes);
-
-        let formParams: { append(param: string, value: any): any };
-        let useForm = false;
-        // use FormData to transmit files using content-type "multipart/form-data"
-        useForm = canConsumeForm;
-        if (useForm) {
-            formParams = new FormData();
-        } else {
-            formParams = new URLSearchParams();
-        }
-
-        if (requestParameters.requestFile !== undefined) {
-            formParams.append('requestFile', requestParameters.requestFile as any);
-        }
-
-        const response = await this.request({
-            path: `/api/user/data/updatePicture`,
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: formParams,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UpdatePictureResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Changes the users profile picture to the uploaded picture.
-     */
-    async updatePicture(requestParameters: UpdatePictureRequest): Promise<UpdatePictureResponse> {
-        const response = await this.updatePictureRaw(requestParameters);
         return await response.value();
     }
 
@@ -425,7 +181,7 @@ export class UserApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/user/{username}/shifts`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            path: `/user/{username}/shifts`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -439,40 +195,6 @@ export class UserApi extends runtime.BaseAPI {
      */
     async userShifts(requestParameters: UserShiftsRequest): Promise<UserShiftsResponse> {
         const response = await this.userShiftsRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Verifies the server to send a confirmation email to the next email address.
-     */
-    async verifyEmailChangeRaw(requestParameters: VerifyEmailChangeRequest): Promise<runtime.ApiResponse<VerifyEmailChangeResponse>> {
-        if (requestParameters.token === null || requestParameters.token === undefined) {
-            throw new runtime.RequiredError('token','Required parameter requestParameters.token was null or undefined when calling verifyEmailChange.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
-
-        const response = await this.request({
-            path: `/api/user/verifyEmailChange/{token}`.replace(`{${"token"}}`, encodeURIComponent(String(requestParameters.token))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => VerifyEmailChangeResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Verifies the server to send a confirmation email to the next email address.
-     */
-    async verifyEmailChange(requestParameters: VerifyEmailChangeRequest): Promise<VerifyEmailChangeResponse> {
-        const response = await this.verifyEmailChangeRaw(requestParameters);
         return await response.value();
     }
 

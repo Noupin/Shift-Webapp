@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 
 //First Party Imports
+import { TextBox } from "@noupin/feryv-components";
 import { IndividualShiftGetResponse, IndividualShiftPatchRequest } from '../../Swagger';
-import { TextBox } from '../TextBox/TextBox';
 
 
 interface IShiftTitle extends IndividualShiftGetResponse{

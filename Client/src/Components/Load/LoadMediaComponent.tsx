@@ -5,12 +5,10 @@ import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //First Party Imports
-import { Media } from "../Media/Media";
-import { FileDialog } from "../FileDialog/FileDialog";
+import { Media, FileDialog, MediaList } from "@noupin/feryv-components"
 import { validateFileList } from "../../Helpers/Files";
 import { validMediaFileExtesnions } from "../../constants";
 import { IElevatedState } from "../../Interfaces/ElevatedState";
-import { MediaList } from "../../Components/MediaList/MediaList";
 import { dropFiles, allowDrop } from '../../Helpers/dragAndDrop';
 import { IElevatedStateProps } from "../../Interfaces/ElevatedStateProps";
 
@@ -72,10 +70,10 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
                 </Col>
               </Row>
               {baseMedia ? 
-              <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
-                     object-fit-contain" key={!baseMedia ? "": baseMedia.name}
-                     onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
-                     mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
+              <Media className="borderRadius-3 p-2 object-fit-contain" key={!baseMedia ?
+                "": baseMedia.name} mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}
+                onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
               :
               <FileDialog id="baseMediaUpload" className="mb-4 loadFileDialogText"
               style={{width: "100%", height: "auto"}}
@@ -126,11 +124,10 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
                 </Col>
               </Row>
               {maskFiles.length > 0 ?
-              <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
-                     object-fit-contain"
-                     key={!maskFiles[0] ? "": maskFiles[0].name}
-                     onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
-                     mediaSrc={maskFiles[0]!} mediaType="video/mp4" droppable={true}/>
+              <Media className="borderRadius-3 p-2 object-fit-contain" key={!maskFiles[0] ?
+                "": maskFiles[0].name} mediaSrc={maskFiles[0]!} mediaType="video/mp4" droppable={true}
+                onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
               :
               <FileDialog id="maskMediaUpload" className="mb-4"
               style={{width: "100%", height: "auto"}}
@@ -190,10 +187,10 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
               </Col>
             </Row>
             {baseMedia ? 
-              <Media setElevatedState={setElevatedState} className="borderRadius-3 p-2
-                     object-fit-contain w-100" key={!baseMedia ? "": baseMedia.name}
-                     onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
-                     mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}/>
+              <Media className="borderRadius-3 p-2 object-fit-contain w-100" key={!baseMedia ?
+                "": baseMedia.name} mediaSrc={baseMedia!} mediaType="video/mp4" droppable={true}
+                onDragOver={(event: React.DragEvent<HTMLDivElement>) => allowDrop(event)}
+                errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
               :
               <FileDialog id="baseMediaUpload" className="mb-4"
               style={{width: "100%", height: "auto"}}
@@ -234,8 +231,7 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
               {baseFiles.length > 0 ?
               <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
                 onDrop={(event) => setBaseFiles([...baseFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
-                elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}
-                setElevatedState={setElevatedState}/>
+                elementsPerRow={2} key={baseFiles.length} mediaArray={baseFiles} setMediaArray={setBaseFiles}/>
               :
               <FileDialog id="baseFileUpload" mutipleSelect={true} className="mb-4"
               style={{width: "100%", height: "auto"}}
@@ -262,8 +258,7 @@ export const LoadMediaComponent: FC<ILoadMediaComponent> = ({elevatedState, setE
               {maskFiles.length > 0 ?
               <MediaList className="mt-2 pb-1" onDragOver={(event) => allowDrop(event)}
                 onDrop={(event) => setBaseFiles([...maskFiles, ...dropFiles(event, setElevatedState, validMediaFileExtesnions)])}
-                elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}
-                setElevatedState={setElevatedState}/>
+                elementsPerRow={2} key={maskFiles.length} mediaArray={maskFiles} setMediaArray={setMaskFiles}/>
               :
               <FileDialog id="maskFileUpload" mutipleSelect={true} className="mb-4"
               style={{width: "100%", height: "auto"}}

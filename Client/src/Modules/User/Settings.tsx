@@ -5,9 +5,8 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 //First Party Imports
+import { Checkbox, Dropdown } from '@noupin/feryv-components';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { Checkbox } from '../../Components/Checkbox/Checkbox';
-import { Dropdown } from '../../Components/Dropdown/Dropdown';
 import { IFrontEndSettings } from '../../Interfaces/FrontEndSettings';
 import { currentUser } from '../../Helpers/User';
 import { uiStyleTypeArray, trainViewTypeArray } from '../../Types/FrontEndTypes'

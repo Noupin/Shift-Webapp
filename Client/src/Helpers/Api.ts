@@ -1,19 +1,16 @@
 //First Party Imports
-import { API_BASE_URL, videoTypes } from "../constants";
-import { CDNApi, CategoryApi, InferenceApi, 
-  LoadApi, TrainApi, UserApi, AuthenticateApi,
-  ShiftApi, Configuration, ConfigurationParameters, SubscriptionApi } from "../Swagger";
+import { API_BASE_URL, API_CONFIG } from "../constants";
+import { CategoryApi, InferenceApi, 
+  LoadApi, TrainApi, UserApi, ShiftApi,
+  Configuration, ConfigurationParameters } from "../Swagger";
 
 
 function APIFactory<T>(API: new (config: Configuration) => T, configParams: ConfigurationParameters): T {
-  const config = new Configuration({credentials: 'same-origin', basePath: API_BASE_URL, ...configParams})
+  const config = new Configuration({...API_CONFIG, basePath: API_BASE_URL, ...configParams})
   return new API(config)
 }
 
 
-const CDNAPIFactory = (apiKey: string) => {
-  return APIFactory(CDNApi, {apiKey: apiKey})
-}
 const LoadAPIFactory = (apiKey: string) => {
   return APIFactory(LoadApi, {apiKey: apiKey})
 }
@@ -32,13 +29,6 @@ const CategoryAPIFactory = (apiKey: string) => {
 const InferenceAPIFactory = (apiKey: string) => {
   return APIFactory(InferenceApi, {apiKey: apiKey})
 }
-export const AuthenticateAPIFactory = (apiKey?: string) => {
-  return APIFactory(AuthenticateApi, {apiKey: apiKey})
-}
-const SubscriptionAPIFactory = (apiKey?: string) => {
-  return APIFactory(SubscriptionApi, {apiKey: apiKey})
-}
-
 
 export class ApiInstances{
   private key: string
@@ -65,10 +55,6 @@ export class ApiInstances{
     }
   }
 
-  get CDN(){
-    return CDNAPIFactory(this.apiKey)
-  }
-
   get Load(){
     return LoadAPIFactory(this.apiKey)
   }
@@ -91,23 +77,5 @@ export class ApiInstances{
 
   get Inference(){
     return InferenceAPIFactory(this.apiKey)
-  }
-
-  get Authenticate(){
-    return AuthenticateAPIFactory(this.apiKey)
-  }
-
-  get Subscription(){
-    return SubscriptionAPIFactory(this.apiKey)
-  }
-}
-
-
-export function getCDNPrefix(filename: string){
-  if(videoTypes.indexOf(filename!.split('.').pop()!) !== -1){
-    return `${API_BASE_URL}/api/content/video/`
-  }
-  else{
-    return `${API_BASE_URL}/api/content/image/`
   }
 }

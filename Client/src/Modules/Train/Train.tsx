@@ -6,13 +6,11 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
 //First Party Imports
-import { Media } from '../../Components/Media/Media';
+import { Button, Media, Loader } from "@noupin/feryv-components";
 import { useConvertImage } from "../../Hooks/Images";
-import { Button } from '../../Components/Button/Button';
 import { CombinedTrainResponse } from '../../Interfaces/CombinedTrain';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
-import { Loader } from '../../Components/Loader/Loader';
 import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 import { useInterval } from '../../Hooks/Interval';
 import { useFetch } from '../../Hooks/Fetch';
@@ -35,15 +33,27 @@ export function Train (props: IElevatedStateProps){
   const [stop, setStop] = useState(false);
   const [trainResponse, setTrainResponse] = useState<CombinedTrainResponse>();
   const [, setConverting] = useState(false);
-  const fetchTrain = useFetch(elevatedState.APIInstances.Train,
-                              elevatedState.APIInstances.Train.train,
-                              elevatedState, setElevatedState, setTrainResponse, setUpdating)
-  const fetchTrainStatus = useFetch(elevatedState.APIInstances.Train,
-                                    elevatedState.APIInstances.Train.trainStatus,
-                                    elevatedState, setElevatedState, setTrainResponse, setUpdating)
-  const fetchStopTrain = useFetch(elevatedState.APIInstances.Train,
-                                  elevatedState.APIInstances.Train.stopTrain,
-                                  elevatedState, setElevatedState, setTrainResponse)
+
+  const fetchTrain = useFetch()({
+    thisArg: elevatedState.APIInstances.Train,
+    swaggerFunction: elevatedState.APIInstances.Train.train,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setTrainResponse,
+    setLoading: setUpdating
+  })
+  const fetchTrainStatus = useFetch()({
+    thisArg: elevatedState.APIInstances.Train,
+    swaggerFunction: elevatedState.APIInstances.Train.trainStatus,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setTrainResponse,
+    setLoading: setUpdating
+  })
+  const fetchStopTrain = useFetch()({
+    thisArg: elevatedState.APIInstances.Train,
+    swaggerFunction: elevatedState.APIInstances.Train.stopTrain,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setTrainResponse
+  })
 
   const convertImage = useConvertImage(setConverting, setElevatedState,
     setImage, () => trainResponse!.exhibit!.length > 0 ? trainResponse!.exhibit![0] : "");
@@ -157,9 +167,9 @@ export function Train (props: IElevatedStateProps){
     <Container className="d-flex justify-content-center h-100 flex-column" 
                key={image ? image.lastModified : undefined}>
       <Row className="my-2">
-        <Media setElevatedState={setElevatedState}
-          className="neumorphic borderRadius-2 my-2 w-100 p-2"
-          mediaSrc={image!} mediaType="video/mp4"/>
+        <Media className="neumorphic borderRadius-2 my-2 w-100 p-2"
+          mediaSrc={image!} mediaType="video/mp4"
+          errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
       </Row>
       {(updating || stop) ? <Row className="justify-content-center"><Loader/></Row> : <></>}
       <Row className="my-2">

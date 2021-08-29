@@ -6,7 +6,7 @@ import { History } from 'history';
 //First Party Imports
 import { API_CONFIG } from "../constants";
 import { IElevatedStateProps } from "../Interfaces/ElevatedStateProps";
-import { fetchHookFactory, RefreshResponse } from '@noupin/feryv-oauth-hooks';
+import { RefreshResponse, logoutHookFactory } from '@noupin/feryv-oauth-hooks';
 
 
 export interface IRefs{
@@ -16,7 +16,7 @@ export interface IRefs{
 
 const refs: IRefs = {}
 
-export function makeFetch(initialRefs: IRefs){
+export function makeLogout(initialRefs: IRefs){
   if(initialRefs.setter){
     refs.setter = initialRefs.setter!
   }
@@ -31,7 +31,6 @@ export function makeFetch(initialRefs: IRefs){
   }
   function errorCallback(error: Error){
     setElevatedState((prev) => ({...prev, error: error}));
-    //window.location.assign("http://shift.feryv.com/error")
   }
   function authErrorCallback(error: Error){
     setElevatedState(prev => ({...prev, accessToken: "", error: error}))
@@ -43,10 +42,10 @@ export function makeFetch(initialRefs: IRefs){
     }));
   }
 
-  return fetchHookFactory({onAuthSuccess: authSuccessCallback, onError: errorCallback,
+  return logoutHookFactory({onAuthSuccess: authSuccessCallback, onError: errorCallback,
     onAuthError: authErrorCallback, onSecondAuthError: authSecondErrorCallback},
     API_CONFIG)
 }
 
 
-export const useFetch = () => makeFetch(refs)
+export const useLogout = () => makeLogout(refs)

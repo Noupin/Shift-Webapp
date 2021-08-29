@@ -61,7 +61,7 @@ export class TrainApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/stopTraining`,
+            path: `/stopTraining`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -94,7 +94,7 @@ export class TrainApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/train`,
+            path: `/train`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -127,7 +127,7 @@ export class TrainApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/trainStatus`,
+            path: `/trainStatus`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

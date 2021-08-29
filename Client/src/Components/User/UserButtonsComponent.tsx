@@ -6,7 +6,7 @@ import { Col, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
 //First Party Imports
-import { Button } from '../../Components/Button/Button';
+import { Button } from '@noupin/feryv-components';
 
 
 interface IUserButtons{

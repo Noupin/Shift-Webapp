@@ -3,16 +3,17 @@
 //Third Party Imports
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 
 //First Party Imports
-import { TextBox } from '../../Components/TextBox/TextBox';
+import { TextBox } from '@noupin/feryv-components';
+import { getCDNPrefix } from '@noupin/feryv-cdn-helpers';
 import { GetIndivdualUserRequest, IndividualUserPatchRequest, IndividualUserPatchResponse,
-  PatchIndivdualUserRequest, UpdatePictureResponse, IndividualUserGetResponse,
-  UpdatePictureRequest, DeleteIndivdualUserRequest, IndividualShiftDeleteResponse} from '../../Swagger';
+  PatchIndivdualUserRequest, IndividualUserGetResponse, DeleteIndivdualUserRequest,
+  IndividualUserDeleteResponse } from '../../Swagger';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { UserButtonComponent } from './UserButtonsComponent';
 import { ProfileMediaComponent } from './UserMediaComponent';
@@ -37,24 +38,29 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
 
   const [userGetResponse, setUserGetResponse] = useState<IndividualUserGetResponse>();
   const [userPatchResponse, setUserPatchResponse] = useState<IndividualUserPatchResponse>();
-  const [userDeleteResponse, setUserDeleteResponse] = useState<IndividualShiftDeleteResponse>();
-  const [updatePictureResponse, setUpdatePictureResponse] = useState<UpdatePictureResponse>();
+  const [userDeleteResponse, setUserDeleteResponse] = useState<IndividualUserDeleteResponse>();
   const [profilePictureURL, setProfilePictureURL] = useState("");
   const [profilePicture, setProfilePicture] = useState<File>();
 
-  const fetchGetUser = useFetch(elevatedState.APIInstances.User,
-                                elevatedState.APIInstances.User.getIndivdualUser,
-                                elevatedState, setElevatedState, setUserGetResponse)
-  const fetchDeleteUser = useFetch(elevatedState.APIInstances.User,
-                                   elevatedState.APIInstances.User.deleteIndivdualUser,
-                                   elevatedState, setElevatedState, setUserDeleteResponse)
-  const fetchPatchUser = useFetch(elevatedState.APIInstances.User,
-                                  elevatedState.APIInstances.User.patchIndivdualUser,
-                                  elevatedState, setElevatedState, setUserPatchResponse)
-  const fetchUpdateUserPicture = useFetch(elevatedState.APIInstances.User,
-                                          elevatedState.APIInstances.User.updatePicture,
-                                          elevatedState, setElevatedState, setUpdatePictureResponse)
-  const fetchRefresh = useRefresh(setElevatedState)
+  const fetchGetUser = useFetch()({
+    thisArg: elevatedState.APIInstances.User,
+    swaggerFunction: elevatedState.APIInstances.User.getIndivdualUser,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setUserGetResponse
+  })
+  const fetchDeleteUser = useFetch()({
+    thisArg: elevatedState.APIInstances.User,
+    swaggerFunction: elevatedState.APIInstances.User.deleteIndivdualUser,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setUserDeleteResponse
+  })
+  const fetchPatchUser = useFetch()({
+    thisArg: elevatedState.APIInstances.User,
+    swaggerFunction: elevatedState.APIInstances.User.patchIndivdualUser,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setUserPatchResponse
+  })
+  const fetchRefresh = useRefresh()()
 
 
   //Get user
@@ -87,7 +93,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
     if(!userGetResponse || !userGetResponse.user) return;
 
     setOwner(userGetResponse.owner)
-    setProfilePictureURL(`/api/content/image/${userGetResponse!.user.mediaFilename}`);
+    setProfilePictureURL(`${getCDNPrefix(userGetResponse!.user.feryvUser!.mediaFilename)}${userGetResponse!.user.feryvUser!.mediaFilename}`);
   }, [userGetResponse]);
 
   //Patch and Profile Picture update
@@ -109,17 +115,8 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
       fetchRefresh()
     }
 
-    async function updateProfilePicture(){
-      if(!profilePicture) return;
-
-      const requestParams: UpdatePictureRequest = {
-        requestFile: profilePicture
-      }
-      fetchUpdateUserPicture(requestParams)
-    }
 
     patchUser()
-    updateProfilePicture()    
     setSaving(false)
     setProfilePicture(undefined) //Try to remove
   }, [saving])
@@ -142,13 +139,6 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
     setElevatedState((prev) => ({...prev, msg: userDeleteResponse.msg!}))
   }, [userDeleteResponse])
 
-  //Updated Profile Picture Response
-  useEffect(() => {
-    if (!updatePictureResponse) return;
-
-    setElevatedState((prev) => ({...prev, msg: updatePictureResponse.msg!}))
-  }, [updatePictureResponse])
-
 
   let userComponent = <></>
 
@@ -163,7 +153,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
           </h2>
         </Row>
         <Row>
-          <p>{userGetResponse.user!.email}</p>
+          <p>{userGetResponse.user!.feryvUser!.email}</p>
         </Row>
         <Row>
           <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
@@ -182,7 +172,7 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
               <TextBox className="text-left borderRadius-2 p-2 m-1 w-100" placeholder="Username"
                 type="text" defaultValue={username}
                 onBlur={(event) => {
-                  if(event.target.value !== userGetResponse.user!.username){
+                  if(event.target.value !== userGetResponse.user!.feryvUser!.username){
                     setUserChanges(prev => ({...prev, username: event.target.value}))
                   }
                 }}/>
@@ -195,9 +185,9 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
           <Row>
             <Col xs={12}>
               <TextBox className="text-left borderRadius-2 p-2 m-1 w-100" placeholder="Email"
-                type="text" defaultValue={userGetResponse.user!.email}
+                type="text" defaultValue={userGetResponse.user!.feryvUser!.email}
                 onBlur={(event) => {
-                  if(event.target.value !== userGetResponse.user!.email){
+                  if(event.target.value !== userGetResponse.user!.feryvUser!.email){
                     setUserChanges(prev => ({...prev, email: event.target.value}))
                   }
                 }}/>

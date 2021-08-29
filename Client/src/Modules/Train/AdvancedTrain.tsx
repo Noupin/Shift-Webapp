@@ -7,15 +7,13 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
 //First Party Imports
+import { Button, Media, Loader } from "@noupin/feryv-components";
 import { CombinedTrainResponse } from "../../Interfaces/CombinedTrain";
-import { Button } from '../../Components/Button/Button';
-import { Media } from '../../Components/Media/Media';
 import { useConvertImage } from "../../Hooks/Images";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { pageTitles, TRAIN_STATUS_INTERVAL } from '../../constants';
 import { StopTrainRequest, TrainOperationRequest, TrainRequest, TrainStatusRequest } from '../../Swagger';
 import { TrainAPIFactory } from '../../Helpers/Api';
-import { Loader } from '../../Components/Loader/Loader';
 import { useInterval } from '../../Hooks/Interval';
 
 
@@ -36,7 +34,6 @@ export function AdvancedTrain (props: IElevatedStateProps){
   const [maskImage, setMaskImage] = useState<File>();
   const [maskRemake, setMaskRemake] = useState<File>();
 
-  const history = useHistory()
 
   const [updating, setUpdating] = useState(true);
   const [stop, setStop] = useState(false);
@@ -167,18 +164,6 @@ export function AdvancedTrain (props: IElevatedStateProps){
     convertMaskRemake();
   }, [trainResponse]);
 
-  //Move the user to other pages on button clicks
-  useEffect(() => {
-    if(stopTrain){
-      history.push("/inference")
-    }
-
-    if(basicView){
-      history.push("/train")
-    }
-
-    return;
-  }, [stopTrain, basicView])
 
 
   return (
@@ -187,26 +172,26 @@ export function AdvancedTrain (props: IElevatedStateProps){
       <Row>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media setElevatedState={setElevatedState}
-              className="neumorphic borderRadius-2 my-1 w-100 p-2"
-              mediaSrc={baseImage!} mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2"
+              mediaSrc={baseImage!} mediaType="video/mp4"
+              errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media setElevatedState={setElevatedState}
-              className="neumorphic borderRadius-2 my-1 w-100 p-2"
-              mediaSrc={maskImage!} mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2"
+              mediaSrc={maskImage!} mediaType="video/mp4"
+              errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
           </Row>
         </Col>
         <Col className="my-2 px-2" xs={6}>
           <Row className="my-2 ml-4 py-2">
-            <Media setElevatedState={setElevatedState}
-              className="neumorphic borderRadius-2 my-1 w-100 p-2"
-              mediaSrc={baseRemake!} mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2"
+              mediaSrc={baseRemake!} mediaType="video/mp4"
+              errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
           </Row>
           <Row className="my-2 ml-4 py-2">
-            <Media setElevatedState={setElevatedState}
-              className="neumorphic borderRadius-2 my-1 w-100 p-2"
-              mediaSrc={maskRemake!} mediaType="video/mp4"/>
+            <Media className="neumorphic borderRadius-2 my-1 w-100 p-2"
+              mediaSrc={maskRemake!} mediaType="video/mp4"
+              errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
           </Row>
         </Col>
       </Row>

@@ -5,10 +5,9 @@ import { FC, ReactElement, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 
 //First Party Imports
+import { Button, TextBox } from "@noupin/feryv-components";
 import { IElevatedStateProps } from "../../Interfaces/ElevatedStateProps";
-import { TextBox } from "../TextBox/TextBox";
 import { defaultShiftTitle } from "../../constants";
-import { Button } from "../Button/Button";
 
 
 interface ILoadMediaComponent extends IElevatedStateProps{

@@ -1,6 +1,6 @@
 //First Party Import
-import { User } from "../Swagger";
 import { DEFAULT_USER } from '../constants'
+import { User } from '../Swagger'
 
 
 export function currentUser(): User{

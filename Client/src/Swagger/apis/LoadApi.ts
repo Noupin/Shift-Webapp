@@ -77,7 +77,7 @@ export class LoadApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/loadData`,
+            path: `/loadData`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

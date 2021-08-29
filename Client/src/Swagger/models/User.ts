@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    FeryvUser,
+    FeryvUserFromJSON,
+    FeryvUserFromJSONTyped,
+    FeryvUserToJSON,
+} from './';
+
 /**
  * 
  * @export
@@ -33,46 +40,22 @@ export interface User {
     canTrain?: boolean;
     /**
      * 
-     * @type {boolean}
+     * @type {FeryvUser}
      * @memberof User
      */
-    confirmed?: boolean;
+    feryvUser?: FeryvUser;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof User
      */
-    dateCreated?: string;
+    id?: number;
     /**
      * 
-     * @type {string}
+     * @type {Array<object>}
      * @memberof User
      */
-    email: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof User
-     */
-    id?: object;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    mediaFilename?: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof User
-     */
-    subscriptions?: object;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    username: string;
+    shifts?: Array<object>;
     /**
      * 
      * @type {boolean}
@@ -93,13 +76,9 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         
         'admin': !exists(json, 'admin') ? undefined : json['admin'],
         'canTrain': !exists(json, 'canTrain') ? undefined : json['canTrain'],
-        'confirmed': !exists(json, 'confirmed') ? undefined : json['confirmed'],
-        'dateCreated': !exists(json, 'dateCreated') ? undefined : json['dateCreated'],
-        'email': json['email'],
+        'feryvUser': !exists(json, 'feryvUser') ? undefined : FeryvUserFromJSON(json['feryvUser']),
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'mediaFilename': !exists(json, 'mediaFilename') ? undefined : json['mediaFilename'],
-        'subscriptions': !exists(json, 'subscriptions') ? undefined : json['subscriptions'],
-        'username': json['username'],
+        'shifts': !exists(json, 'shifts') ? undefined : json['shifts'],
         'verified': !exists(json, 'verified') ? undefined : json['verified'],
     };
 }
@@ -115,13 +94,9 @@ export function UserToJSON(value?: User | null): any {
         
         'admin': value.admin,
         'canTrain': value.canTrain,
-        'confirmed': value.confirmed,
-        'dateCreated': value.dateCreated,
-        'email': value.email,
+        'feryvUser': FeryvUserToJSON(value.feryvUser),
         'id': value.id,
-        'mediaFilename': value.mediaFilename,
-        'subscriptions': value.subscriptions,
-        'username': value.username,
+        'shifts': value.shifts,
         'verified': value.verified,
     };
 }

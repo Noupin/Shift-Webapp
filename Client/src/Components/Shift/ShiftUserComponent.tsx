@@ -3,13 +3,14 @@
 //Third Party Imports
 import React, { FC, ReactElement} from 'react';
 import { Row } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 
 //First Party Imports
-import { Media } from '../../Components/Media/Media';
+import { Media } from '@noupin/feryv-components';
+import { getCDNPrefix } from '@noupin/feryv-cdn-helpers'
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { IndividualShiftGetResponse } from '../../Swagger';
 
@@ -23,19 +24,19 @@ export const ShiftUserComponent: FC<IShiftUser> = ({shift, setElevatedState}): R
   const history = useHistory()
 
   return (
-    <div onClick={() => history.push(`/user/${shift!.author.username}`)}
+    <div onClick={() => history.push(`/user/${shift!.author.feryvUser!.username}`)}
       style={{cursor: "pointer"}}>
       <Row>
         <h4>
-          {shift!.author.username}
+          {shift!.author.feryvUser!.username}
           {shift!.author.verified! ? <FontAwesomeIcon icon={faShieldAlt}/> : <></>}
           {shift!.author.admin! ? <FontAwesomeIcon icon={faCheckCircle}/> : <></>}
         </h4>
       </Row>
       <Row>
         <Media className="neumorphic borderRadius-3 p-2"
-               srcString={`/api/content/image/${shift!.author.mediaFilename!}`}
-               setElevatedState={setElevatedState}/>
+          srcString={`${getCDNPrefix(shift!.author.feryvUser!.mediaFilename!)}${shift!.author.feryvUser!.mediaFilename!}`}
+          errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
       </Row>
     </div>
   )

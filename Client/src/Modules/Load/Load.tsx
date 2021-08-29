@@ -7,17 +7,16 @@ import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 
 //First Party Imports
-import { Button } from '../../Components/Button/Button';
+import { Button, Loader } from "@noupin/feryv-components";
+import { getCDNPrefix } from '@noupin/feryv-cdn-helpers';
 import { defaultShiftTitle, pageTitles } from "../../constants";
 import { fillArray } from "../../Helpers/Arrays";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
 import { LoadDataResponse, LoadDataRequest, GetIndivdualShiftRequest, IndividualShiftGetResponse } from '../../Swagger';
-import { Loader } from '../../Components/Loader/Loader';
 import { LoadMediaComponent } from '../../Components/Load/LoadMediaComponent';
 import { LoadTitleComponent } from '../../Components/Load/LoadTitleComponent';
 import { useFetch } from '../../Hooks/Fetch';
 import { urlToFile } from '../../Helpers/Files';
-import { getCDNPrefix } from '../../Helpers/Api';
 
 
 export function Load (props: IElevatedStateProps){
@@ -34,17 +33,25 @@ export function Load (props: IElevatedStateProps){
 
   const [fetching, setFetching] = useState(false);
   const [loadResponse, setLoadResponse] = useState<LoadDataResponse>();
-  const fetchLoad = useFetch(elevatedState.APIInstances.Load,
-                             elevatedState.APIInstances.Load.loadData,
-                             elevatedState, setElevatedState, setLoadResponse)
   const [shiftResponse, setShiftResponse] = useState<IndividualShiftGetResponse>();
-  const fetchShift = useFetch(elevatedState.APIInstances.Shift,
-                              elevatedState.APIInstances.Shift.getIndivdualShift,
-                              elevatedState, setElevatedState, setShiftResponse)
+
+  const fetchLoad = useFetch()({
+    thisArg: elevatedState.APIInstances.Load,
+    swaggerFunction: elevatedState.APIInstances.Load.loadData,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setLoadResponse
+  })
+  const fetchShift = useFetch()({
+    thisArg: elevatedState.APIInstances.Shift,
+    swaggerFunction: elevatedState.APIInstances.Shift.getIndivdualShift,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setShiftResponse
+  })
+
 
   const prevShiftUUID = sessionStorage["shiftUUID"];
 
-  
+
   useEffect(() => {
     document.title = pageTitles["load"]
     setElevatedState((prev) => ({...prev, shiftTitle: defaultShiftTitle}))
@@ -85,7 +92,6 @@ export function Load (props: IElevatedStateProps){
     }
 
     let renamedFiles: Blob[] = files.map((file: File) => {
-      console.log(file)
       return new File([file], `${uuidv4()}.${file.name.split('.').pop()!.toLowerCase()}`, {type: file.type})
     })
 
@@ -111,7 +117,7 @@ export function Load (props: IElevatedStateProps){
     if(!elevatedState.shiftUUID || elevatedState.shiftUUID === prevShiftUUID) return;
 
     if(elevatedState.frontEndSettings.trainingShift){
-      history.push(`/${elevatedState.frontEndSettings.trainView === "basic" ? "train" : "advancedTrain"}`);
+      history.push(`/train`);
     }
     else{
       history.push(`/inference`)

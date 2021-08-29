@@ -1,6 +1,6 @@
 //First Party Imports
 import { IFrontEndSettings } from "./Interfaces/FrontEndSettings";
-import { User } from "./Swagger";
+import { ConfigurationParameters, User } from "./Swagger";
 
 
 export const videoTypes = ['mp4', 'webm', 'ogg']
@@ -37,7 +37,7 @@ export const CATEGORIES_TO_GET = -1;
 export const CATEGORIES_TO_REMOVE = ["Featured"]
 
 
-export const DEFAULT_USER: User = {username: "", email: ""}
+export const DEFAULT_USER: User = {}
 
 export const DEFUALT_FRONT_END_SETTINGS: IFrontEndSettings = {
   usePTM: true, 
@@ -47,4 +47,5 @@ export const DEFUALT_FRONT_END_SETTINGS: IFrontEndSettings = {
   uiStyle: 'neumorphic'
 }
 
-export const API_BASE_URL = 'http://192.168.1.52'
+export const API_BASE_URL = '/api'
+export const API_CONFIG: ConfigurationParameters = {credentials: 'include'}

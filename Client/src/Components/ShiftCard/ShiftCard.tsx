@@ -1,14 +1,13 @@
 //Third Party Imports
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 //First Party Imports
-import { Media } from '../Media/Media'
-import { Button } from '../Button/Button';
+import { getCDNPrefix } from '@noupin/feryv-cdn-helpers';
+import { Media, Button } from "@noupin/feryv-components";
 import "./ShiftCard.scss"
 import { Shift } from '../../Swagger';
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { getCDNPrefix } from '../../Helpers/Api';
 
 
 interface IShiftCard extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
@@ -48,7 +47,7 @@ export function ShiftCard(props: IShiftCard){
         </p>
         <Media srcString={`${getCDNPrefix(shift.mediaFilename!)}${shift.mediaFilename}`}
           className={imageCssClass}
-          setElevatedState={setElevatedState}/>
+          errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
       </div>
     </Button>
   );

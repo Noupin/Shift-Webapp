@@ -3,13 +3,13 @@
 //Third Party Imports
 import React, { useState, useEffect } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 //First Party Imports
+import { Button, Media, Image } from '@noupin/feryv-components';
+import { getCDNPrefix } from '@noupin/feryv-cdn-helpers'
 import { IElevatedStateProps } from '../Interfaces/ElevatedStateProps';
 import { IndividualShiftGetResponse } from '../Swagger/models/IndividualShiftGetResponse';
-import { Media } from '../Components/Media/Media';
-import { Image } from '../Components/Image/Image';
 import LeftCurvedArrow from "../Assets/LeftCurvedArrow.svg"
 import RightCurvedArrow from "../Assets/RightCurvedArrow.svg"
 import { pageTitles } from '../constants';
@@ -18,9 +18,7 @@ import { DeleteIndivdualShiftRequest, GetIndivdualShiftRequest, IndividualShiftD
 import { ShiftButtonsComponent } from '../Components/Shift/ShiftButtonsComponent';
 import { ShiftUserComponent } from '../Components/Shift/ShiftUserComponent';
 import { ShiftTitleComponent } from '../Components/Shift/ShiftTitleComponent';
-import { Button } from '../Components/Button/Button';
 import { useFetch } from '../Hooks/Fetch';
-import { getCDNPrefix } from '../Helpers/Api';
 
 
 export function ShiftPage (props: IElevatedStateProps){
@@ -39,17 +37,29 @@ export function ShiftPage (props: IElevatedStateProps){
   const [shiftMediaURL, setShiftMediaURL] = useState("");
   const [baseMediaURL, setBaseMediaURL] = useState("");
   const [maskMediaURL, setMaskMediaURL] = useState("");
-  
-  const fetchGetIndividualShift = useFetch(elevatedState.APIInstances.Shift,
-                                           elevatedState.APIInstances.Shift.getIndivdualShift,
-                                           elevatedState, setElevatedState, setShiftGetResponse)
-  const fetchPatchIndividualShift = useFetch(elevatedState.APIInstances.Shift,
-                                             elevatedState.APIInstances.Shift.patchIndivdualShift,
-                                             elevatedState, setElevatedState, setShiftPatchResponse, setSaving)
-  const fetchDeleteIndividualShift = useFetch(elevatedState.APIInstances.Shift,
-                                              elevatedState.APIInstances.Shift.deleteIndivdualShift,
-                                              elevatedState, setElevatedState, setShiftDeleteResponse)
-  
+
+
+  const fetchGetIndividualShift = useFetch()({
+    thisArg: elevatedState.APIInstances.Shift,
+    swaggerFunction: elevatedState.APIInstances.Shift.getIndivdualShift,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setShiftGetResponse
+  })
+  const fetchPatchIndividualShift = useFetch()({
+    thisArg: elevatedState.APIInstances.Shift,
+    swaggerFunction: elevatedState.APIInstances.Shift.patchIndivdualShift,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setShiftPatchResponse,
+    setLoading: setSaving
+  })
+  const fetchDeleteIndividualShift = useFetch()({
+    thisArg: elevatedState.APIInstances.Shift,
+    swaggerFunction: elevatedState.APIInstances.Shift.deleteIndivdualShift,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setShiftDeleteResponse
+  })
+
+
   function shareClick(event: Event){
     if(!shiftGetResponse){
       setElevatedState(prev => ({...prev, msg: "There was no data to share please reload your page."}))
@@ -57,8 +67,8 @@ export function ShiftPage (props: IElevatedStateProps){
     }
     try{
       navigator.share({
-        title: `Shift: ${shiftGetResponse.shift!.title} by ${shiftGetResponse.shift!.author.username}`,
-        text: `Look at the shift ${shiftGetResponse.shift!.author.username} made. Make your own at https://shift.feryv.com`,
+        title: `Shift: ${shiftGetResponse.shift!.title} by ${shiftGetResponse.shift!.author.feryvUser!.username}`,
+        text: `Look at the shift ${shiftGetResponse.shift!.author.feryvUser!.username} made. Make your own at https://shift.feryv.com`,
         url: `${window.location.href}`
       }).then(() => {
         setElevatedState(prev => ({...prev, msg: "Thanks you for sharing!"}))
@@ -98,7 +108,7 @@ export function ShiftPage (props: IElevatedStateProps){
   useEffect(() => {
     if (!shiftGetResponse) return;
 
-    document.title = pageTitles["shift"](shiftGetResponse.shift!.author.username, shiftGetResponse.shift!.title)
+    document.title = pageTitles["shift"](shiftGetResponse.shift!.author.feryvUser!.username, shiftGetResponse.shift!.title)
 
     setShiftMediaURL(`${getCDNPrefix(shiftGetResponse.shift!.mediaFilename!)}${shiftGetResponse.shift!.mediaFilename!}`)
     setBaseMediaURL(`${getCDNPrefix(shiftGetResponse.shift!.baseMediaFilename!)}${shiftGetResponse.shift!.baseMediaFilename!}`)
@@ -170,7 +180,7 @@ export function ShiftPage (props: IElevatedStateProps){
             <Col xs={2}></Col>
             <Col xs={8}>
               <Media className="neumorphic borderRadius-3 p-2" srcString={shiftMediaURL}
-                setElevatedState={setElevatedState}/>
+                errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
             </Col>
             <Col xs={2}></Col>
           </Row>
@@ -194,11 +204,11 @@ export function ShiftPage (props: IElevatedStateProps){
             <Col xs={1}></Col>
             <Col xs={5} className="pr-2">
               <Media className="neumorphic borderRadius-3 p-2" srcString={baseMediaURL}
-                setElevatedState={setElevatedState}/>
+                errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
             </Col>
             <Col xs={5} className="pl-2">
               <Media className="neumorphic borderRadius-3 p-2" srcString={maskMediaURL}
-                setElevatedState={setElevatedState}/>
+                errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
             </Col>
             <Col xs={1}></Col>
           </Row>

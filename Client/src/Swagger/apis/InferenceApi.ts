@@ -58,7 +58,7 @@ export class InferenceApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/inference`,
+            path: `/inference`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -89,7 +89,7 @@ export class InferenceApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/inference/content/{filename}`.replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
+            path: `/inference/content/{filename}`.replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -121,7 +121,7 @@ export class InferenceApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/inferenceStatus`,
+            path: `/inferenceStatus`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

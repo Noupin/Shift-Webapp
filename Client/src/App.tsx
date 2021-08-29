@@ -3,43 +3,31 @@
 //Third Party Imports
 import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { loadStripe, Stripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
 import { BrowserRouter as Router,
          Switch, Route } from "react-router-dom";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 
 //First Party Imports
+import { Button, ProtectedRoute } from '@noupin/feryv-components';
 import { IElevatedState } from "./Interfaces/ElevatedState";
-import { Register } from "./Modules/User/Register";
-import { Login } from "./Modules/User/Login";
-import { ChangePassword } from "./Modules/User/ChangePassword";
 import { NavBar } from "./Components/Navbar/Navbar";
 import { Load } from "./Modules/Load/Load";
 import { Train } from "./Modules/Train/Train";
 import { Inference } from "./Modules/Inference/Inference";
 import { Home } from "./Modules/Home/Home";
-import { Button } from "./Components/Button/Button";
 import { defaultShiftTitle, pageTitles } from "./constants";
 import { ShiftPage } from "./Modules/ShiftPage";
 import { UserPage } from "./Modules/User/UserPage";
-import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
-import { ResetPassword } from './Modules/User/ResetPassword';
 import { Settings } from './Modules/User/Settings';
-import { ForgotPassword } from './Modules/User/ForgotPassword';
 import { currentUser, setCurrentUser, isAuthenticated, setAuthenticated } from './Helpers/User';
 import { isTokenExpired } from './Helpers/Token';
 import { ApiInstances } from './Helpers/Api';
-import { useRefresh } from './Hooks/Refresh';
-import { useFetch } from './Hooks/Fetch';
+import { makeRefresh } from './Hooks/Refresh';
+import { makeFetch } from './Hooks/Fetch';
 import { getFrontEndSettings, setFrontEndSettings } from './Helpers/FrontEndSettings';
-import { ConfirmEmail } from './Modules/User/ConfirmEmail';
-import { ResendConfirmEmail } from './Modules/User/ResendConfirmEmail';
-import { VerifyEmailChange } from './Modules/User/VerifyEmailChange';
-import { ConfirmEmailChange } from './Modules/User/ConfirmEmailChange';
-import { StripePublishableKeyResponse } from './Swagger';
 import './App.scss';
-import { SubscriptionPage } from './Modules/Subscription/SubscriptionPage';
+import { IndividualUserGetResponse } from './Swagger';
+import { makeLogout } from './Hooks/Logout';
 
 
 export default function App() {
@@ -57,19 +45,24 @@ export default function App() {
   })
 
   const [showMsg, setShowMsg] = useState(false);
-  const fetchRefresh = useRefresh(setElevatedState)
+  const [userGetResponse, setUserGetResponse] = useState<IndividualUserGetResponse>()
 
-  const [stripe, setStripe] = useState<Promise<Stripe | null>>()
-  const [publishableKey, setPublishableKey] = useState<StripePublishableKeyResponse>();
-  const fetchPublishableKey = useFetch(elevatedState.APIInstances.Subscription,
-                                       elevatedState.APIInstances.Subscription.getStripePublishableKey,
-                                       elevatedState, setElevatedState, setPublishableKey)
+  const useRefresh = makeRefresh({setter: setElevatedState})
+  const useFetch = makeFetch({setter: setElevatedState})
+  makeLogout({setter: setElevatedState})
+
+  const fetchRefresh = useRefresh()
+  const fetchGetUser = useFetch({
+    thisArg: elevatedState.APIInstances.User,
+    swaggerFunction: elevatedState.APIInstances.User.getIndivdualUser,
+    authDependency: elevatedState.APIInstances.apiKey,
+    setData: setUserGetResponse
+  })
 
 
   useEffect(() => {
     document.title = pageTitles[""]
     setElevatedState(prev => ({...prev, shiftUUID: sessionStorage.getItem("shiftUUID")!}))
-    fetchPublishableKey()
   }, [])
 
   useEffect(() => {
@@ -91,21 +84,29 @@ export default function App() {
   }, [elevatedState.error]);
 
   useEffect(() => {
+    if(!userGetResponse || !elevatedState.accessToken) return;
+
+    const JWTBody = JSON.parse(atob(elevatedState.accessToken.split('.')[1]))
+    if(JWTBody.user && userGetResponse){
+      setCurrentUser({...JWTBody.user, ...userGetResponse});
+      if(!JWTBody.user.confirmed){
+        setElevatedState(prev => ({...prev, msg: "Please confirm your account."}))
+      }
+    }
+
+    setCurrentUser(userGetResponse.user!)
+  }, [userGetResponse]);
+
+  useEffect(() => {
     if(!elevatedState.accessToken || elevatedState.accessToken.split('.').length < 3){
       setElevatedState(prev => ({...prev, authenticated: false}))
       elevatedState.APIInstances.apiKey = ""
       setAuthenticated(false)
       return;
     }
-    
 
     const JWTBody = JSON.parse(atob(elevatedState.accessToken.split('.')[1]))
-    if(JWTBody.user){
-      setCurrentUser(JWTBody.user);
-      if(!JWTBody.user.confirmed){
-        setElevatedState(prev => ({...prev, msg: "Please confirm your account."}))
-      }
-    }
+    fetchGetUser({username: JWTBody.user.username})
 
     elevatedState.APIInstances.apiKey = elevatedState.accessToken
     var authenticated = isTokenExpired(elevatedState.accessToken)
@@ -125,13 +126,6 @@ export default function App() {
 
     setFrontEndSettings(elevatedState.frontEndSettings)
   }, [elevatedState.frontEndSettings])
-
-  useEffect(() => {
-    if(!publishableKey) return;
-    console.log(publishableKey)
-
-    setStripe(loadStripe(publishableKey.publicKey))
-  }, [publishableKey])
 
 
   return (
@@ -157,31 +151,16 @@ export default function App() {
               </Alert>
 
               <Switch>
-                <Route path="/register/:redirect?">
-                  <Register elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route path="/login/:redirect?">
-                  <Login elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <ProtectedRoute key={elevatedState.authenticated.toString()}
-                  expression={isAuthenticated()} path="/change-password">
-                  <ChangePassword elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </ProtectedRoute>
-                <Route path="/forgot-password">
-                  <ForgotPassword elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route path="/reset-password/:token">
-                  <ResetPassword elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <ProtectedRoute key={elevatedState.authenticated.toString()}
-                  expression={isAuthenticated()} path="/load">
+                <ProtectedRoute RouteInstance={Route} key={elevatedState.authenticated.toString()}
+                  condition={isAuthenticated()} path="/load">
                   <Load elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute expression={currentUser().canTrain!} path="/train">
+                <ProtectedRoute RouteInstance={Route} condition={currentUser().canTrain!} path="/train"
+                  key={currentUser().canTrain ? currentUser().canTrain!.toString() : ""}>
                   <Train elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
-                <ProtectedRoute key={elevatedState.authenticated.toString()}
-                  expression={isAuthenticated()} path="/inference">
+                <ProtectedRoute RouteInstance={Route} key={elevatedState.authenticated.toString()}
+                  condition={isAuthenticated()} path="/inference">
                   <Inference elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </ProtectedRoute>
                 <Route path="/shift/:uuid">
@@ -193,24 +172,6 @@ export default function App() {
                 <Route path="/settings">
                   <Settings elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>
-                <Route path="/confirm-email/:token">
-                  <ConfirmEmail elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route path="/resend-confirmation-email">
-                  <ResendConfirmEmail elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route path="/verify-email-change/:token">
-                  <VerifyEmailChange elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                <Route path="/confirm-email-change/:token">
-                  <ConfirmEmailChange elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                </Route>
-                {stripe &&
-                <Route path="/subscription">
-                  <Elements stripe={stripe}>
-                    <SubscriptionPage elevatedState={elevatedState} setElevatedState={setElevatedState}/>
-                  </Elements>
-                </Route>}
                 <Route exact path="/">
                   <Home elevatedState={elevatedState} setElevatedState={setElevatedState}/>
                 </Route>

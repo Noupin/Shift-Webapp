@@ -4,9 +4,8 @@
 import React, { FC, ReactElement} from 'react';
 
 //First Party Imports
-import { Media } from '../Media/Media';
+import { Media, FileDialog } from "@noupin/feryv-components";
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
-import { FileDialog } from '../FileDialog/FileDialog';
 import { validateFileList } from '../../Helpers/Files';
 import { imageTypes } from '../../constants';
 import './UserComponent.scss';
@@ -24,14 +23,14 @@ interface IUserMedia{
 export const ProfileMediaComponent: FC<IUserMedia> = ({setElevatedState, profilePictureURL, editing, setProfilePicture, setProfilePictureURL}): ReactElement => {
   let profileMediaComponent = (
     <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL}
-      setElevatedState={setElevatedState}/>
+      errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
   )
 
   if (editing){
     profileMediaComponent = (
       <div className="hoverInput" style={{position: "relative"}}>
         <Media className="neumorphic borderRadius-3 p-2" srcString={profilePictureURL}
-          setElevatedState={setElevatedState}/>
+          errorCallback={(err) => setElevatedState(prev => ({...prev, msg: err}))}/>
         <div id="hoverFileDialogButton" style={{maxHeight: "90%", maxWidth: "90%"}}
           className="justify-content-center p-2">
           <FileDialog className="justify-content-center align-items-center glassmorphic
