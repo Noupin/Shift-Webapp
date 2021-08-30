@@ -30,10 +30,10 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
   setOwner, username}): ReactElement => {
   const history = useHistory()
 
-  const [editing, setEditing] = useState(false)
+  const [editing,] = useState(false)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
-  const [userChanges, setUserChanges] = useState<IndividualUserPatchRequest["data"]>({})
+  const [userChanges,] = useState<IndividualUserPatchRequest["data"]>({})
 
   const [userGetResponse, setUserGetResponse] = useState<IndividualUserGetResponse>();
   const [userPatchResponse, setUserPatchResponse] = useState<IndividualUserPatchResponse>();

@@ -4,9 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import Masonry from 'react-masonry-css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog } from '@fortawesome/free-solid-svg-icons'
-import { NavLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 //First Party Imports
 import { IElevatedStateProps } from '../../Interfaces/ElevatedStateProps';
@@ -25,8 +23,8 @@ export function UserPage (props: IElevatedStateProps){
 
   const [userShiftsResponse, setUserShiftsResponse] = useState<UserShiftsResponse>();
   const [userShifts, setUserShifts] = useState<Shift[]>([]);
-  const [owner, setOwner] = useState(false)
-  const [pageNumber, setPageNumber] = useState(1)
+  const [, setOwner] = useState(false)
+  const [pageNumber,] = useState(1)
 
   const fetchUserShifts = useFetch()({
     thisArg: elevatedState.APIInstances.User,
