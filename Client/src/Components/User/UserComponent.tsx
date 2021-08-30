@@ -2,14 +2,13 @@
 
 //Third Party Imports
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 
 //First Party Imports
-import { TextBox } from '@noupin/feryv-components';
 import { getCDNPrefix } from '@noupin/feryv-cdn-helpers';
 import { GetIndivdualUserRequest, IndividualUserPatchRequest, IndividualUserPatchResponse,
   PatchIndivdualUserRequest, IndividualUserGetResponse, DeleteIndivdualUserRequest,
@@ -40,7 +39,6 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
   const [userPatchResponse, setUserPatchResponse] = useState<IndividualUserPatchResponse>();
   const [userDeleteResponse, setUserDeleteResponse] = useState<IndividualUserDeleteResponse>();
   const [profilePictureURL, setProfilePictureURL] = useState("");
-  const [profilePicture, setProfilePicture] = useState<File>();
 
   const fetchGetUser = useFetch()({
     thisArg: elevatedState.APIInstances.User,
@@ -118,7 +116,6 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
 
     patchUser()
     setSaving(false)
-    setProfilePicture(undefined) //Try to remove
   }, [saving])
 
   //Patched user repsonse adn url forwarding
@@ -156,51 +153,12 @@ export const UserComponent: FC<IUserComponent> = ({elevatedState, setElevatedSta
           <p>{userGetResponse.user!.feryvUser!.email}</p>
         </Row>
         <Row>
-          <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
-            setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
+          <ProfileMediaComponent setElevatedState={setElevatedState} profilePictureURL={profilePictureURL}/>
         </Row>
         {userGetResponse && userGetResponse.owner && elevatedState.authenticated && 
-        <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>}
+        <UserButtonComponent setDeleting={setDeleting}/>}
       </>
     )
-
-    if(editing){
-      userComponent = (
-        <>
-          <Row>
-            <Col xs={12}>
-              <TextBox className="text-left borderRadius-2 p-2 m-1 w-100" placeholder="Username"
-                type="text" defaultValue={username}
-                onBlur={(event) => {
-                  if(event.target.value !== userGetResponse.user!.feryvUser!.username){
-                    setUserChanges(prev => ({...prev, username: event.target.value}))
-                  }
-                }}/>
-              <div className="pr-2" style={{position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)"}}>
-                {userGetResponse.user!.admin! ? <FontAwesomeIcon icon={faShieldAlt}/> : <></>}
-                {userGetResponse.user!.verified! ? <FontAwesomeIcon icon={faCheckCircle}/> : <></>}
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <TextBox className="text-left borderRadius-2 p-2 m-1 w-100" placeholder="Email"
-                type="text" defaultValue={userGetResponse.user!.feryvUser!.email}
-                onBlur={(event) => {
-                  if(event.target.value !== userGetResponse.user!.feryvUser!.email){
-                    setUserChanges(prev => ({...prev, email: event.target.value}))
-                  }
-                }}/>
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <ProfileMediaComponent setElevatedState={setElevatedState} setProfilePictureURL={setProfilePictureURL}
-              setProfilePicture={setProfilePicture} profilePictureURL={profilePictureURL} editing={editing}/>
-          </Row>
-          <UserButtonComponent editing={editing} setEditing={setEditing} setSaving={setSaving} setDeleting={setDeleting}/>
-        </>
-      )
-    }
   }
 
   return userComponent

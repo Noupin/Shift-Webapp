@@ -2,6 +2,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Navbar, Nav } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCog } from '@fortawesome/free-solid-svg-icons'
 
 
 //First Party Imports
@@ -26,7 +28,17 @@ export function NavBar (props: IElevatedStateProps){
           </NavLink>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" style={{boxShadow: 'none'}}/>
+          <Nav className="justify-content-end navbar-toggler"
+            style={{boxShadow: 'none', border: 'none', padding: 0}}>
+            <div className="mx-2">
+              <NavLink to="/settings" className="nav-link-2 px-2">
+                <FontAwesomeIcon className="spinAnimation" icon={faCog}/>
+              </NavLink>
+            </div>
+          </Nav>
+        </div>
 
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
@@ -41,6 +53,15 @@ export function NavBar (props: IElevatedStateProps){
             <UserElements elevatedState={elevatedState} setElevatedState={setElevatedState} key={`${elevatedState.authenticated}`}/>
           </Nav>
         </Navbar.Collapse>
+
+        <Nav id="basic-navbar-nav" className="navbar-collapse collapse"
+          style={{boxShadow: 'none', border: 'none', padding: 0, flex: 'none'}}>
+          <div className="mx-2">
+            <NavLink to="/settings" className="nav-link-2 px-2">
+              <FontAwesomeIcon className="spinAnimation" icon={faCog} style={{fontSize: '1.25rem'}}/>
+            </NavLink>
+          </div>
+        </Nav>
       </Navbar>
     </div>
   );

@@ -7,23 +7,24 @@ import { Link } from "react-router-dom";
 
 //First Party Imports
 import { Button } from '@noupin/feryv-components';
+import { FERYV_OAUTH_URL } from '@noupin/feryv-oauth-hooks';
+import { currentUser } from '../../Helpers/User';
 
 
 interface IUserButtons{
-  editing: boolean
-  setEditing: React.Dispatch<React.SetStateAction<boolean>>
-  setSaving: React.Dispatch<React.SetStateAction<boolean>>
   setDeleting: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-export const UserButtonComponent: FC<IUserButtons> = ({editing, setEditing, setSaving, setDeleting}): ReactElement => {
+export const UserButtonComponent: FC<IUserButtons> = ({setDeleting}): ReactElement => {
   let userButtonComponent = (
     <Row>
       <Col>
-        <Button className="borderRadius-2 p-2 mt-2 w-100" onClick={() => setEditing(true)}>
-          Edit
-        </Button>
+        <a href={`${FERYV_OAUTH_URL}/user/${currentUser().feryvUser?.username}`} className="w-100">
+          <Button className="borderRadius-2 p-2 mt-2 w-100">
+            Edit
+          </Button>
+        </a>
       </Col>
       <Col>
         <Button className="borderRadius-2 p-2 mt-2 w-100 text-danger" onClick={() => setDeleting(true)}>
@@ -32,39 +33,6 @@ export const UserButtonComponent: FC<IUserButtons> = ({editing, setEditing, setS
       </Col>
     </Row>
   )
-
-  if (editing){
-    userButtonComponent = (
-      <>
-        <Row>
-          <Col>
-            <Link to="/change-password" className="w-100">
-              <Button className="p-2 mt-2 mb-1 borderRadius-2 w-100">
-                Change Password
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Button className="borderRadius-2 p-2 mt-2 w-100"
-            onClick={() => {
-              setEditing(false)
-              setSaving(true)
-            }}>
-              Save
-            </Button>
-          </Col>
-          <Col>
-            <Button className="borderRadius-2 p-2 mt-2 w-100 text-danger"
-            onClick={() => setEditing(false)}>
-              Cancel
-            </Button>
-          </Col>
-        </Row>
-      </>
-    )
-  }
 
   return userButtonComponent
 }

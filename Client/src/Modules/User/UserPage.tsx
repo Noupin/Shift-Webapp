@@ -74,12 +74,6 @@ export function UserPage (props: IElevatedStateProps){
             setElevatedState={setElevatedState} setOwner={setOwner}/>
         </Col>
         <Col xs={9} className="p-2" key={elevatedState.accessToken}>
-          {owner && elevatedState.authenticated &&
-          <Row className="justify-content-end">
-            <NavLink to="/settings" className="textColor" style={{fontSize: "1.5em"}}>
-              <FontAwesomeIcon className="spinAnimation" icon={faCog}/>
-            </NavLink>
-          </Row>}
           <Row className="justify-content-center">
             <h2>Shifts</h2>
           </Row>
