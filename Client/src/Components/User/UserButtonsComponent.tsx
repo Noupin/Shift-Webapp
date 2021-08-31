@@ -7,7 +7,6 @@ import { Col, Row } from 'react-bootstrap';
 //First Party Imports
 import { Button } from '@noupin/feryv-components';
 import { FERYV_OAUTH_URL } from '@noupin/feryv-oauth-hooks';
-import { currentUser } from '../../Helpers/User';
 
 
 interface IUserButtons{
@@ -19,7 +18,7 @@ export const UserButtonComponent: FC<IUserButtons> = ({setDeleting}): ReactEleme
   let userButtonComponent = (
     <Row>
       <Col>
-        <a href={`${FERYV_OAUTH_URL}/user/${currentUser().feryvUser?.username}`} className="w-100">
+        <a href={`${FERYV_OAUTH_URL}/account/?editing=true`} className="w-100">
           <Button className="borderRadius-2 p-2 mt-2 w-100">
             Edit
           </Button>
